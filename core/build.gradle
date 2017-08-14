@@ -1,0 +1,15 @@
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+eclipse.project.name = appName + '-core'
+
+dependencies {
+  compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+  compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+  compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+  compile "net.dermetfan.libgdx-utils:libgdx-utils-box2d:$utilsBox2dVersion"
+  compile "net.dermetfan.libgdx-utils:libgdx-utils:$utilsVersion"
+  compile "com.kotcrab.vis:vis-ui:$visUiVersion"
+  compile "com.strongjoshua:libgdx-inGameConsole:$inGameConsoleVersion"
+  compile "net.onedaybeard.artemis:artemis-odb:$artemisOdbVersion"
+  compile "com.rafaskoberg.gdx:typing-label:$typingLabelVersion"
+}
+        
