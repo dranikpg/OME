@@ -1,22 +1,29 @@
 package com.draniksoft.ome.menu.button_bar;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.draniksoft.ome.menu.dynamic_vs.DynamicViewController;
 import com.draniksoft.ome.utils.SUtils;
+import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 
 public class ButtonBar extends VisTable {
 
     DynamicViewController vc;
+    VisLabel fps;
+
+    VisTextButton editB;
+
+    VisTextButton exitB;
 
     public ButtonBar(DynamicViewController _vc){
 
         this.vc = _vc;
 
-        VisTextButton t1B = new VisTextButton(SUtils.f_m("editor_b"),"blue");
-        t1B.addListener(new ChangeListener() {
+        editB = new VisTextButton(SUtils.f_m("editor_b"),"blue");
+        editB.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 vc.open(DynamicViewController.Codes.EDITOR);
@@ -24,17 +31,27 @@ public class ButtonBar extends VisTable {
         });
 
 
-        VisTextButton t2B = new VisTextButton("t2","blue");
-        t2B.addListener(new ChangeListener() {
+        exitB = new VisTextButton(SUtils.f_m("exit_b"),"blue");
+        exitB.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                vc.open(DynamicViewController.Codes.EDITOR_NEW_MAP);
+
+                Gdx.app.exit();
             }
         });
 
-        add(t1B).padBottom(20);
+        add(editB).padBottom(20);
         row();
-        add(t2B);
+        add(exitB);
+
+        fps = new VisLabel("0");
+        row().padTop(50);add(fps);
     }
 
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+
+        fps.setText(" " + Gdx.graphics.getFramesPerSecond());
+    }
 }

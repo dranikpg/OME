@@ -30,8 +30,6 @@ public class MenuScreen implements Screen {
     // barwidth,
     int dimens[] = {150,10};
 
-
-
     public MenuScreen(LaunchBundle b){
         this.stage = b.stage;
         this.viewport = b.viewport;
@@ -41,23 +39,26 @@ public class MenuScreen implements Screen {
         stage.clear();
 
         vcDrawGroup = new Group();
-        vc = new DynamicViewController(new int[]{
-                dimens[0]+dimens[1],
-                dimens[1],
-                640 - (dimens[0]+2*dimens[1]),
-                480-2*dimens[1]
-        },stage,vcDrawGroup);
+        vc = new DynamicViewController(this,
+                new int[]{
+                        dimens[0]+dimens[1],
+                        dimens[1],
+                        (int) (viewport.getWorldWidth() - (dimens[0]+2*dimens[1])),
+                        (int) (viewport.getWorldHeight()-2*dimens[1])
+                },vcDrawGroup);
         vc.open(DynamicViewController.Codes.EDITOR);
 
         bar = new ButtonBar(vc);
         bar.background("window-bg");
         bar.setPosition(0,0);
-        bar.setSize(dimens[0],480);
+        bar.setSize(dimens[0],viewport.getWorldHeight());
 
         stage.addActor(vcDrawGroup);
         stage.addActor(bar);
 
     }
+
+
 
     @Override
     public void show() {
@@ -68,7 +69,6 @@ public class MenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
-
         Gdx.gl.glClearColor(0,0.5f,0.5f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -78,7 +78,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        viewport.update(width,height);
     }
 
     @Override

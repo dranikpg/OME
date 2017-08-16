@@ -94,6 +94,7 @@ public class OneThreadPLoader implements PreLoader {
     @Override
     public void startLoading() {
 
+
         loadR = new LoadRunnable();
 
         t = new Thread(loadR);

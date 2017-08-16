@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.draniksoft.ome.Main;
+import com.draniksoft.ome.mgmnt_base.AppDataObserver;
 import com.draniksoft.ome.preload.OneThreadPLoader;
 import com.draniksoft.ome.preload.PreLoader;
 import com.draniksoft.ome.utils.Const;
@@ -17,6 +18,8 @@ import com.kotcrab.vis.ui.widget.VisImage;
 import com.kotcrab.vis.ui.widget.VisLabel;
 
 public class LoadingScreen implements Screen{
+
+    public static final String tag = "LoadingScreen";
 
     Main main;
 
@@ -35,7 +38,10 @@ public class LoadingScreen implements Screen{
         this.main = main;
 
         stage = new Stage();
-        VisUI.load();
+
+        if(!VisUI.isLoaded())
+            VisUI.load();
+
         viewport = new FitViewport(640,480);
 
         logo = new VisImage(new Texture(Gdx.files.internal("menu/logo.png")));
@@ -48,11 +54,19 @@ public class LoadingScreen implements Screen{
         versionL.setColor(0,0,0,1);
         stage.addActor(versionL);
 
+        if(AppDataObserver.loaded)
+            launchMS();
+            return;
 
     }
 
     @Override
     public void show() {
+
+        if(AppDataObserver.loaded)
+            return;
+
+        Gdx.app.debug(tag,"Showing");
 
         loader = new OneThreadPLoader();
         loader.init(new ResponseListener() {
@@ -61,16 +75,8 @@ public class LoadingScreen implements Screen{
 
                 if(code == PreLoader.Codes.READY){
 
-                    final MenuScreen.LaunchBundle b = new MenuScreen.LaunchBundle();
-                    b.stage = stage;
-                    b.viewport = viewport;
+                    launchMS();
 
-                    Gdx.app.postRunnable(new Runnable() {
-                        @Override
-                        public void run() {
-                            main.launchMS(b);
-                        }
-                    });
                 }
 
             }
@@ -78,6 +84,19 @@ public class LoadingScreen implements Screen{
         loader.startLoading();
 
 
+    }
+
+    public void launchMS(){
+        final MenuScreen.LaunchBundle b = new MenuScreen.LaunchBundle();
+        b.stage = stage;
+        b.viewport = viewport;
+
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                main.launchMS(b);
+            }
+        });
     }
 
 

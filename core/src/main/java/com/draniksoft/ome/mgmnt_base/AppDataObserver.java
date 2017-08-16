@@ -9,6 +9,7 @@ import com.draniksoft.ome.utils.preload.Initable;
 public class AppDataObserver implements Initable{
 
     public static final String tag = "AppDataObserver";
+    public static boolean loaded = false;
 
     private static AppDataObserver i;
 
@@ -37,6 +38,7 @@ public class AppDataObserver implements Initable{
 
         langMgr = new LanguageManager();
 
+        loaded = true;
         l.onResponse(Codes.READY);
 
     }

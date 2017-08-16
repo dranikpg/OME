@@ -3,7 +3,11 @@ package com.draniksoft.ome.utils;
 
 import com.draniksoft.ome.mgmnt_base.AppDataObserver;
 
-// utils for shorter code
+/**
+ *
+ * Utils for code shortening
+ *
+ */
 public class SUtils {
 
     public static String f_m(String k, Object... a){

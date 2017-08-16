@@ -10,11 +10,18 @@ dependencies {
   compile "net.dermetfan.libgdx-utils:libgdx-utils-box2d:$utilsBox2dVersion"
   compile "net.dermetfan.libgdx-utils:libgdx-utils:$utilsVersion"
   compile "com.kotcrab.vis:vis-ui:$visUiVersion"
+
   compile "com.strongjoshua:libgdx-inGameConsole:$inGameConsoleVersion"
   compile "net.onedaybeard.artemis:artemis-odb:$artemisOdbVersion"
   compile "com.rafaskoberg.gdx:typing-label:$typingLabelVersion"
 
+  compile "net.mostlyoriginal.artemis-odb:contrib-core:2.2.0"
+  compile "net.mostlyoriginal.artemis-odb:contrib-eventbus:2.2.0"
+  compile "net.mostlyoriginal.artemis-odb:contrib-plugin-profiler:2.2.0"
+
   compile group: 'ro.fortsoft.pf4j', name: 'pf4j', version: '1.3.0'
   compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.6.1'
+
+
 }
         

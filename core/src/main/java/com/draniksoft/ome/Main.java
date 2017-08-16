@@ -5,6 +5,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.draniksoft.ome.menu.LoadingScreen;
 import com.draniksoft.ome.menu.MenuScreen;
+import com.draniksoft.ome.mgmnt_base.AppDataObserver;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms.
  *  Main Application manager until Editor/Presenter win is opened
@@ -24,7 +25,13 @@ public class Main extends Game {
 
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
-        setScreen(new LoadingScreen(this));
+        LoadingScreen sc = new LoadingScreen(this);
+
+        if(AppDataObserver.loaded){
+            sc.launchMS();
+        }else {
+            setScreen(sc);
+        }
 
     }
 

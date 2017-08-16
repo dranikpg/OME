@@ -24,7 +24,7 @@ public class EditorView extends DynamicView {
     public void init() {
 
         newMapB = new VisTextButton(SUtils.f_m("new_map_b"));
-        loadM = new VisTextButton(SUtils.f_m("DUMMY"));
+        loadM = new VisTextButton("DUMMY");
 
 
         newMapB.addListener(new ChangeListener() {

@@ -4,9 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.IntMap;
+import com.draniksoft.ome.menu.MenuScreen;
 import com.draniksoft.ome.menu.dynamic_vs.vs.EditorView;
 import com.draniksoft.ome.menu.dynamic_vs.vs.NewMapView;
 
@@ -17,10 +17,10 @@ public class DynamicViewController {
 
     public static final String tag = "DynamicViewController";
 
+    MenuScreen ms;
 
     // dimensions bottom left x,y + width, height
     int d[] = {0,0,0,0};
-    Stage stage;
     // A group solves the draw order problem
     Group drawGroup;
 
@@ -44,9 +44,9 @@ public class DynamicViewController {
     Action fadeInA;
     Action fadeOutA;
 
-    public DynamicViewController(int[] d, Stage stage, Group drawGroup){
+    public DynamicViewController(MenuScreen ms,int[] d, Group drawGroup){
+        this.ms = ms;
         this.d = d;
-        this.stage = stage;
         this.drawGroup = drawGroup;
 
         views = new IntMap<DynamicView>();
@@ -55,11 +55,11 @@ public class DynamicViewController {
 
     public void buildActions(){
 
-        float t = 1f;
+        float t = 0.5f;
 
         fadeInA = Actions.sequence(
                 Actions.moveTo(d[0] + d[2] + 20,d[1]),
-                Actions.moveTo(d[0], d[1], t*1.1f, Interpolation.exp5),
+                Actions.moveTo(d[0], d[1], t, Interpolation.pow2),
                 new Action() {
                     @Override
                     public boolean act(float delta) {
@@ -75,7 +75,7 @@ public class DynamicViewController {
                     }
                 });
 
-        fadeOutA = Actions.moveTo(d[0] - d[2],d[1],t,Interpolation.exp5);
+        fadeOutA = Actions.moveTo(d[0] - d[2],d[1],t,Interpolation.pow2);
 
     }
 
@@ -163,4 +163,7 @@ public class DynamicViewController {
     }
 
 
+    public MenuScreen getMs() {
+        return ms;
+    }
 }
