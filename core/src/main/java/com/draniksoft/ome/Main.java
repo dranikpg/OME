@@ -25,6 +25,7 @@ public class Main extends Game {
 
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
+
         LoadingScreen sc = new LoadingScreen(this);
 
         if(AppDataObserver.loaded){

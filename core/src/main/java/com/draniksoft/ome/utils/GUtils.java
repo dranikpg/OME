@@ -5,6 +5,10 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.utils.BufferUtils;
+
+import java.nio.IntBuffer;
 
 /**
  * Graphics/GLWF utils
@@ -48,11 +52,16 @@ public class GUtils {
         configuration.setWindowedMode(640, 480);
         configuration.setWindowIcon("libgdx128.png", "libgdx64.png", "libgdx32.png", "libgdx16.png");
 
-        configuration.setResizable(false);
         configuration.setInitialVisible(false);
 
         return configuration;
 
+    }
+
+    public static int getMaxTexSize(){
+        IntBuffer intBuffer = BufferUtils.newIntBuffer(16);
+        Gdx.gl20.glGetIntegerv(GL20.GL_MAX_TEXTURE_SIZE, intBuffer);
+        return  intBuffer.get();
     }
 
 
