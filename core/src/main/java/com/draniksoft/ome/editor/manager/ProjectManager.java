@@ -6,7 +6,7 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.draniksoft.ome.editor.map_load.LoadSaveManager;
 import com.draniksoft.ome.editor.map_load.ProjectLoader;
-import com.draniksoft.ome.utils.Pair;
+import com.draniksoft.ome.utils.struct.Pair;
 
 public class ProjectManager extends Manager implements LoadSaveManager {
 

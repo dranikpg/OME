@@ -4,8 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.*;
 import com.draniksoft.ome.editor.manager.MapManager;
 import com.draniksoft.ome.editor.manager.ProjectManager;
-import com.draniksoft.ome.utils.Pair;
 import com.draniksoft.ome.utils.ResponseListener;
+import com.draniksoft.ome.utils.struct.Pair;
 
 import java.io.IOException;
 import java.io.OutputStream;

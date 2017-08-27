@@ -2,6 +2,7 @@ package com.draniksoft.ome.editor.manager;
 
 import com.artemis.Manager;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.loaders.TextureLoader;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -11,7 +12,7 @@ import com.draniksoft.ome.editor.components.TexRegC;
 import com.draniksoft.ome.editor.map_load.LoadSaveManager;
 import com.draniksoft.ome.editor.map_load.ProjectLoader;
 import com.draniksoft.ome.utils.GUtils;
-import com.draniksoft.ome.utils.Pair;
+import com.draniksoft.ome.utils.struct.Pair;
 
 public class MapManager extends Manager implements LoadSaveManager {
 
@@ -60,7 +61,11 @@ public class MapManager extends Manager implements LoadSaveManager {
 
         } else {
 
-            l.getAssetManager().load(mpath, Texture.class);
+            TextureLoader.TextureParameter textureParameter = new TextureLoader.TextureParameter();
+            textureParameter.magFilter = Texture.TextureFilter.Linear;
+            textureParameter.minFilter = Texture.TextureFilter.Linear;
+
+            l.getAssetManager().load(mpath, Texture.class, textureParameter);
 
         }
 

@@ -109,7 +109,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
      * World System utilities
      */
 
-    public void stopsys(String name){
+    public void stopsys_n(String name) {
         manageSysState(name,false);
     }
 
@@ -117,7 +117,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
         world.getSystems().get(id - 1).setEnabled(false);
     }
 
-    public void runsys(String name){
+    public void runsys_n(String name) {
         manageSysState(name,true);
     }
 

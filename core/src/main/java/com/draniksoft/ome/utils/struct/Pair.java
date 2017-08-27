@@ -1,4 +1,4 @@
-package com.draniksoft.ome.utils;
+package com.draniksoft.ome.utils.struct;
 
 public class Pair<K, V> {
 

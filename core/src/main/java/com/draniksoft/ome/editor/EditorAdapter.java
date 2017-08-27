@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteCache;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -25,9 +26,11 @@ import com.draniksoft.ome.editor.systems.render.BaseRenderSys;
 import com.draniksoft.ome.editor.systems.render.MapRDebugSys;
 import com.draniksoft.ome.editor.systems.render.MapRenderSys;
 import com.draniksoft.ome.editor.systems.render.UIRenderSystem;
+import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.ConsoleSys;
 import com.draniksoft.ome.editor.systems.support.UiSystem;
 import com.draniksoft.ome.utils.GUtils;
+import net.mostlyoriginal.api.event.common.EventSystem;
 
 
 public class EditorAdapter extends ApplicationAdapter {
@@ -90,6 +93,9 @@ public class EditorAdapter extends ApplicationAdapter {
 
         SpriteCache mapCache = new SpriteCache(1000, false);
 
+        com.badlogic.gdx.physics.box2d.World phys = new com.badlogic.gdx.physics.box2d.World(new Vector2(0, 0), true);
+
+
         /*
 
 
@@ -97,13 +103,24 @@ public class EditorAdapter extends ApplicationAdapter {
 
         WorldConfigurationBuilder cb = new WorldConfigurationBuilder();
 
+        // ESC MANAGER
+
         cb.with(new ArchTransmuterMgr());
+
+        // OTHER MANAGER
+
         cb.with(new ProjectManager());
         cb.with(new MapManager());
+
+        // SUPPORT SYSTEMS
 
         cb.with(new ProjecetLoadSys());
 
         cb.with(new UiSystem());
+
+        cb.with(new ActionSystem());
+
+        // RENDER PART
 
         cb.with(new CameraSys());
 
@@ -137,6 +154,8 @@ public class EditorAdapter extends ApplicationAdapter {
         c.register("top_stage", uiStage);
 
         c.register(mapCache);
+
+        c.setSystem(EventSystem.class);
 
 
         c.setInvocationStrategy(new PMIStrategy());

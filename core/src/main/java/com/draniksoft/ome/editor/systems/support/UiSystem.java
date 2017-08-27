@@ -2,17 +2,25 @@ package com.draniksoft.ome.editor.systems.support;
 
 import com.artemis.BaseSystem;
 import com.artemis.annotations.Wire;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.draniksoft.ome.editor.support.actions.SaveAction;
 import com.draniksoft.ome.editor.systems.render.UIRenderSystem;
 import com.draniksoft.ome.editor.ui.BaseWindow;
+import com.draniksoft.ome.editor.ui.utils.UriMenuItem;
 import com.kotcrab.vis.ui.widget.Menu;
 import com.kotcrab.vis.ui.widget.MenuBar;
+import com.kotcrab.vis.ui.widget.MenuItem;
 
 public class UiSystem extends BaseSystem {
 
     public static class WinCodes {
+
+        public static final int open_proj = 1;
 
     }
 
@@ -20,6 +28,9 @@ public class UiSystem extends BaseSystem {
 
     @Wire(name = "top_stage")
     Stage uiStage;
+
+    @Wire
+    InputMultiplexer multiplexer;
 
 
     ObjectMap<Integer, BaseWindow> wins;
@@ -38,13 +49,19 @@ public class UiSystem extends BaseSystem {
         uiStage.addActor(rootT);
 
         menuBar = new MenuBar();
-        menuBar.addMenu(new Menu("LOL KEK"));
 
-        rootT.add(menuBar.getTable()).expand().bottom().fillX();
+        asembleMenuBar();
 
 
-        uiStage.setDebugAll(true);
+        rootT.add(menuBar.getTable()).expand().top();
+
+
+        //uiStage.setDebugAll(true);
+
+        multiplexer.addProcessor(uiStage);
+
     }
+
 
     @Override
     protected void processSystem() {
@@ -57,7 +74,7 @@ public class UiSystem extends BaseSystem {
     public void open(int code, String uri) {
 
         if (!wins.containsKey(code)) {
-            if (!buildWin()) {
+            if (!buildWin(code)) {
                 return;
             }
         }
@@ -81,11 +98,56 @@ public class UiSystem extends BaseSystem {
 
     }
 
-    private boolean buildWin() {
+    private boolean buildWin(int code) {
+
+        BaseWindow w = new BaseWindow("Tst") {
+            @Override
+            public void init() {
+
+            }
+
+            @Override
+            public void open(String uri) {
+                row();
+                add(uri);
+            }
+
+            @Override
+            public void close() {
+
+            }
+
+            @Override
+            public boolean isOpen() {
+                return false;
+            }
+        };
+        w.setResizable(true);
+
+
+        wins.put(code, w);
+        uiStage.addActor(w);
 
         return true;
 
     }
 
+
+    private void asembleMenuBar() {
+
+        Menu fileM = new Menu("File");
+
+        fileM.addItem(new UriMenuItem("Open", WinCodes.open_proj, "lol", this));
+        fileM.addItem(new MenuItem("Save", new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                world.getSystem(ActionSystem.class).exec(new SaveAction());
+            }
+        }));
+
+
+        menuBar.addMenu(fileM);
+
+    }
 
 }

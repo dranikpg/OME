@@ -1,7 +1,7 @@
 package com.draniksoft.ome.editor.map_load;
 
 import com.badlogic.gdx.utils.JsonValue;
-import com.draniksoft.ome.utils.Pair;
+import com.draniksoft.ome.utils.struct.Pair;
 
 public interface LoadSaveManager {
 
