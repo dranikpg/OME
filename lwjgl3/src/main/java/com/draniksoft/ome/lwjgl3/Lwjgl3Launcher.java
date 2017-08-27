@@ -24,6 +24,8 @@ public class Lwjgl3Launcher {
         configuration.setWindowIcon("libgdx128.png", "libgdx64.png", "libgdx32.png", "libgdx16.png");
         configuration.setInitialVisible(true);
 
+        configuration.setIdleFPS(10);
+
         configuration.setDecorated(false);
         configuration.setResizable(false);
 

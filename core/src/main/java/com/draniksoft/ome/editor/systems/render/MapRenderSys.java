@@ -4,7 +4,6 @@ import com.artemis.Aspect;
 import com.artemis.BaseEntitySystem;
 import com.artemis.ComponentMapper;
 import com.artemis.annotations.Wire;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteCache;
@@ -26,7 +25,7 @@ public class MapRenderSys extends BaseEntitySystem {
     ComponentMapper<PosSizeC> psm;
 
 
-    @Wire
+    @Wire(name = "game_cam")
     OrthographicCamera cam;
 
     @Wire
@@ -38,6 +37,7 @@ public class MapRenderSys extends BaseEntitySystem {
 
 
     Vector3 lma;
+    float lz;
     int cid = -1;
 
     @Override
@@ -48,12 +48,11 @@ public class MapRenderSys extends BaseEntitySystem {
     @Override
     protected void processSystem() {
 
-      if(!lma.equals(cam.position) || cid == -1){
-          Gdx.app.debug(tag,"Redrawing");
-
+        if (!lma.equals(cam.position) || cid == -1 || lz != cam.zoom) {
           redraw();
 
           lma.set(cam.position);
+            lz = cam.zoom;
 
       }
 
@@ -74,8 +73,6 @@ public class MapRenderSys extends BaseEntitySystem {
         cache.clear();
         cache.beginCache();
 
-        batch.setProjectionMatrix(cam.combined);
-        batch.begin();
 
         int e;
         for(int i = 0; i < getEntityIds().size(); i++){
@@ -83,7 +80,7 @@ public class MapRenderSys extends BaseEntitySystem {
             e = getEntityIds().get(i);
 
             tPSC = psm.get(e);
-            if(cam.frustum.boundsInFrustum(tPSC.x,tPSC.y,0,tPSC.w/2f, tPSC.h/2f,0)){
+            if (cam.frustum.boundsInFrustum(tPSC.x, tPSC.y, 0, tPSC.w, tPSC.h, 0)) {
 
                 cache.add(dm.get(e).d,tPSC.x,tPSC.y, tPSC.w,tPSC.h);
 
@@ -94,9 +91,6 @@ public class MapRenderSys extends BaseEntitySystem {
         }
 
         cid = cache.endCache();
-
-        batch.end();
-
 
     }
 

@@ -5,30 +5,28 @@ import com.artemis.WorldConfiguration;
 import com.artemis.WorldConfigurationBuilder;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteCache;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.draniksoft.ome.editor.components.PosSizeC;
-import com.draniksoft.ome.editor.components.TexRegC;
 import com.draniksoft.ome.editor.esc_utils.PMIStrategy;
 import com.draniksoft.ome.editor.launch.MapLoadBundle;
 import com.draniksoft.ome.editor.manager.ArchTransmuterMgr;
-import com.draniksoft.ome.editor.systems.file_mgmnt.MapLoadSystem;
+import com.draniksoft.ome.editor.manager.MapManager;
+import com.draniksoft.ome.editor.manager.ProjectManager;
+import com.draniksoft.ome.editor.systems.file_mgmnt.ProjecetLoadSys;
 import com.draniksoft.ome.editor.systems.gfx_support.CameraSys;
 import com.draniksoft.ome.editor.systems.render.BaseRenderSys;
 import com.draniksoft.ome.editor.systems.render.MapRDebugSys;
 import com.draniksoft.ome.editor.systems.render.MapRenderSys;
+import com.draniksoft.ome.editor.systems.render.UIRenderSystem;
 import com.draniksoft.ome.editor.systems.support.ConsoleSys;
+import com.draniksoft.ome.editor.systems.support.UiSystem;
 import com.draniksoft.ome.utils.GUtils;
 
 
@@ -40,6 +38,7 @@ public class EditorAdapter extends ApplicationAdapter {
     MapLoadBundle bundle;
 
     Viewport gameVP;
+    Viewport uiVP;
 
 
     public EditorAdapter(MapLoadBundle bundle){
@@ -51,8 +50,6 @@ public class EditorAdapter extends ApplicationAdapter {
     public void create() {
 
         engine = loadEngine();
-
-        loadMap(500,500);
 
         GUtils.getWindow().setVisible(true);
 
@@ -68,36 +65,6 @@ public class EditorAdapter extends ApplicationAdapter {
 
     }
 
-    private void loadMap(int w, int h) {
-
-        Texture t = new Texture(Gdx.files.absolute("/media/vlad/Second/dev/tmp/OME_C/map.png"));
-
-        TextureRegion[][] ts = TextureRegion.split(t,w,h);
-
-        Gdx.app.debug(tag," TS Size "  + ts.length);
-
-        for(int i = 0; i < ts.length; i++){
-
-            for(int j = 0; j < ts.length; j++){
-
-                int e = engine.getSystem(ArchTransmuterMgr.class).build(ArchTransmuterMgr.Codes.MAP_C);
-
-                TexRegC dc = engine.getMapper(TexRegC.class).get(e);
-                dc.d = ts[i][j];
-
-                PosSizeC ps = engine.getMapper(PosSizeC.class).get(e);
-                ps.x = j*w;
-                ps.y = t.getHeight() - (i*h);
-                ps.w = w;
-                ps.h = h;
-
-
-            }
-
-        }
-
-
-    }
 
     public World loadEngine(){
 
@@ -109,19 +76,19 @@ public class EditorAdapter extends ApplicationAdapter {
         InputMultiplexer multiplexer = new InputMultiplexer();
         AssetManager manager = new AssetManager();
 
+        OrthographicCamera gameCam = new OrthographicCamera(640,480);
+        OrthographicCamera uiCam = new OrthographicCamera(640, 480);
+
+        gameVP = new ScreenViewport(gameCam);
+        uiVP = new ScreenViewport(uiCam);
+
+
         SpriteBatch batch = new SpriteBatch();
         ShapeRenderer shapeRenderer = new ShapeRenderer();
 
-        OrthographicCamera gameCam = new OrthographicCamera(640,480);
-        gameVP = new ScreenViewport(gameCam);
-        Viewport uiVP = new FitViewport(640,480);
+        Stage uiStage = new Stage(uiVP);
 
-        SpriteCache mapCache = new SpriteCache(100000,false);
-
-        CameraInputController camCtrl = new CameraInputController(gameCam);
-        camCtrl.translateUnits = 0.1f;
-        camCtrl.pinchZoomFactor = .1f;
-        camCtrl.activateKey = Input.Keys.F2;
+        SpriteCache mapCache = new SpriteCache(1000, false);
 
         /*
 
@@ -131,7 +98,12 @@ public class EditorAdapter extends ApplicationAdapter {
         WorldConfigurationBuilder cb = new WorldConfigurationBuilder();
 
         cb.with(new ArchTransmuterMgr());
-        cb.with(new MapLoadSystem());
+        cb.with(new ProjectManager());
+        cb.with(new MapManager());
+
+        cb.with(new ProjecetLoadSys());
+
+        cb.with(new UiSystem());
 
         cb.with(new CameraSys());
 
@@ -140,6 +112,7 @@ public class EditorAdapter extends ApplicationAdapter {
         cb.with(new MapRenderSys());
         cb.with(new MapRDebugSys());
 
+        cb.with(new UIRenderSystem());
 
         cb.with(new ConsoleSys());
 
@@ -155,12 +128,16 @@ public class EditorAdapter extends ApplicationAdapter {
         c.register(bundle);
         c.register(manager);
 
+        c.register("game_cam", gameCam);
+        c.register("ui_cam", uiCam);
+
         c.register(batch);
         c.register(shapeRenderer);
 
+        c.register("top_stage", uiStage);
+
         c.register(mapCache);
 
-        c.register(gameCam);
 
         c.setInvocationStrategy(new PMIStrategy());
 
@@ -169,8 +146,6 @@ public class EditorAdapter extends ApplicationAdapter {
 
          */
 
-
-        multiplexer.addProcessor(camCtrl);
 
 
         Gdx.input.setInputProcessor(multiplexer);
@@ -186,6 +161,8 @@ public class EditorAdapter extends ApplicationAdapter {
         if(engine != null){
 
             gameVP.update(width,height);
+
+            uiVP.update(width, height, true);
 
             engine.getSystem(ConsoleSys.class).resize(width,height);
 

@@ -8,18 +8,22 @@ public class PMIStrategy extends InvocationStrategy {
 
     long ms;
 
-    ObjectMap<String,Long> mp;
+    ObjectMap<String, Long> cP;
+    ObjectMap<String, Long> mP;
+
 
     @Override
     protected void initialize() {
 
-        mp = new ObjectMap<String, Long>();
-
+        cP = new ObjectMap<String, Long>();
+        mP = new ObjectMap<String, Long>();
     }
 
     @Override
     protected void process() {
+
         BaseSystem[] systemsData = systems.getData();
+
         for (int i = 0, s = systems.size(); s > i; i++) {
             if (disabled.get(i))
                 continue;
@@ -30,7 +34,9 @@ public class PMIStrategy extends InvocationStrategy {
 
             systemsData[i].process();
 
-            mp.put(systemsData[i].getClass().getSimpleName(),System.currentTimeMillis() - ms);
+            cP.put(systemsData[i].getClass().getSimpleName(), System.currentTimeMillis() - ms);
+            mP.put(systemsData[i].getClass().getSimpleName(), Math.max(System.currentTimeMillis() - ms,
+                    mP.get(systemsData[i].getClass().getSimpleName(), 0L)));
 
         }
 
@@ -38,7 +44,11 @@ public class PMIStrategy extends InvocationStrategy {
     }
 
     public String getO(){
-        return mp.toString();
+        return cP.toString();
+    }
+
+    public String getMO() {
+        return mP.toString();
     }
 
     @Override
@@ -46,7 +56,7 @@ public class PMIStrategy extends InvocationStrategy {
         super.setEnabled(system, value);
 
         if(!value){
-            mp.put(system.getClass().getSimpleName(),0L);
+            cP.put(system.getClass().getSimpleName(), 0L);
         }
 
     }

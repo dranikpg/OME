@@ -16,7 +16,7 @@ public class MapRDebugSys extends IteratingSystem {
         super(Aspect.all(MapC.class, PosSizeC.class));
     }
 
-    @Wire
+    @Wire(name = "game_cam")
     OrthographicCamera gameCam;
 
     @Wire
@@ -28,6 +28,7 @@ public class MapRDebugSys extends IteratingSystem {
 
     Color hc = new Color(.8f,.4f,.8f,1);
     Color rdrC = new Color(0.5f,1f,0.5f,1);
+    Color frustumC = new Color(1, 0.5f, 0.5f, 1);
 
     boolean hiddedRender = false;
 
@@ -48,7 +49,7 @@ public class MapRDebugSys extends IteratingSystem {
 
         tPSC = psm.get(e);
 
-        if(gameCam.frustum.boundsInFrustum(tPSC.x,tPSC.y,0,tPSC.w/2, tPSC.h/2,0)){
+        if (gameCam.frustum.boundsInFrustum(tPSC.x, tPSC.y, 0, tPSC.w, tPSC.h, 0)) {
 
             rdr.setColor(rdrC);
             rdr.box(tPSC.x,tPSC.y,0,tPSC.w,tPSC.h,0);
@@ -65,7 +66,6 @@ public class MapRDebugSys extends IteratingSystem {
 
     @Override
     protected void end() {
-
         rdr.end();
 
     }

@@ -1,19 +1,14 @@
 package com.draniksoft.ome.editor.support;
 
-import com.artemis.Aspect;
 import com.artemis.BaseSystem;
 import com.artemis.World;
 import com.artemis.utils.ImmutableBag;
-import com.artemis.utils.IntBag;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.draniksoft.ome.editor.components.MapC;
-import com.draniksoft.ome.editor.components.PosSizeC;
-import com.draniksoft.ome.editor.components.TexRegC;
 import com.draniksoft.ome.editor.esc_utils.PMIStrategy;
-import com.draniksoft.ome.editor.manager.ArchTransmuterMgr;
+import com.draniksoft.ome.editor.launch.MapLoadBundle;
+import com.draniksoft.ome.editor.manager.ProjectManager;
+import com.draniksoft.ome.editor.systems.file_mgmnt.ProjecetLoadSys;
 
 public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
@@ -38,6 +33,35 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     }
 
+    /**
+     * FIle mgmnt utils
+     */
+
+    public void load(String p) {
+
+        world.getSystem(ProjecetLoadSys.class).setBundle(new MapLoadBundle(p));
+        world.getSystem(ProjecetLoadSys.class).load();
+
+    }
+
+    public void save() {
+
+        world.getSystem(ProjecetLoadSys.class).save();
+
+    }
+
+    public void gname() {
+
+        console.log(world.getSystem(ProjectManager.class).getName());
+
+    }
+
+    public void sname(String n) {
+
+        world.getSystem(ProjectManager.class).setmName(n);
+
+    }
+
 
     /**
      *
@@ -57,7 +81,9 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     }
 
-    public void mapchrdr(boolean rdr){
+    public void logmaxperf() {
+
+        console.log(((PMIStrategy) world.getInvocationStrategy()).getMO());
 
     }
 
@@ -68,13 +94,13 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     public void scpos(int x,int y){
 
-        world.getInjector().getRegistered(OrthographicCamera.class).position.set(x,y,0);
+        ((OrthographicCamera) world.getInjector().getRegistered("game_cam")).position.set(x, y, 0);
 
     }
 
     public void sczoom(float z){
 
-        world.getInjector().getRegistered(OrthographicCamera.class).zoom = (z/100f);
+        ((OrthographicCamera) world.getInjector().getRegistered("game_cam")).zoom = (z / 100f);
 
     }
 
@@ -87,11 +113,19 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
         manageSysState(name,false);
     }
 
+    public void stopsys(int id) {
+        world.getSystems().get(id - 1).setEnabled(false);
+    }
+
     public void runsys(String name){
         manageSysState(name,true);
     }
 
-    public void sys_stat(String name){
+    public void runsys(int id) {
+        world.getSystems().get(id - 1).setEnabled(true);
+    }
+
+    public void sys_state(String name) {
         BaseSystem s = findSystem(name);
         if(s == null){
             console.log("No system found");
@@ -100,7 +134,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
         }
     }
 
-    public void list_sys_states(){
+    public void sys_states() {
 
         ImmutableBag<BaseSystem > s = world.getSystems();
         String name;
@@ -122,8 +156,6 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     }
 
-
-
     /**
      * Here are the bigger method implementations
      */
@@ -139,7 +171,6 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     private void manageSysState(String name, boolean state){
 
-
         BaseSystem s = findSystem(name);
 
         if(s == null)
@@ -154,40 +185,6 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     private String formatString(int l, String s){
         return String.format("%1$"+l+ "s", s);
-    }
-
-    public void loadMap(int w, int h) {
-
-        IntBag es = world.getAspectSubscriptionManager().get(Aspect.all(MapC.class)).getEntities();
-
-        for(int i = 0; i < es.size(); i ++ ){
-            world.delete(es.get(i));
-        }
-
-        Texture t = new Texture(Gdx.files.absolute("/media/vlad/Second/dev/tmp/OME_C/map.png"));
-
-        TextureRegion[][] ts = TextureRegion.split(t,w,h);
-
-        for(int i = 0; i < ts.length; i++){
-
-            for(int j = 0; j < ts.length; j++){
-
-                int e = world.getSystem(ArchTransmuterMgr.class).build(ArchTransmuterMgr.Codes.MAP_C);
-
-                TexRegC dc = world.getMapper(TexRegC.class).get(e);
-                dc.d = ts[i][j];
-
-                PosSizeC ps = world.getMapper(PosSizeC.class).get(e);
-                ps.x = j*w;
-                ps.y = t.getHeight() - (i*h);
-                ps.w = w;
-                ps.h = h;
-
-            }
-
-        }
-
-
     }
 
 }

@@ -2,11 +2,15 @@ package com.draniksoft.ome.mgmnt_base;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.utils.BufferUtils;
 import com.draniksoft.ome.utils.Const;
+import com.draniksoft.ome.utils.GUtils;
 import com.draniksoft.ome.utils.ResponseListener;
-import com.draniksoft.ome.utils.preload.Initable;
 
-public class AppDataObserver implements Initable{
+import java.nio.IntBuffer;
+
+public class AppDataObserver extends AppDataManager {
 
     public static final String tag = "AppDataObserver";
     public static boolean loaded = false;
@@ -16,7 +20,8 @@ public class AppDataObserver implements Initable{
     Preferences prefs;
     LanguageManager langMgr;
 
-    private AppDataObserver(){};
+    private AppDataObserver() {
+    }
 
     public static AppDataObserver getI(){
 
@@ -38,13 +43,26 @@ public class AppDataObserver implements Initable{
 
         langMgr = new LanguageManager();
 
+
+        initStatics();
+
         loaded = true;
         l.onResponse(Codes.READY);
 
     }
 
-    public LanguageManager getLangMgr() {
-        return langMgr;
+    private void initStatics() {
+
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+
+                IntBuffer tsizeB = BufferUtils.newIntBuffer(16);
+                Gdx.gl20.glGetIntegerv(GL20.GL_MAX_TEXTURE_SIZE, tsizeB);
+                GUtils.maxTSize = tsizeB.get();
+
+            }
+        });
     }
 
     // shorter function for "nicer" language manager access

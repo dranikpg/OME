@@ -11,5 +11,4 @@ public class Const {
     public static final String prefsID = "dsoft_ome";
 
 
-
 }

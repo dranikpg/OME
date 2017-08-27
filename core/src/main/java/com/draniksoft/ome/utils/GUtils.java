@@ -6,6 +6,9 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.BufferUtils;
 
 import java.nio.IntBuffer;
@@ -17,6 +20,8 @@ import java.nio.IntBuffer;
  * */
 
 public class GUtils {
+
+    public static int maxTSize = -1;
 
     public static Lwjgl3Graphics getGraphics(){
         return (Lwjgl3Graphics) Gdx.graphics;
@@ -65,4 +70,24 @@ public class GUtils {
     }
 
 
+    public static TextureRegion[][] splitTITR(Texture t, int h, int w) {
+
+        int yb = MathUtils.ceil(t.getHeight() * 1f / h);
+        int xb = MathUtils.ceil(t.getWidth() * 1f / w);
+
+        TextureRegion[][] r = new TextureRegion[yb][xb];
+
+        for (int y = yb - 1; y >= 0; y--) {
+
+            for (int x = 0; x < xb; x++) {
+
+                r[y][x] = new TextureRegion(t, x * w, Math.max(0, t.getHeight() - (y + 1) * (h)), Math.min(w, t.getWidth() - x * w), (Math.min(t.getHeight() - (y + 1) * (h), 0) + h));
+
+            }
+
+        }
+
+        return r;
+
+    }
 }
