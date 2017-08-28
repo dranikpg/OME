@@ -1,4 +1,4 @@
-package com.draniksoft.ome.editor.components;
+package com.draniksoft.ome.editor.components.gfx;
 
 import com.artemis.PooledComponent;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;

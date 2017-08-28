@@ -17,18 +17,16 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.draniksoft.ome.editor.esc_utils.PMIStrategy;
 import com.draniksoft.ome.editor.launch.MapLoadBundle;
-import com.draniksoft.ome.editor.manager.ArchTransmuterMgr;
-import com.draniksoft.ome.editor.manager.MapManager;
-import com.draniksoft.ome.editor.manager.ProjectManager;
+import com.draniksoft.ome.editor.manager.*;
 import com.draniksoft.ome.editor.systems.file_mgmnt.ProjecetLoadSys;
 import com.draniksoft.ome.editor.systems.gfx_support.CameraSys;
-import com.draniksoft.ome.editor.systems.render.BaseRenderSys;
-import com.draniksoft.ome.editor.systems.render.MapRDebugSys;
-import com.draniksoft.ome.editor.systems.render.MapRenderSys;
-import com.draniksoft.ome.editor.systems.render.UIRenderSystem;
+import com.draniksoft.ome.editor.systems.gui.FloatUILSupSys;
+import com.draniksoft.ome.editor.systems.gui.UiSystem;
+import com.draniksoft.ome.editor.systems.pos.PhysicsSys;
+import com.draniksoft.ome.editor.systems.render.*;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.ConsoleSys;
-import com.draniksoft.ome.editor.systems.support.UiSystem;
+import com.draniksoft.ome.editor.systems.support.InputSys;
 import com.draniksoft.ome.utils.GUtils;
 import net.mostlyoriginal.api.event.common.EventSystem;
 
@@ -90,6 +88,7 @@ public class EditorAdapter extends ApplicationAdapter {
         ShapeRenderer shapeRenderer = new ShapeRenderer();
 
         Stage uiStage = new Stage(uiVP);
+        Stage gameStage = new Stage(uiVP);
 
         SpriteCache mapCache = new SpriteCache(1000, false);
 
@@ -110,15 +109,28 @@ public class EditorAdapter extends ApplicationAdapter {
         // OTHER MANAGER
 
         cb.with(new ProjectManager());
+
         cb.with(new MapManager());
 
+        cb.with(new DrawableMgr());
+
+        cb.with(new LocationMgr());
+
         // SUPPORT SYSTEMS
+
+        cb.with(new InputSys());
 
         cb.with(new ProjecetLoadSys());
 
         cb.with(new UiSystem());
 
+        cb.with(new FloatUILSupSys());
+
         cb.with(new ActionSystem());
+
+        // PHYS POS SYS
+
+        cb.with(new PhysicsSys());
 
         // RENDER PART
 
@@ -128,6 +140,12 @@ public class EditorAdapter extends ApplicationAdapter {
 
         cb.with(new MapRenderSys());
         cb.with(new MapRDebugSys());
+
+        cb.with(new LocationRSys());
+
+        cb.with(new PhysRDebugSys());
+
+        cb.with(new FloatUIRenderSys());
 
         cb.with(new UIRenderSystem());
 
@@ -145,6 +163,9 @@ public class EditorAdapter extends ApplicationAdapter {
         c.register(bundle);
         c.register(manager);
 
+        c.register("ui_vp", uiVP);
+        c.register("game_vp", gameVP);
+
         c.register("game_cam", gameCam);
         c.register("ui_cam", uiCam);
 
@@ -152,8 +173,11 @@ public class EditorAdapter extends ApplicationAdapter {
         c.register(shapeRenderer);
 
         c.register("top_stage", uiStage);
+        c.register("game_stage", gameStage);
 
         c.register(mapCache);
+
+        c.register(phys);
 
         c.setSystem(EventSystem.class);
 
@@ -164,7 +188,6 @@ public class EditorAdapter extends ApplicationAdapter {
 
 
          */
-
 
 
         Gdx.input.setInputProcessor(multiplexer);

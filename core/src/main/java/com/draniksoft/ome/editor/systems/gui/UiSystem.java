@@ -1,4 +1,4 @@
-package com.draniksoft.ome.editor.systems.support;
+package com.draniksoft.ome.editor.systems.gui;
 
 import com.artemis.BaseSystem;
 import com.artemis.annotations.Wire;
@@ -8,8 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.draniksoft.ome.editor.support.actions.SaveAction;
+import com.draniksoft.ome.editor.support.actions.proj.SaveProjectAction;
 import com.draniksoft.ome.editor.systems.render.UIRenderSystem;
+import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.ui.BaseWindow;
 import com.draniksoft.ome.editor.ui.utils.UriMenuItem;
 import com.kotcrab.vis.ui.widget.Menu;
@@ -141,10 +142,18 @@ public class UiSystem extends BaseSystem {
         fileM.addItem(new MenuItem("Save", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                world.getSystem(ActionSystem.class).exec(new SaveAction());
+                world.getSystem(ActionSystem.class).exec(new SaveProjectAction());
             }
         }));
 
+
+        Menu editM = new Menu("Edit");
+        editM.addItem(new MenuItem("Undo", new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                world.getSystem(ActionSystem.class).undo();
+            }
+        }));
 
         menuBar.addMenu(fileM);
 

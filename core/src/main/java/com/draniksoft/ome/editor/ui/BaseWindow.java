@@ -8,7 +8,6 @@ public abstract class BaseWindow extends VisWindow {
         super(title);
     }
 
-
     public abstract void init();
 
     public abstract void open(String uri);

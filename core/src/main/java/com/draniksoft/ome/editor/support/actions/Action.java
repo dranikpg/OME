@@ -11,7 +11,7 @@ public interface Action {
 
     void _do(World w);
 
-    void _undo();
+    void _undo(World w);
 
     //
     boolean isUndoable();

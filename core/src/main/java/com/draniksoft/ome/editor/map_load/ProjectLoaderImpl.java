@@ -2,6 +2,8 @@ package com.draniksoft.ome.editor.map_load;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.*;
+import com.draniksoft.ome.editor.manager.DrawableMgr;
+import com.draniksoft.ome.editor.manager.LocationMgr;
 import com.draniksoft.ome.editor.manager.MapManager;
 import com.draniksoft.ome.editor.manager.ProjectManager;
 import com.draniksoft.ome.utils.ResponseListener;
@@ -67,7 +69,15 @@ public class ProjectLoaderImpl extends ProjectLoader {
 
                 Gdx.app.debug(tag, "Processing " + mgr.getClass().getSimpleName());
 
-                mgr.loadL(rootNode.get(mgr.getNode()), _this);
+                if (mgr.getNode() != null) {
+
+                    mgr.loadL(rootNode.get(mgr.getNode()), _this);
+
+                } else {
+
+                    mgr.loadL(null, _this);
+
+                }
 
                 if (crashed) return;
 
@@ -133,7 +143,9 @@ public class ProjectLoaderImpl extends ProjectLoader {
 
         mgrs = new LoadSaveManager[]{
                 world.getSystem(ProjectManager.class),
-                world.getSystem(MapManager.class)
+                world.getSystem(MapManager.class),
+                world.getSystem(DrawableMgr.class),
+                world.getSystem(LocationMgr.class)
         };
 
         Gdx.app.debug(tag, "Collected managers");

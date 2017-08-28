@@ -156,6 +156,20 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     }
 
+    /*
+
+    Location utils
+
+     */
+
+
+    public void newl(int x, int y, int h, int w, String txt) {
+
+
+    }
+
+
+
     /**
      * Here are the bigger method implementations
      */

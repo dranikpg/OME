@@ -7,8 +7,8 @@ import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.draniksoft.ome.editor.components.MapC;
-import com.draniksoft.ome.editor.components.PosSizeC;
+import com.draniksoft.ome.editor.components.pos.PosSizeC;
+import com.draniksoft.ome.editor.components.tps.MapC;
 
 public class MapRDebugSys extends IteratingSystem {
 

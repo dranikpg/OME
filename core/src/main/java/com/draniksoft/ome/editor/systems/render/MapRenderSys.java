@@ -8,9 +8,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteCache;
 import com.badlogic.gdx.math.Vector3;
-import com.draniksoft.ome.editor.components.MapC;
-import com.draniksoft.ome.editor.components.PosSizeC;
-import com.draniksoft.ome.editor.components.TexRegC;
+import com.draniksoft.ome.editor.components.gfx.TexRegC;
+import com.draniksoft.ome.editor.components.pos.PosSizeC;
+import com.draniksoft.ome.editor.components.tps.MapC;
 
 public class MapRenderSys extends BaseEntitySystem {
 

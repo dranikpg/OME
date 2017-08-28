@@ -5,15 +5,19 @@ import com.artemis.ArchetypeBuilder;
 import com.artemis.EntityTransmuter;
 import com.artemis.Manager;
 import com.badlogic.gdx.utils.IntMap;
-import com.draniksoft.ome.editor.components.MapC;
-import com.draniksoft.ome.editor.components.PosSizeC;
-import com.draniksoft.ome.editor.components.TexRegC;
+import com.draniksoft.ome.editor.components.gfx.DrawableC;
+import com.draniksoft.ome.editor.components.gfx.TexRegC;
+import com.draniksoft.ome.editor.components.pos.PhysC;
+import com.draniksoft.ome.editor.components.pos.PosSizeC;
+import com.draniksoft.ome.editor.components.tps.LocationC;
+import com.draniksoft.ome.editor.components.tps.MapC;
 
 public class ArchTransmuterMgr extends Manager{
 
     public static class Codes{
 
         public static final int MAP_C = 1;
+        public static final int BASE_LOCATION = 2;
 
     }
 
@@ -38,14 +42,18 @@ public class ArchTransmuterMgr extends Manager{
         types.put(Codes.MAP_C,new ArchetypeBuilder().add(TexRegC.class)
                 .add(MapC.class).add(PosSizeC.class).build(world));
 
+        types.put(Codes.BASE_LOCATION, new ArchetypeBuilder().add(PhysC.class)
+                .add(PosSizeC.class).add(DrawableC.class).add(LocationC.class)
+                .add(PhysC.class).build(world));
+
     }
 
     public void registerArchType(){
 
     }
 
-    public void getArchType(int code){
-
+    public Archetype getArchType(int code) {
+        return types.get(code);
     }
 
     public int build(int code){

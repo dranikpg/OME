@@ -1,16 +1,17 @@
-package com.draniksoft.ome.editor.support.actions;
+package com.draniksoft.ome.editor.support.actions.proj;
 
 import com.artemis.World;
+import com.draniksoft.ome.editor.support.actions.Action;
 import com.draniksoft.ome.editor.systems.file_mgmnt.ProjecetLoadSys;
 
-public class SaveAction implements Action {
+public class SaveProjectAction implements Action {
     @Override
     public void _do(World w) {
         w.getSystem(ProjecetLoadSys.class).save();
     }
 
     @Override
-    public void _undo() {
+    public void _undo(World _w) {
 
     }
 

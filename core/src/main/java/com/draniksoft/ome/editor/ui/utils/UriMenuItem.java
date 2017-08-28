@@ -2,7 +2,7 @@ package com.draniksoft.ome.editor.ui.utils;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.draniksoft.ome.editor.systems.support.UiSystem;
+import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.kotcrab.vis.ui.widget.MenuItem;
 
 

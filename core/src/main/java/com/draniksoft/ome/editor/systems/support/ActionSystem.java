@@ -17,6 +17,8 @@ public class ActionSystem extends BaseSystem {
     @Override
     protected void processSystem() {
 
+        stack = new LinkedList<Action>();
+
     }
 
     public void exec(Action a) {
@@ -24,6 +26,7 @@ public class ActionSystem extends BaseSystem {
         Gdx.app.debug(tag, "Executing " + a.getClass().getSimpleName());
 
         a._do(world);
+
 
         stack.add(a);
 
@@ -51,7 +54,7 @@ public class ActionSystem extends BaseSystem {
 
                 Gdx.app.debug(tag, "Undoing " + a.getClass().getSimpleName());
 
-                a._undo();
+                a._undo(world);
                 stack.removeLast();
                 return;
             }

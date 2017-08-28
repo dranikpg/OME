@@ -1,4 +1,4 @@
-package com.draniksoft.ome.editor.components;
+package com.draniksoft.ome.editor.components.pos;
 
 import com.artemis.PooledComponent;
 
