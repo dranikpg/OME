@@ -1,22 +1,13 @@
 package com.draniksoft.ome.editor.systems.support;
 
-import com.artemis.Aspect;
 import com.artemis.BaseSystem;
 import com.artemis.annotations.Wire;
-import com.artemis.utils.IntBag;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.QueryCallback;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.draniksoft.ome.editor.components.supp.SelectionC;
-import com.draniksoft.ome.editor.support.event.SelectionChangeE;
-import com.draniksoft.ome.utils.PUtils;
-import net.mostlyoriginal.api.event.common.EventSystem;
+import com.draniksoft.ome.editor.support.input.InputController;
+import com.draniksoft.ome.editor.support.input.SelectIC;
 
 public class InputSys extends BaseSystem implements InputProcessor {
 
@@ -31,93 +22,54 @@ public class InputSys extends BaseSystem implements InputProcessor {
     @Wire
     InputMultiplexer mx;
 
-    float tdt = -1;
+    // aka the current tool
+    InputController mainIC;
 
-    float tl = 10;
-
-    Vector2 tV;
-    IntArray es;
-
-    float pressT = .3f;
+    // aka the behavior
+    InputController defIC;
 
     @Override
     protected void initialize() {
-        tV = new Vector2();
-        es = new IntArray();
 
         mx.addProcessor(this);
+
+        setDefIC(new SelectIC());
     }
 
     @Override
     protected void processSystem() {
 
-        if (tdt >= 0) {
-            tdt += Gdx.graphics.getDeltaTime();
+        if (mainIC != null) {
+            mainIC.update();
         }
 
-        if (tdt > pressT) {
-            Gdx.app.debug(tag, "Touch down");
-            processI();
-            tdt = -1;
+        if (defIC != null) {
+            defIC.update();
         }
-    }
-
-    private void processI() {
-
-        int x = Gdx.input.getX();
-        int y = Gdx.input.getY();
-
-        tV.set(x, y);
-
-        Gdx.app.debug(tag, "TD AT " + tV.toString());
-
-        tV = gameVP.unproject(tV);
-
-        es.clear();
-        phys.QueryAABB(new QueryCallback() {
-                           @Override
-                           public boolean reportFixture(Fixture fixture) {
-                               es.add((Integer) fixture.getBody().getUserData());
-                               return false;
-                           }
-                       }, (tV.x - tl) / PUtils.PPM, (tV.y - tl) / PUtils.PPM,
-                (tV.x + tl) / PUtils.PPM, (tV.y + tl) / PUtils.PPM);
-
-
-        IntBag sels = world.getAspectSubscriptionManager().get(Aspect.all(SelectionC.class)).getEntities();
-
-        for (int i = 0; i < sels.size(); i++) {
-
-            if (es.size > 0 && sels.get(i) == es.get(0)) return;
-
-            world.getMapper(SelectionC.class).remove(sels.get(i));
-
-        }
-
-        int e = -1;
-        if (es.size > 0) {
-
-            e = es.get(0);
-
-            world.getMapper(SelectionC.class).create(e);
-
-        }
-
-        SelectionChangeE ev = new SelectionChangeE();
-        ev.old = sels.size() > 0 ? sels.get(0) : -1;
-        ev.n = e;
-        world.getSystem(EventSystem.class).dispatch(ev);
-
-        Gdx.app.debug(tag, "Selection changed ");
-
 
     }
 
-    public int getSel() {
-        if (es.size > 0)
-            return es.get(0);
-        else
-            return 0;
+
+    public void setMainIC(InputController mainIC) {
+
+        if (this.mainIC != null) {
+            this.mainIC.destruct();
+        }
+
+        this.mainIC = mainIC;
+
+        if (mainIC != null) mainIC.init(world);
+    }
+
+    public void setDefIC(InputController defIC) {
+
+        if (this.defIC != null) {
+            this.defIC.destruct();
+        }
+
+        this.defIC = defIC;
+
+        if (defIC != null) defIC.init(world);
     }
 
     @Override
@@ -137,29 +89,59 @@ public class InputSys extends BaseSystem implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        tdt = 0;
+
+        if (((mainIC == null) || !mainIC.touchDown(screenX, screenY, pointer, button)) && defIC != null) {
+            defIC.touchDown(screenX, screenY, pointer, button);
+        }
+
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        tdt = -1;
+
+        if ((mainIC == null || mainIC.touchUp(screenX, screenY, pointer, button)) && defIC != null) {
+            defIC.touchUp(screenX, screenY, pointer, button);
+        }
+
         return false;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        tdt = -1;
+
+        if ((mainIC == null || mainIC.touchDragged(screenX, screenY, pointer)) && defIC != null) {
+            defIC.touchDragged(screenX, screenY, pointer);
+        }
+
         return false;
     }
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
+
+        if ((mainIC == null || mainIC.mouseMoved(screenX, screenY)) && defIC != null) {
+            defIC.mouseMoved(screenX, screenY);
+        }
+
         return false;
     }
 
     @Override
     public boolean scrolled(int amount) {
+
+        if (mainIC != null) {
+            mainIC.scrolled(amount);
+        }
+
         return false;
+    }
+
+    public InputController getMainIC() {
+        return mainIC;
+    }
+
+    public InputController getDefIC() {
+        return defIC;
     }
 }

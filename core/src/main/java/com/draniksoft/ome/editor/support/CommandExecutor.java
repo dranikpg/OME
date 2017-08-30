@@ -8,7 +8,14 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.draniksoft.ome.editor.esc_utils.PMIStrategy;
 import com.draniksoft.ome.editor.launch.MapLoadBundle;
 import com.draniksoft.ome.editor.manager.ProjectManager;
+import com.draniksoft.ome.editor.support.actions.loc.AddLocationAction;
+import com.draniksoft.ome.editor.support.input.CreateLocIC;
+import com.draniksoft.ome.editor.support.input.InputController;
+import com.draniksoft.ome.editor.support.input.SelectIC;
+import com.draniksoft.ome.editor.support.input.TimedSelectIC;
 import com.draniksoft.ome.editor.systems.file_mgmnt.ProjecetLoadSys;
+import com.draniksoft.ome.editor.systems.support.ActionSystem;
+import com.draniksoft.ome.editor.systems.support.InputSys;
 
 public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
@@ -75,7 +82,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
         console.log(Float.toString(Gdx.graphics.getDeltaTime()));
     }
 
-    public void logperf(){
+    public void log_perf() {
 
         console.log(((PMIStrategy) world.getInvocationStrategy()).getO());
 
@@ -165,10 +172,63 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     public void newl(int x, int y, int h, int w, String txt) {
 
+        world.getSystem(ActionSystem.class).exec(new AddLocationAction(x, y, h, w, txt));
+
+    }
+
+    /**
+     * Input utils
+     */
+
+    public void log_ic() {
+
+        InputController m = world.getSystem(InputSys.class).getMainIC();
+        InputController d = world.getSystem(InputSys.class).getDefIC();
+
+        if (m != null) {
+            console.log("Main ic channel : " + m.getClass().getSimpleName());
+        } else {
+            console.log("Main ic channel : NULL");
+        }
+
+        if (d != null) {
+            console.log("Def ic channel : " + d.getClass().getSimpleName());
+        } else {
+            console.log("Def ic channel : NULL");
+        }
+
+
+    }
+
+    public void ic_sel() {
+        world.getSystem(InputSys.class).setDefIC(new SelectIC());
+    }
+
+    public void ic_tsel() {
+        world.getSystem(InputSys.class).setDefIC(new TimedSelectIC());
+    }
+
+    public void ic_mnull() {
+
+        world.getSystem(InputSys.class).setMainIC(null);
+
+    }
+
+    public void ic_newl() {
+
+        world.getSystem(InputSys.class).setMainIC(new CreateLocIC());
 
     }
 
 
+    /**
+     * Action utils
+     */
+
+
+    public void undoa() {
+        world.getSystem(ActionSystem.class).undo();
+    }
 
     /**
      * Here are the bigger method implementations

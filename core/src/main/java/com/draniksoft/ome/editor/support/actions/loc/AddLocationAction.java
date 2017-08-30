@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.draniksoft.ome.editor.components.gfx.DrawableC;
 import com.draniksoft.ome.editor.components.pos.PhysC;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
+import com.draniksoft.ome.editor.components.selection.FLabelC;
 import com.draniksoft.ome.editor.manager.ArchTransmuterMgr;
 import com.draniksoft.ome.editor.manager.DrawableMgr;
 import com.draniksoft.ome.editor.support.actions.Action;
@@ -53,9 +54,9 @@ public class AddLocationAction implements Action {
         DrawableC dc = _w.getMapper(DrawableC.class).get(e);
         dc.d = new TextureRegionDrawable(new TextureRegion(_w.getSystem(DrawableMgr.class).t));
 
-        /*FLabelC lc = _w.getMapper(FLabelC.class).create(e);
+        FLabelC lc = _w.getMapper(FLabelC.class).create(e);
         lc.txt = name;
-        */
+
 
         BodyDef bd = new BodyDef();
         bd.type = BodyDef.BodyType.KinematicBody;
