@@ -27,6 +27,7 @@ import com.draniksoft.ome.editor.systems.render.*;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.ConsoleSys;
 import com.draniksoft.ome.editor.systems.support.InputSys;
+import com.draniksoft.ome.editor.systems.support.TimeActivitySys;
 import com.draniksoft.ome.utils.GUtils;
 import net.mostlyoriginal.api.event.common.EventSystem;
 
@@ -108,13 +109,15 @@ public class EditorAdapter extends ApplicationAdapter {
 
         // OTHER MANAGER
 
-        cb.with(new ProjectManager());
+        cb.with(new ProjectMgr());
 
-        cb.with(new MapManager());
+        cb.with(new MapMgr());
 
         cb.with(new DrawableMgr());
 
         cb.with(new LocationMgr());
+
+        cb.with(new TimeMgr());
 
         // SUPPORT SYSTEMS
 
@@ -122,11 +125,16 @@ public class EditorAdapter extends ApplicationAdapter {
 
         cb.with(new ProjecetLoadSys());
 
+        //
+
         cb.with(new UiSystem());
 
         cb.with(new FloatUILSupSys());
 
+        cb.with(new TimeActivitySys());
+
         cb.with(new ActionSystem());
+
 
         // PHYS POS SYS
 

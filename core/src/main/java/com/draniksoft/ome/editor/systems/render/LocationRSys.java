@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.draniksoft.ome.editor.components.gfx.DrawableC;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
+import com.draniksoft.ome.editor.components.state.InactiveC;
+import com.draniksoft.ome.editor.components.state.TInactiveC;
 import com.draniksoft.ome.editor.components.tps.LocationC;
 
 public class LocationRSys extends IteratingSystem {
@@ -16,7 +18,8 @@ public class LocationRSys extends IteratingSystem {
 
 
     public LocationRSys() {
-        super(Aspect.all(PosSizeC.class, DrawableC.class, LocationC.class));
+        super(Aspect.all(PosSizeC.class, DrawableC.class, LocationC.class)
+                .exclude(InactiveC.class, TInactiveC.class));
     }
 
     ComponentMapper<PosSizeC> posM;
@@ -28,6 +31,7 @@ public class LocationRSys extends IteratingSystem {
 
     @Wire(name = "game_cam")
     OrthographicCamera cam;
+
 
     @Override
     protected void begin() {

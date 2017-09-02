@@ -4,8 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.*;
 import com.draniksoft.ome.editor.manager.DrawableMgr;
 import com.draniksoft.ome.editor.manager.LocationMgr;
-import com.draniksoft.ome.editor.manager.MapManager;
-import com.draniksoft.ome.editor.manager.ProjectManager;
+import com.draniksoft.ome.editor.manager.MapMgr;
+import com.draniksoft.ome.editor.manager.ProjectMgr;
 import com.draniksoft.ome.utils.ResponseListener;
 import com.draniksoft.ome.utils.struct.Pair;
 
@@ -142,8 +142,8 @@ public class ProjectLoaderImpl extends ProjectLoader {
     private void initMgrs() {
 
         mgrs = new LoadSaveManager[]{
-                world.getSystem(ProjectManager.class),
-                world.getSystem(MapManager.class),
+                world.getSystem(ProjectMgr.class),
+                world.getSystem(MapMgr.class),
                 world.getSystem(DrawableMgr.class),
                 world.getSystem(LocationMgr.class)
         };

@@ -8,9 +8,9 @@ import com.draniksoft.ome.editor.map_load.LoadSaveManager;
 import com.draniksoft.ome.editor.map_load.ProjectLoader;
 import com.draniksoft.ome.utils.struct.Pair;
 
-public class ProjectManager extends Manager implements LoadSaveManager {
+public class ProjectMgr extends Manager implements LoadSaveManager {
 
-    static final String tag = "ProjectManager";
+    static final String tag = "ProjectMgr";
 
     String mName;
 

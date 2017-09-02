@@ -16,7 +16,7 @@ import com.draniksoft.ome.editor.manager.DrawableMgr;
 import com.draniksoft.ome.editor.support.actions.Action;
 import com.draniksoft.ome.utils.PUtils;
 
-public class AddLocationAction implements Action {
+public class CreateLocationA implements Action {
 
     int x, y;
     int w = 40;
@@ -26,13 +26,13 @@ public class AddLocationAction implements Action {
 
     String name;
 
-    public AddLocationAction(int x, int y, String name) {
+    public CreateLocationA(int x, int y, String name) {
         this.x = x - w / 2;
         this.y = y - h / 2;
         this.name = name;
     }
 
-    public AddLocationAction(int x, int y, int w, int h, String name) {
+    public CreateLocationA(int x, int y, int w, int h, String name) {
         this.x = x - w / 2;
         this.y = y - h / 2;
         this.w = w;
@@ -55,6 +55,7 @@ public class AddLocationAction implements Action {
         dc.d = new TextureRegionDrawable(new TextureRegion(_w.getSystem(DrawableMgr.class).t));
 
         FLabelC lc = _w.getMapper(FLabelC.class).create(e);
+        lc.lid = -1;
         lc.txt = name;
 
 
@@ -92,7 +93,7 @@ public class AddLocationAction implements Action {
 
     @Override
     public boolean isUndoable() {
-        return false;
+        return true;
     }
 
     @Override

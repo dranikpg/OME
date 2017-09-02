@@ -14,9 +14,9 @@ import com.draniksoft.ome.editor.map_load.ProjectLoader;
 import com.draniksoft.ome.utils.GUtils;
 import com.draniksoft.ome.utils.struct.Pair;
 
-public class MapManager extends Manager implements LoadSaveManager {
+public class MapMgr extends Manager implements LoadSaveManager {
 
-    public static final String tag = "MapManager";
+    public static final String tag = "MapMgr";
 
     boolean aviab = false;
     int w, h;

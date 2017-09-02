@@ -15,9 +15,12 @@ public class ActionSystem extends BaseSystem {
     int maxStackSize = 10;
 
     @Override
-    protected void processSystem() {
-
+    protected void initialize() {
         stack = new LinkedList<Action>();
+    }
+
+    @Override
+    protected void processSystem() {
 
     }
 
@@ -44,9 +47,10 @@ public class ActionSystem extends BaseSystem {
 
     public void undo() {
 
-        int i = stack.size();
+        // index of last element
+        int i = stack.size() - 1;
 
-        while (i > 0) {
+        while (i >= 0) {
 
             Action a = stack.get(i);
 
@@ -65,5 +69,15 @@ public class ActionSystem extends BaseSystem {
 
     }
 
+    public LinkedList<Action> getStack() {
+        return stack;
+    }
 
+    public int getMaxStackSize() {
+        return maxStackSize;
+    }
+
+    public void setMaxStackSize(int maxStackSize) {
+        this.maxStackSize = maxStackSize;
+    }
 }

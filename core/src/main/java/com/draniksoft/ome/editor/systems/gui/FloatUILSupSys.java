@@ -11,10 +11,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
 import com.draniksoft.ome.editor.components.selection.FLabelC;
 import com.draniksoft.ome.editor.components.selection.SelectionC;
+import com.draniksoft.ome.editor.components.state.TInactiveC;
 import com.draniksoft.ome.editor.support.event.SelectionChangeE;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import net.mostlyoriginal.api.event.common.Subscribe;
@@ -28,28 +30,58 @@ public class FloatUILSupSys extends IteratingSystem {
     LinkedList<Actor> actrs;
 
     public FloatUILSupSys() {
-        super(Aspect.all(FLabelC.class, PosSizeC.class));
+        super(Aspect.all(FLabelC.class, PosSizeC.class).exclude(TInactiveC.class));
     }
-
     @Override
     protected void initialize() {
         actrs = new LinkedList<Actor>();
         tv = new Vector2();
 
-        EntitySubscription subscription = world.getAspectSubscriptionManager().get(Aspect.all(FLabelC.class, PosSizeC.class));
-
-        subscription.addSubscriptionListener(new EntitySubscription.SubscriptionListener() {
+        getSubscription().addSubscriptionListener(new EntitySubscription.SubscriptionListener() {
             @Override
-            public void inserted(IntBag entities) {
+            public void inserted(IntBag es) {
+
+                Gdx.app.debug(tag, "Entities added ");
+
+                for (int e = 0; e < es.size(); e++) {
+
+                    tc = flM.get(es.get(e));
+
+                    if (tc.lid == -1) {
+                        tc.lid = newLabel(tc.txt);
+                    }
+
+                }
 
             }
 
             @Override
-            public void removed(IntBag entities) {
+            public void removed(IntBag es) {
 
+                Gdx.app.debug(tag, "Entities removed");
+
+                for (int i = 0; i < es.size(); i++) {
+
+                    actrs.get(flM.get(es.get(i)).lid).addAction(Actions.sequence(
+
+                            Actions.alpha(0, 1f),
+                            new com.badlogic.gdx.scenes.scene2d.Action() {
+                                @Override
+                                public boolean act(float delta) {
+                                    tc.lid = -1;
+                                    return true;
+                                }
+                            },
+                            Actions.removeActor()
+
+                    ));
+
+                }
 
             }
+
         });
+
     }
 
 
@@ -79,11 +111,6 @@ public class FloatUILSupSys extends IteratingSystem {
     protected void process(int e) {
 
         tc = flM.get(e);
-
-        if (tc.lid == -1) {
-            tc.lid = newLabel(tc.txt);
-        }
-
         pc = pM.get(e);
 
         if (cam.frustum.boundsInFrustum(pc.x, pc.y, 0, pc.w, pc.h, 0)) {
@@ -129,6 +156,11 @@ public class FloatUILSupSys extends IteratingSystem {
         }
 
         if (e.n != -1 && flM.has(e.n)) {
+
+            if (flM.get(e.n).lid == -1) {
+                flM.get(e.n).lid = newLabel(tc.txt);
+            }
+
             actrs.get(flM.get(e.n).lid).setColor(1, 0, 0, 1);
         }
 

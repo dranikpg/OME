@@ -3,7 +3,7 @@ package com.draniksoft.ome.editor.support.input;
 import com.artemis.World;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.draniksoft.ome.editor.support.actions.loc.AddLocationAction;
+import com.draniksoft.ome.editor.support.actions.loc.CreateLocationA;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.InputSys;
 
@@ -68,7 +68,7 @@ public class CreateLocIC implements InputController {
 
         tmp = ((Viewport) w.getInjector().getRegistered("game_vp")).unproject(tmp.set(screenX, screenY));
 
-        w.getSystem(ActionSystem.class).exec(new AddLocationAction((int) tmp.x, (int) tmp.y, 50, 50, "DEF"));
+        w.getSystem(ActionSystem.class).exec(new CreateLocationA((int) tmp.x, (int) tmp.y, 50, 50, "DEF"));
 
         return true;
     }
