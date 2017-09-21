@@ -4,6 +4,6 @@ import com.artemis.Component;
 
 public class LocationC extends Component {
 
-    String name;
+    public String name;
 
 }

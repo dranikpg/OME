@@ -68,7 +68,7 @@ public class CreateLocIC implements InputController {
 
         tmp = ((Viewport) w.getInjector().getRegistered("game_vp")).unproject(tmp.set(screenX, screenY));
 
-        w.getSystem(ActionSystem.class).exec(new CreateLocationA((int) tmp.x, (int) tmp.y, 50, 50, "DEF"));
+        w.getSystem(ActionSystem.class).exec(new CreateLocationA((int) tmp.x, (int) tmp.y, 50, 50));
 
         return true;
     }

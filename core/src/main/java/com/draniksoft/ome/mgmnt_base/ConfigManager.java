@@ -2,7 +2,7 @@ package com.draniksoft.ome.mgmnt_base;
 
 import com.draniksoft.ome.utils.ResponseListener;
 
-public class ConfigMgr extends AppDataManager {
+public class ConfigManager extends AppDataManager {
 
 
     @Override
@@ -11,4 +11,8 @@ public class ConfigMgr extends AppDataManager {
     }
 
 
+    @Override
+    public void save(ResponseListener l, boolean t) {
+
+    }
 }

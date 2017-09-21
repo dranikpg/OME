@@ -22,6 +22,7 @@ public class ConsoleSys extends BaseSystem {
         console = new GUIConsole();
 
         console.setCommandExecutor(new CommandExecutor(world));
+        console.log("See the github wiki for more details");
 
         console.setDisplayKeyID(Input.Keys.F1);
 

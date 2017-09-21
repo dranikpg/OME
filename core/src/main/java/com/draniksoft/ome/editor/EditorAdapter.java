@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.draniksoft.ome.editor.esc_utils.PMIStrategy;
 import com.draniksoft.ome.editor.launch.MapLoadBundle;
 import com.draniksoft.ome.editor.manager.*;
+import com.draniksoft.ome.editor.systems.file_mgmnt.AssetLScheduleSys;
 import com.draniksoft.ome.editor.systems.file_mgmnt.ProjecetLoadSys;
 import com.draniksoft.ome.editor.systems.gfx_support.CameraSys;
 import com.draniksoft.ome.editor.systems.gui.FloatUILSupSys;
@@ -27,8 +28,10 @@ import com.draniksoft.ome.editor.systems.render.*;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.ConsoleSys;
 import com.draniksoft.ome.editor.systems.support.InputSys;
-import com.draniksoft.ome.editor.systems.support.TimeActivitySys;
+import com.draniksoft.ome.editor.systems.time.TimeActivitySys;
+import com.draniksoft.ome.mgmnt_base.AppDataObserver;
 import com.draniksoft.ome.utils.GUtils;
+import com.draniksoft.ome.utils.ResponseListener;
 import net.mostlyoriginal.api.event.common.EventSystem;
 
 
@@ -115,7 +118,7 @@ public class EditorAdapter extends ApplicationAdapter {
 
         cb.with(new DrawableMgr());
 
-        cb.with(new LocationMgr());
+        cb.with(new EntitySrzMgr());
 
         cb.with(new TimeMgr());
 
@@ -158,6 +161,11 @@ public class EditorAdapter extends ApplicationAdapter {
         cb.with(new UIRenderSystem());
 
         cb.with(new ConsoleSys());
+
+
+        // Afterwards
+
+        cb.with(new AssetLScheduleSys());
 
 
         /*
@@ -217,6 +225,30 @@ public class EditorAdapter extends ApplicationAdapter {
             engine.getSystem(ConsoleSys.class).resize(width,height);
 
         }
+
+    }
+
+
+    @Override
+    public void pause() {
+
+        Gdx.app.debug(tag, "AppAdapter :: Paused ");
+
+    }
+
+
+    @Override
+    public void dispose() {
+
+        Gdx.app.debug(tag, "Disposed");
+
+        AppDataObserver.getI().save(new ResponseListener() {
+            @Override
+            public void onResponse(short code) {
+
+            }
+        }, false);
+
 
     }
 }

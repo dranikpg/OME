@@ -1,7 +1,7 @@
 package com.draniksoft.ome.editor.support.actions.loc;
 
 import com.artemis.World;
-import com.draniksoft.ome.editor.components.time.TimeC;
+import com.draniksoft.ome.editor.components.time.TimedC;
 import com.draniksoft.ome.editor.support.actions.Action;
 
 public class AddTimeC implements Action {
@@ -23,7 +23,7 @@ public class AddTimeC implements Action {
     @Override
     public void _do(World w) {
 
-        TimeC tc = w.getMapper(TimeC.class).create(_e);
+        TimedC tc = w.getMapper(TimedC.class).create(_e);
         tc.s = se;
         tc.e = ee;
 
@@ -32,7 +32,7 @@ public class AddTimeC implements Action {
     @Override
     public void _undo(World w) {
 
-        w.getMapper(TimeC.class).remove(_e);
+        w.getMapper(TimedC.class).remove(_e);
 
     }
 

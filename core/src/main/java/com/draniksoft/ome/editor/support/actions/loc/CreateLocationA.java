@@ -1,7 +1,6 @@
 package com.draniksoft.ome.editor.support.actions.loc;
 
 import com.artemis.World;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -11,6 +10,8 @@ import com.draniksoft.ome.editor.components.gfx.DrawableC;
 import com.draniksoft.ome.editor.components.pos.PhysC;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
 import com.draniksoft.ome.editor.components.selection.FLabelC;
+import com.draniksoft.ome.editor.components.tps.LocationC;
+import com.draniksoft.ome.editor.components.tps.MObjectC;
 import com.draniksoft.ome.editor.manager.ArchTransmuterMgr;
 import com.draniksoft.ome.editor.manager.DrawableMgr;
 import com.draniksoft.ome.editor.support.actions.Action;
@@ -18,21 +19,25 @@ import com.draniksoft.ome.utils.PUtils;
 
 public class CreateLocationA implements Action {
 
-    int x, y;
-    int w = 40;
-    int h = 40;
+    public int x, y;
+    public int w = 40;
+    public int h = 40;
 
-    int e;
+    public int e;
 
-    String name;
+    public boolean GFX_W = true;
 
-    public CreateLocationA(int x, int y, String name) {
+    public String name;
+    public String dwbIU = "i_casB@mapTile@100";
+
+    public CreateLocationA(int x, int y, String texN) {
         this.x = x - w / 2;
         this.y = y - h / 2;
-        this.name = name;
+        this.name = texN;
     }
 
-    public CreateLocationA(int x, int y, int w, int h, String name) {
+
+    public CreateLocationA(int x, int y, int w, int h) {
         this.x = x - w / 2;
         this.y = y - h / 2;
         this.w = w;
@@ -45,6 +50,16 @@ public class CreateLocationA implements Action {
 
         e = _w.getSystem(ArchTransmuterMgr.class).build(ArchTransmuterMgr.Codes.BASE_LOCATION);
 
+        LocationC loc = _w.getMapper(LocationC.class).get(e);
+        loc.name = name;
+
+        MObjectC moc = _w.getMapper(MObjectC.class).get(e);
+        moc.x = x + (w / 2);
+        moc.y = y + (h / 2);
+        moc.w = w;
+        moc.h = h;
+        moc.dwbIU = dwbIU;
+
         PosSizeC pc = _w.getMapper(PosSizeC.class).get(e);
         pc.x = x;
         pc.y = y;
@@ -52,7 +67,8 @@ public class CreateLocationA implements Action {
         pc.h = h;
 
         DrawableC dc = _w.getMapper(DrawableC.class).get(e);
-        dc.d = new TextureRegionDrawable(new TextureRegion(_w.getSystem(DrawableMgr.class).t));
+        if (GFX_W)
+            dc.d = new TextureRegionDrawable(_w.getSystem(DrawableMgr.class).getRegion(dwbIU));
 
         FLabelC lc = _w.getMapper(FLabelC.class).create(e);
         lc.lid = -1;
@@ -89,6 +105,10 @@ public class CreateLocationA implements Action {
         _w.delete(e);
 
 
+    }
+
+    public int getE() {
+        return e;
     }
 
     @Override

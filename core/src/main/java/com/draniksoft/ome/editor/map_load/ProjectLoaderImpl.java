@@ -3,9 +3,10 @@ package com.draniksoft.ome.editor.map_load;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.*;
 import com.draniksoft.ome.editor.manager.DrawableMgr;
-import com.draniksoft.ome.editor.manager.LocationMgr;
+import com.draniksoft.ome.editor.manager.EntitySrzMgr;
 import com.draniksoft.ome.editor.manager.MapMgr;
 import com.draniksoft.ome.editor.manager.ProjectMgr;
+import com.draniksoft.ome.utils.Env;
 import com.draniksoft.ome.utils.ResponseListener;
 import com.draniksoft.ome.utils.struct.Pair;
 
@@ -111,17 +112,21 @@ public class ProjectLoaderImpl extends ProjectLoader {
 
                     r.addChild(v.getElement0(), v.getElement1());
 
-                    Gdx.app.debug(tag, "Adding " + v.getElement1().prettyPrint(JsonWriter.OutputType.json, 2) + "   for " + mgrs[i].getClass().getSimpleName());
 
                 }
 
 
             }
 
-
             OutputStream s = Gdx.files.absolute(bundle.fPath + "/index.json").write(false);
             try {
-                s.write(r.prettyPrint(JsonWriter.OutputType.json, 2).getBytes());
+                byte[] outS;
+                if (Env.DEBUG)
+                    outS = r.prettyPrint(JsonWriter.OutputType.json, 2).getBytes();
+                else
+                    outS = r.toJson(JsonWriter.OutputType.minimal).getBytes();
+
+                s.write(outS);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -145,7 +150,7 @@ public class ProjectLoaderImpl extends ProjectLoader {
                 world.getSystem(ProjectMgr.class),
                 world.getSystem(MapMgr.class),
                 world.getSystem(DrawableMgr.class),
-                world.getSystem(LocationMgr.class)
+                world.getSystem(EntitySrzMgr.class)
         };
 
         Gdx.app.debug(tag, "Collected managers");

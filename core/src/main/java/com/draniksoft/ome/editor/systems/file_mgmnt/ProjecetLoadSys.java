@@ -87,6 +87,10 @@ public class ProjecetLoadSys extends BaseSystem {
         this.bundle = bundle;
     }
 
+    public MapLoadBundle getBundle() {
+        return bundle;
+    }
+
     public void load(){if(bundle!=null)load(bundle);}
 
     public void save() {

@@ -2,33 +2,44 @@ package com.draniksoft.ome.editor.support;
 
 import com.artemis.Aspect;
 import com.artemis.BaseSystem;
+import com.artemis.ComponentMapper;
 import com.artemis.World;
+import com.artemis.utils.Bag;
 import com.artemis.utils.ImmutableBag;
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.draniksoft.ome.editor.components.pos.PhysC;
-import com.draniksoft.ome.editor.components.state.InactiveC;
-import com.draniksoft.ome.editor.components.state.TInactiveC;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
+import com.draniksoft.ome.editor.components.gfx.DrawableC;
 import com.draniksoft.ome.editor.components.supp.SelectionC;
-import com.draniksoft.ome.editor.components.time.TimeC;
-import com.draniksoft.ome.editor.components.tps.LocationC;
-import com.draniksoft.ome.editor.components.tps.MapC;
+import com.draniksoft.ome.editor.components.time.TimedMoveC;
 import com.draniksoft.ome.editor.esc_utils.PMIStrategy;
 import com.draniksoft.ome.editor.launch.MapLoadBundle;
+import com.draniksoft.ome.editor.manager.DrawableMgr;
 import com.draniksoft.ome.editor.manager.ProjectMgr;
 import com.draniksoft.ome.editor.manager.TimeMgr;
 import com.draniksoft.ome.editor.support.actions.Action;
 import com.draniksoft.ome.editor.support.actions.loc.AddTimeC;
 import com.draniksoft.ome.editor.support.actions.loc.CreateLocationA;
+import com.draniksoft.ome.editor.support.container.MoveDesc;
 import com.draniksoft.ome.editor.support.input.CreateLocIC;
 import com.draniksoft.ome.editor.support.input.InputController;
 import com.draniksoft.ome.editor.support.input.SelectIC;
 import com.draniksoft.ome.editor.support.input.TimedSelectIC;
 import com.draniksoft.ome.editor.systems.file_mgmnt.ProjecetLoadSys;
+import com.draniksoft.ome.editor.systems.pos.PhysicsSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.InputSys;
+import com.draniksoft.ome.mgmnt_base.AppDataObserver;
+import com.draniksoft.ome.utils.Env;
+import com.draniksoft.ome.utils.dao.AssetDDao;
+import com.draniksoft.ome.utils.struct.Pair;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.LinkedList;
 
 public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
@@ -38,6 +49,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
     public CommandExecutor(World world){
         this.world = world;
     }
+
 
     /**
      * Simple console utils
@@ -54,6 +66,30 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     }
 
+    /**
+     * Environment utils
+     */
+
+
+    public void denv_setb(String n, int b) throws NoSuchFieldException, IllegalAccessException {
+
+        Field f = Env.class.getDeclaredField(n);
+
+        f.setBoolean(null, b == 1);
+
+
+    }
+
+    public void log_denv() throws IllegalAccessException {
+
+        Field[] fields = Env.class.getDeclaredFields();
+        for (Field f : fields) {
+            if (Modifier.isStatic(f.getModifiers())) {
+                console.log(f.getName() + " :: " + f.getBoolean(null));
+            }
+        }
+
+    }
     /**
      * FIle mgmnt utils
      */
@@ -80,6 +116,135 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
     public void sname(String n) {
 
         world.getSystem(ProjectMgr.class).setmName(n);
+
+    }
+
+    /**
+     *
+     * Entity log utils
+     *
+     */
+
+    public void le_ppos(int _e) {
+
+        Pair<Float, Float> p = world.getSystem(PhysicsSys.class).getPos(_e);
+
+        console.log("" + p.getElement0() + " " + p.getElement1());
+
+    }
+
+
+    /**
+     * Entity transform methods
+     */
+
+    public void te_setdwbn(int e, String newN) {
+
+        try {
+
+            DrawableC c = world.getMapper(DrawableC.class).get(e);
+
+            c.d = new TextureRegionDrawable(world.getSystem(DrawableMgr.class).getRegion(newN));
+
+        } catch (Exception ex) {
+
+            Gdx.app.error("CM", "", ex);
+
+        }
+
+    }
+
+
+    public void te_addtc(int _e, int se, int ee) {
+
+        world.getSystem(ActionSystem.class).exec(new AddTimeC(_e, se, ee));
+
+    }
+
+    public void te_addMoveC(int s, int e, int x, int y, int _e) {
+
+        ComponentMapper<TimedMoveC> cm = world.getMapper(TimedMoveC.class);
+
+        if (!cm.has(_e)) {
+            cm.create(_e);
+            cm.get(_e).a = new Array<MoveDesc>();
+        }
+
+        MoveDesc d = new MoveDesc();
+        d.s = s;
+        d.e = e;
+        d.x = x;
+        d.y = y;
+        Pair<Float, Float> p = world.getSystem(PhysicsSys.class).getPos(_e);
+        d.sx = p.getElement0();
+        d.sy = p.getElement1();
+
+        cm.get(_e).a.add(d);
+
+
+    }
+
+    /**
+     * AssetDManager utils
+     */
+
+    public void log_locassl() {
+
+        console.log("Items at :: " + AppDataObserver.getI().getAssetDM().getDirP());
+
+        for (AssetDDao dao : AppDataObserver.getI().getAssetDM().getDaos()) {
+
+            console.log("Name = " + dao.name + "; uri = " + dao.uri + "; ID = " + dao.id);
+
+        }
+
+
+    }
+
+    public void load_exassbyid(int i) {
+
+        world.getSystem(DrawableMgr.class).loadDwbl(
+                AppDataObserver.getI().getAssetDM().getDaos().get(i)
+        );
+
+    }
+
+    public void log_avass() {
+
+        Array<AssetDDao> ds = world.getSystem(DrawableMgr.class).getAllAviabDao();
+
+        for (AssetDDao d : ds) {
+
+            console.log(d.id + "  [" + d.uri + "]");
+
+        }
+
+    }
+
+    public void log_ass() {
+
+
+        ObjectMap<String, AssetDDao> d = world.getSystem(DrawableMgr.class).getAllDescI();
+
+        for (String id : d.keys()) {
+
+            console.log(d.get(id).name + " ~uri=" + d.get(id).uri + " ~id=" + d.get(id).id);
+
+        }
+
+    }
+
+    public void log_asspc(String id) {
+
+        Array<TextureAtlas.AtlasRegion> rs = world.getSystem(DrawableMgr.class).getAtlas(id).getRegions();
+
+
+        for (TextureAtlas.AtlasRegion r : rs) {
+
+            console.log("name= " + r.name + "; ~id = " + r.index);
+
+        }
+
 
     }
 
@@ -195,7 +360,9 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     public void newl(int x, int y, int h, int w, String txt) {
 
-        world.getSystem(ActionSystem.class).exec(new CreateLocationA(x, y, h, w, txt));
+        CreateLocationA a = new CreateLocationA(x, y, w, h);
+        a.dwbIU = txt;
+        world.getSystem(ActionSystem.class).exec(a);
 
     }
 
@@ -329,11 +496,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
     // adds
 
 
-    public void add_tc(int _e, int se, int ee) {
 
-        world.getSystem(ActionSystem.class).exec(new AddTimeC(_e, se, ee));
-
-    }
 
     /**
      * Time utils
@@ -376,6 +539,12 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     }
 
+    public void log_es(int s){
+
+        log_es(s, Integer.MAX_VALUE);
+
+    }
+
     public void log_es(int s, int e) {
 
         IntBag es = world.getAspectSubscriptionManager().get(Aspect.all()).getEntities();
@@ -387,21 +556,39 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
         console.log("Logging from " + s + " " + l);
 
         int _e;
+
+        Array<String> out = new Array<String>();
+        String c = "";
+
+        Bag b = new Bag();
+
         while (i < l) {
 
             _e = es.get(i);
 
-            console.log(i + " : " +
-                    (world.getMapper(LocationC.class).has(_e) ? "Location, " : " ") +
-                    (world.getMapper(MapC.class).has(_e) ? "Map, " : " ") +
-                    (world.getMapper(SelectionC.class).has(_e) ? "Selected, " : " ") +
-                    (world.getMapper(PhysC.class).has(_e) ? "Body, " : " ") +
-                    (world.getMapper(TimeC.class).has(_e) ? "Timed, " : " ") +
-                    (world.getMapper(TInactiveC.class).has(_e) ? "Timed::Inactive, " : " ") +
-                    (world.getMapper(InactiveC.class).has(_e) ? "Inactive, " : " ")
-            );
+            b.clear();
+            b = world.getEntity(_e).getComponents(b);
+
+            c = c.concat("" + _e + "(" + world.getEntity(_e).getCompositionId() + ") ");
+            for (int j = 0; j < b.size(); j++) {
+                c = c.concat(b.get(j).getClass().getSimpleName());
+                c = c.concat(" & ");
+            }
+            c = c.concat(" ::  ");
+
+            if (i % 2 == 0 || i == l - 1) {
+                out.add(c);
+                c = "";
+            }
 
             i++;
+        }
+
+
+        for (String ous : out){
+
+            console.log(ous);
+
         }
 
     }

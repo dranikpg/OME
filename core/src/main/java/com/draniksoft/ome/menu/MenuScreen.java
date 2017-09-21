@@ -8,6 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.draniksoft.ome.menu.button_bar.ButtonBar;
 import com.draniksoft.ome.menu.dynamic_vs.DynamicViewController;
+import com.draniksoft.ome.mgmnt_base.AppDataObserver;
+import com.draniksoft.ome.utils.ResponseListener;
 
 public class MenuScreen implements Screen {
 
@@ -96,8 +98,17 @@ public class MenuScreen implements Screen {
 
     }
 
+
     @Override
     public void dispose() {
+
+        AppDataObserver.getI().save(new ResponseListener() {
+            @Override
+            public void onResponse(short code) {
+
+            }
+        }, true);
+
 
     }
 }

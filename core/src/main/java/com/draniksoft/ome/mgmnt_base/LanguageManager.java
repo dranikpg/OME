@@ -54,4 +54,9 @@ public class LanguageManager extends AppDataManager {
     public String format_m(String key, Object... ags){
         return menuB.format(key,ags);
     }
+
+    @Override
+    public void save(ResponseListener l, boolean t) {
+
+    }
 }

@@ -8,4 +8,9 @@ public class AppStateManager extends AppDataManager {
     public void init(ResponseListener l, boolean t) {
 
     }
+
+    @Override
+    public void save(ResponseListener l, boolean t) {
+
+    }
 }

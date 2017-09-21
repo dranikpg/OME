@@ -18,7 +18,10 @@ public class AppDataObserver extends AppDataManager {
     private static AppDataObserver i;
 
     Preferences prefs;
+
     LanguageManager langMgr;
+    ConfigManager conifgM;
+    AssetDManager assetDM;
 
     private AppDataObserver() {
     }
@@ -36,20 +39,50 @@ public class AppDataObserver extends AppDataManager {
     // Must be called to use AppData observer properly
 
     @Override
-    public void init(ResponseListener l, boolean t) {
+    public void init(final ResponseListener l, boolean t) {
 
-        prefs = Gdx.app.getPreferences(Const.prefsID);
-        Gdx.app.debug(tag,"Fetched prefs :: size :: " + prefs.get().size());
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
 
-        langMgr = new LanguageManager();
+                prefs = Gdx.app.getPreferences(Const.prefsID);
+                Gdx.app.debug(tag, "Fetched prefs :: size :: " + prefs.get().size());
+
+                langMgr = new LanguageManager();
+                conifgM = new ConfigManager();
+                assetDM = new AssetDManager();
 
 
-        initStatics();
+                initStatics();
+                loaded = true;
+                l.onResponse(Codes.READY);
 
-        loaded = true;
-        l.onResponse(Codes.READY);
+
+            }
+        };
+
+        if (t) {
+            new Thread(r).start();
+        } else {
+            r.run();
+        }
 
     }
+
+    @Override
+    public void save(final ResponseListener l, boolean t) {
+
+        langMgr.save(l, false);
+        assetDM.save(l, false);
+
+        Gdx.app.debug(tag, "Flushing preferences");
+
+        prefs.flush();
+
+
+    }
+
+
 
     private void initStatics() {
 
@@ -68,6 +101,18 @@ public class AppDataObserver extends AppDataManager {
     // shorter function for "nicer" language manager access
     public LanguageManager L() {
         return langMgr;
+    }
+
+    public AssetDManager getAssetDM() {
+        return assetDM;
+    }
+
+    public ConfigManager getConifgM() {
+        return conifgM;
+    }
+
+    public Preferences getPrefs() {
+        return prefs;
     }
 
 

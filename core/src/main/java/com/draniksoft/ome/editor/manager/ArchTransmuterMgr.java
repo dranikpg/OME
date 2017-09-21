@@ -9,8 +9,9 @@ import com.draniksoft.ome.editor.components.gfx.DrawableC;
 import com.draniksoft.ome.editor.components.gfx.TexRegC;
 import com.draniksoft.ome.editor.components.pos.PhysC;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
-import com.draniksoft.ome.editor.components.time.TimeC;
+import com.draniksoft.ome.editor.components.time.TimedC;
 import com.draniksoft.ome.editor.components.tps.LocationC;
+import com.draniksoft.ome.editor.components.tps.MObjectC;
 import com.draniksoft.ome.editor.components.tps.MapC;
 
 public class ArchTransmuterMgr extends Manager{
@@ -46,12 +47,14 @@ public class ArchTransmuterMgr extends Manager{
                 .add(MapC.class).add(PosSizeC.class).build(world));
 
         types.put(Codes.BASE_LOCATION, new ArchetypeBuilder().add(PhysC.class)
-                .add(PosSizeC.class).add(DrawableC.class).add(LocationC.class)
-                .add(PhysC.class).build(world));
+                .add(PosSizeC.class).add(DrawableC.class)
+                .add(LocationC.class).add(MObjectC.class)
+                .build(world));
 
         types.put(Codes.TIMED_LOCATION, new ArchetypeBuilder().add(PhysC.class)
-                .add(PosSizeC.class).add(DrawableC.class).add(LocationC.class)
-                .add(PhysC.class).add(TimeC.class).build(world));
+                .add(PosSizeC.class).add(DrawableC.class)
+                .add(LocationC.class).add(MObjectC.class)
+                .add(TimedC.class).build(world));
 
     }
 

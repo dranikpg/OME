@@ -53,6 +53,12 @@ public class TimeMgr extends BaseSystem implements LoadSaveManager {
 
     }
 
+    public float getStepPrecent() {
+
+        return timeStamp / stampMax;
+
+    }
+
     @Override
     public String getNode() {
         return null;

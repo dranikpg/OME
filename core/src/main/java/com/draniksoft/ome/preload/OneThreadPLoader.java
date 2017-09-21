@@ -58,10 +58,11 @@ public class OneThreadPLoader implements PreLoader {
             AppDataObserver.getI().init(myL,false);
             if (!running)return;
 
-
             AppDataObserver.getI().L().init(myL,false);
             if(!running)return;
 
+            AppDataObserver.getI().getAssetDM().init(myL, false);
+            if (!running) return;
 
             //
 

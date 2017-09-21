@@ -111,6 +111,9 @@ public class FloatUILSupSys extends IteratingSystem {
     protected void process(int e) {
 
         tc = flM.get(e);
+
+        if (tc.lid == -1) return;
+
         pc = pM.get(e);
 
         if (cam.frustum.boundsInFrustum(pc.x, pc.y, 0, pc.w, pc.h, 0)) {
