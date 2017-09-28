@@ -99,7 +99,7 @@ public class TimeActivitySys extends IteratingSystem {
                 float psd = (((float) Dint.diff(tmgr.getTime(), d.s)) +
                         Math.min(d.e == tmgr.getTime() ? 0 : 1f, tmgr.getStepPrecent())) / ((float) Dint.diff(d.e, d.s));
 
-                Pair<Float, Float> p = Pair.createPair(d.sx, d.sy);
+                Pair<Integer, Integer> p = Pair.createPair(d.sx, d.sy);
 
                 float dx = ((float) d.x - p.getElement0()) * psd;
                 float dy = ((float) d.y - p.getElement1()) * psd;

@@ -14,4 +14,10 @@ public class AssetDDao {
     public String id;
 
 
+    public boolean sysmz = false;
+
+    // Creates redirect for this asset if not empty
+    public String redirect;
+
+
 }

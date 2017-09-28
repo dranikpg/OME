@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.draniksoft.ome.editor.support.actions.proj.SaveProjectAction;
-import com.draniksoft.ome.editor.systems.render.UIRenderSystem;
+import com.draniksoft.ome.editor.systems.render.ui.UIRenderSystem;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.ui.BaseWindow;
 import com.draniksoft.ome.editor.ui.utils.UriMenuItem;

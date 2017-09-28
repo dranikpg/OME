@@ -1,4 +1,4 @@
-package com.draniksoft.ome.editor.systems.render;
+package com.draniksoft.ome.editor.systems.render.map;
 
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
 import com.draniksoft.ome.editor.components.tps.MapC;
+import com.draniksoft.ome.utils.Env;
 
 public class MapRDebugSys extends IteratingSystem {
 
@@ -33,6 +34,10 @@ public class MapRDebugSys extends IteratingSystem {
     boolean hiddedRender = false;
 
 
+    @Override
+    protected void initialize() {
+        setEnabled(Env.GFX_DEBUG);
+    }
 
     @Override
     protected void begin() {

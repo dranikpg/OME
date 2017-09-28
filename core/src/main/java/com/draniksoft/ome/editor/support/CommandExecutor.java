@@ -25,15 +25,21 @@ import com.draniksoft.ome.editor.support.actions.Action;
 import com.draniksoft.ome.editor.support.actions.loc.AddTimeC;
 import com.draniksoft.ome.editor.support.actions.loc.CreateLocationA;
 import com.draniksoft.ome.editor.support.container.MoveDesc;
-import com.draniksoft.ome.editor.support.input.CreateLocIC;
 import com.draniksoft.ome.editor.support.input.InputController;
+import com.draniksoft.ome.editor.support.input.NewLocIC;
 import com.draniksoft.ome.editor.support.input.SelectIC;
 import com.draniksoft.ome.editor.support.input.TimedSelectIC;
+import com.draniksoft.ome.editor.support.render.core.OverlyRendererI;
+import com.draniksoft.ome.editor.support.workflow.EditMode;
+import com.draniksoft.ome.editor.support.workflow.NewLocEditMode;
 import com.draniksoft.ome.editor.systems.file_mgmnt.ProjecetLoadSys;
 import com.draniksoft.ome.editor.systems.pos.PhysicsSys;
+import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.InputSys;
+import com.draniksoft.ome.editor.systems.support.WorkflowSystem;
 import com.draniksoft.ome.mgmnt_base.AppDataObserver;
+import com.draniksoft.ome.utils.Const;
 import com.draniksoft.ome.utils.Env;
 import com.draniksoft.ome.utils.dao.AssetDDao;
 import com.draniksoft.ome.utils.struct.Pair;
@@ -41,6 +47,7 @@ import com.draniksoft.ome.utils.struct.Pair;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.LinkedList;
+import java.util.Map;
 
 public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
@@ -90,13 +97,42 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
         }
 
     }
+
+    public void log_appv() {
+
+        console.log("" + Const.appVersion);
+
+    }
+
+    public void log_appfn() {
+
+        console.log(Const.appVFullName);
+
+    }
+
     /**
      * FIle mgmnt utils
      */
+    public void log_ophis() {
+
+        console.log(AppDataObserver.getI().getOpngHisM().getLastOpAr().toString());
+
+    }
 
     public void load(String p) {
 
         world.getSystem(ProjecetLoadSys.class).setBundle(new MapLoadBundle(p));
+        world.getSystem(ProjecetLoadSys.class).load();
+
+    }
+
+    public void load_h(int i) {
+
+        world.getSystem(ProjecetLoadSys.class).setBundle(new MapLoadBundle(
+
+                AppDataObserver.getI().getOpngHisM().getLastOpAr().get(i)
+
+        ));
         world.getSystem(ProjecetLoadSys.class).load();
 
     }
@@ -118,6 +154,65 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
         world.getSystem(ProjectMgr.class).setmName(n);
 
     }
+
+    /**
+     * Editor Renderer utils
+     */
+
+    public void log_ers() {
+
+        StringBuilder b = new StringBuilder();
+
+        for (OverlyRendererI r : world.getSystem(OverlayRenderSys.class).getRs()) {
+
+            b.append(r.getId()).append("; ");
+
+        }
+
+        console.log(b.toString());
+
+
+    }
+
+    public void remove_rdr_by_place(String as, String os) {
+
+        String[] a_s = as.split(",");
+        int[] a = new int[a_s.length];
+        for (int i = 0; i < a_s.length; i++) a[i] = Integer.parseInt(a_s[i]);
+
+
+        String[] o_s = os.split(",");
+        int[] o = new int[o_s.length];
+        for (int i = 0; i < o_s.length; i++) o[i] = Integer.parseInt(o_s[i]);
+
+        world.getSystem(OverlayRenderSys.class).removeRdrByPlace(a, o);
+
+    }
+
+    /**
+     * Editmode utils
+     */
+
+    public void log_em() {
+
+
+        EditMode m = world.getSystem(WorkflowSystem.class).getCurEM();
+
+        if (m == null) {
+            console.log("NULL");
+            return;
+        }
+
+        console.log(m.getClass().getSimpleName());
+
+    }
+
+    public void em_newL() {
+
+        world.getSystem(WorkflowSystem.class).attachEditMode(new NewLocEditMode());
+
+    }
+
 
     /**
      *
@@ -176,8 +271,8 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
         d.x = x;
         d.y = y;
         Pair<Float, Float> p = world.getSystem(PhysicsSys.class).getPos(_e);
-        d.sx = p.getElement0();
-        d.sy = p.getElement1();
+        d.sx =  p.getElement0().intValue();
+        d.sy = p.getElement1().intValue();
 
         cm.get(_e).a.add(d);
 
@@ -245,6 +340,19 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
         }
 
+
+    }
+
+
+    public void log_assrds() {
+
+        Map<String, String> m = world.getSystem(DrawableMgr.class).getRedirects();
+
+        for (Map.Entry<String, String> e : m.entrySet()) {
+
+            console.log(e.getKey() + " = " + e.getValue());
+
+        }
 
     }
 
@@ -406,7 +514,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     public void ic_newl() {
 
-        world.getSystem(InputSys.class).setMainIC(new CreateLocIC());
+        world.getSystem(InputSys.class).setMainIC(new NewLocIC());
 
     }
 

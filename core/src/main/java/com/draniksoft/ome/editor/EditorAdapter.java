@@ -24,10 +24,18 @@ import com.draniksoft.ome.editor.systems.gfx_support.CameraSys;
 import com.draniksoft.ome.editor.systems.gui.FloatUILSupSys;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.editor.systems.pos.PhysicsSys;
-import com.draniksoft.ome.editor.systems.render.*;
+import com.draniksoft.ome.editor.systems.render.BaseRenderSys;
+import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
+import com.draniksoft.ome.editor.systems.render.map.MapRDebugSys;
+import com.draniksoft.ome.editor.systems.render.map.MapRenderSys;
+import com.draniksoft.ome.editor.systems.render.obj.ObjRSys;
+import com.draniksoft.ome.editor.systems.render.obj.PhysRDebugSys;
+import com.draniksoft.ome.editor.systems.render.ui.FloatUIRenderSys;
+import com.draniksoft.ome.editor.systems.render.ui.UIRenderSystem;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.ConsoleSys;
 import com.draniksoft.ome.editor.systems.support.InputSys;
+import com.draniksoft.ome.editor.systems.support.WorkflowSystem;
 import com.draniksoft.ome.editor.systems.time.TimeActivitySys;
 import com.draniksoft.ome.mgmnt_base.AppDataObserver;
 import com.draniksoft.ome.utils.GUtils;
@@ -124,6 +132,8 @@ public class EditorAdapter extends ApplicationAdapter {
 
         // SUPPORT SYSTEMS
 
+        cb.with(new WorkflowSystem());
+
         cb.with(new InputSys());
 
         cb.with(new ProjecetLoadSys());
@@ -152,9 +162,14 @@ public class EditorAdapter extends ApplicationAdapter {
         cb.with(new MapRenderSys());
         cb.with(new MapRDebugSys());
 
-        cb.with(new LocationRSys());
+
+        cb.with(new OverlayRenderSys());
+
+
+        cb.with(new ObjRSys());
 
         cb.with(new PhysRDebugSys());
+
 
         cb.with(new FloatUIRenderSys());
 

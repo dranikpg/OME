@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.BufferUtils;
 
 import java.nio.IntBuffer;
@@ -88,6 +89,20 @@ public class GUtils {
         }
 
         return r;
+
+    }
+
+
+    public static void calcLine(int i, int i1, int i2, int i3, float[] data, Vector2 tV) {
+
+        tV.set(i, i1);
+
+        float dst = tV.dst(i2, i3);
+
+        float a = (float) (Math.atan2(i3 - i1, i2 - i) * 180f / Math.PI);
+
+        data[0] = dst;
+        data[1] = a;
 
     }
 }

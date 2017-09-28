@@ -1,25 +1,39 @@
 package com.draniksoft.ome.editor.support.input;
 
 import com.artemis.World;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.draniksoft.ome.editor.support.actions.loc.CreateLocationA;
-import com.draniksoft.ome.editor.systems.support.ActionSystem;
+import com.draniksoft.ome.editor.support.render.NewLocRenderer;
+import com.draniksoft.ome.editor.support.workflow.NewLocEditMode;
 import com.draniksoft.ome.editor.systems.support.InputSys;
 
 /**
  * The input controller used for adding new locations
  */
 
-public class CreateLocIC implements InputController {
+public class NewLocIC implements InputController {
 
-    static final String tag = "CreateLocIC";
+    static final String tag = "NewLocIC";
 
     boolean ter = false;
 
     World w;
 
     Vector2 tmp;
+
+    NewLocRenderer rdr;
+    NewLocEditMode m;
+
+    public boolean ignoreDestruct = false;
+
+    public void setRdr(NewLocRenderer rdr) {
+        this.rdr = rdr;
+    }
+
+    public void setOwnerMode(NewLocEditMode m) {
+        this.m = m;
+    }
 
     @Override
     public void init(World w) {
@@ -34,12 +48,22 @@ public class CreateLocIC implements InputController {
 
     @Override
     public void destruct() {
+
         w.getSystem(InputSys.class).setDefIC(new SelectIC());
+
+        if (ignoreDestruct) return;
+
+        m.inputStopped();
+
     }
 
 
     @Override
     public void update() {
+
+        tmp = ((Viewport) w.getInjector().getRegistered("game_vp")).unproject(tmp.set(Gdx.input.getX(), Gdx.input.getY()));
+
+        rdr.setMousePos(tmp.x, tmp.y);
 
     }
 
@@ -68,7 +92,7 @@ public class CreateLocIC implements InputController {
 
         tmp = ((Viewport) w.getInjector().getRegistered("game_vp")).unproject(tmp.set(screenX, screenY));
 
-        w.getSystem(ActionSystem.class).exec(new CreateLocationA((int) tmp.x, (int) tmp.y, 50, 50));
+        m.createLoc(tmp);
 
         return true;
     }
@@ -81,6 +105,7 @@ public class CreateLocIC implements InputController {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
+
         return false;
     }
 

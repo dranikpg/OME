@@ -4,8 +4,8 @@ public class MoveDesc {
 
     public int s, e;
     public int x, y;
-    public Float sx;
-    public Float sy;
+    public int sx;
+    public int sy;
 
 
 }

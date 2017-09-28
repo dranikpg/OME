@@ -64,6 +64,9 @@ public class OneThreadPLoader implements PreLoader {
             AppDataObserver.getI().getAssetDM().init(myL, false);
             if (!running) return;
 
+            AppDataObserver.getI().getOpngHisM().init(myL, false);
+            if (!running) return;
+
             //
 
             Gdx.app.debug(tag,"Overall #taken " + (System.currentTimeMillis()-millis));

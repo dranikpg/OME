@@ -1,4 +1,4 @@
-package com.draniksoft.ome.editor.systems.render;
+package com.draniksoft.ome.editor.systems.render.map;
 
 import com.artemis.Aspect;
 import com.artemis.BaseEntitySystem;

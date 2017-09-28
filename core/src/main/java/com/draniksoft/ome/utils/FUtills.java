@@ -10,6 +10,8 @@ public class FUtills {
 
         public static final String localFolder = "loc_fdr";
 
+        public static final String lastOpenings = "last_openings";
+
     }
 
 

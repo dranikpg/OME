@@ -7,6 +7,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.draniksoft.ome.editor.launch.MapLoadBundle;
 import com.draniksoft.ome.editor.map_load.ProjectLoader;
 import com.draniksoft.ome.editor.map_load.ProjectLoaderImpl;
+import com.draniksoft.ome.mgmnt_base.AppDataObserver;
 import com.draniksoft.ome.utils.ResponseListener;
 
 public class ProjecetLoadSys extends BaseSystem {
@@ -57,6 +58,8 @@ public class ProjecetLoadSys extends BaseSystem {
             return;
         }
 
+        logLoad(bundle.fPath);
+
         loader = new ProjectLoaderImpl();
         loader.setBundle(bundle);
         loader.setAssetManager(assets);
@@ -64,6 +67,12 @@ public class ProjecetLoadSys extends BaseSystem {
         Gdx.app.debug(tag, "Starting new map load " + bundle.fPath);
 
         loader.load(myL);
+
+    }
+
+    private void logLoad(String p) {
+
+        AppDataObserver.getI().getOpngHisM().reportOpening(p);
 
     }
 

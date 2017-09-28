@@ -1,10 +1,11 @@
-package com.draniksoft.ome.editor.systems.render;
+package com.draniksoft.ome.editor.systems.render.obj;
 
 import com.artemis.BaseSystem;
 import com.artemis.annotations.Wire;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.draniksoft.ome.utils.Env;
 import com.draniksoft.ome.utils.PUtils;
 
 public class PhysRDebugSys extends BaseSystem {
@@ -19,7 +20,11 @@ public class PhysRDebugSys extends BaseSystem {
 
     @Override
     protected void initialize() {
+
         r = new Box2DDebugRenderer();
+
+        setEnabled(Env.GFX_DEBUG);
+
     }
 
     @Override

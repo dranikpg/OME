@@ -18,6 +18,9 @@ import com.draniksoft.ome.utils.FUtills;
 import com.draniksoft.ome.utils.dao.AssetDDao;
 import com.draniksoft.ome.utils.struct.Pair;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class DrawableMgr extends BaseSystem implements LoadSaveManager {
 
     static final String tag = "DrawableMgr";
@@ -35,6 +38,8 @@ public class DrawableMgr extends BaseSystem implements LoadSaveManager {
     Array<AssetDDao> localD;
     Array<AssetDDao> intD;
     JsonReader jR;
+
+    Map<String, String> redirects;
 
     Array<AssetDDao> loadDs;
 
@@ -84,8 +89,13 @@ public class DrawableMgr extends BaseSystem implements LoadSaveManager {
         mapD = new Array<AssetDDao>();
         intD = new Array<AssetDDao>();
 
+        redirects = new HashMap<String, String>();
+
         initInternalAss();
 
+        assM.finishLoading();
+
+        processSystem();
 
     }
 
@@ -106,6 +116,8 @@ public class DrawableMgr extends BaseSystem implements LoadSaveManager {
             d.name = v.getString("name");
             d.id = v.getString("id");
 
+            d.sysmz = v.getBoolean("sysmz", false);
+
             if (d.name == null || d.id == null) continue;
 
             d.uri = FUtills.toUIRPath("i_assets/" + d.id.substring(2) + "/f.atlas", 1);
@@ -114,6 +126,10 @@ public class DrawableMgr extends BaseSystem implements LoadSaveManager {
             if (v.getBoolean("fl"))
                 loadDwbl(d);
 
+            if (v.has("redirect")) {
+                d.redirect = v.getString("redirect");
+                redirects.put(d.redirect, d.id);
+            }
             intD.add(d);
 
         }
@@ -228,6 +244,7 @@ public class DrawableMgr extends BaseSystem implements LoadSaveManager {
         ds.addAll(localD);
         ds.addAll(mapD);
 
+
         return ds;
     }
 
@@ -237,12 +254,74 @@ public class DrawableMgr extends BaseSystem implements LoadSaveManager {
 
     }
 
+
+    public void putRedirect(String r, String id) {
+
+        if (!dA.containsKey(id)) return;
+
+        redirects.put(r, id);
+
+    }
+
+    public void resetRedirects() {
+
+        redirects.clear();
+
+        for (AssetDDao d : intD) {
+
+            if (d.sysmz && d.redirect != null) {
+
+                redirects.put(d.redirect, d.id);
+
+            }
+
+        }
+
+    }
+
+    public Map<String, String> getRedirects() {
+        return redirects;
+    }
+
+    public void resetToDefaulRedirect(String r) {
+
+        redirects.clear();
+
+        for (AssetDDao d : intD) {
+
+            if (d.sysmz && d.redirect != null & d.redirect.equals(r)) {
+
+                redirects.put(r, d.id);
+
+            }
+
+        }
+
+
+    }
+
     public ObjectMap<String, AssetDDao> getAllDescI() {
         return dD;
     }
 
 
+    public boolean containsAtlas(String n) {
+        return dA.containsKey(n);
+    }
+
     public TextureRegion getRegion(String aid, String name, int id) {
+
+        if (redirects.containsKey(aid)) aid = redirects.get(aid);
+
+        if (!dA.containsKey(aid)) return null;
+
+        return dA.get(aid).findRegion(name, id);
+
+    }
+
+    public TextureRegion getRegionF(String aid, String name, int id) {
+
+        if (!dA.containsKey(aid)) return null;
 
         return dA.get(aid).findRegion(name, id);
 
@@ -258,7 +337,7 @@ public class DrawableMgr extends BaseSystem implements LoadSaveManager {
             return getRegion(parts[0], parts[1], Integer.valueOf(parts[2]));
         }
 
-        return getRegion(parts[0], parts[1], 0);
+        return getRegion(parts[0], parts[1], -1);
 
 
     }

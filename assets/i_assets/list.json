@@ -1,5 +1,12 @@
 [
   {
+    "name": "Editor helpdrawsys resource pack || hidden",
+    "id": "i_ehr",
+    "fl": true,
+    "sysmz": true,
+    "redirect": "overlay_r_base"
+  },
+  {
     "name": "Base Castle test pack",
     "id": "i_casB",
     "fl": true

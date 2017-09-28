@@ -17,6 +17,7 @@ public class PMIStrategy extends InvocationStrategy {
 
         cP = new ObjectMap<String, Long>();
         mP = new ObjectMap<String, Long>();
+
     }
 
     @Override
@@ -55,7 +56,7 @@ public class PMIStrategy extends InvocationStrategy {
     public void setEnabled(BaseSystem system, boolean value) {
         super.setEnabled(system, value);
 
-        if(!value){
+        if (!value && cP != null) {
             cP.put(system.getClass().getSimpleName(), 0L);
         }
 

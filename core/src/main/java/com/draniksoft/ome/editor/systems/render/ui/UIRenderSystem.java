@@ -1,4 +1,4 @@
-package com.draniksoft.ome.editor.systems.render;
+package com.draniksoft.ome.editor.systems.render.ui;
 
 import com.artemis.BaseSystem;
 import com.artemis.annotations.Wire;

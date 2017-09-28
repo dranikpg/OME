@@ -22,6 +22,7 @@ public class AppDataObserver extends AppDataManager {
     LanguageManager langMgr;
     ConfigManager conifgM;
     AssetDManager assetDM;
+    OpeningHistoryManager opngHisM;
 
     private AppDataObserver() {
     }
@@ -51,6 +52,7 @@ public class AppDataObserver extends AppDataManager {
                 langMgr = new LanguageManager();
                 conifgM = new ConfigManager();
                 assetDM = new AssetDManager();
+                opngHisM = new OpeningHistoryManager();
 
 
                 initStatics();
@@ -74,6 +76,7 @@ public class AppDataObserver extends AppDataManager {
 
         langMgr.save(l, false);
         assetDM.save(l, false);
+        opngHisM.save(l, false);
 
         Gdx.app.debug(tag, "Flushing preferences");
 
@@ -111,7 +114,11 @@ public class AppDataObserver extends AppDataManager {
         return conifgM;
     }
 
-    public Preferences getPrefs() {
+    public OpeningHistoryManager getOpngHisM() {
+        return opngHisM;
+    }
+
+    public synchronized Preferences getPrefs() {
         return prefs;
     }
 

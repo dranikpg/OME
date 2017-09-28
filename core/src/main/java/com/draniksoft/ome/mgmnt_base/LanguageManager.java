@@ -23,6 +23,7 @@ public class LanguageManager extends AppDataManager {
                     FileHandle baseFileHandle = Gdx.files.internal("menu/lang/bundle");
                     menuB = I18NBundle.createBundle(baseFileHandle);
 
+
                     runTest();
 
                     l.onResponse(Codes.READY);
