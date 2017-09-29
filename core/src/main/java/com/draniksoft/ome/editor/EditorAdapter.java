@@ -186,8 +186,17 @@ public class EditorAdapter extends ApplicationAdapter {
         /*
 
 
+
+
          */
 
+        // multiplexer.addProcessor(uiStage);
+
+        /*
+
+
+
+         */
         WorldConfiguration c = cb.build();
 
         c.register(multiplexer);

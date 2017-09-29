@@ -2,27 +2,36 @@ package com.draniksoft.ome.editor.systems.gui;
 
 import com.artemis.BaseSystem;
 import com.artemis.annotations.Wire;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.draniksoft.ome.editor.support.actions.proj.SaveProjectAction;
 import com.draniksoft.ome.editor.systems.render.ui.UIRenderSystem;
-import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.ui.BaseWindow;
-import com.draniksoft.ome.editor.ui.utils.UriMenuItem;
+import com.draniksoft.ome.editor.ui.wins.MOList;
+import com.draniksoft.ome.editor.ui.wins.uimgmnt.WindowMgrWin;
 import com.kotcrab.vis.ui.widget.Menu;
 import com.kotcrab.vis.ui.widget.MenuBar;
-import com.kotcrab.vis.ui.widget.MenuItem;
+
+import java.util.HashMap;
 
 public class UiSystem extends BaseSystem {
 
+    private static String tag = "UiSystem";
+
     public static class WinCodes {
 
-        public static final int open_proj = 1;
+        public static final int win1 = 1;
+        public static final int winMgr = 2;
 
+        public static HashMap<Integer, Class> map = new HashMap<Integer, Class>();
+
+        static {
+            System.out.println("Initializing wincodes::map");
+            map.put(win1, MOList.class);
+            map.put(winMgr, WindowMgrWin.class);
+        }
     }
 
     UIRenderSystem topSys;
@@ -59,7 +68,8 @@ public class UiSystem extends BaseSystem {
 
         //uiStage.setDebugAll(true);
 
-        multiplexer.addProcessor(uiStage);
+        multiplexer.addProcessor(1, uiStage);
+
 
     }
 
@@ -99,32 +109,28 @@ public class UiSystem extends BaseSystem {
 
     }
 
+    public BaseWindow getWin(int c) {
+
+        if (!wins.containsKey(c)) return null;
+
+        return wins.get(c);
+    }
+
     private boolean buildWin(int code) {
 
-        BaseWindow w = new BaseWindow("Tst") {
-            @Override
-            public void init() {
+        BaseWindow w = null;
 
-            }
+        try {
+            if (WinCodes.map.containsKey(code))
+                w = (BaseWindow) WinCodes.map.get(code).getConstructor().newInstance();
+        } catch (Exception e) {
+            Gdx.app.debug(tag, "", e);
+        }
+        if (w == null) return false;
 
-            @Override
-            public void open(String uri) {
-                row();
-                add(uri);
-            }
+        w.code = code;
 
-            @Override
-            public void close() {
-
-            }
-
-            @Override
-            public boolean isOpen() {
-                return false;
-            }
-        };
-        w.setResizable(true);
-
+        w.init(world);
 
         wins.put(code, w);
         uiStage.addActor(w);
@@ -133,12 +139,15 @@ public class UiSystem extends BaseSystem {
 
     }
 
+    public ObjectMap.Values<BaseWindow> getWins() {
+        return wins.values();
+    }
 
     private void asembleMenuBar() {
 
         Menu fileM = new Menu("File");
 
-        fileM.addItem(new UriMenuItem("Open", WinCodes.open_proj, "lol", this));
+        /*fileM.addItem(new WinOpenMenuItem("Open", WinCodes.open_proj, "lol", this));
         fileM.addItem(new MenuItem("Save", new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -154,7 +163,7 @@ public class UiSystem extends BaseSystem {
                 world.getSystem(ActionSystem.class).undo();
             }
         }));
-
+*/
         menuBar.addMenu(fileM);
 
     }

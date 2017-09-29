@@ -5,7 +5,9 @@ import com.artemis.annotations.Wire;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.draniksoft.ome.editor.manager.MapMgr;
 
 public class CameraSys extends BaseSystem implements InputProcessor {
 
@@ -16,6 +18,8 @@ public class CameraSys extends BaseSystem implements InputProcessor {
 
     @Wire
     InputMultiplexer multiplexer;
+
+    MapMgr mapM;
 
     float oneZoomU = 0.1f;
     float dragS = 0.01f;
@@ -77,6 +81,7 @@ public class CameraSys extends BaseSystem implements InputProcessor {
                 -tdrgas * (stv.y - screenY)
         );
 
+
         return false;
     }
 
@@ -94,6 +99,8 @@ public class CameraSys extends BaseSystem implements InputProcessor {
         } else {
             camera.zoom -= oneZoomU;
         }
+
+        camera.zoom = MathUtils.clamp(camera.zoom, 0.1f, 10);
 
         return false;
     }

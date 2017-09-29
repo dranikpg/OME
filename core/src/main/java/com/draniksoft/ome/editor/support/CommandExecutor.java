@@ -8,6 +8,8 @@ import com.artemis.utils.Bag;
 import com.artemis.utils.ImmutableBag;
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -33,6 +35,7 @@ import com.draniksoft.ome.editor.support.render.core.OverlyRendererI;
 import com.draniksoft.ome.editor.support.workflow.EditMode;
 import com.draniksoft.ome.editor.support.workflow.NewLocEditMode;
 import com.draniksoft.ome.editor.systems.file_mgmnt.ProjecetLoadSys;
+import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.editor.systems.pos.PhysicsSys;
 import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
@@ -477,6 +480,14 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
     /**
      * Input utils
      */
+    public void log_ip() {
+
+
+        Array<InputProcessor> cps = world.getInjector().getRegistered(InputMultiplexer.class).getProcessors();
+        for (InputProcessor p : cps) {
+            console.log(p.getClass().getSimpleName());
+        }
+    }
 
     public void log_ic() {
 
@@ -602,6 +613,38 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
     }
 
     // adds
+
+    /**
+     * UI UTILS
+     */
+
+
+    public void openwin(int code) {
+
+        world.getSystem(UiSystem.class).open(code, null);
+
+    }
+
+    public void openwin(int code, String uri) {
+
+        world.getSystem(UiSystem.class).open(code, uri);
+
+    }
+
+    public void closewin(int code) {
+
+        world.getSystem(UiSystem.class).close(code);
+
+    }
+
+    public void log_wincds() {
+
+        for (Map.Entry<Integer, Class> e : UiSystem.WinCodes.map.entrySet()) {
+            console.log(e.getKey() + " -> " + e.getValue());
+        }
+
+    }
+
 
 
 
