@@ -3,8 +3,8 @@ package com.draniksoft.ome.editor.manager;
 import com.artemis.BaseSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.JsonValue;
-import com.draniksoft.ome.editor.map_load.LoadSaveManager;
-import com.draniksoft.ome.editor.map_load.ProjectLoader;
+import com.draniksoft.ome.editor.support.map_load.LoadSaveManager;
+import com.draniksoft.ome.editor.support.map_load.ProjectLoader;
 import com.draniksoft.ome.utils.struct.Pair;
 import dint.Dint;
 

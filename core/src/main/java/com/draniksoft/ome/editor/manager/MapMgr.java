@@ -9,8 +9,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.JsonValue;
 import com.draniksoft.ome.editor.components.gfx.TexRegC;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
-import com.draniksoft.ome.editor.map_load.LoadSaveManager;
-import com.draniksoft.ome.editor.map_load.ProjectLoader;
+import com.draniksoft.ome.editor.support.map_load.LoadSaveManager;
+import com.draniksoft.ome.editor.support.map_load.ProjectLoader;
 import com.draniksoft.ome.utils.GUtils;
 import com.draniksoft.ome.utils.struct.Pair;
 

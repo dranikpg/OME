@@ -91,6 +91,7 @@ public class CameraSys extends BaseSystem implements InputProcessor {
         return false;
     }
 
+
     @Override
     public boolean scrolled(int amount) {
 
@@ -100,7 +101,7 @@ public class CameraSys extends BaseSystem implements InputProcessor {
             camera.zoom -= oneZoomU;
         }
 
-        camera.zoom = MathUtils.clamp(camera.zoom, 0.1f, 10);
+        camera.zoom = MathUtils.clamp(camera.zoom, 0.2f, 10);
 
         return false;
     }

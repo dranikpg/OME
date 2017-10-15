@@ -10,6 +10,9 @@ import com.kotcrab.vis.ui.widget.VisTextButton;
 public abstract class SupportedReliantWin extends ReliantBaseWin {
 
     private float minExHeight = 200f;
+    private boolean minimized = false;
+
+    boolean collapseToBottom = false;
 
     public SupportedReliantWin(String title) {
         super(title);
@@ -17,36 +20,36 @@ public abstract class SupportedReliantWin extends ReliantBaseWin {
 
     float prevH = 0;
 
+    final Vector2 tmpV = new Vector2();
+
+    private VisTextButton hideB;
+
     @Override
     public final void init(final World w) {
 
         VisTextButton closeB = new VisTextButton("X");
-        final VisTextButton hideB = new VisTextButton("M", "toggle");
+        hideB = new VisTextButton("M", "toggle");
+        hideB.setProgrammaticChangeEvents(false);
 
         closeB.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                w.getSystem(UiSystem.class).close(code);
+
+                if (closeRequest())
+                    w.getSystem(UiSystem.class).close(code);
             }
         });
 
-        final Vector2 tmpV = new Vector2();
+
 
         hideB.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
 
                 if (hideB.isChecked()) {
-                    minimized();
-                    setResizable(false);
-                    prevH = getHeight();
-                    setY(localToStageCoordinates(tmpV.set(0, getTitleTable().getY())).y);
-                    setHeight(getTitleTable().getHeight() + 1);
-
+                    minimize();
                 } else {
-                    setResizable(true);
-                    setHeight(Math.max(minExHeight, prevH));
-                    setY(localToStageCoordinates(tmpV.set(0, getTitleTable().getY())).y - (getHeight() - getTitleTable().getHeight()));
+                    expand();
                 }
 
             }
@@ -59,6 +62,46 @@ public abstract class SupportedReliantWin extends ReliantBaseWin {
 
         prevH = getHeight();
 
+    }
+
+    protected boolean closeRequest() {
+        return true;
+    }
+
+
+    public final void minimize() {
+        minimized();
+
+        getStage().setScrollFocus(null);
+        getStage().setKeyboardFocus(null);
+
+        hideB.setChecked(true);
+
+        setResizable(false);
+        minimized = true;
+        prevH = getHeight();
+
+        setY(localToStageCoordinates(tmpV.set(0, getTitleTable().getY())).y);
+        setHeight(getTitleTable().getHeight());
+    }
+
+    public final void expand() {
+        maximized();
+
+        hideB.setChecked(false);
+
+        setResizable(true);
+        minimized = false;
+
+        setHeight(Math.max(minExHeight, prevH));
+        setY(localToStageCoordinates(tmpV.set(0, getTitleTable().getY())).y - (getHeight() - getTitleTable().getHeight()));
+
+    }
+
+    protected abstract void maximized();
+
+    public boolean isMinimized() {
+        return minimized;
     }
 
     public abstract void minimized();

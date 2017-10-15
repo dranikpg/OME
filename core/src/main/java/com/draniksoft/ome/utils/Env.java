@@ -6,6 +6,10 @@ public class Env {
 
     public static boolean GFX_DEBUG = false;
 
+    public static boolean PRETTY_JSON = true;
+
+    public static boolean B64D = false;
+
     static {
         if (!DEBUG) GFX_DEBUG = false;
     }

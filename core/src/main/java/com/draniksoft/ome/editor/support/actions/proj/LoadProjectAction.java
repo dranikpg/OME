@@ -35,4 +35,14 @@ public class LoadProjectAction implements Action {
     public boolean isCleaner() {
         return true;
     }
+
+    @Override
+    public String getSimpleConcl() {
+        return "Loaded project";
+    }
+
+    @Override
+    public void destruct() {
+
+    }
 }

@@ -6,7 +6,7 @@ public interface EditMode {
 
     void attached(World _w);
 
-    void run();
+    void update();
 
     void detached();
 

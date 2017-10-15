@@ -13,6 +13,7 @@ public class AssetDDao {
     // id
     public String id;
 
+    public boolean loaded = false;
 
     public boolean sysmz = false;
 

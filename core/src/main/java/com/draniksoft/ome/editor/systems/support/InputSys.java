@@ -34,6 +34,7 @@ public class InputSys extends BaseSystem implements InputProcessor {
         mx.addProcessor(this);
 
         setDefIC(new SelectIC());
+
     }
 
     @Override
@@ -49,6 +50,9 @@ public class InputSys extends BaseSystem implements InputProcessor {
 
     }
 
+    public void clearMainIC() {
+        setMainIC(null);
+    }
 
     public void setMainIC(InputController mainIC) {
 
@@ -79,6 +83,10 @@ public class InputSys extends BaseSystem implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
+        if (((mainIC == null) || !mainIC.keyUp(keycode)) && defIC != null) {
+            defIC.keyUp(keycode);
+        }
+
         return false;
     }
 

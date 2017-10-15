@@ -22,10 +22,14 @@ public abstract class ReliantBaseWin extends BaseWindow {
     @Override
     public abstract void init(World w);
 
+    public boolean toFrontOnOpen = true;
+
     @Override
     public final void open(String uri) {
 
         on_opened(uri);
+
+        if (toFrontOnOpen) toFront();
 
         if (isOpen()) return;
 

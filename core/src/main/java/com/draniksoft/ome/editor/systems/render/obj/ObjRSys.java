@@ -10,7 +10,6 @@ import com.draniksoft.ome.editor.components.gfx.DrawableC;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
 import com.draniksoft.ome.editor.components.state.InactiveC;
 import com.draniksoft.ome.editor.components.state.TInactiveC;
-import com.draniksoft.ome.editor.components.tps.LocationC;
 
 public class ObjRSys extends IteratingSystem {
 
@@ -18,7 +17,7 @@ public class ObjRSys extends IteratingSystem {
 
 
     public ObjRSys() {
-        super(Aspect.all(PosSizeC.class, DrawableC.class, LocationC.class)
+        super(Aspect.all(PosSizeC.class, DrawableC.class)
                 .exclude(InactiveC.class, TInactiveC.class));
     }
 

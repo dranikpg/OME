@@ -148,12 +148,13 @@ public class OverlayRenderSys extends BaseEntitySystem {
 
         }
 
+        Array<OverlyRendererI> torem = new Array<OverlyRendererI>();
         for (int i = 0; i < rmIds.size; i++) {
             Gdx.app.debug(tag, "Removing OverlayR :: " + rs.get(rmIds.get(i)).getClass().getSimpleName());
-
-            rs.removeIndex(rmIds.get(i));
-
+            torem.add(rs.get(rmIds.get(i)));
         }
+
+        rs.removeAll(torem, true);
 
 
     }

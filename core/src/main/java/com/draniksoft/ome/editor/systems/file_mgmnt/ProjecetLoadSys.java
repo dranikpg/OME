@@ -1,12 +1,14 @@
 package com.draniksoft.ome.editor.systems.file_mgmnt;
 
+import com.artemis.Aspect;
 import com.artemis.BaseSystem;
 import com.artemis.annotations.Wire;
+import com.artemis.utils.IntBag;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.draniksoft.ome.editor.launch.MapLoadBundle;
-import com.draniksoft.ome.editor.map_load.ProjectLoader;
-import com.draniksoft.ome.editor.map_load.ProjectLoaderImpl;
+import com.draniksoft.ome.editor.support.map_load.ProjectLoader;
+import com.draniksoft.ome.editor.support.map_load.ProjectLoaderImpl;
 import com.draniksoft.ome.mgmnt_base.AppDataObserver;
 import com.draniksoft.ome.utils.ResponseListener;
 
@@ -59,6 +61,7 @@ public class ProjecetLoadSys extends BaseSystem {
         }
 
         logLoad(bundle.fPath);
+        clearAll();
 
         loader = new ProjectLoaderImpl();
         loader.setBundle(bundle);
@@ -67,6 +70,18 @@ public class ProjecetLoadSys extends BaseSystem {
         Gdx.app.debug(tag, "Starting new map load " + bundle.fPath);
 
         loader.load(myL);
+
+    }
+
+    private void clearAll() {
+
+        IntBag b = world.getAspectSubscriptionManager().get(Aspect.all()).getEntities();
+
+        for (int i = 0; i < b.size(); i++) {
+
+            world.delete(b.get(i));
+
+        }
 
     }
 

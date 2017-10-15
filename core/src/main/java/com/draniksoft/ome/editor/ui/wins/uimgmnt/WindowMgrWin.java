@@ -27,6 +27,11 @@ public class WindowMgrWin extends SupportedReliantWin {
     float maxT = 1f;
 
     @Override
+    protected void maximized() {
+
+    }
+
+    @Override
     public void minimized() {
 
     }

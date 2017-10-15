@@ -6,10 +6,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.draniksoft.ome.editor.systems.render.ui.UIRenderSystem;
 import com.draniksoft.ome.editor.ui.BaseWindow;
+import com.draniksoft.ome.editor.ui.utils.BaseDialog;
 import com.draniksoft.ome.editor.ui.wins.MOList;
+import com.draniksoft.ome.editor.ui.wins.actions.ActionList;
+import com.draniksoft.ome.editor.ui.wins.asset.AssetMgmntWin;
+import com.draniksoft.ome.editor.ui.wins.asset.DrawableSelectionWin;
+import com.draniksoft.ome.editor.ui.wins.em.AddCompWin;
+import com.draniksoft.ome.editor.ui.wins.em.EmList;
+import com.draniksoft.ome.editor.ui.wins.inspector.InspectorMainWin;
 import com.draniksoft.ome.editor.ui.wins.uimgmnt.WindowMgrWin;
 import com.kotcrab.vis.ui.widget.Menu;
 import com.kotcrab.vis.ui.widget.MenuBar;
@@ -24,6 +32,13 @@ public class UiSystem extends BaseSystem {
 
         public static final int win1 = 1;
         public static final int winMgr = 2;
+        public static final int em_win = 3;
+        public static final int assetMgr = 4;
+        public static final int actionList = 5;
+        public static final int inspector = 7;
+
+        public static final int drawableSelWin = 21;
+        public static final int addCWin = 22;
 
         public static HashMap<Integer, Class> map = new HashMap<Integer, Class>();
 
@@ -31,6 +46,12 @@ public class UiSystem extends BaseSystem {
             System.out.println("Initializing wincodes::map");
             map.put(win1, MOList.class);
             map.put(winMgr, WindowMgrWin.class);
+            map.put(em_win, EmList.class);
+            map.put(assetMgr, AssetMgmntWin.class);
+            map.put(actionList, ActionList.class);
+            map.put(inspector, InspectorMainWin.class);
+            map.put(addCWin, AddCompWin.class);
+            map.put(drawableSelWin, DrawableSelectionWin.class);
         }
     }
 
@@ -44,15 +65,23 @@ public class UiSystem extends BaseSystem {
 
 
     ObjectMap<Integer, BaseWindow> wins;
+    IntArray backupIDs;
+
 
     MenuBar menuBar;
 
     Table rootT;
 
     @Override
+    protected void processSystem() {
+
+    }
+
+    @Override
     protected void initialize() {
 
         wins = new ObjectMap<Integer, BaseWindow>();
+        backupIDs = new IntArray();
 
         rootT = new Table();
         rootT.setFillParent(true);
@@ -68,15 +97,43 @@ public class UiSystem extends BaseSystem {
 
         //uiStage.setDebugAll(true);
 
-        multiplexer.addProcessor(1, uiStage);
+        multiplexer.addProcessor(0, uiStage);
+
+        initBaseWins();
 
 
     }
 
+    private void initBaseWins() {
 
-    @Override
-    protected void processSystem() {
+    }
 
+
+    public IntArray crateBackup() {
+
+        backupIDs.clear();
+
+        for (ObjectMap.Entry<Integer, BaseWindow> entry : wins) {
+
+            if (entry.value.isOpen()) {
+                backupIDs.add(entry.key);
+                entry.value.close();
+            }
+        }
+
+        Gdx.app.debug(tag, "Created window backUP :: sz " + backupIDs.size);
+
+        return backupIDs;
+
+    }
+
+    public void loadBackup() {
+
+        for (int i = 0; i < backupIDs.size; i++) {
+
+            wins.get(backupIDs.get(i)).open(null);
+
+        }
     }
 
     /**
@@ -165,6 +222,32 @@ public class UiSystem extends BaseSystem {
         }));
 */
         menuBar.addMenu(fileM);
+
+    }
+
+    public void centerWin(int code) {
+
+        BaseWindow w = wins.get(code);
+        if (w == null) return;
+
+        w.centerWindow();
+
+    }
+
+    public <T> T openDilaog(Class<T> c) {
+
+        BaseDialog d = null;
+        try {
+            d = (BaseDialog) c.getConstructor().newInstance();
+        } catch (Exception e) {
+
+        }
+
+        uiStage.addActor(d);
+        d.fadeIn();
+
+
+        return (T) d;
 
     }
 

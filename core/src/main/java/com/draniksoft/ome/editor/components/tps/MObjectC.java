@@ -8,10 +8,11 @@ public class MObjectC extends Component {
     public int x, y;
 
     // width height :: whole size
-    public int w, h;
+    public int w;
+    public int h;
 
     /* id::uri for a drawable
     */
-    public String dwbIU;
+    public String dwbID;
 
 }

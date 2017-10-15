@@ -24,23 +24,24 @@ import com.draniksoft.ome.editor.manager.DrawableMgr;
 import com.draniksoft.ome.editor.manager.ProjectMgr;
 import com.draniksoft.ome.editor.manager.TimeMgr;
 import com.draniksoft.ome.editor.support.actions.Action;
-import com.draniksoft.ome.editor.support.actions.loc.AddTimeC;
-import com.draniksoft.ome.editor.support.actions.loc.CreateLocationA;
+import com.draniksoft.ome.editor.support.actions.timed.AddTimeCA;
+import com.draniksoft.ome.editor.support.container.CO_actiondesc.ActionDesc;
+import com.draniksoft.ome.editor.support.container.EM_desc.EditModeDesc;
 import com.draniksoft.ome.editor.support.container.MoveDesc;
 import com.draniksoft.ome.editor.support.input.InputController;
-import com.draniksoft.ome.editor.support.input.NewLocIC;
+import com.draniksoft.ome.editor.support.input.NewMOIC;
 import com.draniksoft.ome.editor.support.input.SelectIC;
 import com.draniksoft.ome.editor.support.input.TimedSelectIC;
 import com.draniksoft.ome.editor.support.render.core.OverlyRendererI;
 import com.draniksoft.ome.editor.support.workflow.EditMode;
-import com.draniksoft.ome.editor.support.workflow.NewLocEditMode;
+import com.draniksoft.ome.editor.support.workflow.compositionObserver.abstr.CompositionObserver;
 import com.draniksoft.ome.editor.systems.file_mgmnt.ProjecetLoadSys;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.editor.systems.pos.PhysicsSys;
 import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
+import com.draniksoft.ome.editor.systems.support.EditorSystem;
 import com.draniksoft.ome.editor.systems.support.InputSys;
-import com.draniksoft.ome.editor.systems.support.WorkflowSystem;
 import com.draniksoft.ome.mgmnt_base.AppDataObserver;
 import com.draniksoft.ome.utils.Const;
 import com.draniksoft.ome.utils.Env;
@@ -49,6 +50,7 @@ import com.draniksoft.ome.utils.struct.Pair;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -196,10 +198,32 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
      * Editmode utils
      */
 
+    public void log_avem() {
+
+        Array<EditModeDesc> ds = world.getSystem(EditorSystem.class).getEmDesc();
+
+
+        for (EditModeDesc d : ds) {
+            console.log(d.getName() + " [ " + d.id + " ] " + " -> " + d.c.getSimpleName());
+        }
+
+
+    }
+
+    public void log_emdesc() {
+
+        EditModeDesc d = world.getSystem(EditorSystem.class).getCurModeDesc();
+
+        if (d == null) console.log("NULL");
+        else {
+            console.log(d.c.getSimpleName());
+        }
+    }
+
     public void log_em() {
 
 
-        EditMode m = world.getSystem(WorkflowSystem.class).getCurEM();
+        EditMode m = world.getSystem(EditorSystem.class).getCurEM();
 
         if (m == null) {
             console.log("NULL");
@@ -210,9 +234,18 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     }
 
-    public void em_newL() {
+    public void em_set(int id) {
 
-        world.getSystem(WorkflowSystem.class).attachEditMode(new NewLocEditMode());
+        try {
+            world.getSystem(EditorSystem.class).attachNewEditMode(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void em_remove() {
+
+        world.getSystem(EditorSystem.class).detachEditMode();
 
     }
 
@@ -230,6 +263,53 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
         console.log("" + p.getElement0() + " " + p.getElement1());
 
     }
+
+    /*
+
+
+     */
+
+
+    public void log_cos() {
+
+        console.log("Logging for  " + world.getSystem(EditorSystem.class).sel);
+
+        CompositionObserver o;
+        Iterator<CompositionObserver> i = world.getSystem(EditorSystem.class).getComObsI();
+        while (i.hasNext()) {
+            o = i.next();
+            console.log(o.getName() + " [Lang dep]" + o.getClass().getSimpleName() + "(" + +o.id + ")" + " :: " + (o.isSelActive() ? "Triggered" : "Unaffected"));
+
+        }
+
+    }
+
+    public void log_cos_acts(int id) {
+
+        CompositionObserver o = world.getSystem(EditorSystem.class).getComOb(id);
+
+        if (o == null) {
+            console.log("Not found");
+            return;
+        }
+
+        try {
+
+
+            for (ActionDesc d : o.getDesc().values()) {
+
+                console.log(d.code + " ->" + d.getName() + " nooarg = " + d.noargpsb + " aviab = " + o.isAviab(d.code));
+
+            }
+        } catch (Exception e) {
+
+            Gdx.app.error("Console", "", e);
+
+        }
+
+    }
+
+
 
 
     /**
@@ -255,30 +335,33 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     public void te_addtc(int _e, int se, int ee) {
 
-        world.getSystem(ActionSystem.class).exec(new AddTimeC(_e, se, ee));
+        world.getSystem(ActionSystem.class).exec(new AddTimeCA(_e, se, ee));
 
     }
 
     public void te_addMoveC(int s, int e, int x, int y, int _e) {
 
-        ComponentMapper<TimedMoveC> cm = world.getMapper(TimedMoveC.class);
+        try {
+            ComponentMapper<TimedMoveC> cm = world.getMapper(TimedMoveC.class);
 
-        if (!cm.has(_e)) {
-            cm.create(_e);
-            cm.get(_e).a = new Array<MoveDesc>();
+            if (!cm.has(_e)) {
+                cm.create(_e);
+                cm.get(_e).a = new Array<MoveDesc>();
+            }
+
+            MoveDesc d = new MoveDesc();
+            d.s = s;
+            d.e = e;
+            d.x = x;
+            d.y = y;
+            Pair<Float, Float> p = world.getSystem(PhysicsSys.class).getPos(_e);
+            d.sx = p.getElement0().intValue();
+            d.sy = p.getElement1().intValue();
+
+            cm.get(_e).a.add(d);
+        } catch (Exception er) {
+            Gdx.app.error("", ",", er);
         }
-
-        MoveDesc d = new MoveDesc();
-        d.s = s;
-        d.e = e;
-        d.x = x;
-        d.y = y;
-        Pair<Float, Float> p = world.getSystem(PhysicsSys.class).getPos(_e);
-        d.sx =  p.getElement0().intValue();
-        d.sy = p.getElement1().intValue();
-
-        cm.get(_e).a.add(d);
-
 
     }
 
@@ -469,14 +552,6 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
      */
 
 
-    public void newl(int x, int y, int h, int w, String txt) {
-
-        CreateLocationA a = new CreateLocationA(x, y, w, h);
-        a.dwbIU = txt;
-        world.getSystem(ActionSystem.class).exec(a);
-
-    }
-
     /**
      * Input utils
      */
@@ -525,7 +600,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     public void ic_newl() {
 
-        world.getSystem(InputSys.class).setMainIC(new NewLocIC());
+        world.getSystem(InputSys.class).setMainIC(new NewMOIC());
 
     }
 
@@ -621,8 +696,11 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     public void openwin(int code) {
 
-        world.getSystem(UiSystem.class).open(code, null);
-
+        try {
+            world.getSystem(UiSystem.class).open(code, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void openwin(int code, String uri) {
@@ -775,5 +853,6 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
     private String formatString(int l, String s){
         return String.format("%1$"+l+ "s", s);
     }
+
 
 }

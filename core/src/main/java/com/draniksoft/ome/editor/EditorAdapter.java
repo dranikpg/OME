@@ -34,8 +34,8 @@ import com.draniksoft.ome.editor.systems.render.ui.FloatUIRenderSys;
 import com.draniksoft.ome.editor.systems.render.ui.UIRenderSystem;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.ConsoleSys;
+import com.draniksoft.ome.editor.systems.support.EditorSystem;
 import com.draniksoft.ome.editor.systems.support.InputSys;
-import com.draniksoft.ome.editor.systems.support.WorkflowSystem;
 import com.draniksoft.ome.editor.systems.time.TimeActivitySys;
 import com.draniksoft.ome.mgmnt_base.AppDataObserver;
 import com.draniksoft.ome.utils.GUtils;
@@ -61,6 +61,7 @@ public class EditorAdapter extends ApplicationAdapter {
 
     @Override
     public void create() {
+
 
         engine = loadEngine();
 
@@ -132,7 +133,7 @@ public class EditorAdapter extends ApplicationAdapter {
 
         // SUPPORT SYSTEMS
 
-        cb.with(new WorkflowSystem());
+        cb.with(new EditorSystem());
 
         cb.with(new InputSys());
 

@@ -11,12 +11,14 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.draniksoft.ome.editor.map_load.LoadSaveManager;
-import com.draniksoft.ome.editor.map_load.ProjectLoader;
+import com.draniksoft.ome.editor.support.event.asset.AssetListChange;
+import com.draniksoft.ome.editor.support.map_load.LoadSaveManager;
+import com.draniksoft.ome.editor.support.map_load.ProjectLoader;
 import com.draniksoft.ome.mgmnt_base.AppDataObserver;
 import com.draniksoft.ome.utils.FUtills;
 import com.draniksoft.ome.utils.dao.AssetDDao;
 import com.draniksoft.ome.utils.struct.Pair;
+import net.mostlyoriginal.api.event.common.EventSystem;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -74,6 +76,10 @@ public class DrawableMgr extends BaseSystem implements LoadSaveManager {
         dA.put(dao.id, assM.get(dao.p, TextureAtlas.class));
         dD.put(dao.id, dao);
 
+        dao.loaded = true;
+
+        world.getSystem(EventSystem.class).dispatch(new AssetListChange(dao.id));
+
     }
 
     @Override
@@ -103,7 +109,7 @@ public class DrawableMgr extends BaseSystem implements LoadSaveManager {
 
         Gdx.app.debug(tag, "Initing internal assets");
 
-        String rJsonStr = Gdx.files.internal("i_assets/list.json").readString();
+        String rJsonStr = Gdx.files.internal("desc/iassets.json").readString();
 
         JsonValue rootV = jR.parse(rJsonStr);
 
@@ -153,9 +159,6 @@ public class DrawableMgr extends BaseSystem implements LoadSaveManager {
 
     }
 
-    public void unloadEx(String id) {
-
-    }
 
 
 
@@ -168,15 +171,19 @@ public class DrawableMgr extends BaseSystem implements LoadSaveManager {
     @Override
     public void loadL(JsonValue val, ProjectLoader l) {
 
-        l.getAssetManager().load("editor/defC/c.png", Texture.class);
-
         if (val != null) {
 
             for (int i = 0; i < val.size; i++) {
 
                 String id = val.getString(i);
 
-                loadDwbl(findDao(id));
+                if (dA.containsKey(id)) return;
+
+                AssetDDao d = findDao(id);
+
+                if (d != null)
+                    loadDwbl(findDao(id));
+                else ;
 
             }
 
@@ -217,6 +224,8 @@ public class DrawableMgr extends BaseSystem implements LoadSaveManager {
 
         for (AssetDDao d : dD.values()) {
 
+            if (d.sysmz) continue;
+
             JsonValue v = new JsonValue(JsonValue.ValueType.stringValue);
             v.set(d.id);
             root.addChild(v);
@@ -246,6 +255,10 @@ public class DrawableMgr extends BaseSystem implements LoadSaveManager {
 
 
         return ds;
+    }
+
+    public Array<AssetDDao> getLoadDs() {
+        return loadDs;
     }
 
     public ObjectMap<String, TextureAtlas> getAllAtlasI() {
@@ -300,13 +313,24 @@ public class DrawableMgr extends BaseSystem implements LoadSaveManager {
 
     }
 
+    public Array<AssetDDao> getLoaded() {
+
+        return dD.values().toArray();
+
+    }
+
     public ObjectMap<String, AssetDDao> getAllDescI() {
         return dD;
     }
 
 
     public boolean containsAtlas(String n) {
-        return dA.containsKey(n);
+        return dA.containsKey(passRedirect(n));
+    }
+
+    private String passRedirect(String id) {
+        if (redirects.containsKey(id)) return redirects.get(id);
+        return id;
     }
 
     public TextureRegion getRegion(String aid, String name, int id) {
@@ -332,6 +356,7 @@ public class DrawableMgr extends BaseSystem implements LoadSaveManager {
         String splitS = "@";
 
         String[] parts = uri.split(splitS);
+
 
         if (parts.length > 2) {
             return getRegion(parts[0], parts[1], Integer.valueOf(parts[2]));

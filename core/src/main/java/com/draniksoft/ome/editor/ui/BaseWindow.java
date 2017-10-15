@@ -19,7 +19,4 @@ public abstract class BaseWindow extends VisWindow {
 
     public abstract boolean isOpen();
 
-    public boolean isModal() {
-        return false;
-    }
 }

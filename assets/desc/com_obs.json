@@ -1,0 +1,26 @@
+{
+  "1": {
+    "a": [
+      {
+        "c": 1,
+        "noargpsb": false,
+        "name_ru": "N",
+        "name_en": "NAME EN",
+        "desc_ru": "N",
+        "desc_en": "DESC EN"
+      }
+    ]
+  },
+  "2": {
+    "a": [
+      {
+        "c": 1,
+        "noargpsb": false,
+        "name_ru": "N",
+        "name_en": "Add timed component",
+        "desc_ru": "N",
+        "desc_en": "DESC EN"
+      }
+    ]
+  }
+}

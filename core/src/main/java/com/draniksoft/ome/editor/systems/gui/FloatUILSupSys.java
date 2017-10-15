@@ -17,7 +17,7 @@ import com.draniksoft.ome.editor.components.pos.PosSizeC;
 import com.draniksoft.ome.editor.components.selection.FLabelC;
 import com.draniksoft.ome.editor.components.selection.SelectionC;
 import com.draniksoft.ome.editor.components.state.TInactiveC;
-import com.draniksoft.ome.editor.support.event.SelectionChangeE;
+import com.draniksoft.ome.editor.support.event.entityy.SelectionChangeE;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import net.mostlyoriginal.api.event.common.Subscribe;
 
@@ -47,7 +47,9 @@ public class FloatUILSupSys extends IteratingSystem {
 
                     tc = flM.get(es.get(e));
 
-                    if (tc.lid == -1) {
+                    Gdx.app.debug(tag, "Created for " + es.get(e));
+
+                    if (tc != null && tc.lid == -1) {
                         tc.lid = newLabel(tc.txt);
                     }
 
@@ -146,25 +148,23 @@ public class FloatUILSupSys extends IteratingSystem {
 
         actrs.add(l);
 
-        Gdx.app.debug(tag, "Added new label :: id ::  " + (actrs.size() - 1));
-
         return (actrs.size() - 1);
     }
 
     @Subscribe
     public void selectionChange(SelectionChangeE e) {
 
-        if (e.old != -1 && flM.has(e.old)) {
+        if (e.old > -1 && flM.has(e.old)) {
             actrs.get(flM.get(e.old).lid).setColor(0, 0, 0, 1);
         }
 
-        if (e.n != -1 && flM.has(e.n)) {
+        if (e.n > -1 && flM.has(e.n)) {
 
             if (flM.get(e.n).lid == -1) {
-                flM.get(e.n).lid = newLabel(tc.txt);
+                //flM.get(e.n).lid = newLabel(tc.txt);
             }
 
-            actrs.get(flM.get(e.n).lid).setColor(1, 0, 0, 1);
+            //actrs.get(flM.get(e.n).lid).setColor(1, 0, 0, 1);
         }
 
     }

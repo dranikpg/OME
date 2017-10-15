@@ -18,4 +18,9 @@ public interface Action {
 
     // A cleaner cleans the story, hence it's supposed to be an action like loading a map
     boolean isCleaner();
+
+    String getSimpleConcl();
+
+    // Called when pool is freed and all action data should be deleted
+    void destruct();
 }

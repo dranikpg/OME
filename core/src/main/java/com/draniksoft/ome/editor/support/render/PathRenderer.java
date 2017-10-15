@@ -3,7 +3,7 @@ package com.draniksoft.ome.editor.support.render;
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.Array;
 import com.draniksoft.ome.editor.components.time.TimedMoveC;
 import com.draniksoft.ome.editor.manager.DrawableMgr;
 import com.draniksoft.ome.editor.support.container.MoveDesc;
+import com.draniksoft.ome.editor.support.render.core.OverlayPlaces;
 import com.draniksoft.ome.editor.support.render.core.OverlyRendererI;
 import com.draniksoft.ome.utils.GUtils;
 
@@ -32,7 +33,7 @@ public class PathRenderer implements OverlyRendererI {
     float[] rdata = {0f, 0f};
 
     @Override
-    public void render(int _e, SpriteBatch b, Camera c) {
+    public void render(int _e, SpriteBatch b, OrthographicCamera c) {
 
         if (d == null) {
             checkD();
@@ -91,7 +92,7 @@ public class PathRenderer implements OverlyRendererI {
 
     @Override
     public int[] getPos() {
-        return new int[0];
+        return new int[]{OverlayPlaces.PATH, OverlayPlaces.ENTITY_MAIN_BODY};
     }
 
     @Override

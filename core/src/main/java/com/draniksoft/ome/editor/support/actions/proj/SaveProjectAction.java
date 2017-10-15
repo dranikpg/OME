@@ -24,4 +24,14 @@ public class SaveProjectAction implements Action {
     public boolean isCleaner() {
         return false;
     }
+
+    @Override
+    public String getSimpleConcl() {
+        return "Saved Project";
+    }
+
+    @Override
+    public void destruct() {
+
+    }
 }

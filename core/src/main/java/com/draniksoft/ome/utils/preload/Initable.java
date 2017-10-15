@@ -4,7 +4,7 @@ import com.draniksoft.ome.utils.ResponseListener;
 
 public interface Initable {
 
-    public static class Codes{
+    class Codes {
 
         // All okay
         public static final short READY = 1;
@@ -20,7 +20,7 @@ public interface Initable {
     }
 
     // l to send the respone to
-    // t - tell is the process should run on a new Thread
-    public void init(ResponseListener l, boolean t);
+    // t - tell is the process should update on a new Thread
+    void init(ResponseListener l, boolean t);
 
 }

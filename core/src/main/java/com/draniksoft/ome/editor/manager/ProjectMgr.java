@@ -4,8 +4,8 @@ import com.artemis.Manager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.JsonWriter;
-import com.draniksoft.ome.editor.map_load.LoadSaveManager;
-import com.draniksoft.ome.editor.map_load.ProjectLoader;
+import com.draniksoft.ome.editor.support.map_load.LoadSaveManager;
+import com.draniksoft.ome.editor.support.map_load.ProjectLoader;
 import com.draniksoft.ome.utils.struct.Pair;
 
 public class ProjectMgr extends Manager implements LoadSaveManager {

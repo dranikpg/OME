@@ -3,9 +3,10 @@ package com.draniksoft.ome.editor.support.render;
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TransformDrawable;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
@@ -25,9 +26,11 @@ public class SelectionRenderer implements OverlyRendererI {
     PosSizeC c;
     ComponentMapper<PosSizeC> pM;
 
+    float bc = 20;
+
 
     @Override
-    public void render(int _e, SpriteBatch b, Camera cam) {
+    public void render(int _e, SpriteBatch b, OrthographicCamera cam) {
 
         if (d == null) {
             checkD();
@@ -38,7 +41,12 @@ public class SelectionRenderer implements OverlyRendererI {
 
         c = pM.get(_e);
 
-        d.draw(b, c.x, c.y + c.h / 2, c.w, 10);
+        float sh = c.h / bc * MathUtils.clamp(cam.zoom * 2, 0.5f, 20);
+        float sw = c.w / bc * MathUtils.clamp(cam.zoom * 2, 0.5f, 20);
+        d.draw(b, c.x - sw, c.y + c.h, c.w + 2 * sw, sh);
+        d.draw(b, c.x - sw, c.y - sh, c.w + 2 * sw, sh);
+        d.draw(b, c.x + c.w, c.y, sw, c.h);
+        d.draw(b, c.x - sw, c.y, sw, c.h);
 
 
     }

@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "sr": false,
+    "name_en": "New Location Tool",
+    "name_ru": "New Location Tool",
+    "iconID": "SomeId",
+    "c": "NewMOEM"
+  },
+  {
+    "id": 2,
+    "sr": true,
+    "name_en": "Move Location Tool",
+    "name_ru": "Move Location Tool",
+    "iconID": "SomeId",
+    "c": "MoveMOEM"
+  }
+]

@@ -10,7 +10,7 @@ import com.badlogic.gdx.physics.box2d.QueryCallback;
 import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.draniksoft.ome.editor.components.supp.SelectionC;
-import com.draniksoft.ome.editor.support.event.SelectionChangeE;
+import com.draniksoft.ome.editor.support.event.entityy.SelectionChangeE;
 import com.draniksoft.ome.editor.systems.support.InputSys;
 import com.draniksoft.ome.utils.PUtils;
 import net.mostlyoriginal.api.event.common.EventSystem;
@@ -102,6 +102,7 @@ public class TimedSelectIC implements InputController {
         if (es.size > 0) {
 
             e = es.get(0);
+            Gdx.app.debug(tag, "CHanged sel to " + e);
 
             w.getMapper(SelectionC.class).create(e);
 
@@ -109,13 +110,13 @@ public class TimedSelectIC implements InputController {
 
         }
 
+        Gdx.app.debug(tag, "CHanged sel to " + e);
+
+
         SelectionChangeE ev = new SelectionChangeE();
         ev.old = sels.size() > 0 ? sels.get(0) : -1;
         ev.n = e;
         w.getSystem(EventSystem.class).dispatch(ev);
-
-        Gdx.app.debug(tag, "Selection changed ");
-
 
     }
 

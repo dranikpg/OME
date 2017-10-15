@@ -19,8 +19,9 @@ public class ArchTransmuterMgr extends Manager{
     public static class Codes{
 
         public static final int MAP_C = 1;
-        public static final int BASE_LOCATION = 2;
-        public static final int TIMED_LOCATION = 3;
+        public static final int BASE_MO = 10;
+        public static final int BASE_LOCATION = 20;
+        public static final int TIMED_LOCATION = 21;
 
 
     }
@@ -45,6 +46,10 @@ public class ArchTransmuterMgr extends Manager{
 
         types.put(Codes.MAP_C,new ArchetypeBuilder().add(TexRegC.class)
                 .add(MapC.class).add(PosSizeC.class).build(world));
+
+        types.put(Codes.BASE_MO, new ArchetypeBuilder().add(PhysC.class)
+                .add(PosSizeC.class).add(DrawableC.class).add(MObjectC.class)
+                .build(world));
 
         types.put(Codes.BASE_LOCATION, new ArchetypeBuilder().add(PhysC.class)
                 .add(PosSizeC.class).add(DrawableC.class)

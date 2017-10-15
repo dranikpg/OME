@@ -5,11 +5,15 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.draniksoft.ome.utils.ResponseListener;
 
+import java.util.Locale;
+
 public class LanguageManager extends AppDataManager {
 
     public static final String tag = "LanguageManager";
 
     I18NBundle menuB;
+
+    Locale locale;
 
     @Override
     public void init(final ResponseListener l, boolean t) {
@@ -20,7 +24,9 @@ public class LanguageManager extends AppDataManager {
 
                 try{
 
-                    FileHandle baseFileHandle = Gdx.files.internal("menu/lang/bundle");
+                    locale = new Locale("EN");
+
+                    FileHandle baseFileHandle = Gdx.files.internal("lang/bundle");
                     menuB = I18NBundle.createBundle(baseFileHandle);
 
 
@@ -54,6 +60,16 @@ public class LanguageManager extends AppDataManager {
     //
     public String format_m(String key, Object... ags){
         return menuB.format(key,ags);
+    }
+
+    public boolean isEn() {
+        return true;
+    }
+
+    public String getLangTag() {
+
+        return locale.getLanguage();
+
     }
 
     @Override

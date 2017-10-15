@@ -26,7 +26,6 @@ public class TimeActivitySys extends IteratingSystem {
     public TimeActivitySys() {
         super(Aspect.one(TimedC.class, TimedMoveC.class).exclude(InactiveC.class));
 
-
     }
 
     @Override
@@ -53,6 +52,9 @@ public class TimeActivitySys extends IteratingSystem {
 
             }
         });
+
+
+        setEnabled(false);
     }
 
     ComponentMapper<TInactiveC> tiM;
