@@ -6,12 +6,22 @@ public abstract class EditModeDesc {
 
         public static final int newMO = 1;
         public static final int moveMO = 2;
+        public static final int editTimedMoves = 3;
+
+
 
     }
 
 
     public int id;
     public String iconID;
+
+    public static final int AVAILABLE = 1;
+    public static final int AV_DISABLED = 2;
+    public static final int AV_HIDDEN = 3;
+
+
+    public int aviabT = 3;
 
     public boolean selRequired = false;
 

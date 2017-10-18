@@ -1,4 +1,4 @@
-package com.draniksoft.ome.editor.support.workflow.compositionObserver.abstr;
+package com.draniksoft.ome.editor.support.compositionObserver.abstr;
 
 import com.artemis.Aspect;
 import com.artemis.World;

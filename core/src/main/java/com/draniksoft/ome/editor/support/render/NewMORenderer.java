@@ -77,6 +77,6 @@ public class NewMORenderer implements OverlyRendererI {
 
     @Override
     public int getId() {
-        return 0;
+        return IDs.NewMOR;
     }
 }

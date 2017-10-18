@@ -1,4 +1,4 @@
-package com.draniksoft.ome.editor.support.render;
+package com.draniksoft.ome.editor.support.render.def;
 
 import com.artemis.ComponentMapper;
 import com.artemis.World;
@@ -16,7 +16,6 @@ import com.draniksoft.ome.editor.support.render.core.OverlyRendererI;
 
 public class SelectionRenderer implements OverlyRendererI {
 
-    public static final int id = 101;
 
     private final static String tag = "SelectionRenderer";
 
@@ -88,6 +87,6 @@ public class SelectionRenderer implements OverlyRendererI {
 
     @Override
     public int getId() {
-        return id;
+        return IDs.SelR;
     }
 }

@@ -1,4 +1,4 @@
-package com.draniksoft.ome.editor.support.render;
+package com.draniksoft.ome.editor.support.render.def;
 
 import com.artemis.ComponentMapper;
 import com.artemis.World;
@@ -15,18 +15,17 @@ import com.draniksoft.ome.editor.manager.DrawableMgr;
 import com.draniksoft.ome.editor.support.container.MoveDesc;
 import com.draniksoft.ome.editor.support.render.core.OverlayPlaces;
 import com.draniksoft.ome.editor.support.render.core.OverlyRendererI;
+import com.draniksoft.ome.editor.systems.pos.PhysicsSys;
 import com.draniksoft.ome.utils.GUtils;
+import com.draniksoft.ome.utils.struct.Pair;
 
 public class PathRenderer implements OverlyRendererI {
 
     private static final String tag = "PathRenderer";
 
-    public static final int id = 102;
-
     World _w;
 
-    TransformDrawable d;
-    TimedMoveC c;
+    TransformDrawable _d;
     ComponentMapper<TimedMoveC> cM;
 
     Vector2 tmpV;
@@ -35,7 +34,7 @@ public class PathRenderer implements OverlyRendererI {
     @Override
     public void render(int _e, SpriteBatch b, OrthographicCamera c) {
 
-        if (d == null) {
+        if (_d == null) {
             checkD();
             return;
         }
@@ -44,17 +43,38 @@ public class PathRenderer implements OverlyRendererI {
 
         if (!cM.has(_e)) return;
 
-        renderLines(cM.get(_e).a, b);
+        renderLines(_e, cM.get(_e).a, b);
 
     }
 
-    private void renderLines(Array<MoveDesc> a, SpriteBatch b) {
+    float tmpd[] = new float[]{0, 0};
+    Vector2 lastP = new Vector2();
+    Vector2 v = new Vector2();
 
-        for (MoveDesc md : a) {
+    float h = 10f;
 
-            GUtils.calcLine(md.sx, md.sy, md.x, md.y, rdata, tmpV);
+    private void renderLines(int _e, Array<MoveDesc> a, SpriteBatch b) {
 
-            d.draw(b, md.sx, md.sy, 0, 0, rdata[0], 10, 1, 1, rdata[1]);
+        float sx, sy;
+        Pair<Float, Float> ep = _w.getSystem(PhysicsSys.class).getPos(_e);
+
+        lastP.set(ep.getElement0(), ep.getElement1());
+
+        for (MoveDesc d : a) {
+
+            if (d.start_x < 0) {
+                sx = (int) lastP.x;
+                sy = (int) lastP.y;
+            } else {
+                sx = d.start_x;
+                sy = d.start_y;
+            }
+
+            GUtils.calcLine(sx, sy, d.end_x, d.end_y, tmpd, v);
+
+            _d.draw(b, sx, sy, 0, 5, tmpd[0], h, 1 + (h / (tmpd[0] * 2)), 1, tmpd[1]);
+
+            lastP.set(d.end_x, d.end_y);
 
         }
 
@@ -66,7 +86,7 @@ public class PathRenderer implements OverlyRendererI {
 
         if (r == null) return;
 
-        d = new TextureRegionDrawable(r);
+        _d = new TextureRegionDrawable(r);
 
         Gdx.app.debug(tag, "Collected drawable");
 
@@ -97,6 +117,6 @@ public class PathRenderer implements OverlyRendererI {
 
     @Override
     public int getId() {
-        return id;
+        return IDs.PathR;
     }
 }

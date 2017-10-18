@@ -12,9 +12,9 @@ import com.draniksoft.ome.editor.manager.DrawableMgr;
 import com.draniksoft.ome.editor.support.actions.mapO.ChangeDwbA;
 import com.draniksoft.ome.editor.support.actions.mapO.MoveMOA;
 import com.draniksoft.ome.editor.support.container.EM_desc.EditModeDesc;
+import com.draniksoft.ome.editor.support.ems.MoveMOEM;
 import com.draniksoft.ome.editor.support.event.EditModeChangeE;
 import com.draniksoft.ome.editor.support.event.entityy.EntityDataChangeE;
-import com.draniksoft.ome.editor.support.workflow.def_ems.MoveMOEM;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.EditorSystem;
@@ -57,8 +57,8 @@ public class MOTable extends VisTable {
     public void init(int e, final World w) {
 
         this._w = w;
+        this._e = e;
 
-        MObjectC c = w.getMapper(MObjectC.class).get(e);
         psc = w.getMapper(PosSizeC.class).get(e);
 
         w.getSystem(EventSystem.class).registerEvents(this);
@@ -103,6 +103,7 @@ public class MOTable extends VisTable {
             public boolean keyTyped(InputEvent event, char character) {
 
                 if (character == '\n') {
+                    getStage().setKeyboardFocus(null);
                     saveVals();
                 }
 
@@ -119,6 +120,7 @@ public class MOTable extends VisTable {
             public boolean keyTyped(InputEvent event, char character) {
 
                 if (character == '\n') {
+                    getStage().setKeyboardFocus(null);
                     saveVals();
                 }
 
@@ -192,7 +194,7 @@ public class MOTable extends VisTable {
     public void DataChanged(EntityDataChangeE e) {
 
         if (e._e == this._e) {
-
+            this._e = e._e;
             updateVals();
 
         }
@@ -205,7 +207,13 @@ public class MOTable extends VisTable {
         yF.setText(String.valueOf(psc.y + psc.w / 2));
 
         curDWBT.clearChildren();
-        curDWB = new VisImageButton(new TextureRegionDrawable(_w.getSystem(DrawableMgr.class).getRegion(_w.getMapper(MObjectC.class).get(_e).dwbID)));
+
+
+        TextureRegionDrawable d = new TextureRegionDrawable(_w.getSystem(DrawableMgr.class).getRegion(_w.getMapper(MObjectC.class).get(_e).dwbID));
+
+        if (d == null) return;
+
+        curDWB = new VisImageButton(d);
         curDWBT.add(curDWB).expand().fill();
         curDWB.addListener(dwl);
     }

@@ -7,4 +7,7 @@ public class FLabelC extends Component {
     public int lid = -1;
     public String txt;
 
+    public boolean scaleChg = false;
+    public float sizeM = 1f;
+
 }

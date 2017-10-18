@@ -1,18 +1,17 @@
-package com.draniksoft.ome.editor.support.workflow.def_ems;
+package com.draniksoft.ome.editor.support.ems;
 
 import com.artemis.World;
 import com.badlogic.gdx.Gdx;
 import com.draniksoft.ome.editor.support.actions.mapO.MoveMOA;
+import com.draniksoft.ome.editor.support.ems.core.EditMode;
 import com.draniksoft.ome.editor.support.input.MoveMOIC;
 import com.draniksoft.ome.editor.support.render.MoveMORenderer;
 import com.draniksoft.ome.editor.support.render.core.OverlayPlaces;
-import com.draniksoft.ome.editor.support.workflow.EditMode;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.EditorSystem;
 import com.draniksoft.ome.editor.systems.support.InputSys;
-import com.draniksoft.ome.utils.ESCUtils;
 import net.mostlyoriginal.api.event.common.EventSystem;
 
 public class MoveMOEM implements EditMode {
@@ -35,7 +34,7 @@ public class MoveMOEM implements EditMode {
         rdr = new MoveMORenderer();
 
 
-        e = ESCUtils.getFirstSel(_w);
+        e = _w.getSystem(EditorSystem.class).sel;
 
         if (e < 0) {
             Gdx.app.debug(tag, "Selection is null -> detaching");
@@ -115,24 +114,8 @@ public class MoveMOEM implements EditMode {
 
     }
 
-    @Override
-    public void stopped() {
-
-        _w.getSystem(InputSys.class).clearMainIC();
-        _w.getSystem(OverlayRenderSys.class).removeRdr(rdr);
-
-    }
-
-    @Override
-    public void resumed() {
-
-        _w.getSystem(OverlayRenderSys.class).addRdr(rdr);
-        _w.getSystem(InputSys.class).setMainIC(ic);
-
-    }
-
     /*
-    public void selChanged(SelectionChangeE e){
+    public void selChanged(SelectionChangeE time_e){
         selfDestroy();
     }
     */

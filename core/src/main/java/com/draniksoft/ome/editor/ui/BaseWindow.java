@@ -5,10 +5,15 @@ import com.kotcrab.vis.ui.widget.VisWindow;
 
 public abstract class BaseWindow extends VisWindow {
 
+
     public int code;
 
     public BaseWindow(String title) {
         super(title);
+    }
+
+    public BaseWindow(String title, String style) {
+        super(title, style);
     }
 
     public abstract void init(World w);

@@ -1,4 +1,4 @@
-package com.draniksoft.ome.editor.support.actions.timed;
+package com.draniksoft.ome.editor.support.actions.timed.move;
 
 import com.artemis.World;
 import com.draniksoft.ome.editor.components.time.TimedMoveC;
@@ -16,12 +16,12 @@ public class AddTimedMoveA implements Action {
 
         TimedMoveC c = w.getMapper(TimedMoveC.class).get(_e);
         MoveDesc d = new MoveDesc();
-        d.sx = sx;
-        d.sy = sy;
-        d.x = ex;
-        d.y = ey;
-        d.s = s;
-        d.e = e;
+        d.start_x = sx;
+        d.start_y = sy;
+        d.end_x = ex;
+        d.end_y = ey;
+        d.time_s = s;
+        d.time_e = e;
 
         c.a.add(d);
 

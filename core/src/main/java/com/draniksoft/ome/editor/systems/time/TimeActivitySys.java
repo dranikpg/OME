@@ -12,9 +12,12 @@ import com.draniksoft.ome.editor.components.time.TimedC;
 import com.draniksoft.ome.editor.components.time.TimedMoveC;
 import com.draniksoft.ome.editor.manager.TimeMgr;
 import com.draniksoft.ome.editor.support.container.MoveDesc;
+import com.draniksoft.ome.editor.support.event.workflow.ModeChangeE;
 import com.draniksoft.ome.editor.systems.pos.PhysicsSys;
 import com.draniksoft.ome.utils.struct.Pair;
 import dint.Dint;
+import net.mostlyoriginal.api.event.common.EventSystem;
+import net.mostlyoriginal.api.event.common.Subscribe;
 
 public class TimeActivitySys extends IteratingSystem {
 
@@ -53,8 +56,9 @@ public class TimeActivitySys extends IteratingSystem {
             }
         });
 
-
         setEnabled(false);
+
+        world.getSystem(EventSystem.class).registerEvents(this);
     }
 
     ComponentMapper<TInactiveC> tiM;
@@ -68,11 +72,6 @@ public class TimeActivitySys extends IteratingSystem {
     @Override
     protected void process(int e) {
 
-        if (tmgr.getTime() == -1) {
-            return;
-        }
-
-
         if (tM.has(e))
             processTimeC(tM.get(e), e);
 
@@ -85,30 +84,45 @@ public class TimeActivitySys extends IteratingSystem {
     private void processTMoveC(TimedMoveC c, int e) {
 
 
-        int lx = -1;
-        int ly = -1;
+        float lx, ly;
 
+        Pair<Float, Float> pp = world.getSystem(PhysicsSys.class).getPos(e);
+        lx = pp.getElement0();
+        ly = pp.getElement1();
 
         for (MoveDesc d : c.a) {
 
-            if (tmgr.getTime() > d.e) {
-                lx = d.x;
-                ly = d.y;
-            }
+            if (tmgr.getTime() > d.time_e) {
+                lx = d.end_x;
+                ly = d.end_y;
+                d.rt_sx = -1;
 
-            if (tmgr.isNow(d.s, d.e)) {
+            } else if (tmgr.isNow(d.time_s, d.time_e)) {
 
-                float psd = (((float) Dint.diff(tmgr.getTime(), d.s)) +
-                        Math.min(d.e == tmgr.getTime() ? 0 : 1f, tmgr.getStepPrecent())) / ((float) Dint.diff(d.e, d.s));
+                if (d.rt_sx < 0) {
+                    if (d.start_x < 0) {
+                        d.rt_sx = (int) lx;
+                        d.rt_sy = (int) ly;
+                    } else {
+                        d.rt_sx = d.start_x;
+                        d.rt_sy = d.start_y;
+                    }
+                }
 
-                Pair<Integer, Integer> p = Pair.createPair(d.sx, d.sy);
+                float dif1 = Dint.diff(tmgr.getTime(), d.time_s);
+                float dif2 = Dint.diff(d.time_e, d.time_s);
 
-                float dx = ((float) d.x - p.getElement0()) * psd;
-                float dy = ((float) d.y - p.getElement1()) * psd;
+                float psd = dif1 / dif2;
+                psd = Math.min(psd, 1);
 
-                world.getSystem(PhysicsSys.class).setSyncPos(p.getElement0() + dx,
-                        p.getElement1() + dy,
+
+                float dx = ((float) d.end_x - d.rt_sx) * psd;
+                float dy = ((float) d.end_y - d.rt_sy) * psd;
+
+                world.getSystem(PhysicsSys.class).setSyncPos(d.rt_sx + dx,
+                        d.rt_sy + dy,
                         e);
+
 
                 return;
 
@@ -117,7 +131,8 @@ public class TimeActivitySys extends IteratingSystem {
         }
 
         if (lx == -1 || ly == -1) return;
-        world.getSystem(PhysicsSys.class).setSyncPos(lx, ly, e);
+
+        //world.getSystem(PhysicsSys.class).setSyncPos(lx, ly, time_e);
 
 
     }
@@ -136,5 +151,22 @@ public class TimeActivitySys extends IteratingSystem {
             }
 
         }
+    }
+
+
+    @Subscribe
+    public void modeChanged(ModeChangeE e) {
+
+        setEnabled(e.SHOW_MODE);
+
+        if (!e.SHOW_MODE) {
+            clearRTPS();
+        }
+
+    }
+
+    private void clearRTPS() {
+
+
     }
 }

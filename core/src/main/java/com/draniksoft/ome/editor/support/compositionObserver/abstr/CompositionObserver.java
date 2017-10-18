@@ -1,7 +1,6 @@
-package com.draniksoft.ome.editor.support.workflow.compositionObserver.abstr;
+package com.draniksoft.ome.editor.support.compositionObserver.abstr;
 
 import com.artemis.World;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntMap;
@@ -18,6 +17,8 @@ public abstract class CompositionObserver {
 
         public static final short MO_CO = 1;
         public static final short TIMED_CO = 2;
+        public static final short TIMED_MOV_CO = 3;
+        public static final short FLABEL_ID = 4;
 
     }
 
@@ -45,11 +46,11 @@ public abstract class CompositionObserver {
 
     public abstract String getName();
 
-    protected Array<ActionDesc> ds;
+    protected Array<ActionDesc> __ds;
 
     public void loadActionConfig(JsonValue rootv) {
 
-        ds = new Array<ActionDesc>();
+        __ds = new Array<ActionDesc>();
 
         JsonValue ar = rootv.get("a");
 
@@ -63,11 +64,9 @@ public abstract class CompositionObserver {
             d.desc_en = v.getString("desc_en");
             d.desc_ru = v.getString("desc_ru");
 
-            ds.add(d);
+            __ds.add(d);
         }
 
-
-        Gdx.app.debug(tag, "Parsed " + ds.size + " actions");
     }
 
 

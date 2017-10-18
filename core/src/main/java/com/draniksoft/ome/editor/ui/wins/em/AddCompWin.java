@@ -4,8 +4,8 @@ import com.artemis.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.draniksoft.ome.editor.support.compositionObserver.abstr.CompositionObserver;
 import com.draniksoft.ome.editor.support.container.CO_actiondesc.ActionDesc;
-import com.draniksoft.ome.editor.support.workflow.compositionObserver.abstr.CompositionObserver;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.editor.systems.support.EditorSystem;
 import com.draniksoft.ome.editor.ui.ReliantBaseWin;
@@ -57,7 +57,7 @@ public class AddCompWin extends ReliantBaseWin {
 
     private void addPsb(final ActionDesc desc, final CompositionObserver o) {
 
-        VisTextButton b = new VisTextButton(desc.getName());
+        VisTextButton b = new VisTextButton(desc.getName(), "menu-bar");
 
         b.addListener(new ChangeListener() {
             @Override

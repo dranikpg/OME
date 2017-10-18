@@ -19,7 +19,7 @@ public class DynamicViewController {
 
     MenuScreen ms;
 
-    // dimensions bottom left x,y + width, height
+    // dimensions bottom left end_x,end_y + width, height
     int d[] = {0,0,0,0};
     // A group solves the draw order problem
     Group drawGroup;

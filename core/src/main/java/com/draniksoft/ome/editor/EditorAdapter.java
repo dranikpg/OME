@@ -32,10 +32,7 @@ import com.draniksoft.ome.editor.systems.render.obj.ObjRSys;
 import com.draniksoft.ome.editor.systems.render.obj.PhysRDebugSys;
 import com.draniksoft.ome.editor.systems.render.ui.FloatUIRenderSys;
 import com.draniksoft.ome.editor.systems.render.ui.UIRenderSystem;
-import com.draniksoft.ome.editor.systems.support.ActionSystem;
-import com.draniksoft.ome.editor.systems.support.ConsoleSys;
-import com.draniksoft.ome.editor.systems.support.EditorSystem;
-import com.draniksoft.ome.editor.systems.support.InputSys;
+import com.draniksoft.ome.editor.systems.support.*;
 import com.draniksoft.ome.editor.systems.time.TimeActivitySys;
 import com.draniksoft.ome.mgmnt_base.AppDataObserver;
 import com.draniksoft.ome.utils.GUtils;
@@ -182,6 +179,8 @@ public class EditorAdapter extends ApplicationAdapter {
         // Afterwards
 
         cb.with(new AssetLScheduleSys());
+
+        cb.with(new WorkflowSys());
 
 
         /*

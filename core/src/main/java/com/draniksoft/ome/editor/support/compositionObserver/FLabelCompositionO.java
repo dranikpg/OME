@@ -1,21 +1,22 @@
-package com.draniksoft.ome.editor.support.workflow.compositionObserver;
+package com.draniksoft.ome.editor.support.compositionObserver;
 
 import com.artemis.Aspect;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.IntMap;
-import com.draniksoft.ome.editor.components.time.TimedC;
-import com.draniksoft.ome.editor.support.actions.timed.AddTimeCA;
+import com.draniksoft.ome.editor.components.pos.PosSizeC;
+import com.draniksoft.ome.editor.components.selection.FLabelC;
+import com.draniksoft.ome.editor.support.actions.flabel.CreateFLabelC;
+import com.draniksoft.ome.editor.support.compositionObserver.abstr.SimpleCompositionObserver;
 import com.draniksoft.ome.editor.support.container.CO_actiondesc.ActionDesc;
-import com.draniksoft.ome.editor.support.workflow.compositionObserver.abstr.SimpleCompositionObserver;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
-import com.kotcrab.vis.ui.widget.VisLabel;
-import com.kotcrab.vis.ui.widget.VisTable;
+import com.draniksoft.ome.editor.ui.comp_obs_ts.FlabelT;
 
-public class TimedCompositionO extends SimpleCompositionObserver {
+public class FLabelCompositionO extends SimpleCompositionObserver {
 
+    private static final String tag = "FLabelCompositionO";
 
-    IntMap<ActionDesc> desc;
-
+    IntMap<ActionDesc> ds;
 
     @Override
     protected void on_selchanged(boolean previousActivity) {
@@ -25,36 +26,50 @@ public class TimedCompositionO extends SimpleCompositionObserver {
     @Override
     protected void on_selCompChanhed(boolean previousActivity) {
 
+        Gdx.app.debug(tag, "Comp changed");
+
     }
 
     @Override
     protected void _init() {
 
-        desc = new IntMap<ActionDesc>();
+        ds = new IntMap<ActionDesc>();
 
-        if (ds == null) return;
+        if (__ds != null) {
 
-        for (ActionDesc d : ds) {
-            desc.put(d.code, d);
+            for (ActionDesc d : __ds) {
+
+                ds.put(d.code, d);
+
+            }
+
         }
 
     }
 
+    @Override
+    protected Aspect.Builder getAspectB() {
+        return Aspect.all(FLabelC.class, PosSizeC.class);
+    }
 
     @Override
     public IntMap<ActionDesc> getDesc() {
-        return desc;
+        return ds;
     }
 
     @Override
     public boolean isAviab(int ac, int e) {
+
         if (ac == ActionDesc.BaseCodes.ACTION_CREATE) {
+
             return !matches(e);
-        } else if (ac == ActionDesc.BaseCodes.ACTION_DELETE || ac == ActionDesc.BaseCodes.ACTION_RESET) {
+
+        } else {
+
             return matches(e);
+
         }
 
-        return true;
     }
 
     @Override
@@ -64,7 +79,7 @@ public class TimedCompositionO extends SimpleCompositionObserver {
 
     @Override
     public ActionDesc getDesc(int ac) {
-        return desc.get(ac);
+        return ds.get(ac);
     }
 
     @Override
@@ -72,10 +87,9 @@ public class TimedCompositionO extends SimpleCompositionObserver {
 
         if (id == ActionDesc.BaseCodes.ACTION_CREATE) {
 
-            AddTimeCA a = new AddTimeCA();
+            CreateFLabelC a = new CreateFLabelC();
             a._e = _e;
-            a.se = 0;
-            a.ee = 0;
+
             _w.getSystem(ActionSystem.class).exec(a);
 
         }
@@ -84,18 +98,11 @@ public class TimedCompositionO extends SimpleCompositionObserver {
 
     @Override
     public String getName() {
-        return "Timed C";
+        return "Flabel";
     }
 
     @Override
     public Table getSettingsT() {
-        VisTable t = new VisTable();
-        t.add(new VisLabel("fsdffsd"));
-        return t;
-    }
-
-    @Override
-    protected Aspect.Builder getAspectB() {
-        return Aspect.all(TimedC.class);
+        return new FlabelT(_w, _selE);
     }
 }

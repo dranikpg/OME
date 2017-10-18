@@ -15,8 +15,11 @@ public abstract class ReliantBaseWin extends BaseWindow {
     public ReliantBaseWin(String title) {
         super(title);
         setName(title);
+    }
 
-
+    public ReliantBaseWin(String title, String style) {
+        super(title, style);
+        setName(title);
     }
 
     @Override

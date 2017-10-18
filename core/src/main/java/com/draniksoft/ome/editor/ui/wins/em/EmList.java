@@ -1,12 +1,11 @@
 package com.draniksoft.ome.editor.ui.wins.em;
 
 import com.artemis.World;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.Array;
 import com.draniksoft.ome.editor.support.container.EM_desc.EditModeDesc;
 import com.draniksoft.ome.editor.support.event.EditModeChangeE;
+import com.draniksoft.ome.editor.support.event.entityy.CompositionChangeE;
 import com.draniksoft.ome.editor.support.event.entityy.SelectionChangeE;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.editor.systems.support.EditorSystem;
@@ -18,12 +17,14 @@ import com.kotcrab.vis.ui.widget.VisTextButton;
 import net.mostlyoriginal.api.event.common.EventSystem;
 import net.mostlyoriginal.api.event.common.Subscribe;
 
+import java.util.Iterator;
+
 public class EmList extends SupportedReliantWin {
 
     private static final String tag = "EmList";
 
     World w;
-    Array<EditModeDesc> ds;
+    Iterator<EditModeDesc> ds;
 
     EditorSystem sys;
     int sel;
@@ -66,21 +67,22 @@ public class EmList extends SupportedReliantWin {
         setResizable(true);
         setResizeBorder(15);
 
-        setModal(true);
 
     }
 
     private void rebuild() {
 
 
-        Gdx.app.debug(tag, "Rebuilding");
-
         r.clearChildren();
 
         ds = sys.getEmDesc();
 
+        EditModeDesc d;
 
-        for (EditModeDesc d : ds) {
+        while (ds.hasNext()) {
+            d = ds.next();
+
+            if (d.aviabT > EditModeDesc.AVAILABLE) return;
 
             if (d.selRequired) {
 
@@ -144,9 +146,14 @@ public class EmList extends SupportedReliantWin {
 
     }
 
-    @Subscribe
+    @Subscribe()
     public void selectionChanged(SelectionChangeE e) {
         sel = e.n;
+        rebuild();
+    }
+
+    @Subscribe
+    public void compChange(CompositionChangeE e) {
         rebuild();
     }
 

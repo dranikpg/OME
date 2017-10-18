@@ -1,10 +1,12 @@
-package com.draniksoft.ome.editor.support.actions.timed;
+package com.draniksoft.ome.editor.support.actions.timed.move;
 
 import com.artemis.World;
 import com.badlogic.gdx.utils.Array;
 import com.draniksoft.ome.editor.components.time.TimedMoveC;
 import com.draniksoft.ome.editor.support.actions.Action;
 import com.draniksoft.ome.editor.support.container.MoveDesc;
+import com.draniksoft.ome.editor.support.event.entityy.CompositionChangeE;
+import net.mostlyoriginal.api.event.common.EventSystem;
 
 public class AddTimedMoveCA implements Action {
 
@@ -24,6 +26,8 @@ public class AddTimedMoveCA implements Action {
         TimedMoveC c = w.getMapper(TimedMoveC.class).create(_e);
         c.a = new Array<MoveDesc>();
 
+        w.getSystem(EventSystem.class).dispatch(new CompositionChangeE(_e));
+
     }
 
     @Override
@@ -31,11 +35,14 @@ public class AddTimedMoveCA implements Action {
 
         w.getMapper(TimedMoveC.class).remove(_e);
 
+
+        w.getSystem(EventSystem.class).dispatch(new CompositionChangeE(_e));
+
     }
 
     @Override
     public boolean isUndoable() {
-        return false;
+        return true;
     }
 
     @Override
@@ -45,7 +52,7 @@ public class AddTimedMoveCA implements Action {
 
     @Override
     public String getSimpleConcl() {
-        return "Added timed C";
+        return "Added timed move C";
     }
 
     @Override

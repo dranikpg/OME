@@ -6,17 +6,20 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
+import com.draniksoft.ome.editor.support.compositionObserver.FLabelCompositionO;
+import com.draniksoft.ome.editor.support.compositionObserver.MOCompositionO;
+import com.draniksoft.ome.editor.support.compositionObserver.abstr.CompositionObserver;
+import com.draniksoft.ome.editor.support.compositionObserver.timed.TimedCompositionO;
+import com.draniksoft.ome.editor.support.compositionObserver.timed.TimedMoveCompositionO;
 import com.draniksoft.ome.editor.support.container.EM_desc.BiLangEMDs;
 import com.draniksoft.ome.editor.support.container.EM_desc.EditModeDesc;
+import com.draniksoft.ome.editor.support.ems.core.EditMode;
 import com.draniksoft.ome.editor.support.event.EditModeChangeE;
 import com.draniksoft.ome.editor.support.event.entityy.CompositionChangeE;
 import com.draniksoft.ome.editor.support.event.entityy.SelectionChangeE;
+import com.draniksoft.ome.editor.support.event.workflow.ModeChangeE;
 import com.draniksoft.ome.editor.support.map_load.LoadSaveManager;
 import com.draniksoft.ome.editor.support.map_load.ProjectLoader;
-import com.draniksoft.ome.editor.support.workflow.EditMode;
-import com.draniksoft.ome.editor.support.workflow.compositionObserver.MOCompositionO;
-import com.draniksoft.ome.editor.support.workflow.compositionObserver.TimedCompositionO;
-import com.draniksoft.ome.editor.support.workflow.compositionObserver.abstr.CompositionObserver;
 import com.draniksoft.ome.utils.ESCUtils;
 import com.draniksoft.ome.utils.struct.Pair;
 import net.mostlyoriginal.api.event.common.EventSystem;
@@ -31,7 +34,7 @@ public class EditorSystem extends BaseSystem implements LoadSaveManager {
 
     public int sel = -1;
 
-    Array<EditModeDesc> emDesc;
+    IntMap<EditModeDesc> emDesc;
 
     EditModeDesc curEMD;
     EditModeDesc nexEMD;
@@ -42,7 +45,7 @@ public class EditorSystem extends BaseSystem implements LoadSaveManager {
 
     @Override
     protected void initialize() {
-        emDesc = new Array<EditModeDesc>();
+        emDesc = new IntMap<EditModeDesc>();
         initBaseEms();
 
         comObs = new IntMap<CompositionObserver>();
@@ -131,6 +134,21 @@ public class EditorSystem extends BaseSystem implements LoadSaveManager {
         }
     }
 
+    @Subscribe
+    public void modeChange(ModeChangeE e) {
+
+        if (e.SHOW_MODE) {
+
+            //ESCUtils.clearSelected(world);
+
+            detachEditMode();
+            setEnabled(false);
+        } else {
+            setEnabled(true);
+        }
+
+    }
+
 
     /*
 
@@ -176,13 +194,7 @@ public class EditorSystem extends BaseSystem implements LoadSaveManager {
     }
 
     public EditModeDesc getEditModeDesc(int id) {
-
-        for (EditModeDesc d : emDesc) {
-            if (d.id == id) return d;
-        }
-
-
-        return null;
+        return emDesc.get(id);
     }
 
     public EditMode constructEditMode(EditModeDesc desc) {
@@ -227,8 +239,12 @@ public class EditorSystem extends BaseSystem implements LoadSaveManager {
         attachNewEditMode(getEditModeDesc(id));
     }
 
-    public Array<EditModeDesc> getEmDesc() {
-        return emDesc;
+    public Iterator<EditModeDesc> getEmDesc() {
+        return emDesc.values().iterator();
+    }
+
+    public IntMap.Values<EditModeDesc> getEmDescVs() {
+        return emDesc.values();
     }
 
 
@@ -257,16 +273,18 @@ public class EditorSystem extends BaseSystem implements LoadSaveManager {
             d.id = v.getInt("id");
             d.selRequired = v.getBoolean("sr");
 
+            if (v.has("sav")) d.aviabT = v.getInt("sav");
+
             try {
                 d.c = Class.forName(
-                        "com.draniksoft.ome.editor.support.workflow.def_ems." +
+                        "com.draniksoft.ome.editor.support.ems." +
                                 v.getString("c"));
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
 
             if (d.c != null && d.id > 0 && d.getName() != null)
-                emDesc.add(d);
+                emDesc.put(d.id, d);
         }
 
 
@@ -276,6 +294,8 @@ public class EditorSystem extends BaseSystem implements LoadSaveManager {
     }
 
     private void steamComObsData() {
+
+        Gdx.app.debug(tag, "Parsing com_obs -> observer init ");
 
         String rootS = Gdx.files.internal("desc/com_obs.json").readString();
         JsonValue root = r.parse(rootS);
@@ -299,13 +319,23 @@ public class EditorSystem extends BaseSystem implements LoadSaveManager {
 
     private void initComObs() {
 
+        addComOb(CompositionObserver.IDs.MO_CO, new MOCompositionO());
 
-        comObs.put(CompositionObserver.IDs.MO_CO, new MOCompositionO());
-        comObs.get(CompositionObserver.IDs.MO_CO).id = CompositionObserver.IDs.MO_CO;
+        addComOb(CompositionObserver.IDs.TIMED_CO, new TimedCompositionO());
 
-        comObs.put(CompositionObserver.IDs.TIMED_CO, new TimedCompositionO());
-        comObs.get(CompositionObserver.IDs.TIMED_CO).id = CompositionObserver.IDs.TIMED_CO;
+        addComOb(CompositionObserver.IDs.TIMED_MOV_CO, new TimedMoveCompositionO());
 
+        addComOb(CompositionObserver.IDs.FLABEL_ID, new FLabelCompositionO());
+    }
+
+    private void addComOb(int c, CompositionObserver o) {
+        comObs.put(c, o);
+        o.id = c;
+    }
+
+    public void setEMDavbt(int emd, int i) {
+
+        getEditModeDesc(emd).aviabT = i;
 
     }
 

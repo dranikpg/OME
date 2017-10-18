@@ -1,12 +1,12 @@
-package com.draniksoft.ome.editor.support.workflow.def_ems;
+package com.draniksoft.ome.editor.support.ems;
 
 import com.artemis.World;
 import com.badlogic.gdx.math.Vector2;
 import com.draniksoft.ome.editor.support.actions.mapO.CreateNewMOA;
+import com.draniksoft.ome.editor.support.ems.core.EditMode;
 import com.draniksoft.ome.editor.support.input.NewMOIC;
 import com.draniksoft.ome.editor.support.input.SelectIC;
 import com.draniksoft.ome.editor.support.render.NewMORenderer;
-import com.draniksoft.ome.editor.support.workflow.EditMode;
 import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.EditorSystem;
@@ -54,23 +54,10 @@ public class NewMOEM implements EditMode {
 
     }
 
-    @Override
-    public void stopped() {
 
-        _w.getSystem(InputSys.class).setMainIC(null);
-        _w.getSystem(OverlayRenderSys.class).removeRdr(newRdr);
-
-    }
-
-    @Override
-    public void resumed() {
-
-        _w.getSystem(InputSys.class).setMainIC(newLIC);
-        _w.getSystem(OverlayRenderSys.class).addRdr(newRdr);
-
-    }
 
     public void createLoc(Vector2 tmp) {
+
         CreateNewMOA a = new CreateNewMOA(tmp.x, tmp.y, 50, 50, "i_casB@mapTile@100");
 
         _w.getSystem(ActionSystem.class).exec(a);

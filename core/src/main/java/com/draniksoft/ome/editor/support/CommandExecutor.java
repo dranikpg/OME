@@ -24,17 +24,17 @@ import com.draniksoft.ome.editor.manager.DrawableMgr;
 import com.draniksoft.ome.editor.manager.ProjectMgr;
 import com.draniksoft.ome.editor.manager.TimeMgr;
 import com.draniksoft.ome.editor.support.actions.Action;
-import com.draniksoft.ome.editor.support.actions.timed.AddTimeCA;
+import com.draniksoft.ome.editor.support.actions.timed._base_.AddTimeCA;
+import com.draniksoft.ome.editor.support.compositionObserver.abstr.CompositionObserver;
 import com.draniksoft.ome.editor.support.container.CO_actiondesc.ActionDesc;
 import com.draniksoft.ome.editor.support.container.EM_desc.EditModeDesc;
 import com.draniksoft.ome.editor.support.container.MoveDesc;
+import com.draniksoft.ome.editor.support.ems.core.EditMode;
 import com.draniksoft.ome.editor.support.input.InputController;
 import com.draniksoft.ome.editor.support.input.NewMOIC;
 import com.draniksoft.ome.editor.support.input.SelectIC;
 import com.draniksoft.ome.editor.support.input.TimedSelectIC;
 import com.draniksoft.ome.editor.support.render.core.OverlyRendererI;
-import com.draniksoft.ome.editor.support.workflow.EditMode;
-import com.draniksoft.ome.editor.support.workflow.compositionObserver.abstr.CompositionObserver;
 import com.draniksoft.ome.editor.systems.file_mgmnt.ProjecetLoadSys;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.editor.systems.pos.PhysicsSys;
@@ -42,6 +42,7 @@ import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.EditorSystem;
 import com.draniksoft.ome.editor.systems.support.InputSys;
+import com.draniksoft.ome.editor.systems.support.WorkflowSys;
 import com.draniksoft.ome.mgmnt_base.AppDataObserver;
 import com.draniksoft.ome.utils.Const;
 import com.draniksoft.ome.utils.Env;
@@ -77,6 +78,24 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
         console.setSizePercent(xp, yp);
 
     }
+
+    /**
+     * Show edit mode urils
+     */
+
+    public void set_mode(boolean m) {
+
+        try {
+
+            world.getSystem(WorkflowSys.class).switchMode(m);
+
+        } catch (Exception e) {
+            Gdx.app.error("", "", e);
+        }
+        console.log("Show mode " + world.getSystem(WorkflowSys.class).SHOW_M);
+
+    }
+
 
     /**
      * Environment utils
@@ -200,11 +219,13 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     public void log_avem() {
 
-        Array<EditModeDesc> ds = world.getSystem(EditorSystem.class).getEmDesc();
+        Iterator<EditModeDesc> ds = world.getSystem(EditorSystem.class).getEmDesc();
 
 
-        for (EditModeDesc d : ds) {
-            console.log(d.getName() + " [ " + d.id + " ] " + " -> " + d.c.getSimpleName());
+        EditModeDesc d;
+        while (ds.hasNext()) {
+            d = ds.next();
+            console.log(d.getName() + " [ " + d.id + " ] " + " (av" + d.aviabT + ")" + " -> " + d.c.getSimpleName());
         }
 
 
@@ -298,7 +319,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
             for (ActionDesc d : o.getDesc().values()) {
 
-                console.log(d.code + " ->" + d.getName() + " nooarg = " + d.noargpsb + " aviab = " + o.isAviab(d.code));
+                console.log(d.code + " -> " + d.getName() + "  || " + " nooarg = " + d.noargpsb + " aviab = " + o.isAviab(d.code));
 
             }
         } catch (Exception e) {
@@ -350,13 +371,13 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
             }
 
             MoveDesc d = new MoveDesc();
-            d.s = s;
-            d.e = e;
-            d.x = x;
-            d.y = y;
+            d.time_s = s;
+            d.time_e = e;
+            d.end_x = x;
+            d.end_y = y;
             Pair<Float, Float> p = world.getSystem(PhysicsSys.class).getPos(_e);
-            d.sx = p.getElement0().intValue();
-            d.sy = p.getElement1().intValue();
+            d.start_x = p.getElement0().intValue();
+            d.start_y = p.getElement1().intValue();
 
             cm.get(_e).a.add(d);
         } catch (Exception er) {
@@ -847,11 +868,11 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
     }
 
     private String formatIntToStrCL(int l, int val){
-        return  String.format("%1$"+l+ "s", String.valueOf(val));
+        return String.format("%1$" + l + "time_s", String.valueOf(val));
     }
 
     private String formatString(int l, String s){
-        return String.format("%1$"+l+ "s", s);
+        return String.format("%1$" + l + "time_s", s);
     }
 
 

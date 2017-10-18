@@ -38,8 +38,8 @@ public interface InputController {
     /**
      * Called when the screen was touched or a mouse button was pressed. The button parameter will be {@link Input.Buttons#LEFT} on iOS.
      *
-     * @param screenX The x coordinate, origin is in the upper left corner
-     * @param screenY The y coordinate, origin is in the upper left corner
+     * @param screenX The end_x coordinate, origin is in the upper left corner
+     * @param screenY The end_y coordinate, origin is in the upper left corner
      * @param pointer the pointer for the event.
      * @param button  the button
      * @return whether the input was processed

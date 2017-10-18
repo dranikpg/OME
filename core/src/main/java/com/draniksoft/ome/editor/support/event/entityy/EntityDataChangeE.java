@@ -22,6 +22,28 @@ public class EntityDataChangeE implements Event {
 
     }
 
+    public static class FlabelTextChangeE extends EntityDataChangeE {
+
+        public FlabelTextChangeE(int _e) {
+            super(_e);
+        }
+    }
+
+    public static class TimedValsChange extends EntityDataChangeE {
+
+        public TimedValsChange(int _e) {
+            super(_e);
+        }
+
+
+    }
+
+    public static class TimedMoveValsChange extends EntityDataChangeE {
+        public TimedMoveValsChange(int _e) {
+            super(_e);
+        }
+    }
+
     public static class DwbChangeE extends EntityDataChangeE {
 
         public DwbChangeE(int _e) {

@@ -93,7 +93,7 @@ public class GUtils {
     }
 
 
-    public static void calcLine(int i, int i1, int i2, int i3, float[] data, Vector2 tV) {
+    public static void calcLine(float i, float i1, float i2, float i3, float[] data, Vector2 tV) {
 
         tV.set(i, i1);
 

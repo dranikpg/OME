@@ -12,9 +12,9 @@ import com.draniksoft.ome.editor.components.time.TimedC;
 import com.draniksoft.ome.editor.components.time.TimedMoveC;
 import com.draniksoft.ome.editor.components.tps.MObjectC;
 import com.draniksoft.ome.editor.support.actions.mapO.CreateNewMOA;
-import com.draniksoft.ome.editor.support.actions.timed.AddTimeCA;
-import com.draniksoft.ome.editor.support.actions.timed.AddTimedMoveA;
-import com.draniksoft.ome.editor.support.actions.timed.AddTimedMoveCA;
+import com.draniksoft.ome.editor.support.actions.timed._base_.AddTimeCA;
+import com.draniksoft.ome.editor.support.actions.timed.move.AddTimedMoveA;
+import com.draniksoft.ome.editor.support.actions.timed.move.AddTimedMoveCA;
 import com.draniksoft.ome.editor.support.container.MoveDesc;
 import com.draniksoft.ome.editor.support.map_load.LoadSaveManager;
 import com.draniksoft.ome.editor.support.map_load.ProjectLoader;
@@ -80,7 +80,7 @@ public class EntitySrzMgr extends Manager implements LoadSaveManager {
 
 
         c++;
-        return c >= toS.size - 1;
+        return c > toS.size - 1;
 
 
     }
@@ -131,12 +131,12 @@ public class EntitySrzMgr extends Manager implements LoadSaveManager {
             for (JsonValue lv : lr) {
                 AddTimedMoveA la = new AddTimedMoveA();
                 la._e = _e;
-                la.e = lv.getInt("e");
-                la.s = lv.getInt("s");
-                la.sx = lv.getInt("sx");
-                la.sy = lv.getInt("sy");
-                la.ex = lv.getInt("ex");
-                la.ey = lv.getInt("ey");
+                la.e = lv.getInt("time_e");
+                la.s = lv.getInt("time_s");
+                la.sx = lv.getInt("start_x");
+                la.sy = lv.getInt("start_y");
+                la.ex = lv.getInt("end_x");
+                la.ey = lv.getInt("end_y");
                 la._do(world);
                 la.destruct();
             }
@@ -182,12 +182,12 @@ public class EntitySrzMgr extends Manager implements LoadSaveManager {
             for (MoveDesc d : world.getMapper(TimedMoveC.class).get(_e).a) {
 
                 JsonValue lv = new JsonValue(JsonValue.ValueType.object);
-                lv.addChild("s", JsonUtils.createIntV(d.s));
-                lv.addChild("e", JsonUtils.createIntV(d.e));
-                lv.addChild("sx", JsonUtils.createIntV(d.sx));
-                lv.addChild("sy", JsonUtils.createIntV(d.sy));
-                lv.addChild("ex", JsonUtils.createIntV(d.x));
-                lv.addChild("ey", JsonUtils.createIntV(d.y));
+                lv.addChild("time_s", JsonUtils.createIntV(d.time_s));
+                lv.addChild("time_e", JsonUtils.createIntV(d.time_e));
+                lv.addChild("start_x", JsonUtils.createIntV(d.start_x));
+                lv.addChild("start_y", JsonUtils.createIntV(d.start_y));
+                lv.addChild("end_x", JsonUtils.createIntV(d.end_x));
+                lv.addChild("end_y", JsonUtils.createIntV(d.end_y));
 
                 lr.addChild(lv);
             }

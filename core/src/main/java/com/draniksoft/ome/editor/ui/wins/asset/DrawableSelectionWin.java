@@ -70,6 +70,8 @@ public class DrawableSelectionWin extends ReliantBaseWin {
 
         _w.getSystem(EventSystem.class).registerEvents(this);
 
+
+        setSize(500, 300);
         setResizable(true);
         setResizeBorder(20);
 
@@ -175,11 +177,15 @@ public class DrawableSelectionWin extends ReliantBaseWin {
     @Override
     public void on_opened(String uir) {
 
+        centerWindow();
+
     }
 
 
     @Override
     public void on_closed() {
+
+        getStage().setScrollFocus(null);
 
     }
 

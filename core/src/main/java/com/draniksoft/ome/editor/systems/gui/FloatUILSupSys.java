@@ -9,17 +9,14 @@ import com.artemis.utils.IntBag;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
 import com.draniksoft.ome.editor.components.selection.FLabelC;
-import com.draniksoft.ome.editor.components.selection.SelectionC;
 import com.draniksoft.ome.editor.components.state.TInactiveC;
-import com.draniksoft.ome.editor.support.event.entityy.SelectionChangeE;
 import com.kotcrab.vis.ui.widget.VisLabel;
-import net.mostlyoriginal.api.event.common.Subscribe;
 
 import java.util.LinkedList;
 
@@ -27,14 +24,14 @@ public class FloatUILSupSys extends IteratingSystem {
 
     static final String tag = "FLoatUILSupSys";
 
-    LinkedList<Actor> actrs;
+    LinkedList<Label> actrs;
 
     public FloatUILSupSys() {
         super(Aspect.all(FLabelC.class, PosSizeC.class).exclude(TInactiveC.class));
     }
     @Override
     protected void initialize() {
-        actrs = new LinkedList<Actor>();
+        actrs = new LinkedList<Label>();
         tv = new Vector2();
 
         getSubscription().addSubscriptionListener(new EntitySubscription.SubscriptionListener() {
@@ -89,7 +86,6 @@ public class FloatUILSupSys extends IteratingSystem {
 
     ComponentMapper<FLabelC> flM;
     ComponentMapper<PosSizeC> pM;
-    ComponentMapper<SelectionC> sM;
 
     @Wire(name = "game_stage")
     Stage s;
@@ -107,7 +103,7 @@ public class FloatUILSupSys extends IteratingSystem {
     PosSizeC pc;
 
     Vector2 tv;
-    Actor ta;
+    Label ta;
 
     @Override
     protected void process(int e) {
@@ -126,8 +122,14 @@ public class FloatUILSupSys extends IteratingSystem {
             tv = uiVP.unproject(tv);
 
             ta = actrs.get(tc.lid);
+            ta.setText(tc.txt);
             ta.setVisible(true);
-            ta.setScale(1 / cam.zoom);
+
+            if (tc.scaleChg)
+                ta.setFontScale(tc.sizeM / cam.zoom);
+            else
+                ta.setFontScale(tc.sizeM);
+
             ta.setPosition(tv.x, uiVP.getWorldHeight() - tv.y - ta.getHeight());
 
         } else {
@@ -151,22 +153,5 @@ public class FloatUILSupSys extends IteratingSystem {
         return (actrs.size() - 1);
     }
 
-    @Subscribe
-    public void selectionChange(SelectionChangeE e) {
-
-        if (e.old > -1 && flM.has(e.old)) {
-            actrs.get(flM.get(e.old).lid).setColor(0, 0, 0, 1);
-        }
-
-        if (e.n > -1 && flM.has(e.n)) {
-
-            if (flM.get(e.n).lid == -1) {
-                //flM.get(e.n).lid = newLabel(tc.txt);
-            }
-
-            //actrs.get(flM.get(e.n).lid).setColor(1, 0, 0, 1);
-        }
-
-    }
 
 }

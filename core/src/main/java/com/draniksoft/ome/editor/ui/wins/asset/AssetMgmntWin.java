@@ -278,6 +278,8 @@ public class AssetMgmntWin extends SupportedReliantWin {
     @Override
     public void on_closed() {
 
+        if (getStage() == null || getStage().getScrollFocus() == null) return;
+
         if (getStage().getScrollFocus().getParent() == rightT)
 
             getStage().setScrollFocus(null);

@@ -12,9 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.TransformDrawable;
 import com.draniksoft.ome.editor.components.gfx.DrawableC;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
 import com.draniksoft.ome.editor.manager.DrawableMgr;
+import com.draniksoft.ome.editor.support.ems.MoveMOEM;
 import com.draniksoft.ome.editor.support.render.core.OverlayPlaces;
 import com.draniksoft.ome.editor.support.render.core.OverlyRendererI;
-import com.draniksoft.ome.editor.support.workflow.def_ems.MoveMOEM;
 
 import static java.lang.Math.max;
 
@@ -139,7 +139,7 @@ public class MoveMORenderer implements OverlyRendererI {
 
     @Override
     public int getId() {
-        return 0;
+        return IDs.MoveMOR;
     }
 
     public void setEm(MoveMOEM em) {

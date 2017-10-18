@@ -48,6 +48,7 @@ public class CreateNewMOA implements Action {
     public void _do(World _w) {
         this._w = _w;
         _e = _w.getSystem(ArchTransmuterMgr.class).build(ArchTransmuterMgr.Codes.BASE_MO);
+
         MObjectC c = _w.getMapper(MObjectC.class).get(_e);
         c.x = (int) x;
         c.y = (int) y;

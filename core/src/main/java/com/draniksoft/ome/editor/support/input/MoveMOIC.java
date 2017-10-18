@@ -5,8 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.draniksoft.ome.editor.support.ems.MoveMOEM;
 import com.draniksoft.ome.editor.support.render.MoveMORenderer;
-import com.draniksoft.ome.editor.support.workflow.def_ems.MoveMOEM;
 
 public class MoveMOIC implements InputController {
 

@@ -9,9 +9,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntArray;
 import com.draniksoft.ome.editor.components.supp.SelectionC;
-import com.draniksoft.ome.editor.support.render.PathRenderer;
-import com.draniksoft.ome.editor.support.render.SelectionRenderer;
+import com.draniksoft.ome.editor.support.event.workflow.ModeChangeE;
 import com.draniksoft.ome.editor.support.render.core.OverlyRendererI;
+import com.draniksoft.ome.editor.support.render.def.PathRenderer;
+import com.draniksoft.ome.editor.support.render.def.SelectionRenderer;
+import net.mostlyoriginal.api.event.common.EventSystem;
+import net.mostlyoriginal.api.event.common.Subscribe;
 
 
 public class OverlayRenderSys extends BaseEntitySystem {
@@ -37,6 +40,8 @@ public class OverlayRenderSys extends BaseEntitySystem {
         rs = new Array<OverlyRendererI>();
 
         restoreDef();
+
+        world.getSystem(EventSystem.class).registerEvents(this);
 
     }
 
@@ -89,17 +94,21 @@ public class OverlayRenderSys extends BaseEntitySystem {
     public void removeRdrByID(int id) {
 
         int ri = -1;
+
         for (int i = 0; i < rs.size; i++) {
+
             OverlyRendererI r = rs.get(i);
 
             if (r.getId() == id) {
-                ri = id;
+
+
+                ri = i;
                 break;
             }
         }
 
-        if (ri > 0)
-            rs.removeIndex(ri);
+        if (ri >= 0)
+            removeRdr(rs.get(ri));
     }
 
     public void removeRdrByPlace(int[] all, int[] one) {
@@ -155,6 +164,22 @@ public class OverlayRenderSys extends BaseEntitySystem {
         }
 
         rs.removeAll(torem, true);
+
+
+    }
+
+    @Subscribe
+    public void modeChanged(ModeChangeE e) {
+
+
+        if (e.SHOW_MODE) {
+
+            removeRdrByID(OverlyRendererI.IDs.SelR);
+            removeRdrByID(OverlyRendererI.IDs.PathR);
+
+        } else {
+            restoreDef();
+        }
 
 
     }

@@ -4,8 +4,8 @@ import com.artemis.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.draniksoft.ome.editor.support.ems.NewMOEM;
 import com.draniksoft.ome.editor.support.render.NewMORenderer;
-import com.draniksoft.ome.editor.support.workflow.def_ems.NewMOEM;
 
 /**
  * The input controller used for adding new locations
@@ -80,6 +80,8 @@ public class NewMOIC implements InputController {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+
+        Gdx.app.debug(tag, "TD");
 
         if (ter) {
             ter = false;

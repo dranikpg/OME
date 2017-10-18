@@ -16,7 +16,7 @@ public interface Action {
     //
     boolean isUndoable();
 
-    // A cleaner cleans the story, hence it's supposed to be an action like loading a map
+    // A cleaner cleans the story, hence it'time_s supposed to be an action like loading a map
     boolean isCleaner();
 
     String getSimpleConcl();

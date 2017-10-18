@@ -14,7 +14,7 @@ public class ActionSystem extends BaseSystem {
 
     // The history
     LinkedList<Action> stack;
-    int maxStackSize = 10;
+    int maxStackSize = 20;
 
     EventSystem eventSys;
 

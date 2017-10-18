@@ -3,12 +3,17 @@ package com.draniksoft.ome.editor.manager;
 import com.artemis.BaseSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.JsonValue;
+import com.draniksoft.ome.editor.support.event.workflow.ModeChangeE;
 import com.draniksoft.ome.editor.support.map_load.LoadSaveManager;
 import com.draniksoft.ome.editor.support.map_load.ProjectLoader;
 import com.draniksoft.ome.utils.struct.Pair;
 import dint.Dint;
+import net.mostlyoriginal.api.event.common.EventSystem;
+import net.mostlyoriginal.api.event.common.Subscribe;
 
 public class TimeMgr extends BaseSystem implements LoadSaveManager {
+
+    private static final String tag = "TimeMgr";
 
     // map data
     int lowerB;
@@ -18,12 +23,12 @@ public class TimeMgr extends BaseSystem implements LoadSaveManager {
     int cur = -1;
 
     // days per time stamp
-    int d_stmp = 1;
+
+    int y_stmp = 1;
 
     float timeStamp = 0;
     float stampMax = 5; // in seconds
 
-    boolean edit = false;
 
     public TimeMgr() {
 
@@ -33,22 +38,33 @@ public class TimeMgr extends BaseSystem implements LoadSaveManager {
     @Override
     protected void initialize() {
 
-        cur = Dint.today();
+        lowerB = Dint.create(0, 0, 0);
+        upperB = Dint.create(10, 0, 0);
 
+        cur = lowerB;
+
+        Gdx.app.debug(tag, "" + cur);
+
+        setEnabled(false);
+
+        world.getSystem(EventSystem.class).registerEvents(this);
     }
 
     @Override
     protected void processSystem() {
 
-        if (edit) {
-            return;
-        }
+        if (Dint.diff(upperB, cur) <= 0) return;
 
         timeStamp += Gdx.graphics.getRawDeltaTime();
 
         if (timeStamp > stampMax) {
+
             timeStamp -= stampMax;
-            cur = Dint.addDays(cur, d_stmp);
+
+            cur = Dint.addYears(cur, y_stmp);
+
+            Gdx.app.debug(tag, "" + cur);
+
         }
 
     }
@@ -115,4 +131,13 @@ public class TimeMgr extends BaseSystem implements LoadSaveManager {
     public int getUpperB() {
         return upperB;
     }
+
+    @Subscribe
+    public void modeChanged(ModeChangeE e) {
+
+        this.cur = lowerB;
+
+        setEnabled(e.SHOW_MODE);
+    }
+
 }

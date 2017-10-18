@@ -27,6 +27,8 @@ public class CameraSys extends BaseSystem implements InputProcessor {
 
     Vector2 stv;
 
+    boolean ignore = false;
+
     @Override
     protected void initialize() {
         multiplexer.addProcessor(this);
@@ -60,6 +62,11 @@ public class CameraSys extends BaseSystem implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
+        if (button == 1) {
+            ignore = true;
+            return false;
+        }
+
         stv.set(screenX, screenY);
 
         return false;
@@ -68,11 +75,15 @@ public class CameraSys extends BaseSystem implements InputProcessor {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
+        ignore = false;
+
         return false;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+
+        if (ignore) return false;
 
         float tdrgas = dragS * camera.zoom;
 

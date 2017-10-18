@@ -2,8 +2,8 @@
   "1": {
     "a": [
       {
-        "c": 1,
-        "noargpsb": false,
+        "c": 2,
+        "noargpsb": true,
         "name_ru": "N",
         "name_en": "NAME EN",
         "desc_ru": "N",
@@ -15,9 +15,57 @@
     "a": [
       {
         "c": 1,
-        "noargpsb": false,
+        "noargpsb": true,
         "name_ru": "N",
         "name_en": "Add timed component",
+        "desc_ru": "N",
+        "desc_en": "DESC EN"
+      },
+      {
+        "c": 2,
+        "noargpsb": true,
+        "name_ru": "N",
+        "name_en": "Remove timed component",
+        "desc_ru": "N",
+        "desc_en": "DESC EN"
+      }
+    ]
+  },
+  "3": {
+    "a": [
+      {
+        "c": 1,
+        "noargpsb": true,
+        "name_ru": "N",
+        "name_en": "Add timed move component",
+        "desc_ru": "N",
+        "desc_en": "DESC EN"
+      },
+      {
+        "c": 2,
+        "noargpsb": true,
+        "name_ru": "N",
+        "name_en": "Remove timed move component",
+        "desc_ru": "N",
+        "desc_en": "DESC EN"
+      }
+    ]
+  },
+  "4": {
+    "a": [
+      {
+        "c": 1,
+        "noargpsb": true,
+        "name_ru": "N",
+        "name_en": "Add Flabel component",
+        "desc_ru": "N",
+        "desc_en": "DESC EN"
+      },
+      {
+        "c": 2,
+        "noargpsb": true,
+        "name_ru": "N",
+        "name_en": "Remove flabel component",
         "desc_ru": "N",
         "desc_en": "DESC EN"
       }

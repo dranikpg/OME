@@ -8,19 +8,21 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.draniksoft.ome.editor.support.event.workflow.ModeChangeE;
 import com.draniksoft.ome.editor.systems.render.ui.UIRenderSystem;
 import com.draniksoft.ome.editor.ui.BaseWindow;
-import com.draniksoft.ome.editor.ui.utils.BaseDialog;
 import com.draniksoft.ome.editor.ui.wins.MOList;
 import com.draniksoft.ome.editor.ui.wins.actions.ActionList;
 import com.draniksoft.ome.editor.ui.wins.asset.AssetMgmntWin;
 import com.draniksoft.ome.editor.ui.wins.asset.DrawableSelectionWin;
 import com.draniksoft.ome.editor.ui.wins.em.AddCompWin;
 import com.draniksoft.ome.editor.ui.wins.em.EmList;
+import com.draniksoft.ome.editor.ui.wins.em.EmSuppWin;
 import com.draniksoft.ome.editor.ui.wins.inspector.InspectorMainWin;
 import com.draniksoft.ome.editor.ui.wins.uimgmnt.WindowMgrWin;
 import com.kotcrab.vis.ui.widget.Menu;
 import com.kotcrab.vis.ui.widget.MenuBar;
+import net.mostlyoriginal.api.event.common.Subscribe;
 
 import java.util.HashMap;
 
@@ -40,6 +42,9 @@ public class UiSystem extends BaseSystem {
         public static final int drawableSelWin = 21;
         public static final int addCWin = 22;
 
+
+        public static final int emSuppWin = 31;
+
         public static HashMap<Integer, Class> map = new HashMap<Integer, Class>();
 
         static {
@@ -52,6 +57,9 @@ public class UiSystem extends BaseSystem {
             map.put(inspector, InspectorMainWin.class);
             map.put(addCWin, AddCompWin.class);
             map.put(drawableSelWin, DrawableSelectionWin.class);
+            map.put(emSuppWin, EmSuppWin.class);
+
+
         }
     }
 
@@ -71,6 +79,9 @@ public class UiSystem extends BaseSystem {
     MenuBar menuBar;
 
     Table rootT;
+
+    boolean openBlock = false;
+
 
     @Override
     protected void processSystem() {
@@ -106,6 +117,13 @@ public class UiSystem extends BaseSystem {
 
     private void initBaseWins() {
 
+        int ar[] = {WinCodes.inspector};
+
+        for (int id : ar) {
+            buildWin(id, true);
+        }
+
+
     }
 
 
@@ -129,10 +147,13 @@ public class UiSystem extends BaseSystem {
 
     public void loadBackup() {
 
+        Gdx.app.debug(tag, "loading backup");
+
         for (int i = 0; i < backupIDs.size; i++) {
 
-            wins.get(backupIDs.get(i)).open(null);
+            Gdx.app.debug(tag, "opening " + backupIDs.get(i));
 
+            open(backupIDs.get(i), "#backup_r");
         }
     }
 
@@ -141,11 +162,15 @@ public class UiSystem extends BaseSystem {
      */
     public void open(int code, String uri) {
 
+        if (openBlock) return;
+
         if (!wins.containsKey(code)) {
-            if (!buildWin(code)) {
+            if (!buildWin(code, false)) {
                 return;
             }
         }
+
+        if ((wins.get(code).getStage() == null)) uiStage.addActor(wins.get(code));
 
         wins.get(code).open(uri);
 
@@ -173,7 +198,7 @@ public class UiSystem extends BaseSystem {
         return wins.get(c);
     }
 
-    private boolean buildWin(int code) {
+    private boolean buildWin(int code, boolean silent) {
 
         BaseWindow w = null;
 
@@ -190,7 +215,9 @@ public class UiSystem extends BaseSystem {
         w.init(world);
 
         wins.put(code, w);
-        uiStage.addActor(w);
+
+        if (!silent)
+            uiStage.addActor(w);
 
         return true;
 
@@ -203,6 +230,12 @@ public class UiSystem extends BaseSystem {
     private void asembleMenuBar() {
 
         Menu fileM = new Menu("File");
+
+        Menu editM = new Menu("Edit");
+
+        Menu stx = new Menu("Management");
+
+        Menu hz = new Menu("Windows");
 
         /*fileM.addItem(new WinOpenMenuItem("Open", WinCodes.open_proj, "lol", this));
         fileM.addItem(new MenuItem("Save", new ChangeListener() {
@@ -222,6 +255,9 @@ public class UiSystem extends BaseSystem {
         }));
 */
         menuBar.addMenu(fileM);
+        menuBar.addMenu(editM);
+        menuBar.addMenu(stx);
+        menuBar.addMenu(hz);
 
     }
 
@@ -234,20 +270,21 @@ public class UiSystem extends BaseSystem {
 
     }
 
-    public <T> T openDilaog(Class<T> c) {
 
-        BaseDialog d = null;
-        try {
-            d = (BaseDialog) c.getConstructor().newInstance();
-        } catch (Exception e) {
+    @Subscribe
+    public void modeChanged(ModeChangeE e) {
 
+        Gdx.app.debug(tag, "Mode changed");
+
+
+        openBlock = e.SHOW_MODE;
+
+        if (e.SHOW_MODE) {
+            crateBackup();
+        } else {
+            loadBackup();
         }
 
-        uiStage.addActor(d);
-        d.fadeIn();
-
-
-        return (T) d;
 
     }
 
