@@ -1,6 +1,6 @@
 package com.draniksoft.ome.editor.support.container.CO_actiondesc;
 
-import com.draniksoft.ome.mgmnt_base.AppDataObserver;
+import com.draniksoft.ome.mgmnt_base.base.AppDataObserver;
 
 public class BiLangActionDEsc extends ActionDesc {
 

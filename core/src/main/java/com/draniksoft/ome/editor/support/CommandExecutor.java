@@ -43,7 +43,7 @@ import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.EditorSystem;
 import com.draniksoft.ome.editor.systems.support.InputSys;
 import com.draniksoft.ome.editor.systems.support.WorkflowSys;
-import com.draniksoft.ome.mgmnt_base.AppDataObserver;
+import com.draniksoft.ome.mgmnt_base.base.AppDataObserver;
 import com.draniksoft.ome.utils.Const;
 import com.draniksoft.ome.utils.Env;
 import com.draniksoft.ome.utils.dao.AssetDDao;

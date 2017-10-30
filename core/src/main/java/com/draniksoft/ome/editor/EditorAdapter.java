@@ -34,9 +34,9 @@ import com.draniksoft.ome.editor.systems.render.ui.FloatUIRenderSys;
 import com.draniksoft.ome.editor.systems.render.ui.UIRenderSystem;
 import com.draniksoft.ome.editor.systems.support.*;
 import com.draniksoft.ome.editor.systems.time.TimeActivitySys;
-import com.draniksoft.ome.mgmnt_base.AppDataObserver;
+import com.draniksoft.ome.mgmnt_base.base.AppDataObserver;
 import com.draniksoft.ome.utils.GUtils;
-import com.draniksoft.ome.utils.ResponseListener;
+import com.draniksoft.ome.utils.struct.ResponseListener;
 import net.mostlyoriginal.api.event.common.EventSystem;
 
 

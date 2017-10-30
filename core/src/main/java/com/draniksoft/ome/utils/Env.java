@@ -6,11 +6,16 @@ public class Env {
 
     public static boolean GFX_DEBUG = false;
 
+    public static boolean HARD_IO_DEBUG = true;
+
     public static boolean PRETTY_JSON = true;
 
     public static boolean B64D = false;
 
     static {
         if (!DEBUG) GFX_DEBUG = false;
+        if (!DEBUG) HARD_IO_DEBUG = false;
     }
+
+    public static boolean GC_SCHEDULE_FQ = true;
 }

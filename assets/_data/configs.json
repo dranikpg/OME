@@ -1,0 +1,9 @@
+{
+  "testV": {
+    "namek": "testV",
+    "desck": "testK",
+    "vt": "freestr",
+    "defv": "difolt value",
+    "tags": []
+  }
+}

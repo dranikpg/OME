@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.draniksoft.ome.editor.support.event.asset.AssetListChange;
 import com.draniksoft.ome.editor.support.map_load.LoadSaveManager;
 import com.draniksoft.ome.editor.support.map_load.ProjectLoader;
-import com.draniksoft.ome.mgmnt_base.AppDataObserver;
+import com.draniksoft.ome.mgmnt_base.base.AppDataObserver;
 import com.draniksoft.ome.utils.FUtills;
 import com.draniksoft.ome.utils.dao.AssetDDao;
 import com.draniksoft.ome.utils.struct.Pair;

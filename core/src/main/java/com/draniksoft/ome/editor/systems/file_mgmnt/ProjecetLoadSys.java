@@ -9,9 +9,9 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.draniksoft.ome.editor.launch.MapLoadBundle;
 import com.draniksoft.ome.editor.support.map_load.ProjectLoader;
 import com.draniksoft.ome.editor.support.map_load.ProjectLoaderImpl;
-import com.draniksoft.ome.mgmnt_base.AppDataObserver;
+import com.draniksoft.ome.mgmnt_base.base.AppDataObserver;
 import com.draniksoft.ome.utils.ESCUtils;
-import com.draniksoft.ome.utils.ResponseListener;
+import com.draniksoft.ome.utils.struct.ResponseListener;
 
 public class ProjecetLoadSys extends BaseSystem {
 

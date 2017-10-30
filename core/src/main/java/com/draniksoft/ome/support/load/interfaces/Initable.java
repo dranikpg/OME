@@ -1,6 +1,6 @@
-package com.draniksoft.ome.utils.preload;
+package com.draniksoft.ome.support.load.interfaces;
 
-import com.draniksoft.ome.utils.ResponseListener;
+import com.draniksoft.ome.utils.struct.ResponseListener;
 
 public interface Initable {
 

@@ -36,29 +36,15 @@ public class GUtils {
         return (Lwjgl3Application) Gdx.app;
     }
 
-    public static Lwjgl3ApplicationConfiguration getMenuConfig(){
+
+    public static Lwjgl3ApplicationConfiguration getEditorConfig() {
+
         Lwjgl3ApplicationConfiguration configuration = new Lwjgl3ApplicationConfiguration();
         configuration.setTitle("OpenMapEditor");
 
         configuration.setWindowedMode(640, 480);
+        configuration.setMaximized(true);
         configuration.setWindowIcon("libgdx128.png", "libgdx64.png", "libgdx32.png", "libgdx16.png");
-        configuration.setInitialVisible(true);
-
-        configuration.setDecorated(false);
-        configuration.setResizable(false);
-
-        return configuration;
-    }
-
-    public static Lwjgl3ApplicationConfiguration getEditorConfig(){
-
-        Lwjgl3ApplicationConfiguration configuration = new Lwjgl3ApplicationConfiguration();
-        configuration.setTitle("OpenMapEditor");
-
-        configuration.setWindowedMode(800, 600);
-        configuration.setWindowIcon("libgdx128.png", "libgdx64.png", "libgdx32.png", "libgdx16.png");
-
-        configuration.setInitialVisible(false);
 
         return configuration;
 

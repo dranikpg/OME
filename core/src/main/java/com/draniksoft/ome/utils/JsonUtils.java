@@ -37,4 +37,17 @@ public class JsonUtils {
 
     }
 
+    public static <T> T getVal(Class<T> c, JsonValue v) {
+        if (c == Boolean.class) {
+            return (T) new Boolean(v.asBoolean());
+        } else if (c == Integer.class) {
+            return (T) new Integer(v.asInt());
+        } else if (c == String.class) {
+            return (T) v.asString();
+        }
+
+        return null;
+
+    }
+
 }

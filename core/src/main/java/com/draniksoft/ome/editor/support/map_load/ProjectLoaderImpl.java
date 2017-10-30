@@ -7,7 +7,7 @@ import com.draniksoft.ome.editor.manager.EntitySrzMgr;
 import com.draniksoft.ome.editor.manager.MapMgr;
 import com.draniksoft.ome.editor.manager.ProjectMgr;
 import com.draniksoft.ome.utils.Env;
-import com.draniksoft.ome.utils.ResponseListener;
+import com.draniksoft.ome.utils.struct.ResponseListener;
 import com.draniksoft.ome.utils.struct.Pair;
 
 import java.io.IOException;

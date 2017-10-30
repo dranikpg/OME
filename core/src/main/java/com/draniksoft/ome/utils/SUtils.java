@@ -1,7 +1,7 @@
 package com.draniksoft.ome.utils;
 
 
-import com.draniksoft.ome.mgmnt_base.AppDataObserver;
+import com.draniksoft.ome.mgmnt_base.base.AppDO;
 
 /**
  *
@@ -10,8 +10,8 @@ import com.draniksoft.ome.mgmnt_base.AppDataObserver;
  */
 public class SUtils {
 
-    public static String f_m(String k, Object... a){
-        return AppDataObserver.getI().L().format_m(k,a);
+    public static String getS(String k) {
+        return AppDO.I.L().get(k);
     }
 
 }

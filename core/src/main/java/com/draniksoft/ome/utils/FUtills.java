@@ -1,6 +1,8 @@
 package com.draniksoft.ome.utils;
 
 
+import com.badlogic.gdx.Preferences;
+
 /**
  * File utils class
  */
@@ -21,7 +23,17 @@ public class FUtills {
 
     }
 
-    public void globalSave() {
+    public static <T> T getVal(Preferences prefs, Class<T> c, String id) {
+
+        if (c == Boolean.class) {
+            return (T) Boolean.valueOf(prefs.getBoolean(id));
+        } else if (c == Integer.class) {
+            return (T) Integer.valueOf(prefs.getInteger(id));
+        } else if (c == String.class) {
+            return (T) prefs.getString(id);
+        }
+
+        return null;
 
     }
 

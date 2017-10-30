@@ -4,7 +4,7 @@ import com.artemis.World;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.Array;
 import com.draniksoft.ome.editor.launch.MapLoadBundle;
-import com.draniksoft.ome.utils.ResponseListener;
+import com.draniksoft.ome.utils.struct.ResponseListener;
 
 
 /**
