@@ -1,10 +1,10 @@
-package com.draniksoft.ome.load_screen;
+package com.draniksoft.ome.support.load.load_screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -14,6 +14,7 @@ import com.draniksoft.ome.mgmnt_base.base.BaseLoadController;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.utils.GUtils;
 import com.draniksoft.ome.utils.struct.ResponseListener;
+import com.kotcrab.vis.ui.VisUI;
 
 public class LoadingScreen implements Screen {
 
@@ -21,7 +22,7 @@ public class LoadingScreen implements Screen {
 
     ShapeRenderer r;
     SpriteBatch b;
-    Texture logoT;
+    TextureRegion logoT;
 
     Viewport vp;
 
@@ -30,13 +31,14 @@ public class LoadingScreen implements Screen {
     @Override
     public void show() {
 
-
         startLoad();
 
         r = new ShapeRenderer();
         b = new SpriteBatch();
-        logoT = new Texture("logo/logo.png");
         vp = new FitViewport(1500, 700);
+
+        VisUI.load("skin/skin.json");
+        logoT = VisUI.getSkin().getRegion("logo");
 
         vp.apply();
 
@@ -132,7 +134,7 @@ public class LoadingScreen implements Screen {
         r.setProjectionMatrix(vp.getCamera().combined);
         r.setColor(c, c, c, 1f);
         r.begin(ShapeRenderer.ShapeType.Filled);
-        
+
         r.circle(350, 400, rd);
         r.rect(650, 200, x, 700);
 

@@ -46,6 +46,8 @@ public class GUtils {
         configuration.setMaximized(true);
         configuration.setWindowIcon("libgdx128.png", "libgdx64.png", "libgdx32.png", "libgdx16.png");
 
+        configuration.setBackBufferConfig(8, 8, 8, 8, 16, 8, 2);
+
         return configuration;
 
     }

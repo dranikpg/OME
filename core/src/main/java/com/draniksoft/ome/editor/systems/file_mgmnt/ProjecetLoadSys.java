@@ -9,8 +9,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.draniksoft.ome.editor.launch.MapLoadBundle;
 import com.draniksoft.ome.editor.support.map_load.ProjectLoader;
 import com.draniksoft.ome.editor.support.map_load.ProjectLoaderImpl;
-import com.draniksoft.ome.mgmnt_base.base.AppDataObserver;
-import com.draniksoft.ome.utils.ESCUtils;
 import com.draniksoft.ome.utils.struct.ResponseListener;
 
 public class ProjecetLoadSys extends BaseSystem {
@@ -80,7 +78,7 @@ public class ProjecetLoadSys extends BaseSystem {
 
         for (int i = 0; i < b.size(); i++) {
 
-            ESCUtils.removeSelectionBeforeRMV(b.get(i), world);
+            //ESCUtils.removeSelectionBeforeRMV(b.get(i), world);
 
             world.delete(b.get(i));
 
@@ -90,7 +88,6 @@ public class ProjecetLoadSys extends BaseSystem {
 
     private void logLoad(String p) {
 
-        AppDataObserver.getI().getOpngHisM().reportOpening(p);
 
     }
 
