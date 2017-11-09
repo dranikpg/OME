@@ -1,7 +1,10 @@
 package com.draniksoft.ome.editor.components.pos;
 
 import com.artemis.PooledComponent;
+import com.artemis.annotations.Transient;
 
+
+@Transient
 public class PosSizeC extends PooledComponent {
 
     public int x,y;

@@ -9,7 +9,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.QueryCallback;
 import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.draniksoft.ome.editor.components.supp.SelectionC;
+import com.draniksoft.ome.editor.components.selection.SelectionC;
 import com.draniksoft.ome.editor.support.event.entityy.SelectionChangeE;
 import com.draniksoft.ome.editor.systems.support.InputSys;
 import com.draniksoft.ome.utils.PUtils;

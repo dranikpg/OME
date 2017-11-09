@@ -16,11 +16,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.draniksoft.ome.editor.components.gfx.DrawableC;
-import com.draniksoft.ome.editor.components.supp.SelectionC;
+import com.draniksoft.ome.editor.components.selection.SelectionC;
 import com.draniksoft.ome.editor.components.time.TimedMoveC;
 import com.draniksoft.ome.editor.esc_utils.PMIStrategy;
 import com.draniksoft.ome.editor.load.MapLoadBundle;
 import com.draniksoft.ome.editor.manager.DrawableMgr;
+import com.draniksoft.ome.editor.manager.MapMgr;
 import com.draniksoft.ome.editor.manager.TimeMgr;
 import com.draniksoft.ome.editor.support.actions.Action;
 import com.draniksoft.ome.editor.support.actions.timed._base_.AddTimeCA;
@@ -137,6 +138,11 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
      * FIle mgmnt utils
      */
 
+    public void set_mmbdl(String p) {
+
+        world.getSystem(ProjecetLoadSys.class).setBundle(new MapLoadBundle(p));
+
+    }
 
     public void save() {
 
@@ -697,6 +703,16 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
         for (Map.Entry<Integer, Class> e : UiSystem.WinCodes.map.entrySet()) {
             console.log(e.getKey() + " -> " + e.getValue());
         }
+
+    }
+
+    /*
+    * Map utils
+    */
+
+    public void load_map(String path) {
+
+        world.getSystem(MapMgr.class).loadMap(path);
 
     }
 

@@ -18,7 +18,7 @@ public class FileManager extends AppDataManager {
     File dirF;
     FileHandle dirFH;
 
-    File tfile;
+    File tdir;
 
     @Override
     protected void startupLoad(IntelligentLoader l) {
@@ -52,13 +52,21 @@ public class FileManager extends AppDataManager {
 
     private void checkTempFolder() {
 
-        tfile = new File(dirF.getAbsolutePath() + "/" + FUtills.LocalFdrNames.tempF);
-        if (!tfile.exists()) {
+        tdir = new File(dirF.getAbsolutePath() + "/" + FUtills.LocalFdrNames.tempF);
+        if (!tdir.exists()) {
             Gdx.app.debug(tag, "Creating home folder :: tmp dir ");
-            tfile.mkdirs();
+            tdir.mkdirs();
         }
 
 
+    }
+
+    public File getTmpDir() {
+        return tdir;
+    }
+
+    public File getHomeDir() {
+        return dirF;
     }
 
     @Override

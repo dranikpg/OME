@@ -212,7 +212,7 @@ public class EngineLoader {
 
             } else if (cc == 3) {
 
-                SpriteCache ca = new SpriteCache(1000, false);
+                SpriteCache ca = new SpriteCache(10000, false);
 
                 c.register(ca);
 

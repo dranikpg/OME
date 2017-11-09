@@ -14,6 +14,7 @@ import com.draniksoft.ome.editor.support.event.workflow.ModeChangeE;
 import com.draniksoft.ome.editor.ui.core.BaseWin;
 import com.draniksoft.ome.editor.ui.core.menu.Menu;
 import com.draniksoft.ome.editor.ui.core.menu.MenuContentSupplierI;
+import com.draniksoft.ome.editor.ui.wins.Inspector;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.support.load.interfaces.IRunnable;
 import net.mostlyoriginal.api.event.common.Subscribe;
@@ -26,12 +27,13 @@ public class UiSystem extends BaseSystem {
 
     public static class WinCodes {
 
-        public static final int win1 = 1;
+        public static final int inspector = 2;
 
         public static HashMap<Integer, Class> map = new HashMap<Integer, Class>();
 
         static {
 
+            map.put(inspector, Inspector.class);
 
         }
 
@@ -85,6 +87,11 @@ public class UiSystem extends BaseSystem {
 
     private boolean constructWin(int code) {
 
+        if (!WinCodes.map.containsKey(code)) {
+            Gdx.app.error(tag, "NO win code " + code);
+            return false;
+        }
+
         Gdx.app.debug(tag, "Constructing " + WinCodes.map.get(code).getClass().getSimpleName());
 
         BaseWin w;
@@ -101,8 +108,7 @@ public class UiSystem extends BaseSystem {
 
         uiStage.addActor(w);
 
-        w.setHeight(Gdx.graphics.getHeight());
-        w.updateBounds(Gdx.graphics.getWidth());
+        w.updateBounds(vp.getWorldWidth(), vp.getWorldHeight());
         w.immdClose();
 
 
@@ -183,7 +189,7 @@ public class UiSystem extends BaseSystem {
 
         for (BaseWin win : wins.values()) {
             win.setHeight(e.h);
-            win.updateBounds(e.w);
+            win.updateBounds(vp.getWorldWidth(), vp.getWorldHeight());
         }
 
         mn.resized(e.w, e.h);

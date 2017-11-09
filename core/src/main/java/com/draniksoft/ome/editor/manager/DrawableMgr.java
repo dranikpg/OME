@@ -12,7 +12,9 @@ import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.draniksoft.ome.editor.load.LoadSaveManager;
+import com.draniksoft.ome.editor.load.ProjectSaver;
 import com.draniksoft.ome.editor.support.event.asset.AssetListChange;
+import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.utils.FUtills;
 import com.draniksoft.ome.utils.dao.AssetDDao;
 import net.mostlyoriginal.api.event.common.EventSystem;
@@ -294,4 +296,8 @@ public class DrawableMgr extends BaseSystem implements LoadSaveManager {
 
     }
 
+    @Override
+    public void save(IntelligentLoader l, ProjectSaver s) {
+
+    }
 }

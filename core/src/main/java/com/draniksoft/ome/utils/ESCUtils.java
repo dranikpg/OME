@@ -4,7 +4,7 @@ import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.artemis.utils.IntBag;
-import com.draniksoft.ome.editor.components.supp.SelectionC;
+import com.draniksoft.ome.editor.components.selection.SelectionC;
 import com.draniksoft.ome.editor.support.event.entityy.SelectionChangeE;
 import net.mostlyoriginal.api.event.common.EventSystem;
 

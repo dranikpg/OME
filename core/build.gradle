@@ -14,7 +14,11 @@ dependencies {
   compile "com.kotcrab.vis:vis-ui:$visUiVersion"
 
   compile "com.strongjoshua:libgdx-inGameConsole:$inGameConsoleVersion"
+
   compile "net.onedaybeard.artemis:artemis-odb:$artemisOdbVersion"
+  compile "net.onedaybeard.artemis:artemis-odb-serializer-kryo:$artemisOdbVersion"
+  compile "net.onedaybeard.artemis:artemis-odb-serializer-json-libgdx:$artemisOdbVersion"
+
   compile "com.rafaskoberg.gdx:typing-label:$typingLabelVersion"
 
   compile "net.mostlyoriginal.artemis-odb:contrib-core:2.2.0"
