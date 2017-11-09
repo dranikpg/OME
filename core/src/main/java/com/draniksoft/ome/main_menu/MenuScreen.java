@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -25,7 +27,7 @@ public class MenuScreen implements Screen {
 
     Color c;
 
-    public MenuScreen(MainBase base) {
+    public MenuScreen(final MainBase base) {
         this.base = base;
 
         vp = new ScreenViewport();
@@ -41,6 +43,13 @@ public class MenuScreen implements Screen {
         VisImage logo = new VisImage("logo");
         controlT.add(logo);
         controlT.row();
+        logo.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                base.launchEditor(true);
+                return true;
+            }
+        });
 
         controlT.add(new VisTextButton("LOL"));
         controlT.row();

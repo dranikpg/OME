@@ -3,9 +3,13 @@ package com.draniksoft.ome.mgmnt_base.base;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.draniksoft.ome.mgmnt_base.impl.ConfigManager;
+import com.draniksoft.ome.mgmnt_base.impl.FileManager;
 import com.draniksoft.ome.mgmnt_base.impl.LangManager;
+import com.draniksoft.ome.mgmnt_base.impl.LoadHistoryMgr;
 import com.draniksoft.ome.support.load.IntelligentLoader;
+import com.draniksoft.ome.support.load.interfaces.IGLRunnable;
 import com.draniksoft.ome.utils.Const;
+import com.draniksoft.ome.utils.GUtils;
 
 import java.util.HashMap;
 
@@ -20,7 +24,9 @@ public class AppDO extends AppDataManager {
 
     volatile Preferences prefs;
     HashMap<Class, AppDataManager> m;
-    Class<AppDataManager>[] defM = new Class[]{AppDO.class, LangManager.class, ConfigManager.class};
+
+    Class<AppDataManager>[] defM = new Class[]{AppDO.class, LangManager.class, ConfigManager.class,
+            FileManager.class, LoadHistoryMgr.class};
 
     @Override
     protected void startupLoad(IntelligentLoader l) {
@@ -34,9 +40,15 @@ public class AppDO extends AppDataManager {
             try {
                 m.put(c, c.getConstructor().newInstance());
             } catch (Exception e) {
+                Gdx.app.error(tag, "", e);
             }
 
         }
+
+        GL_LOADER gll = new GL_LOADER();
+        l.passGLRunnable(gll);
+
+        while (!glR) Thread.yield();
 
         Gdx.app.debug(tag, "Constructed " + m.size() + " observers");
 
@@ -63,6 +75,28 @@ public class AppDO extends AppDataManager {
 
     public LangManager L() {
         return getMgr(LangManager.class);
+    }
+
+    public LoadHistoryMgr LH() {
+        return getMgr(LoadHistoryMgr.class);
+    }
+
+    public FileManager F() {
+        return getMgr(FileManager.class);
+    }
+
+    volatile boolean glR = false;
+
+    private class GL_LOADER implements IGLRunnable {
+        @Override
+        public byte run() {
+
+            GUtils.maxTSize = GUtils.fetchMaxTexSize();
+
+            glR = true;
+
+            return IGLRunnable.READY;
+        }
     }
 
 

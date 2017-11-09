@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.draniksoft.ome.main_menu.MainBase;
 import com.draniksoft.ome.mgmnt_base.base.BaseLoadController;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.utils.GUtils;
@@ -98,9 +97,7 @@ public class LoadingScreen implements Screen {
 
     private void openMainWin() {
 
-        GUtils.getApp().newWindow(new MainBase(), GUtils.getEditorConfig());
-
-        GUtils.getWindow().closeWindow();
+        GUtils.openEditorWin();
 
     }
 

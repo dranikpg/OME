@@ -1,12 +1,12 @@
 package com.draniksoft.ome.editor.systems.support;
 
 import com.artemis.BaseSystem;
+import com.artemis.annotations.Wire;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
-import com.draniksoft.ome.editor.support.compositionObserver.FLabelCompositionO;
 import com.draniksoft.ome.editor.support.compositionObserver.MOCompositionO;
 import com.draniksoft.ome.editor.support.compositionObserver.abstr.CompositionObserver;
 import com.draniksoft.ome.editor.support.compositionObserver.timed.TimedCompositionO;
@@ -18,17 +18,16 @@ import com.draniksoft.ome.editor.support.event.EditModeChangeE;
 import com.draniksoft.ome.editor.support.event.entityy.CompositionChangeE;
 import com.draniksoft.ome.editor.support.event.entityy.SelectionChangeE;
 import com.draniksoft.ome.editor.support.event.workflow.ModeChangeE;
-import com.draniksoft.ome.editor.support.map_load.LoadSaveManager;
-import com.draniksoft.ome.editor.support.map_load.ProjectLoader;
+import com.draniksoft.ome.support.load.IntelligentLoader;
+import com.draniksoft.ome.support.load.interfaces.IRunnable;
 import com.draniksoft.ome.utils.ESCUtils;
-import com.draniksoft.ome.utils.struct.Pair;
 import net.mostlyoriginal.api.event.common.EventSystem;
 import net.mostlyoriginal.api.event.common.Subscribe;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 
-public class EditorSystem extends BaseSystem implements LoadSaveManager {
+public class EditorSystem extends BaseSystem {
 
     private final String tag = "EditorSystem";
 
@@ -42,22 +41,39 @@ public class EditorSystem extends BaseSystem implements LoadSaveManager {
 
     IntMap<CompositionObserver> comObs;
 
+    @Wire(name = "engine_l")
+    IntelligentLoader l;
+
 
     @Override
     protected void initialize() {
-        emDesc = new IntMap<EditModeDesc>();
-        initBaseEms();
 
-        comObs = new IntMap<CompositionObserver>();
-        initComObs();
 
-        steamComObsData();
+        l.passRunnable(new Loader());
 
-        for (CompositionObserver p : comObs.values()) {
-            p.init(world);
+    }
+
+    private class Loader implements IRunnable {
+        @Override
+        public void run(IntelligentLoader l) {
+
+            emDesc = new IntMap<EditModeDesc>();
+            initBaseEms();
+
+            comObs = new IntMap<CompositionObserver>();
+            initComObs();
+
+            steamComObsData();
+
+            for (CompositionObserver p : comObs.values()) {
+                p.init(world);
+            }
         }
 
-
+        @Override
+        public byte getState() {
+            return RUNNING;
+        }
     }
 
 
@@ -150,36 +166,6 @@ public class EditorSystem extends BaseSystem implements LoadSaveManager {
     }
 
 
-    /*
-
-
-     */
-
-    @Override
-    public String getNode() {
-        return null;
-    }
-
-    @Override
-    public void loadL(JsonValue val, ProjectLoader l) {
-
-    }
-
-    @Override
-    public boolean loadG(ProjectLoader l) {
-        return false;
-    }
-
-    @Override
-    public Pair<String, JsonValue> save() {
-        return null;
-    }
-
-    /*
-
-
-
-     */
 
     public CompositionObserver getComOb(int id) {
         return comObs.containsKey(id) ? comObs.get(id) : null;
@@ -263,7 +249,7 @@ public class EditorSystem extends BaseSystem implements LoadSaveManager {
 
         Gdx.app.debug(tag, "Parsing EM config file");
 
-        String rootString = Gdx.files.internal("desc/editmodes.json").readString();
+        String rootString = Gdx.files.internal("_data/editmodes.json").readString();
         JsonValue root = r.parse(rootString);
 
         for (JsonValue v : root) {
@@ -297,7 +283,7 @@ public class EditorSystem extends BaseSystem implements LoadSaveManager {
 
         Gdx.app.debug(tag, "Parsing com_obs -> observer init ");
 
-        String rootS = Gdx.files.internal("desc/com_obs.json").readString();
+        String rootS = Gdx.files.internal("_data/com_obs.json").readString();
         JsonValue root = r.parse(rootS);
 
         Iterator<CompositionObserver> i = getComObsI();
@@ -325,7 +311,6 @@ public class EditorSystem extends BaseSystem implements LoadSaveManager {
 
         addComOb(CompositionObserver.IDs.TIMED_MOV_CO, new TimedMoveCompositionO());
 
-        addComOb(CompositionObserver.IDs.FLABEL_ID, new FLabelCompositionO());
     }
 
     private void addComOb(int c, CompositionObserver o) {

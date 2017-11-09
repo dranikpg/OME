@@ -37,6 +37,7 @@ public class OverlayRenderSys extends BaseEntitySystem {
     @Override
     protected void initialize() {
 
+
         rs = new Array<OverlyRendererI>();
 
         restoreDef();

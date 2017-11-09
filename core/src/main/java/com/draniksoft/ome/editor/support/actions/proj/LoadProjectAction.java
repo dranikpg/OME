@@ -1,7 +1,7 @@
 package com.draniksoft.ome.editor.support.actions.proj;
 
 import com.artemis.World;
-import com.draniksoft.ome.editor.launch.MapLoadBundle;
+import com.draniksoft.ome.editor.load.MapLoadBundle;
 import com.draniksoft.ome.editor.support.actions.Action;
 import com.draniksoft.ome.editor.systems.file_mgmnt.ProjecetLoadSys;
 

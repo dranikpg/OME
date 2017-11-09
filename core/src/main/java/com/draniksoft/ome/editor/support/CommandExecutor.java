@@ -19,9 +19,8 @@ import com.draniksoft.ome.editor.components.gfx.DrawableC;
 import com.draniksoft.ome.editor.components.supp.SelectionC;
 import com.draniksoft.ome.editor.components.time.TimedMoveC;
 import com.draniksoft.ome.editor.esc_utils.PMIStrategy;
-import com.draniksoft.ome.editor.launch.MapLoadBundle;
+import com.draniksoft.ome.editor.load.MapLoadBundle;
 import com.draniksoft.ome.editor.manager.DrawableMgr;
-import com.draniksoft.ome.editor.manager.ProjectMgr;
 import com.draniksoft.ome.editor.manager.TimeMgr;
 import com.draniksoft.ome.editor.support.actions.Action;
 import com.draniksoft.ome.editor.support.actions.timed._base_.AddTimeCA;
@@ -43,7 +42,7 @@ import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.EditorSystem;
 import com.draniksoft.ome.editor.systems.support.InputSys;
 import com.draniksoft.ome.editor.systems.support.WorkflowSys;
-import com.draniksoft.ome.mgmnt_base.base.AppDataObserver;
+import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.utils.Const;
 import com.draniksoft.ome.utils.Env;
 import com.draniksoft.ome.utils.dao.AssetDDao;
@@ -137,29 +136,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
     /**
      * FIle mgmnt utils
      */
-    public void log_ophis() {
 
-        console.log(AppDataObserver.getI().getOpngHisM().getLastOpAr().toString());
-
-    }
-
-    public void load(String p) {
-
-        world.getSystem(ProjecetLoadSys.class).setBundle(new MapLoadBundle(p));
-        world.getSystem(ProjecetLoadSys.class).load();
-
-    }
-
-    public void load_h(int i) {
-
-        world.getSystem(ProjecetLoadSys.class).setBundle(new MapLoadBundle(
-
-                AppDataObserver.getI().getOpngHisM().getLastOpAr().get(i)
-
-        ));
-        world.getSystem(ProjecetLoadSys.class).load();
-
-    }
 
     public void save() {
 
@@ -167,15 +144,23 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     }
 
-    public void gname() {
+    public void load_h() {
 
-        console.log(world.getSystem(ProjectMgr.class).getName());
+        world.getSystem(ProjecetLoadSys.class).setBundle(new MapLoadBundle(AppDO.I.LH().getLast().get(0)));
+        world.getSystem(ProjecetLoadSys.class).load();
 
     }
 
-    public void sname(String n) {
 
-        world.getSystem(ProjectMgr.class).setmName(n);
+    public void log_lastop() {
+
+        try {
+            for (String o : AppDO.I.LH().getLast()) {
+                console.log(o);
+            }
+        } catch (Exception e) {
+            Gdx.app.error("C", "", e);
+        }
 
     }
 
@@ -390,26 +375,6 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
      * AssetDManager utils
      */
 
-    public void log_locassl() {
-
-        console.log("Items at :: " + AppDataObserver.getI().getAssetDM().getDirP());
-
-        for (AssetDDao dao : AppDataObserver.getI().getAssetDM().getDaos()) {
-
-            console.log("Name = " + dao.name + "; uri = " + dao.uri + "; ID = " + dao.id);
-
-        }
-
-
-    }
-
-    public void load_exassbyid(int i) {
-
-        world.getSystem(DrawableMgr.class).loadDwbl(
-                AppDataObserver.getI().getAssetDM().getDaos().get(i)
-        );
-
-    }
 
     public void log_avass() {
 
@@ -476,17 +441,12 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
         console.log(Float.toString(Gdx.graphics.getDeltaTime()));
     }
 
-    public void log_perf() {
+    public void perf() {
 
         console.log(((PMIStrategy) world.getInvocationStrategy()).getO());
 
     }
 
-    public void logmaxperf() {
-
-        console.log(((PMIStrategy) world.getInvocationStrategy()).getMO());
-
-    }
 
     /**
      * Cammy utils
@@ -546,22 +506,18 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     public void sys_states() {
 
-        ImmutableBag<BaseSystem > s = world.getSystems();
-        String name;
+        try {
+            ImmutableBag<BaseSystem > s = world.getSystems();
+            String name;
+            for(int i = 0; i < s.size(); i++){
 
-        int il = String.valueOf(s.size()).length() + 1;
-        int sl = 0;
+                name = s.get(i).getClass().getSimpleName();
 
-        for(int i = 0; i < s.size(); i ++){
-            sl = Math.max(s.get(i).getClass().getSimpleName().length(),sl);
-        }
+                console.log(i + 1 + "  " + name + " - " + (s.get(i).isEnabled() ? "Running" : "Suspended"));
 
-        for(int i = 0; i < s.size(); i++){
-
-            name = s.get(i).getClass().getSimpleName();
-
-            console.log(formatIntToStrCL(il,i+1) + " " + formatString(sl,name) + " - " + (s.get(i).isEnabled() ? "Running" : "Suspended"));
-
+            }
+        } catch (Exception e) {
+            Gdx.app.error("", "", e);
         }
 
     }
@@ -718,7 +674,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
     public void openwin(int code) {
 
         try {
-            world.getSystem(UiSystem.class).open(code, null);
+            world.getSystem(UiSystem.class).open(code);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -726,7 +682,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     public void openwin(int code, String uri) {
 
-        world.getSystem(UiSystem.class).open(code, uri);
+        world.getSystem(UiSystem.class).open(uri, code);
 
     }
 

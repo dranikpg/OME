@@ -16,7 +16,6 @@ import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.EditorSystem;
 import com.draniksoft.ome.editor.systems.support.InputSys;
-import com.draniksoft.ome.editor.ui.em_supp.EditTimedMovsEMT;
 import com.draniksoft.ome.utils.struct.Pair;
 
 public class EditTimedMovsEM extends SimpleEditMode {
@@ -25,8 +24,6 @@ public class EditTimedMovsEM extends SimpleEditMode {
 
     EditTimedMovsR r;
     EditTimedMovIC ic;
-
-    EditTimedMovsEMT w;
 
     InputController oldDIC;
 
@@ -57,7 +54,6 @@ public class EditTimedMovsEM extends SimpleEditMode {
         ic.setArr(ar);
         r.setArr(ar);
 
-        w = new EditTimedMovsEMT(ar, this);
 
 
         _w.getSystem(OverlayRenderSys.class).removeRdrByPlace(new int[]{}, new int[]{OverlayPlaces.ENTITY_MAIN_BODY, OverlayPlaces.PATH});
@@ -67,7 +63,6 @@ public class EditTimedMovsEM extends SimpleEditMode {
         oldDIC = _w.getSystem(InputSys.class).getDefIC();
         _w.getSystem(InputSys.class).setDefIC(null);
 
-        deflateUI(w);
 
     }
 
@@ -117,7 +112,6 @@ public class EditTimedMovsEM extends SimpleEditMode {
 
     public void setSelI(int i) {
 
-        w.renewSel(i);
 
         Gdx.app.debug(tag, "New Sel " + i);
         selI = i;
@@ -149,8 +143,6 @@ public class EditTimedMovsEM extends SimpleEditMode {
         ar.add(d);
 
         newM = false;
-
-        w.addedI();
     }
 
 

@@ -4,12 +4,8 @@ import com.artemis.Aspect;
 import com.artemis.BaseSystem;
 import com.artemis.annotations.Wire;
 import com.artemis.utils.IntBag;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.draniksoft.ome.editor.launch.MapLoadBundle;
-import com.draniksoft.ome.editor.support.map_load.ProjectLoader;
-import com.draniksoft.ome.editor.support.map_load.ProjectLoaderImpl;
-import com.draniksoft.ome.utils.struct.ResponseListener;
+import com.draniksoft.ome.editor.load.MapLoadBundle;
 
 public class ProjecetLoadSys extends BaseSystem {
 
@@ -21,21 +17,7 @@ public class ProjecetLoadSys extends BaseSystem {
     @Wire
     AssetManager assets;
 
-    ProjectLoader loader;
 
-
-    ResponseListener myL = new ResponseListener() {
-        @Override
-        public void onResponse(short code) {
-
-
-            Gdx.app.debug(tag, "Got code " + code);
-
-            if (code == ProjectLoader.Codes.READY) {
-                loader = null;
-            }
-        }
-    };
 
     @Override
     protected void initialize() {
@@ -45,30 +27,11 @@ public class ProjecetLoadSys extends BaseSystem {
     @Override
     protected void processSystem() {
 
-        if(loader != null){
-            loader.tick();
-        }
-
     }
 
 
     private void load(MapLoadBundle bundle){
 
-        if (bundle.fPath == null) {
-            Gdx.app.debug(tag, "Rejecting map load, hence folder path is null");
-            return;
-        }
-
-        logLoad(bundle.fPath);
-        clearAll();
-
-        loader = new ProjectLoaderImpl();
-        loader.setBundle(bundle);
-        loader.setAssetManager(assets);
-        loader.setWorld(world);
-        Gdx.app.debug(tag, "Starting new map load " + bundle.fPath);
-
-        loader.load(myL);
 
     }
 
@@ -93,18 +56,7 @@ public class ProjecetLoadSys extends BaseSystem {
 
 
     private void save(MapLoadBundle bundle) {
-        if (bundle.fPath == null) {
-            Gdx.app.debug(tag, "Rejecting map load, hence folder path is null");
-            return;
-        }
 
-        loader = new ProjectLoaderImpl();
-        loader.setBundle(bundle);
-        loader.setAssetManager(assets);
-        loader.setWorld(world);
-        Gdx.app.debug(tag, "Starting new save load " + bundle.fPath);
-
-        loader.save(myL);
     }
 
     public void setBundle(MapLoadBundle bundle) {

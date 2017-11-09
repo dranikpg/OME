@@ -11,6 +11,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.draniksoft.ome.editor.components.gfx.TexRegC;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
 import com.draniksoft.ome.editor.components.tps.MapC;
+import com.draniksoft.ome.editor.support.event.base_gfx.ResizeEvent;
+import net.mostlyoriginal.api.event.common.Subscribe;
 
 public class MapRenderSys extends BaseEntitySystem {
 
@@ -40,6 +42,8 @@ public class MapRenderSys extends BaseEntitySystem {
     float lz;
     int cid = -1;
 
+    boolean needrd = false;
+
     @Override
     protected void initialize() {
         lma = new Vector3();
@@ -49,14 +53,16 @@ public class MapRenderSys extends BaseEntitySystem {
     protected void processSystem() {
 
         if (!lma.equals(cam.position) || cid == -1 || lz != cam.zoom) {
-          redraw();
+            needrd = true;
 
           lma.set(cam.position);
             lz = cam.zoom;
 
       }
 
-      cache.setProjectionMatrix(cam.combined);
+        if (needrd) redraw();
+
+        cache.setProjectionMatrix(cam.combined);
       cache.begin();
 
       cache.draw(cid);
@@ -69,6 +75,7 @@ public class MapRenderSys extends BaseEntitySystem {
     PosSizeC tPSC;
     public void redraw(){
 
+        needrd = false;
 
         cache.clear();
         cache.beginCache();
@@ -94,5 +101,10 @@ public class MapRenderSys extends BaseEntitySystem {
 
     }
 
+
+    @Subscribe
+    public void resized(ResizeEvent ev) {
+        needrd = true;
+    }
 
 }

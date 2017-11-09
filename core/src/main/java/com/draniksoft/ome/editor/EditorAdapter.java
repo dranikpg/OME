@@ -4,7 +4,7 @@ import com.artemis.World;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.draniksoft.ome.editor.launch.MapLoadBundle;
+import com.draniksoft.ome.editor.load.MapLoadBundle;
 import com.draniksoft.ome.utils.GUtils;
 
 

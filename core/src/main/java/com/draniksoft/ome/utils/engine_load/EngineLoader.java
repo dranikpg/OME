@@ -14,6 +14,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.draniksoft.ome.editor.esc_utils.PMIStrategy;
+import com.draniksoft.ome.editor.load.MapLoadBundle;
 import com.draniksoft.ome.editor.manager.*;
 import com.draniksoft.ome.editor.systems.file_mgmnt.AssetLScheduleSys;
 import com.draniksoft.ome.editor.systems.file_mgmnt.ProjecetLoadSys;
@@ -26,12 +28,13 @@ import com.draniksoft.ome.editor.systems.render.map.MapRDebugSys;
 import com.draniksoft.ome.editor.systems.render.map.MapRenderSys;
 import com.draniksoft.ome.editor.systems.render.obj.ObjRSys;
 import com.draniksoft.ome.editor.systems.render.obj.PhysRDebugSys;
-import com.draniksoft.ome.editor.systems.render.ui.UIRenderSystem;
 import com.draniksoft.ome.editor.systems.support.*;
 import com.draniksoft.ome.editor.systems.time.TimeActivitySys;
+import com.draniksoft.ome.main_menu.MainBase;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.support.load.interfaces.IGLRunnable;
 import com.draniksoft.ome.support.load.interfaces.IRunnable;
+import com.draniksoft.ome.utils.GUtils;
 import com.draniksoft.ome.utils.struct.ResponseListener;
 import net.mostlyoriginal.api.event.common.EventSystem;
 
@@ -42,12 +45,15 @@ public class EngineLoader {
     public static WorldConfigurationBuilder cb;
     public static WorldConfiguration c;
 
+    public static ResponseListener L;
+
     public static void clearStatics() {
         cb = null;
         c = null;
 
         l = null;
         cS = null;
+        L = null;
     }
 
     public enum LoadS {
@@ -62,7 +68,7 @@ public class EngineLoader {
 
         clearStatics();
 
-        cS = LoadS.CONFIF_B_B;
+        cS = LoadS.SNULL_PTR;
         l = new IntelligentLoader();
         l.setCompletionListener(new ResponseListener() {
             @Override
@@ -89,14 +95,16 @@ public class EngineLoader {
         if (cS == LoadS.CONFIF_B_B) {
             l.passRunnable(new WorldConfigBdrBuilder());
         } else if (cS == LoadS.CONFIG_B) {
-
             l.passRunnable(new ConfigBuilder());
-
         } else if (cS == LoadS.DEPENDENCY_B) {
-
             l.passRunnable(new DependencyB());
             l.passGLRunnable(new GfxDependencyB());
-
+        } else if (cS == LoadS.WORLD_B) {
+            l.passRunnable(new WorldBuild());
+        } else if (cS == LoadS.NULL_PTR) {
+            Gdx.app.debug(tag, "Passed states");
+            L.onResponse((short) IntelligentLoader.LOAD_SUCCESS);
+            l.terminate();
         }
 
     }
@@ -105,6 +113,19 @@ public class EngineLoader {
 
         if (l != null) l.update();
 
+    }
+
+    private static class WorldBuild implements IRunnable {
+
+        @Override
+        public void run(IntelligentLoader l) {
+            MainBase.engine = new com.artemis.World(c);
+        }
+
+        @Override
+        public byte getState() {
+            return IRunnable.RUNNING;
+        }
     }
 
     private static class DependencyB implements IRunnable {
@@ -120,6 +141,11 @@ public class EngineLoader {
             c.register(mx);
             c.register(assm);
 
+            c.register(new MapLoadBundle());
+
+            c.register("engine_l", l);
+
+            Gdx.app.debug(tag, "Dependency B :: Logic ready");
         }
 
         @Override
@@ -148,18 +174,23 @@ public class EngineLoader {
         Viewport gameVP;
         Viewport uiVP;
 
+        SpriteBatch b;
+
         @Override
         public byte run() {
+
             cc++;
             if (cc == 1) {
 
-                OrthographicCamera gameC = new OrthographicCamera(640, 480);
+                OrthographicCamera gameC = new OrthographicCamera(1280, 960);
+                gameC.setToOrtho(false);
                 c.register("game_cam", gameC);
-                OrthographicCamera uiCam = new OrthographicCamera(640, 480);
+                OrthographicCamera uiCam = new OrthographicCamera(1280, 960);
+                uiCam.setToOrtho(false);
                 c.register("ui_cam", uiCam);
 
-                gameVP = new ScreenViewport();
-                uiVP = new ScreenViewport();
+                gameVP = new ScreenViewport(gameC);
+                uiVP = new ScreenViewport(uiCam);
 
                 gameVP.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
                 uiVP.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -170,12 +201,13 @@ public class EngineLoader {
 
             } else if (cc == 2) {
 
-                SpriteBatch b = new SpriteBatch();
+                b = new SpriteBatch();
 
                 c.register(b);
 
                 ShapeRenderer r = new ShapeRenderer();
 
+                GUtils.sr = r;
                 c.register(r);
 
             } else if (cc == 3) {
@@ -186,14 +218,17 @@ public class EngineLoader {
 
             } else if (cc == 4) {
 
-                Stage uiS = new Stage();
+                Stage uiS = new Stage(uiVP, b);
 
                 c.register("top_stage", uiS);
 
-            } else if (cc == 5) {
+            } else if (cc >= 5) {
+
+                Gdx.app.debug(tag, "Dependency B :: GL_GFX finished passes");
 
                 return IGLRunnable.READY;
             }
+
 
             return IGLRunnable.RUNNING;
         }
@@ -231,7 +266,6 @@ public class EngineLoader {
 
             //
 
-            cb.with(new UiSystem());
 
             cb.with(new TimeActivitySys());
 
@@ -259,7 +293,7 @@ public class EngineLoader {
 
             cb.with(new PhysRDebugSys());
 
-            cb.with(new UIRenderSystem());
+            cb.with(new UiSystem());
 
             cb.with(new ConsoleSys());
 
@@ -271,6 +305,8 @@ public class EngineLoader {
             cb.with(new WorkflowSys());
 
             cb.with(new EventSystem());
+
+            cb.register(new PMIStrategy());
 
         }
 

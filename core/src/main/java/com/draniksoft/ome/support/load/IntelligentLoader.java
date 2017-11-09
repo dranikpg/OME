@@ -1,6 +1,7 @@
 package com.draniksoft.ome.support.load;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.draniksoft.ome.support.load.interfaces.IGLRunnable;
 import com.draniksoft.ome.support.load.interfaces.IRunnable;
 import com.draniksoft.ome.support.load.observer.LoadLogObserver;
@@ -10,7 +11,6 @@ import com.draniksoft.ome.utils.struct.ResponseListener;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Iterator;
-import java.util.LinkedList;
 
 public class IntelligentLoader {
 
@@ -31,9 +31,13 @@ public class IntelligentLoader {
     private int free_ts = 0;
     private int hg_ts = 0;
 
+    int maxMS = 12;
+
+    int sleepSt = 100;
+
     private volatile Deque<IRunnable> deq;
     private int log_t = 0;
-    private volatile Deque<IGLRunnable> rs;
+    private volatile DelayedRemovalArray<IGLRunnable> rs;
     private int gfx_t = 0;
 
     private ResponseListener l;
@@ -57,7 +61,7 @@ public class IntelligentLoader {
 
         startMs = System.currentTimeMillis();
 
-        Gdx.app.debug(tag, "Started load " + deq.size() + " & " + rs.size());
+        Gdx.app.debug(tag, "Started load " + deq.size() + " & " + rs.size);
 
     }
 
@@ -71,12 +75,19 @@ public class IntelligentLoader {
 
         Iterator<IGLRunnable> i = rs.iterator();
 
+        long ms = System.currentTimeMillis();
+
         short code;
         while (i.hasNext()) {
             code = i.next().run();
             if (code == IGLRunnable.READY || code == IGLRunnable.TERMINATED) {
                 i.remove();
             }
+
+            if (System.currentTimeMillis() - maxMS > 10) {
+                return;
+            }
+
         }
 
     }
@@ -108,7 +119,7 @@ public class IntelligentLoader {
 
         }
 
-        if (rs.size() == 0 && deq.size() == 0) {
+        if (rs.size == 0 && deq.size() == 0) {
 
             for (int i = 0; i < inited_threads; i++) {
                 if (states[i] != IRunnable.TERMINATED) return;
@@ -165,6 +176,11 @@ public class IntelligentLoader {
 
 
                 if (deq.isEmpty()) {
+                    try {
+                        Thread.sleep(sleepSt);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     Thread.yield();
                     continue;
                 }
@@ -189,6 +205,11 @@ public class IntelligentLoader {
 
                 }
 
+                try {
+                    Thread.sleep(sleepSt);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
                 Thread.yield();
 
@@ -268,7 +289,7 @@ public class IntelligentLoader {
 
 
         deq = new ArrayDeque<IRunnable>();
-        rs = new LinkedList<IGLRunnable>();
+        rs = new DelayedRemovalArray<IGLRunnable>();
 
 
     }

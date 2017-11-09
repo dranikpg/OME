@@ -3,6 +3,8 @@ package com.draniksoft.ome.utils;
 
 import com.badlogic.gdx.Preferences;
 
+import java.io.File;
+
 /**
  * File utils class
  */
@@ -16,12 +18,12 @@ public class FUtills {
 
     }
 
+    public static class LocalFdrNames {
 
-    public static class ConstFileN {
-
-        public static final String assetAll = "f";
+        public static final String tempF = ".__tempF";
 
     }
+
 
     public static <T> T getVal(Preferences prefs, Class<T> c, String id) {
 
@@ -77,5 +79,15 @@ public class FUtills {
         return cS.concat(p);
 
     }
+
+    /*
+
+    J FILE CHOOSER PART
+
+     */
+
+    public static int JF_OPTION = -5;
+    public static File JF_FILE;
+
 
 }

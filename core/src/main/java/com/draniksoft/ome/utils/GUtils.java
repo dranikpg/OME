@@ -6,12 +6,19 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.PixmapPacker;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.BufferUtils;
+import com.draniksoft.ome.main_menu.MainBase;
 
+import javax.swing.*;
+import java.io.File;
 import java.nio.IntBuffer;
 
 /**
@@ -22,7 +29,9 @@ import java.nio.IntBuffer;
 
 public class GUtils {
 
-    public static int maxTSize = -1;
+    public static int maxTSize = 16000;
+
+    public static ShapeRenderer sr;
 
     public static Lwjgl3Graphics getGraphics(){
         return (Lwjgl3Graphics) Gdx.graphics;
@@ -44,6 +53,7 @@ public class GUtils {
 
         configuration.setWindowedMode(640, 480);
         configuration.setMaximized(true);
+
         configuration.setWindowIcon("libgdx128.png", "libgdx64.png", "libgdx32.png", "libgdx16.png");
 
         configuration.setBackBufferConfig(8, 8, 8, 8, 16, 8, 2);
@@ -52,7 +62,7 @@ public class GUtils {
 
     }
 
-    public static int getMaxTexSize(){
+    public static int fetchMaxTexSize() {
         IntBuffer intBuffer = BufferUtils.newIntBuffer(16);
         Gdx.gl20.glGetIntegerv(GL20.GL_MAX_TEXTURE_SIZE, intBuffer);
         return  intBuffer.get();
@@ -93,4 +103,81 @@ public class GUtils {
         data[1] = a;
 
     }
+
+    void tmp() {
+
+        PixmapPacker p = new PixmapPacker(512, 512, Pixmap.Format.RGB565, 2, true);
+        TextureAtlas a = new TextureAtlas();
+
+
+    }
+
+
+    public static void openEditorWin() {
+
+        GUtils.getApp().newWindow(new MainBase(), GUtils.getEditorConfig());
+
+        GUtils.getWindow().closeWindow();
+
+    }
+
+    private static boolean nativeSwingGui = false;
+
+    private static void setNativeLookAndFeel() {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            reportError();
+        }
+    }
+
+    private static void reportError() {
+
+
+    }
+
+    private static void checkSwingState() {
+        System.out.println("Checking SWING state ...");
+        if (!nativeSwingGui) setNativeLookAndFeel();
+    }
+
+
+    public static void showFileDialog(final JFileChooser ch, final Runnable r) {
+
+
+        Runnable fr = new Runnable() {
+            @Override
+            public void run() {
+                int returnValue = ch.showOpenDialog(null);
+                if (returnValue == JFileChooser.APPROVE_OPTION) {
+                    File selectedFile = ch.getSelectedFile();
+                    FUtills.JF_FILE = selectedFile;
+                    System.out.println(selectedFile.getName());
+                }
+
+                FUtills.JF_OPTION = returnValue;
+
+                r.run();
+
+                FUtills.JF_OPTION = -5;
+                FUtills.JF_FILE = null;
+
+            }
+        };
+
+        new Thread(fr).start();
+
+
+    }
+
+    public static JFileChooser createFileDialog() {
+        checkSwingState();
+
+        JFileChooser ch = new JFileChooser();
+
+        return ch;
+    }
+
+
+
 }

@@ -2,11 +2,8 @@ package com.draniksoft.ome.editor.manager;
 
 import com.artemis.BaseSystem;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.JsonValue;
+import com.draniksoft.ome.editor.load.LoadSaveManager;
 import com.draniksoft.ome.editor.support.event.workflow.ModeChangeE;
-import com.draniksoft.ome.editor.support.map_load.LoadSaveManager;
-import com.draniksoft.ome.editor.support.map_load.ProjectLoader;
-import com.draniksoft.ome.utils.struct.Pair;
 import dint.Dint;
 import net.mostlyoriginal.api.event.common.EventSystem;
 import net.mostlyoriginal.api.event.common.Subscribe;
@@ -73,26 +70,6 @@ public class TimeMgr extends BaseSystem implements LoadSaveManager {
 
         return timeStamp / stampMax;
 
-    }
-
-    @Override
-    public String getNode() {
-        return null;
-    }
-
-    @Override
-    public void loadL(JsonValue val, ProjectLoader l) {
-
-    }
-
-    @Override
-    public boolean loadG(ProjectLoader l) {
-        return true;
-    }
-
-    @Override
-    public Pair<String, JsonValue> save() {
-        return null;
     }
 
     public int getTime() {

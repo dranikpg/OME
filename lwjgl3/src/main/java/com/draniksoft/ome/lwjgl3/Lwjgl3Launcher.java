@@ -7,9 +7,7 @@ import com.draniksoft.ome.Main;
 /** Launches the desktop (LWJGL3) application. */
 public class Lwjgl3Launcher {
     public static void main(String[] args) {
-
         createApplication();
-
     }
 
     private static Lwjgl3Application createApplication() {

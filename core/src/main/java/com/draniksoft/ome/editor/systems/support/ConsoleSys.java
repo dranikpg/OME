@@ -5,9 +5,16 @@ import com.artemis.annotations.Wire;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.draniksoft.ome.editor.support.CommandExecutor;
+import com.draniksoft.ome.editor.support.event.base_gfx.ResizeEvent;
+import com.draniksoft.ome.support.load.IntelligentLoader;
+import com.draniksoft.ome.support.load.interfaces.IGLRunnable;
 import com.strongjoshua.console.GUIConsole;
+import net.mostlyoriginal.api.event.common.EventSystem;
+import net.mostlyoriginal.api.event.common.Subscribe;
 
 public class ConsoleSys extends BaseSystem {
+
+    private static final String tag = "ConsoleSys";
 
     @Wire
     InputMultiplexer mxp;
@@ -15,18 +22,17 @@ public class ConsoleSys extends BaseSystem {
     GUIConsole console;
 
 
+    @Wire(name = "engine_l")
+    IntelligentLoader l;
+
 
     @Override
     protected void initialize() {
 
-        console = new GUIConsole();
+        l.passGLRunnable(new Gfx_ldr());
 
-        console.setCommandExecutor(new CommandExecutor(world));
-        console.log("See the github wiki for more details");
+        world.getSystem(EventSystem.class).registerEvents(this);
 
-        console.setDisplayKeyID(Input.Keys.F1);
-
-        mxp.addProcessor(console.getInputProcessor());
     }
 
     @Override
@@ -38,9 +44,27 @@ public class ConsoleSys extends BaseSystem {
 
     }
 
-    public void resize(int width, int height) {
+    @Subscribe
+    public void resize(ResizeEvent e) {
 
         console.refresh(true);
 
+    }
+
+    private class Gfx_ldr implements IGLRunnable {
+
+        @Override
+        public byte run() {
+            console = new GUIConsole();
+
+            console.setCommandExecutor(new CommandExecutor(world));
+            console.log("See the github wiki for more details");
+
+            console.setDisplayKeyID(Input.Keys.F1);
+
+            mxp.addProcessor(console.getInputProcessor());
+
+            return IGLRunnable.READY;
+        }
     }
 }

@@ -8,7 +8,6 @@ import com.draniksoft.ome.editor.support.actions.timed._base_.AddTimeCA;
 import com.draniksoft.ome.editor.support.compositionObserver.abstr.SimpleCompositionObserver;
 import com.draniksoft.ome.editor.support.container.CO_actiondesc.ActionDesc;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
-import com.draniksoft.ome.editor.ui.comp_obs_ts.TimedOTable;
 
 public class TimedCompositionO extends SimpleCompositionObserver {
 
@@ -88,9 +87,7 @@ public class TimedCompositionO extends SimpleCompositionObserver {
 
     @Override
     public Table getSettingsT() {
-        TimedOTable t = new TimedOTable();
-        t.init(_selE, _w);
-        return t;
+        return null;
     }
 
     @Override

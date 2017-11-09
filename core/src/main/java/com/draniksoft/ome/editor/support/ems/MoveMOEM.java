@@ -61,7 +61,7 @@ public class MoveMOEM implements EditMode {
             _w.getSystem(EditorSystem.class).detachEditMode();
         }
 
-        _w.getSystem(UiSystem.class).crateBackup();
+        _w.getSystem(UiSystem.class).createBK();
 
     }
 
@@ -106,7 +106,7 @@ public class MoveMOEM implements EditMode {
 
         if (easyQ) return;
 
-        _w.getSystem(UiSystem.class).loadBackup();
+        _w.getSystem(UiSystem.class).restoreBK();
 
         _w.getSystem(InputSys.class).clearMainIC();
         _w.getSystem(OverlayRenderSys.class).removeRdr(rdr);

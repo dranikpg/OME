@@ -10,10 +10,8 @@ import com.draniksoft.ome.editor.support.container.CO_actiondesc.ActionDesc;
 import com.draniksoft.ome.editor.support.container.EM_desc.EditModeDesc;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.EditorSystem;
-import com.draniksoft.ome.editor.ui.comp_obs_ts.TimedMovsTable;
 
 public class TimedMoveCompositionO extends SimpleCompositionObserver {
-
 
     IntMap<ActionDesc> desc;
 
@@ -104,10 +102,6 @@ public class TimedMoveCompositionO extends SimpleCompositionObserver {
 
     @Override
     public Table getSettingsT() {
-
-        TimedMovsTable stxt = new TimedMovsTable();
-        stxt.init(_w, _selE);
-
-        return stxt;
+        return null;
     }
 }

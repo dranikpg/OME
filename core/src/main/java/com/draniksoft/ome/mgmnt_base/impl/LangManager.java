@@ -20,7 +20,7 @@ public class LangManager extends AppDataManager {
     protected void startupLoad(IntelligentLoader l) {
 
         FileHandle baseFileHandle = Gdx.files.internal("lang/bundle");
-        Locale locale = new Locale("en");
+        Locale locale = new Locale("ru");
         b = I18NBundle.createBundle(baseFileHandle, locale);
 
         testLang();

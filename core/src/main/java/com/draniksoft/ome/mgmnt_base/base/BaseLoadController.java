@@ -18,7 +18,7 @@ public class BaseLoadController {
 
 
     enum LoadState {
-        AppDO, Lang, CONFIG, NULL_PTR
+        AppDO, Lang, CONFIG, MISC, NULL_PTR
     }
 
     LoadState s = LoadState.AppDO;
@@ -92,6 +92,12 @@ public class BaseLoadController {
             AppDO.I.getMgr(ConfigManager.class).setLoadState(AppDataManager.STARTUP_LOAD);
             l.passRunnable(AppDO.I.getMgr(ConfigManager.class));
 
+        } else if (s == LoadState.MISC) {
+
+            AppDO.I.F().setLoadState(AppDO.STARTUP_LOAD);
+            l.passRunnable(AppDO.I.F());
+            AppDO.I.LH().setLoadState(AppDataManager.STARTUP_LOAD);
+            l.passRunnable(AppDO.I.LH());
 
         }
 

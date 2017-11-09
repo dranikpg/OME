@@ -5,6 +5,8 @@ import com.artemis.annotations.Wire;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.draniksoft.ome.support.load.IntelligentLoader;
+import com.draniksoft.ome.support.load.interfaces.IGLRunnable;
 import com.draniksoft.ome.utils.Env;
 import com.draniksoft.ome.utils.PUtils;
 
@@ -18,10 +20,13 @@ public class PhysRDebugSys extends BaseSystem {
     @Wire(name = "game_cam")
     OrthographicCamera cam;
 
+    @Wire(name = "engine_l")
+    IntelligentLoader l;
+
     @Override
     protected void initialize() {
 
-        r = new Box2DDebugRenderer();
+        l.passGLRunnable(new Gl_loader());
 
         setEnabled(Env.GFX_DEBUG);
 
@@ -32,5 +37,16 @@ public class PhysRDebugSys extends BaseSystem {
 
         r.render(pw, cam.combined.cpy().scl(PUtils.PPM));
 
+    }
+
+    private class Gl_loader implements IGLRunnable {
+
+        @Override
+        public byte run() {
+
+            r = new Box2DDebugRenderer();
+
+            return IGLRunnable.READY;
+        }
     }
 }

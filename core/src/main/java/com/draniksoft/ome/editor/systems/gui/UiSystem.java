@@ -5,23 +5,17 @@ import com.artemis.annotations.Wire;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.IntArray;
-import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.IntMap;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.draniksoft.ome.editor.support.event.base_gfx.ResizeEvent;
 import com.draniksoft.ome.editor.support.event.workflow.ModeChangeE;
-import com.draniksoft.ome.editor.systems.render.ui.UIRenderSystem;
-import com.draniksoft.ome.editor.ui.BaseWindow;
-import com.draniksoft.ome.editor.ui.wins.MOList;
-import com.draniksoft.ome.editor.ui.wins.actions.ActionList;
-import com.draniksoft.ome.editor.ui.wins.asset.AssetMgmntWin;
-import com.draniksoft.ome.editor.ui.wins.asset.DrawableSelectionWin;
-import com.draniksoft.ome.editor.ui.wins.em.AddCompWin;
-import com.draniksoft.ome.editor.ui.wins.em.EmList;
-import com.draniksoft.ome.editor.ui.wins.em.EmSuppWin;
-import com.draniksoft.ome.editor.ui.wins.inspector.InspectorMainWin;
-import com.draniksoft.ome.editor.ui.wins.uimgmnt.WindowMgrWin;
-import com.kotcrab.vis.ui.widget.Menu;
-import com.kotcrab.vis.ui.widget.MenuBar;
+import com.draniksoft.ome.editor.ui.core.BaseWin;
+import com.draniksoft.ome.editor.ui.core.menu.Menu;
+import com.draniksoft.ome.editor.ui.core.menu.MenuContentSupplierI;
+import com.draniksoft.ome.support.load.IntelligentLoader;
+import com.draniksoft.ome.support.load.interfaces.IRunnable;
 import net.mostlyoriginal.api.event.common.Subscribe;
 
 import java.util.HashMap;
@@ -33,240 +27,146 @@ public class UiSystem extends BaseSystem {
     public static class WinCodes {
 
         public static final int win1 = 1;
-        public static final int winMgr = 2;
-        public static final int em_win = 3;
-        public static final int assetMgr = 4;
-        public static final int actionList = 5;
-        public static final int inspector = 7;
-
-        public static final int drawableSelWin = 21;
-        public static final int addCWin = 22;
-
-
-        public static final int emSuppWin = 31;
 
         public static HashMap<Integer, Class> map = new HashMap<Integer, Class>();
 
         static {
-            System.out.println("Initializing wincodes::map");
-            map.put(win1, MOList.class);
-            map.put(winMgr, WindowMgrWin.class);
-            map.put(em_win, EmList.class);
-            map.put(assetMgr, AssetMgmntWin.class);
-            map.put(actionList, ActionList.class);
-            map.put(inspector, InspectorMainWin.class);
-            map.put(addCWin, AddCompWin.class);
-            map.put(drawableSelWin, DrawableSelectionWin.class);
-            map.put(emSuppWin, EmSuppWin.class);
 
 
         }
+
     }
-
-    UIRenderSystem topSys;
-
     @Wire(name = "top_stage")
     Stage uiStage;
-
     @Wire
     InputMultiplexer multiplexer;
+    @Wire(name = "engine_l")
+    IntelligentLoader engineL;
+    @Wire(name = "ui_vp")
+    Viewport vp;
 
 
-    ObjectMap<Integer, BaseWindow> wins;
-    IntArray backupIDs;
+    BaseWin w;
+    IntMap<BaseWin> wins;
 
+    Menu mn;
 
-    MenuBar menuBar;
+    BaseWin bk;
 
-    Table rootT;
-
-    boolean openBlock = false;
-
-
-    @Override
-    protected void processSystem() {
-
-    }
 
     @Override
     protected void initialize() {
 
-        wins = new ObjectMap<Integer, BaseWindow>();
-        backupIDs = new IntArray();
-
-        rootT = new Table();
-        rootT.setFillParent(true);
-        uiStage.addActor(rootT);
-
-        menuBar = new MenuBar();
-
-        asembleMenuBar();
-
-
-        rootT.add(menuBar.getTable()).expand().top();
-
-
-        //uiStage.setDebugAll(true);
+        engineL.passRunnable(new Loader());
 
         multiplexer.addProcessor(0, uiStage);
 
-        initBaseWins();
-
-
     }
 
-    private void initBaseWins() {
+    public void open(int code) {
+        open(null, code);
+    }
 
-        int ar[] = {WinCodes.inspector};
+    public void open(String args, int code) {
 
-        for (int id : ar) {
-            buildWin(id, true);
+        boolean d = false;
+        if (w != null) {
+            close(w.code);
+            d = true;
         }
-
-
-    }
-
-
-    public IntArray crateBackup() {
-
-        backupIDs.clear();
-
-        for (ObjectMap.Entry<Integer, BaseWindow> entry : wins) {
-
-            if (entry.value.isOpen()) {
-                backupIDs.add(entry.key);
-                entry.value.close();
-            }
-        }
-
-        Gdx.app.debug(tag, "Created window backUP :: sz " + backupIDs.size);
-
-        return backupIDs;
-
-    }
-
-    public void loadBackup() {
-
-        Gdx.app.debug(tag, "loading backup");
-
-        for (int i = 0; i < backupIDs.size; i++) {
-
-            Gdx.app.debug(tag, "opening " + backupIDs.get(i));
-
-            open(backupIDs.get(i), "#backup_r");
-        }
-    }
-
-    /**
-     * We can open something "Twice" because the uri can point to something else
-     */
-    public void open(int code, String uri) {
-
-        if (openBlock) return;
 
         if (!wins.containsKey(code)) {
-            if (!buildWin(code, false)) {
-                return;
-            }
+            if (!constructWin(code)) return;
         }
 
-        if ((wins.get(code).getStage() == null)) uiStage.addActor(wins.get(code));
+        w = wins.get(code);
+        w.open(args, d);
+    }
 
-        wins.get(code).open(uri);
+    private boolean constructWin(int code) {
+
+        Gdx.app.debug(tag, "Constructing " + WinCodes.map.get(code).getClass().getSimpleName());
+
+        BaseWin w;
+        try {
+            w = (BaseWin) WinCodes.map.get(code).getConstructor().newInstance();
+        } catch (Exception e) {
+            Gdx.app.error(tag, "", e);
+            return false;
+        }
+
+        w.code = code;
+        wins.put(code, w);
+        w.init(world);
+
+        uiStage.addActor(w);
+
+        w.setHeight(Gdx.graphics.getHeight());
+        w.updateBounds(Gdx.graphics.getWidth());
+        w.immdClose();
 
 
+        return true;
     }
 
     public void close(int code) {
-
-        /**
-         * We can't close something that is not created,
-         * or something that is closed
-         */
-        if (!wins.containsKey(code) || !wins.get(code).isOpen()) {
-            return;
-        }
-
-        wins.get(code).close();
-
-    }
-
-    public BaseWindow getWin(int c) {
-
-        if (!wins.containsKey(c)) return null;
-
-        return wins.get(c);
-    }
-
-    private boolean buildWin(int code, boolean silent) {
-
-        BaseWindow w = null;
-
         try {
-            if (WinCodes.map.containsKey(code))
-                w = (BaseWindow) WinCodes.map.get(code).getConstructor().newInstance();
+            w.close();
+            w = null;
         } catch (Exception e) {
-            Gdx.app.debug(tag, "", e);
+            Gdx.app.error(tag, "WIN::CLOSE", e);
         }
-        if (w == null) return false;
-
-        w.code = code;
-
-        w.init(world);
-
-        wins.put(code, w);
-
-        if (!silent)
-            uiStage.addActor(w);
-
-        return true;
-
     }
 
-    public ObjectMap.Values<BaseWindow> getWins() {
-        return wins.values();
-    }
-
-    private void asembleMenuBar() {
-
-        Menu fileM = new Menu("File");
-
-        Menu editM = new Menu("Edit");
-
-        Menu stx = new Menu("Management");
-
-        Menu hz = new Menu("Windows");
-
-        /*fileM.addItem(new WinOpenMenuItem("Open", WinCodes.open_proj, "lol", this));
-        fileM.addItem(new MenuItem("Save", new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                world.getSystem(ActionSystem.class).exec(new SaveProjectAction());
-            }
-        }));
-
-
-        Menu editM = new Menu("Edit");
-        editM.addItem(new MenuItem("Undo", new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                world.getSystem(ActionSystem.class).undo();
-            }
-        }));
-*/
-        menuBar.addMenu(fileM);
-        menuBar.addMenu(editM);
-        menuBar.addMenu(stx);
-        menuBar.addMenu(hz);
-
-    }
-
-    public void centerWin(int code) {
-
-        BaseWindow w = wins.get(code);
+    public void createBK() {
         if (w == null) return;
+        bk = w;
+        close(bk.code);
+    }
 
-        w.centerWindow();
+    public void restoreBK() {
+        if (bk != null) open("#bkrestore", bk.code);
+        bk = null;
+    }
+
+    /*
+
+    Menu Part
+
+     */
+
+
+    public boolean isMenuOpen() {
+        return mn.isOpen();
+    }
+
+    public MenuContentSupplierI getMenuSupplier() {
+        if (!isMenuOpen()) return null;
+        return mn.getSup();
+    }
+
+    public void closeMenu() {
+        mn.close();
+    }
+
+    public void openMenu() {
+        openMenu(null);
+    }
+
+    public void openMenu(String args) {
+        mn.open(args);
+    }
+
+    @Override
+    protected void processSystem() {
+
+        vp.getCamera().update(false);
+
+        vp.apply();
+
+        uiStage.act();
+
+        uiStage.draw();
 
     }
 
@@ -276,16 +176,45 @@ public class UiSystem extends BaseSystem {
 
         Gdx.app.debug(tag, "Mode changed");
 
+    }
 
-        openBlock = e.SHOW_MODE;
+    @Subscribe
+    public void resized(ResizeEvent e) {
 
-        if (e.SHOW_MODE) {
-            crateBackup();
-        } else {
-            loadBackup();
+        for (BaseWin win : wins.values()) {
+            win.setHeight(e.h);
+            win.updateBounds(e.w);
         }
 
+        mn.resized(e.w, e.h);
 
+    }
+
+    private class Loader implements IRunnable {
+
+
+        @Override
+        public void run(IntelligentLoader l) {
+
+
+            wins = new IntMap<BaseWin>();
+
+            mn = new Menu();
+
+            JsonValue rootJV = new JsonReader().parse(Gdx.files.internal("_data/ui_vals.json"));
+
+            mn.init(world);
+            mn.buildSups(rootJV);
+            mn.addToStage(uiStage);
+
+            mn.resized(vp.getWorldHeight(), vp.getWorldHeight());
+
+        }
+
+        @Override
+        public byte getState() {
+            return IRunnable.RUNNING;
+        }
     }
 
 }

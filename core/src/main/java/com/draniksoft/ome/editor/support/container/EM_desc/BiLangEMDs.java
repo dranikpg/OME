@@ -1,6 +1,7 @@
 package com.draniksoft.ome.editor.support.container.EM_desc;
 
-import com.draniksoft.ome.mgmnt_base.base.AppDataObserver;
+
+import com.draniksoft.ome.mgmnt_base.base.AppDO;
 
 public class BiLangEMDs extends EditModeDesc {
 
@@ -10,9 +11,10 @@ public class BiLangEMDs extends EditModeDesc {
     @Override
     public String getName() {
 
-        if (AppDataObserver.getI().L().isEn()) {
+
+        if (AppDO.I.L().isEnL())
             return name_en;
-        } else
+        else
             return name_ru;
 
     }

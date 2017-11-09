@@ -9,7 +9,6 @@ import com.draniksoft.ome.editor.components.pos.PosSizeC;
 import com.draniksoft.ome.editor.components.tps.MObjectC;
 import com.draniksoft.ome.editor.support.compositionObserver.abstr.SimpleCompositionObserver;
 import com.draniksoft.ome.editor.support.container.CO_actiondesc.ActionDesc;
-import com.draniksoft.ome.editor.ui.comp_obs_ts.MOTable;
 
 public class MOCompositionO extends SimpleCompositionObserver {
 
@@ -77,9 +76,7 @@ public class MOCompositionO extends SimpleCompositionObserver {
 
     @Override
     public Table getSettingsT() {
-        MOTable t = new MOTable();
-        t.init(_selE, _w);
-        return t;
+        return null;
     }
 
 
