@@ -63,6 +63,7 @@ public class NewMOEM implements EditMode {
         _w.getSystem(ActionSystem.class).exec(a);
 
         _w.getSystem(EditorSystem.class).detachEditMode();
+
     }
 
 

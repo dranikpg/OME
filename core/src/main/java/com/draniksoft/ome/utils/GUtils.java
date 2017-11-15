@@ -6,7 +6,6 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.PixmapPacker;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -90,8 +89,17 @@ public class GUtils {
 
     }
 
+    /**
+     * @param i   x start pos
+     * @param i1  y start pos
+     * @param i2  x end pos
+     * @param i3  y end pos
+     * @param data float array of size two to fetch data : first element - distance, second - the angle
+     */
 
-    public static void calcLine(float i, float i1, float i2, float i3, float[] data, Vector2 tV) {
+    static Vector2 tV = new Vector2();
+
+    public static void calcLine(float i, float i1, float i2, float i3, float[] data) {
 
         tV.set(i, i1);
 
@@ -104,10 +112,12 @@ public class GUtils {
 
     }
 
-    void tmp() {
+    public void tmp() {
 
-        PixmapPacker p = new PixmapPacker(512, 512, Pixmap.Format.RGB565, 2, true);
-        TextureAtlas a = new TextureAtlas();
+	  PixmapPacker p;
+
+	  TextureAtlas ta = new TextureAtlas();
+
 
 
     }

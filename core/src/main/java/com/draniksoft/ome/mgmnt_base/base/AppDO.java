@@ -63,6 +63,8 @@ public class AppDO extends AppDataManager {
     @Override
     protected void terminateLoad() {
 
+        prefs.flush();
+
     }
 
     public synchronized Preferences getPrefs() {
@@ -83,6 +85,10 @@ public class AppDO extends AppDataManager {
 
     public FileManager F() {
         return getMgr(FileManager.class);
+    }
+
+    public ConfigManager C() {
+        return getMgr(ConfigManager.class);
     }
 
     volatile boolean glR = false;

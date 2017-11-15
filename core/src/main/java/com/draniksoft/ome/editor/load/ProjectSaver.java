@@ -3,13 +3,19 @@ package com.draniksoft.ome.editor.load;
 import com.artemis.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Base64Coder;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.JsonWriter;
-import com.draniksoft.ome.editor.manager.*;
+import com.draniksoft.ome.editor.manager.EntitySrzMgr;
+import com.draniksoft.ome.editor.manager.MapMgr;
+import com.draniksoft.ome.editor.manager.ProjectMgr;
+import com.draniksoft.ome.editor.manager.TimeMgr;
+import com.draniksoft.ome.editor.manager.drawable.SimpleDrawableMgr;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.support.load.interfaces.IRunnable;
+import com.draniksoft.ome.utils.Env;
 import com.draniksoft.ome.utils.respone.ResponseCode;
 import com.draniksoft.ome.utils.struct.ResponseListener;
 
@@ -48,14 +54,14 @@ public class ProjectSaver {
 
     public void start(MapLoadBundle bundle, ResponseListener responseListener) {
 
-        if (w == null) notifyFail();
-
-        l = new IntelligentLoader();
-
         this.b = bundle;
         this.lst = responseListener;
 
-        l.setCompletionListener(new ResponseListener() {
+	  if (w == null) notifyFail();
+
+	  l = new IntelligentLoader();
+	  s = State.IDLE;
+	  l.setCompletionListener(new ResponseListener() {
             @Override
             public void onResponse(short code) {
                 if (code != IntelligentLoader.LOAD_FAILED) {
@@ -83,8 +89,8 @@ public class ProjectSaver {
         } else if (s == State.MGR_RUN) {
             l.passRunnable(new SaveT(w.getSystem(ProjectMgr.class)));
             l.passRunnable(new SaveT(w.getSystem(MapMgr.class)));
-            l.passRunnable(new SaveT(w.getSystem(DrawableMgr.class)));
-            l.passRunnable(new SaveT(w.getSystem(TimeMgr.class)));
+		l.passRunnable(new SaveT(w.getSystem(SimpleDrawableMgr.class)));
+		l.passRunnable(new SaveT(w.getSystem(TimeMgr.class)));
             l.passRunnable(new SaveT(w.getSystem(EntitySrzMgr.class)));
         } else if (s == State.JSON_FLUSH) {
             l.passRunnable(new JsonFlusher());
@@ -99,6 +105,11 @@ public class ProjectSaver {
     }
 
     private void notifyFail() {
+
+	  Gdx.app.error(tag, "Save ERROR RESPONSE on<" + s.toString());
+
+	  dispose();
+
     }
 
 
@@ -117,18 +128,35 @@ public class ProjectSaver {
         @Override
         public void run(IntelligentLoader l) {
 
-            String js = indexV.prettyPrint(JsonWriter.OutputType.json, 2);
+		Gdx.app.debug(tag, "Flushing indexed JSON");
+
+		String js = "";
+		if (Env.PRETTY_JSON) {
+		    js = indexV.prettyPrint(JsonWriter.OutputType.json, 5);
+		} else {
+		    js = indexV.prettyPrint(JsonWriter.OutputType.minimal, 5);
+		}
+
+		if (Env.B64D_JS) {
+		    js = Base64Coder.encodeString(js, true);
+		}
+
+		Gdx.app.debug(tag, js);
 
             FileHandle h = Gdx.files.absolute(AppDO.I.F().getTmpDir().getAbsolutePath() + "/index.json");
-            if (!h.exists()) try {
-                h.file().createNewFile();
-                OutputStream s = h.write(false);
-                s.write(js.getBytes());
-                s.close();
-            } catch (Exception e) {
-                Gdx.app.error(tag, "", e);
-            }
+		if (!h.exists()) try {
+		    h.file().createNewFile();
+		} catch (Exception e) {
+		    Gdx.app.error(tag, "", e);
+		}
 
+		try {
+		    OutputStream s = h.write(false);
+		    s.write(js.getBytes());
+		    s.close();
+		} catch (Exception e) {
+		    Gdx.app.error(tag, "", e);
+		}
 
         }
 

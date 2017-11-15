@@ -2,23 +2,14 @@ package com.draniksoft.ome.utils.dao;
 
 public class AssetDDao {
 
-    // folder path
+    // Unique resource identifier
     public String uri;
-
-    public String p;
-
-    // name of the assets
-    public String name;
 
     // id
     public String id;
 
-    public boolean loaded = false;
-
+    // Tells us whether it is needed by the engine to work properly
     public boolean sysmz = false;
-
-    // Creates redirect for this asset if not empty
-    public String redirect;
 
 
 }

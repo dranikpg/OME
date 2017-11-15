@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TransformDrawable;
 import com.badlogic.gdx.utils.Array;
-import com.draniksoft.ome.editor.manager.DrawableMgr;
+import com.draniksoft.ome.editor.manager.drawable.SimpleDrawableMgr;
 import com.draniksoft.ome.editor.support.container.MoveDesc;
 import com.draniksoft.ome.editor.support.ems.timed.EditTimedMovsEM;
 import com.draniksoft.ome.editor.support.render.core.OverlyRendererI;
@@ -58,7 +58,7 @@ public class EditTimedMovsR implements OverlyRendererI {
                 sy = d.start_y;
             }
 
-            GUtils.calcLine(sx, sy, d.end_x, d.end_y, tmpd, v);
+		GUtils.calcLine(sx, sy, d.end_x, d.end_y, tmpd);
 
             TransformDrawable __d;
 
@@ -77,7 +77,7 @@ public class EditTimedMovsR implements OverlyRendererI {
 
         if (em.newM) {
 
-            GUtils.calcLine(lastP.x, lastP.y, em.px, em.py, tmpd, v);
+		GUtils.calcLine(lastP.x, lastP.y, em.px, em.py, tmpd);
 
 
             _d.draw(batch, lastP.x, lastP.y, 0, 5, tmpd[0], h, 1, 1, tmpd[1]);
@@ -89,12 +89,12 @@ public class EditTimedMovsR implements OverlyRendererI {
 
     private void fetchD() {
 
-        if (_w.getSystem(DrawableMgr.class).containsAtlas("overlay_r_base")) {
+	  if (_w.getSystem(SimpleDrawableMgr.class).hasAtlas("overlay_r_base", true)) {
 
-            TextureRegion r = _w.getSystem(DrawableMgr.class).getRegion("overlay_r_base@hp");
-            _d = new TextureRegionDrawable(r);
+		TextureRegion r = _w.getSystem(SimpleDrawableMgr.class).getRegion("overlay_r_base@hp");
+		_d = new TextureRegionDrawable(r);
 
-            TextureRegion r2 = _w.getSystem(DrawableMgr.class).getRegion("overlay_r_base@n_way");
+		TextureRegion r2 = _w.getSystem(SimpleDrawableMgr.class).getRegion("overlay_r_base@n_way");
 
             _d2 = new TextureRegionDrawable(r2);
 

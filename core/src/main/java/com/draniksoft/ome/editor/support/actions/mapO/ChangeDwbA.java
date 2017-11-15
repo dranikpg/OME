@@ -1,16 +1,18 @@
 package com.draniksoft.ome.editor.support.actions.mapO;
 
 import com.artemis.World;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.draniksoft.ome.editor.components.gfx.DrawableC;
 import com.draniksoft.ome.editor.components.tps.MObjectC;
-import com.draniksoft.ome.editor.manager.DrawableMgr;
 import com.draniksoft.ome.editor.support.actions.Action;
 import com.draniksoft.ome.editor.support.event.entityy.EntityDataChangeE;
+import com.draniksoft.ome.utils.FUtills;
 import net.mostlyoriginal.api.event.common.EventSystem;
 
 public class ChangeDwbA implements Action {
+
+    private static final String tag = "ChangeDwbA";
 
     public int _e;
 
@@ -25,15 +27,18 @@ public class ChangeDwbA implements Action {
 
     private void changeD(World w, String d) {
 
-        TextureRegion tr = w.getSystem(DrawableMgr.class).getRegion(d);
-        if (d == null) return;
+	  Drawable dwb = FUtills.fetchDrawable(d);
+
+	  if (dwb == null) {
+		Gdx.app.error(tag, "DWB IS NULL");
+	  }
 
         MObjectC c = w.getMapper(MObjectC.class).get(_e);
-        old = c.dwbID;
-        c.dwbID = d;
+	  old = c.dwbData;
+	  c.dwbData = d;
 
         DrawableC dc = w.getMapper(DrawableC.class).get(_e);
-        dc.d = new TextureRegionDrawable(tr);
+	  dc.d = dwb;
 
         w.getSystem(EventSystem.class).dispatch(new EntityDataChangeE.DwbChangeE(_e));
 

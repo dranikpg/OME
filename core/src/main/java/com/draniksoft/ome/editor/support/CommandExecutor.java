@@ -12,18 +12,17 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.draniksoft.ome.editor.components.gfx.DrawableC;
 import com.draniksoft.ome.editor.components.selection.SelectionC;
 import com.draniksoft.ome.editor.components.time.TimedMoveC;
-import com.draniksoft.ome.editor.esc_utils.PMIStrategy;
+import com.draniksoft.ome.editor.esc_utils.OmeStrategy;
 import com.draniksoft.ome.editor.load.MapLoadBundle;
-import com.draniksoft.ome.editor.manager.DrawableMgr;
 import com.draniksoft.ome.editor.manager.MapMgr;
 import com.draniksoft.ome.editor.manager.TimeMgr;
+import com.draniksoft.ome.editor.manager.drawable.SimpleDrawableMgr;
 import com.draniksoft.ome.editor.support.actions.Action;
+import com.draniksoft.ome.editor.support.actions.mapO.ChangeDwbA;
 import com.draniksoft.ome.editor.support.actions.timed._base_.AddTimeCA;
 import com.draniksoft.ome.editor.support.compositionObserver.abstr.CompositionObserver;
 import com.draniksoft.ome.editor.support.container.CO_actiondesc.ActionDesc;
@@ -35,15 +34,14 @@ import com.draniksoft.ome.editor.support.input.NewMOIC;
 import com.draniksoft.ome.editor.support.input.SelectIC;
 import com.draniksoft.ome.editor.support.input.TimedSelectIC;
 import com.draniksoft.ome.editor.support.render.core.OverlyRendererI;
-import com.draniksoft.ome.editor.systems.file_mgmnt.ProjecetLoadSys;
+import com.draniksoft.ome.editor.systems.file_mgmnt.ProjectLoadSystem;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.editor.systems.pos.PhysicsSys;
 import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
-import com.draniksoft.ome.editor.systems.support.ActionSystem;
-import com.draniksoft.ome.editor.systems.support.EditorSystem;
-import com.draniksoft.ome.editor.systems.support.InputSys;
-import com.draniksoft.ome.editor.systems.support.WorkflowSys;
+import com.draniksoft.ome.editor.systems.support.*;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
+import com.draniksoft.ome.mgmnt_base.impl.ConfigManager;
+import com.draniksoft.ome.support.configs.ConfigDao;
 import com.draniksoft.ome.utils.Const;
 import com.draniksoft.ome.utils.Env;
 import com.draniksoft.ome.utils.dao.AssetDDao;
@@ -102,12 +100,9 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
      */
 
 
-    public void denv_setb(String n, int b) throws NoSuchFieldException, IllegalAccessException {
+    public void denv_set(String n, int b) throws NoSuchFieldException, IllegalAccessException {
 
-        Field f = Env.class.getDeclaredField(n);
-
-        f.setBoolean(null, b == 1);
-
+        Env.changeVal(n, b == 1);
 
     }
 
@@ -116,7 +111,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
         Field[] fields = Env.class.getDeclaredFields();
         for (Field f : fields) {
             if (Modifier.isStatic(f.getModifiers())) {
-                console.log(f.getName() + " :: " + f.getBoolean(null));
+                console.log(extendString(f.getName(), 10) + " =  " + f.getBoolean(null));
             }
         }
 
@@ -134,27 +129,62 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     }
 
+    /*
+        Config utils
+     */
+
+    public void log_cf() {
+        Iterator<ConfigDao> i = AppDO.I.C().getConfI();
+        ConfigDao d;
+        while (i.hasNext()) {
+            d = i.next();
+            console.log(d.getId() + "   ::" + d.getT().getSimpleName() + "  =  " + d.getV(d.getT()).toString());
+        }
+    }
+
+    public void log_cf(String id) {
+        ConfigManager c = AppDO.I.C();
+        console.log(id + "    ::" + c.getConfT(id).getSimpleName() + "   =  " + c.getConfVal(id, c.getConfT(id)).toString());
+    }
+
+    public void set_cf(String id, boolean b) {
+        AppDO.I.C().setConfVal(id, b);
+    }
+
+    public void set_cf(String id, int b) {
+        AppDO.I.C().setConfVal(id, b);
+    }
+
+    public void set_cf(String id, String b) {
+        AppDO.I.C().setConfVal(id, b);
+    }
+
+
     /**
      * FIle mgmnt utils
      */
 
-    public void set_mmbdl(String p) {
+    public void set_mlb(String p) {
 
-        world.getSystem(ProjecetLoadSys.class).setBundle(new MapLoadBundle(p));
+        world.getSystem(ProjectLoadSystem.class).setBundle(new MapLoadBundle(p));
 
     }
 
     public void save() {
-
-        world.getSystem(ProjecetLoadSys.class).save();
-
+        try {
+            world.getSystem(ProjectLoadSystem.class).save();
+        } catch (Exception e) {
+            Gdx.app.error("", "", e);
+        }
     }
 
     public void load_h() {
-
-        world.getSystem(ProjecetLoadSys.class).setBundle(new MapLoadBundle(AppDO.I.LH().getLast().get(0)));
-        world.getSystem(ProjecetLoadSys.class).load();
-
+        try {
+            world.getSystem(ProjectLoadSystem.class).setBundle(new MapLoadBundle(AppDO.I.LH().getLast().get(0)));
+            world.getSystem(ProjectLoadSystem.class).load();
+        } catch (Exception e) {
+            Gdx.app.error("", "", e);
+        }
     }
 
 
@@ -270,7 +300,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     public void le_ppos(int _e) {
 
-        Pair<Float, Float> p = world.getSystem(PhysicsSys.class).getPos(_e);
+        Pair<Float, Float> p = world.getSystem(PhysicsSys.class).getPhysPos(_e);
 
         console.log("" + p.getElement0() + " " + p.getElement1());
 
@@ -328,19 +358,13 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
      * Entity transform methods
      */
 
-    public void te_setdwbn(int e, String newN) {
+    public void te_sd(int e, String newN) {
 
-        try {
+        ChangeDwbA a = new ChangeDwbA();
+        a._e = e;
+        a.dwid = newN;
 
-            DrawableC c = world.getMapper(DrawableC.class).get(e);
-
-            c.d = new TextureRegionDrawable(world.getSystem(DrawableMgr.class).getRegion(newN));
-
-        } catch (Exception ex) {
-
-            Gdx.app.error("CM", "", ex);
-
-        }
+        world.getSystem(ActionSystem.class).exec(a);
 
     }
 
@@ -366,7 +390,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
             d.time_e = e;
             d.end_x = x;
             d.end_y = y;
-            Pair<Float, Float> p = world.getSystem(PhysicsSys.class).getPos(_e);
+            Pair<Float, Float> p = world.getSystem(PhysicsSys.class).getPhysPos(_e);
             d.start_x = p.getElement0().intValue();
             d.start_y = p.getElement1().intValue();
 
@@ -384,12 +408,12 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     public void log_avass() {
 
-        Array<AssetDDao> ds = world.getSystem(DrawableMgr.class).getAllAviabDao();
+        Iterator<AssetDDao> i = world.getSystem(SimpleDrawableMgr.class).getAviabDaoI();
 
-        for (AssetDDao d : ds) {
-
+        AssetDDao d;
+        while (i.hasNext()) {
+            d = i.next();
             console.log(d.id + "  [" + d.uri + "]");
-
         }
 
     }
@@ -397,19 +421,24 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
     public void log_ass() {
 
 
-        ObjectMap<String, AssetDDao> d = world.getSystem(DrawableMgr.class).getAllDescI();
+        try {
 
-        for (String id : d.keys()) {
+            Iterator<AssetDDao> i = world.getSystem(SimpleDrawableMgr.class).getLoadedDaoI();
 
-            console.log(d.get(id).name + " ~uri=" + d.get(id).uri + " ~id=" + d.get(id).id);
-
+            AssetDDao d;
+            while (i.hasNext()) {
+                d = i.next();
+                console.log(d.id + " [" + d.uri + "]");
+            }
+        } catch (Exception e) {
+            Gdx.app.error("", "", e);
         }
 
     }
 
     public void log_asspc(String id) {
 
-        Array<TextureAtlas.AtlasRegion> rs = world.getSystem(DrawableMgr.class).getAtlas(id).getRegions();
+        Array<TextureAtlas.AtlasRegion> rs = world.getSystem(SimpleDrawableMgr.class).getAtlas(id).getRegions();
 
 
         for (TextureAtlas.AtlasRegion r : rs) {
@@ -424,11 +453,25 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     public void log_assrds() {
 
-        Map<String, String> m = world.getSystem(DrawableMgr.class).getRedirects();
+        Iterator<ObjectMap.Entry<String, String>> m = world.getSystem(SimpleDrawableMgr.class).getRedirectsI();
 
-        for (Map.Entry<String, String> e : m.entrySet()) {
+        ObjectMap.Entry<String, String> e;
 
-            console.log(e.getKey() + " = " + e.getValue());
+        while (m.hasNext()) {
+            e = m.next();
+            console.log(e.key + " = " + e.value);
+
+        }
+
+    }
+
+    public void load_ass(String id) {
+
+        AssetDDao d = world.getSystem(SimpleDrawableMgr.class).getAviabDao(id);
+
+        if (d != null) {
+
+            world.getSystem(SimpleDrawableMgr.class).loadDao(d);
 
         }
 
@@ -443,13 +486,60 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
      */
 
 
-    public void gdlta(){
-        console.log(Float.toString(Gdx.graphics.getDeltaTime()));
+    public void pf_s() {
+
+        world.getInvocationStrategy().setEnabled(world.getSystem(ConsoleSys.class), false);
+
+        ((OmeStrategy) world.getInvocationStrategy()).fetchUpdtProfileD();
+
+
+        new Thread() {
+            @Override
+            public void run() {
+
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+
+                world.getInvocationStrategy().setEnabled(world.getSystem(ConsoleSys.class), true);
+
+
+            }
+        }.start();
+
     }
 
-    public void perf() {
+    public void pf() {
+        ((OmeStrategy) world.getInvocationStrategy()).fetchUpdtProfileD();
+    }
 
-        console.log(((PMIStrategy) world.getInvocationStrategy()).getO());
+    public void log_gpf() {
+
+        OmeStrategy s = world.getInvocationStrategy();
+
+        console.log("GL_CALLS    " + s.getGLProfileP(OmeStrategy.GL_PROFILE_PROP.GL_CLASS));
+        console.log("DRAW_CALLS  " + s.getGLProfileP(OmeStrategy.GL_PROFILE_PROP.DRAW_CALLS));
+        console.log("TEX_BINDS   " + s.getGLProfileP(OmeStrategy.GL_PROFILE_PROP.TEXS_BIND));
+        console.log("SHADER_SW   " + s.getGLProfileP(OmeStrategy.GL_PROFILE_PROP.SHADER_SWITCHES));
+        console.log("");
+        console.log("FPS: " + Gdx.graphics.getFramesPerSecond());
+
+    }
+
+    public void log_fps() {
+        console.log("FPS: " + Gdx.graphics.getFramesPerSecond());
+    }
+
+    public void log_spf() {
+
+        OmeStrategy s = world.getInvocationStrategy();
+
+        for (Map.Entry<Class, Integer> e : s.getSysT().entrySet()) {
+            console.log(e.getKey().getSimpleName() + "    " + e.getValue());
+        }
 
     }
 
@@ -845,6 +935,20 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     private String formatString(int l, String s){
         return String.format("%1$" + l + "time_s", s);
+    }
+
+
+    private String extendString(String name, int l) {
+
+        String o = new String();
+
+        o = o.concat(name);
+
+        for (int i = 0; i < l - name.length(); i++) {
+            o = o.concat(" ");
+        }
+        return o;
+
     }
 
 

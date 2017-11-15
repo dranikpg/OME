@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.draniksoft.ome.editor.load.MapLoadBundle;
-import com.draniksoft.ome.editor.systems.file_mgmnt.ProjecetLoadSys;
+import com.draniksoft.ome.editor.systems.file_mgmnt.ProjectLoadSystem;
 import com.draniksoft.ome.editor.ui.core.menu.MenuContentSupplierI;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.utils.SUtils;
@@ -63,8 +63,8 @@ public class OpenMSupp extends MenuContentSupplierI {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
 
-                        w.getSystem(ProjecetLoadSys.class).setBundle(new MapLoadBundle(lst));
-                        w.getSystem(ProjecetLoadSys.class).load();
+				w.getSystem(ProjectLoadSystem.class).setBundle(new MapLoadBundle(lst));
+				w.getSystem(ProjectLoadSystem.class).load();
 
                         m.close();
 

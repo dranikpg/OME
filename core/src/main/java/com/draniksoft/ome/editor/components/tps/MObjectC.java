@@ -2,13 +2,11 @@ package com.draniksoft.ome.editor.components.tps;
 
 import com.artemis.Component;
 
+
 /*
      Class[Component] for representing the non active data about an object
      It is used to serialize itself
  */
-
-
-
 
 public class MObjectC extends Component {
 
@@ -21,6 +19,6 @@ public class MObjectC extends Component {
 
     /* id::uri for a drawable
     */
-    public String dwbID;
+    public String dwbData;
 
 }

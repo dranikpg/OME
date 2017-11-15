@@ -14,9 +14,9 @@ import com.draniksoft.ome.editor.support.compositionObserver.timed.TimedMoveComp
 import com.draniksoft.ome.editor.support.container.EM_desc.BiLangEMDs;
 import com.draniksoft.ome.editor.support.container.EM_desc.EditModeDesc;
 import com.draniksoft.ome.editor.support.ems.core.EditMode;
-import com.draniksoft.ome.editor.support.event.EditModeChangeE;
 import com.draniksoft.ome.editor.support.event.entityy.CompositionChangeE;
 import com.draniksoft.ome.editor.support.event.entityy.SelectionChangeE;
+import com.draniksoft.ome.editor.support.event.workflow.EditModeChangeE;
 import com.draniksoft.ome.editor.support.event.workflow.ModeChangeE;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.support.load.interfaces.IRunnable;

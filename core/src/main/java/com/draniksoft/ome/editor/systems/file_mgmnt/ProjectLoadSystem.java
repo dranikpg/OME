@@ -1,9 +1,7 @@
 package com.draniksoft.ome.editor.systems.file_mgmnt;
 
-import com.artemis.Aspect;
 import com.artemis.BaseSystem;
 import com.artemis.annotations.Wire;
-import com.artemis.utils.IntBag;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.draniksoft.ome.editor.load.MapLoadBundle;
@@ -12,9 +10,9 @@ import com.draniksoft.ome.editor.load.ProjectSaver;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.utils.struct.ResponseListener;
 
-public class ProjecetLoadSys extends BaseSystem {
+public class ProjectLoadSystem extends BaseSystem {
 
-    public static String tag = "ProjecetLoadSys";
+    public static String tag = "ProjectLoadSystem";
 
     public static final int STATE_IDLE = 1;
     public static final int STATE_LOADING = 2;
@@ -39,7 +37,7 @@ public class ProjecetLoadSys extends BaseSystem {
         loader = new ProjectLoader();
 
 
-        load();
+	  //load();
 
 
     }
@@ -55,7 +53,25 @@ public class ProjecetLoadSys extends BaseSystem {
 
     private void load(MapLoadBundle bundle){
 
+
+	  Gdx.app.debug(tag, "Loading");
+
         logLoad(bundle.fPath);
+
+	  state = STATE_LOADING;
+
+	  loader.setW(world);
+	  loader.start(bundle, new ResponseListener() {
+		@Override
+		public void onResponse(short code) {
+		    Gdx.app.debug(tag, "Load ready");
+
+		    state = STATE_IDLE;
+
+		    loader.dispose();
+		}
+	  });
+
 
 
     }
@@ -87,19 +103,6 @@ public class ProjecetLoadSys extends BaseSystem {
     }
 
 
-    private void clearAll() {
-
-        IntBag b = world.getAspectSubscriptionManager().get(Aspect.all()).getEntities();
-
-        for (int i = 0; i < b.size(); i++) {
-
-            //ESCUtils.removeSelectionBeforeRMV(b.get(i), world);
-
-            world.delete(b.get(i));
-
-        }
-
-    }
 
     private void logLoad(String p) {
 

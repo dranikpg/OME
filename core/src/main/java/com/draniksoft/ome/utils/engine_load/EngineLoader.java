@@ -2,6 +2,7 @@ package com.draniksoft.ome.utils.engine_load;
 
 import com.artemis.WorldConfiguration;
 import com.artemis.WorldConfigurationBuilder;
+import com.artemis.managers.WorldSerializationManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
@@ -14,11 +15,12 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.draniksoft.ome.editor.esc_utils.PMIStrategy;
+import com.draniksoft.ome.editor.esc_utils.OmeStrategy;
 import com.draniksoft.ome.editor.load.MapLoadBundle;
 import com.draniksoft.ome.editor.manager.*;
+import com.draniksoft.ome.editor.manager.drawable.SimpleDrawableMgr;
 import com.draniksoft.ome.editor.systems.file_mgmnt.AssetLScheduleSys;
-import com.draniksoft.ome.editor.systems.file_mgmnt.ProjecetLoadSys;
+import com.draniksoft.ome.editor.systems.file_mgmnt.ProjectLoadSystem;
 import com.draniksoft.ome.editor.systems.gfx_support.CameraSys;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.editor.systems.pos.PhysicsSys;
@@ -250,7 +252,7 @@ public class EngineLoader {
 
             cb.with(new MapMgr());
 
-            cb.with(new DrawableMgr());
+		cb.with(new SimpleDrawableMgr());
 
             cb.with(new EntitySrzMgr());
 
@@ -262,7 +264,9 @@ public class EngineLoader {
 
             cb.with(new InputSys());
 
-            cb.with(new ProjecetLoadSys());
+		cb.with(new ProjectLoadSystem());
+
+		cb.with(new WorldSerializationManager());
 
             //
 
@@ -306,7 +310,7 @@ public class EngineLoader {
 
             cb.with(new EventSystem());
 
-            cb.register(new PMIStrategy());
+		cb.register(new OmeStrategy());
 
         }
 

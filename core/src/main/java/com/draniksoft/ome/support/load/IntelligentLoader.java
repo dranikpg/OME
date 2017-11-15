@@ -25,8 +25,10 @@ public class IntelligentLoader {
 
     private volatile LoadThread[] ts;
     private volatile byte[] states;
+
     private int maxTs = 5;
     private int prefTs = 3;
+
     private int inited_threads = 0;
     private int free_ts = 0;
     private int hg_ts = 0;
@@ -151,6 +153,8 @@ public class IntelligentLoader {
         public void run() {
 
             while (!terminateR) {
+
+                System.out.print(" » ");
 
                 hg_ts = 0;
                 free_ts = 0;

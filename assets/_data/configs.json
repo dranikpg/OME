@@ -5,5 +5,18 @@
     "vt": "freestr",
     "defv": "difolt value",
     "tags": []
+  },
+  "depV": {
+    "namek": "testV",
+    "desck": "testK",
+    "vt": "freestr",
+    "defv": "difolt value",
+    "tags": [],
+    "trig": {
+      "testV": {
+        "LOL": "LOL DETECTED"
+      }
+    }
   }
+
 }

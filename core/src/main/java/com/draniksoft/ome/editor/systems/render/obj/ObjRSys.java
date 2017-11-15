@@ -55,7 +55,6 @@ public class ObjRSys extends IteratingSystem {
 
         if (cam.frustum.boundsInFrustum(ttc.x, ttc.y, 0, ttc.w, ttc.h, 0)) {
 
-
             tdc.d.draw(b, ttc.x, ttc.y, ttc.w, ttc.h);
 
         }

@@ -10,7 +10,6 @@ import com.draniksoft.ome.editor.components.gfx.TexRegC;
 import com.draniksoft.ome.editor.components.pos.PhysC;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
 import com.draniksoft.ome.editor.components.time.TimedC;
-import com.draniksoft.ome.editor.components.tps.LocationC;
 import com.draniksoft.ome.editor.components.tps.MObjectC;
 import com.draniksoft.ome.editor.components.tps.MapC;
 
@@ -26,7 +25,7 @@ public class ArchTransmuterMgr extends Manager{
 
     }
 
-    IntMap<Archetype> types;
+    volatile IntMap<Archetype> types;
     IntMap<EntityTransmuter> tmuters;
 
     public ArchTransmuterMgr(){
@@ -53,12 +52,10 @@ public class ArchTransmuterMgr extends Manager{
 
         types.put(Codes.BASE_LOCATION, new ArchetypeBuilder().add(PhysC.class)
                 .add(PosSizeC.class).add(DrawableC.class)
-                .add(LocationC.class).add(MObjectC.class)
                 .build(world));
 
         types.put(Codes.TIMED_LOCATION, new ArchetypeBuilder().add(PhysC.class)
                 .add(PosSizeC.class).add(DrawableC.class)
-                .add(LocationC.class).add(MObjectC.class)
                 .add(TimedC.class).build(world));
 
     }
@@ -71,8 +68,8 @@ public class ArchTransmuterMgr extends Manager{
         return types.get(code);
     }
 
-    public int build(int code){
-        return world.create(types.get(code));
+    public synchronized int build(int code) {
+	  return world.create(types.get(code));
     }
 
 }

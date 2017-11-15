@@ -8,12 +8,12 @@ public class BundleConfigDao extends ConfigDao {
 
     public String nameK, descK;
 
-    public BundleConfigDao(ConfigValueType t) {
-        super(t);
+    public BundleConfigDao(String id, ConfigValueType t) {
+        super(id, t);
     }
 
-    public BundleConfigDao(ConfigValueType t, String nameK, String descK) {
-        super(t);
+    public BundleConfigDao(String id, ConfigValueType t, String nameK, String descK) {
+        super(id, t);
         this.nameK = nameK;
         this.descK = descK;
     }

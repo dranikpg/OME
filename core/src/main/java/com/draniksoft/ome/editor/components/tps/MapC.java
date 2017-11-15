@@ -1,13 +1,9 @@
 package com.draniksoft.ome.editor.components.tps;
 
-import com.artemis.PooledComponent;
+import com.artemis.Component;
 
-public class MapC extends PooledComponent {
+public class MapC extends Component {
 
     public int id;
 
-    @Override
-    protected void reset() {
-        id = 0;
-    }
 }

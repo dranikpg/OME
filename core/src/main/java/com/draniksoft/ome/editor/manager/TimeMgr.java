@@ -3,6 +3,7 @@ package com.draniksoft.ome.editor.manager;
 import com.artemis.BaseSystem;
 import com.badlogic.gdx.Gdx;
 import com.draniksoft.ome.editor.load.LoadSaveManager;
+import com.draniksoft.ome.editor.load.ProjectLoader;
 import com.draniksoft.ome.editor.load.ProjectSaver;
 import com.draniksoft.ome.editor.support.event.workflow.ModeChangeE;
 import com.draniksoft.ome.support.load.IntelligentLoader;
@@ -121,6 +122,11 @@ public class TimeMgr extends BaseSystem implements LoadSaveManager {
 
     @Override
     public void save(IntelligentLoader l, ProjectSaver s) {
+
+    }
+
+    @Override
+    public void load(IntelligentLoader il, ProjectLoader ld) {
 
     }
 }

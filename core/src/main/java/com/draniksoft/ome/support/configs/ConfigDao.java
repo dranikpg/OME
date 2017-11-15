@@ -20,8 +20,9 @@ public abstract class ConfigDao {
 
     LinkedHashSet<String> tags;
 
-    public ConfigDao(ConfigValueType t) {
+    public ConfigDao(String id, ConfigValueType t) {
         this.t = t;
+        this.id = id;
         tc = t.getT();
         tags = new LinkedHashSet<String>();
     }
@@ -38,10 +39,12 @@ public abstract class ConfigDao {
         return t.canSet(v);
     }
 
-    public void setV(Object nv) {
+    public boolean setV(Object nv) {
         if (t.canSet(nv)) {
             v = nv;
+            return true;
         }
+        return false;
     }
 
     public LinkedHashSet<String> getTags() {

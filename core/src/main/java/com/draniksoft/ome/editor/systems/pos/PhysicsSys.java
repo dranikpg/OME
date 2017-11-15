@@ -7,8 +7,7 @@ import com.artemis.EntitySubscription;
 import com.artemis.annotations.Wire;
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.draniksoft.ome.editor.components.pos.PhysC;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
 import com.draniksoft.ome.editor.components.tps.MObjectC;
@@ -66,7 +65,7 @@ public class PhysicsSys extends BaseEntitySystem {
     }
 
     // returns physics pos in map coords
-    public Pair<Float, Float> getPos(int _e) {
+    public Pair<Float, Float> getPhysPos(int _e) {
 
         if (!pM.has(_e)) return null;
 
@@ -76,41 +75,67 @@ public class PhysicsSys extends BaseEntitySystem {
 
     }
 
+    public void setCentricPos(float x, float y, int _e) {
+	  if (pM.has(_e)) {
+
+		pM.get(_e).b.setTransform(x / PUtils.PPM, y / PUtils.PPM, pM.get(_e).b.getAngle());
+
+	  }
+    }
+
     // positions in the center
-    public void setSyncPos(float x, float y, int _e) {
+    public void setSyncCentricPos(float x, float y, int _e) {
 
-        if (pM.has(_e)) {
+	  setCentricPos(x, y, _e);
 
-            pM.get(_e).b.setTransform(x / PUtils.PPM, y / PUtils.PPM, pM.get(_e).b.getAngle());
+	  if (p2M.has(_e)) {
+		PosSizeC c = p2M.get(_e);
+		c.x = (int) x - c.w / 2;
+		c.y = (int) y - c.h / 2;
+	  }
 
-        }
 
-        if (p2M.has(_e)) {
+    }
 
-            PosSizeC c = p2M.get(_e);
-            c.x = (int) x - c.w / 2;
-            c.y = (int) y - c.h / 2;
+    public void createBodyFromSPos(int x, int y, int _e) {
 
-        }
+	  PosSizeC pc = p2M.get(_e);
+
+	  PhysC c = pM.create(_e);
+
+	  BodyDef bd = new BodyDef();
+	  bd.type = BodyDef.BodyType.KinematicBody;
+	  bd.position.set((x) / PUtils.PPM, (y) / PUtils.PPM);
+	  Body b = world.getInjector().getRegistered(com.badlogic.gdx.physics.box2d.World.class).createBody(bd);
+	  b.setUserData(_e);
+	  PolygonShape pg = new PolygonShape();
+	  pg.setAsBox(pc.w / 2 / PUtils.PPM, pc.h / 2 / PUtils.PPM);
+	  FixtureDef fd = new FixtureDef();
+	  fd.shape = pg;
+	  b.createFixture(fd);
+	  pg.dispose();
+	  c.b = b;
+
+	  setCentricPos(pc.x + pc.w / 2f, pc.y + pc.h / 2f, _e);
 
 
     }
 
     public void saveMOSyncPos(float x, float y, int _e) {
 
-        setSyncPos(x, y, _e);
+	  setSyncCentricPos(x, y, _e);
 
         if (!world.getMapper(MObjectC.class).has(_e)) return;
 
         MObjectC c = world.getMapper(MObjectC.class).get(_e);
-        c.x = (int) x;
-        c.y = (int) y;
+	  c.x = (int) x - c.w / 2;
+	  c.y = (int) y - c.h / 2;
 
     }
 
     public void syncPos(int _e) {
 
-        setSyncPos(getPos(_e).getElement0(), getPos(_e).getElement1(), _e);
+	  setSyncCentricPos(getPhysPos(_e).getElement0(), getPhysPos(_e).getElement1(), _e);
 
     }
 }

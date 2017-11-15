@@ -26,7 +26,7 @@ public class MoveMOA implements Action {
     @Override
     public void _do(World w) {
 
-        oldP = w.getSystem(PhysicsSys.class).getPos(_e);
+	  oldP = w.getSystem(PhysicsSys.class).getPhysPos(_e);
 
         w.getSystem(PhysicsSys.class).saveMOSyncPos(x, y, _e);
 

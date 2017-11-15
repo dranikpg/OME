@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.draniksoft.ome.editor.manager.DrawableMgr;
+import com.draniksoft.ome.editor.manager.drawable.SimpleDrawableMgr;
 import com.draniksoft.ome.editor.support.render.core.OverlyRendererI;
 
 public class NewMORenderer implements OverlyRendererI {
@@ -42,7 +42,7 @@ public class NewMORenderer implements OverlyRendererI {
 
     private void checkD() {
 
-        TextureRegion r = _w.getSystem(DrawableMgr.class).getRegion("i_casB@mapTile@99");
+	  TextureRegion r = _w.getSystem(SimpleDrawableMgr.class).getRegion("i_casB@mapTile@99");
 
         if (r == null) return;
 

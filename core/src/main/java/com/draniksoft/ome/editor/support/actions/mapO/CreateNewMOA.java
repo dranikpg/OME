@@ -6,15 +6,14 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.draniksoft.ome.editor.components.gfx.DrawableC;
 import com.draniksoft.ome.editor.components.pos.PhysC;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
 import com.draniksoft.ome.editor.components.tps.MObjectC;
 import com.draniksoft.ome.editor.manager.ArchTransmuterMgr;
-import com.draniksoft.ome.editor.manager.DrawableMgr;
 import com.draniksoft.ome.editor.support.actions.Action;
 import com.draniksoft.ome.utils.ESCUtils;
+import com.draniksoft.ome.utils.FUtills;
 import com.draniksoft.ome.utils.PUtils;
 
 public class CreateNewMOA implements Action {
@@ -54,7 +53,7 @@ public class CreateNewMOA implements Action {
         c.y = (int) y;
         c.w = (int) w;
         c.h = (int) h;
-        c.dwbID = dwbID;
+	  c.dwbData = dwbID;
 
         PosSizeC psc = _w.getMapper(PosSizeC.class).get(_e);
         psc.x = (int) (x - (w / 2));
@@ -79,7 +78,7 @@ public class CreateNewMOA implements Action {
         if (!GFX_PRC) return;
 
         DrawableC dwC = _w.getMapper(DrawableC.class).get(_e);
-        dwC.d = new TextureRegionDrawable(_w.getSystem(DrawableMgr.class).getRegion(dwbID));
+	  dwC.d = FUtills.fetchDrawable(dwbID);
 
 
         String tag = "CreateNewMOA";

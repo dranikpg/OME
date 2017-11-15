@@ -86,8 +86,8 @@ public class TimeActivitySys extends IteratingSystem {
 
         float lx, ly;
 
-        Pair<Float, Float> pp = world.getSystem(PhysicsSys.class).getPos(e);
-        lx = pp.getElement0();
+	  Pair<Float, Float> pp = world.getSystem(PhysicsSys.class).getPhysPos(e);
+	  lx = pp.getElement0();
         ly = pp.getElement1();
 
         for (MoveDesc d : c.a) {
@@ -119,8 +119,8 @@ public class TimeActivitySys extends IteratingSystem {
                 float dx = ((float) d.end_x - d.rt_sx) * psd;
                 float dy = ((float) d.end_y - d.rt_sy) * psd;
 
-                world.getSystem(PhysicsSys.class).setSyncPos(d.rt_sx + dx,
-                        d.rt_sy + dy,
+		    world.getSystem(PhysicsSys.class).setSyncCentricPos(d.rt_sx + dx,
+				d.rt_sy + dy,
                         e);
 
 
@@ -132,7 +132,7 @@ public class TimeActivitySys extends IteratingSystem {
 
         if (lx == -1 || ly == -1) return;
 
-        //world.getSystem(PhysicsSys.class).setSyncPos(lx, ly, time_e);
+	  //world.getSystem(PhysicsSys.class).setSyncCentricPos(lx, ly, time_e);
 
 
     }

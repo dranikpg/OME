@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TransformDrawable;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
-import com.draniksoft.ome.editor.manager.DrawableMgr;
+import com.draniksoft.ome.editor.manager.drawable.SimpleDrawableMgr;
 import com.draniksoft.ome.editor.support.render.core.OverlayPlaces;
 import com.draniksoft.ome.editor.support.render.core.OverlyRendererI;
 
@@ -52,7 +52,7 @@ public class SelectionRenderer implements OverlyRendererI {
 
     private void checkD() {
 
-        TextureRegion r = _w.getSystem(DrawableMgr.class).getRegion("overlay_r_base@hp");
+	  TextureRegion r = _w.getSystem(SimpleDrawableMgr.class).getRegion("overlay_r_base@hp");
 
         if (r == null) return;
 

@@ -173,7 +173,7 @@ public class EditTimedMovsEM extends SimpleEditMode {
 
     public Pair<Float, Float> getEPos() {
 
-        return _w.getSystem(PhysicsSys.class).getPos(_w.getSystem(EditorSystem.class).sel);
+	  return _w.getSystem(PhysicsSys.class).getPhysPos(_w.getSystem(EditorSystem.class).sel);
 
     }
 }

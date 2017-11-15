@@ -62,7 +62,7 @@ public class ConsoleSys extends BaseSystem {
 
             console.setDisplayKeyID(Input.Keys.F1);
 
-            mxp.addProcessor(console.getInputProcessor());
+		mxp.addProcessor(2, console.getInputProcessor());
 
             return IGLRunnable.READY;
         }

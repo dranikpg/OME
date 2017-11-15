@@ -3,7 +3,7 @@ package com.draniksoft.ome.editor.support.actions.proj;
 import com.artemis.World;
 import com.draniksoft.ome.editor.load.MapLoadBundle;
 import com.draniksoft.ome.editor.support.actions.Action;
-import com.draniksoft.ome.editor.systems.file_mgmnt.ProjecetLoadSys;
+import com.draniksoft.ome.editor.systems.file_mgmnt.ProjectLoadSystem;
 
 public class LoadProjectAction implements Action {
 
@@ -16,8 +16,8 @@ public class LoadProjectAction implements Action {
     @Override
     public void _do(World w) {
 
-        w.getSystem(ProjecetLoadSys.class).setBundle(new MapLoadBundle(path));
-        w.getSystem(ProjecetLoadSys.class).load();
+	  w.getSystem(ProjectLoadSystem.class).setBundle(new MapLoadBundle(path));
+	  w.getSystem(ProjectLoadSystem.class).load();
 
     }
 

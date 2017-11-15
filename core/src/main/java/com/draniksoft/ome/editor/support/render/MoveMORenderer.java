@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TransformDrawable;
 import com.draniksoft.ome.editor.components.gfx.DrawableC;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
-import com.draniksoft.ome.editor.manager.DrawableMgr;
+import com.draniksoft.ome.editor.manager.drawable.SimpleDrawableMgr;
 import com.draniksoft.ome.editor.support.ems.MoveMOEM;
 import com.draniksoft.ome.editor.support.render.core.OverlayPlaces;
 import com.draniksoft.ome.editor.support.render.core.OverlyRendererI;
@@ -25,7 +25,7 @@ public class MoveMORenderer implements OverlyRendererI {
     int e;
 
     World _w;
-    DrawableMgr dwmg;
+    SimpleDrawableMgr dwmg;
 
     Drawable dwb;
     TransformDrawable lineD;
@@ -84,7 +84,7 @@ public class MoveMORenderer implements OverlyRendererI {
     private void checkDwb() {
 
 
-        if (dwmg.containsAtlas("overlay_r_base")) {
+	  if (dwmg.hasAtlas("overlay_r_base", true)) {
 
             TextureRegion r = dwmg.getRegion("overlay_r_base@hp");
 
@@ -101,7 +101,7 @@ public class MoveMORenderer implements OverlyRendererI {
 
         this._w = _w;
 
-        dwmg = _w.getSystem(DrawableMgr.class);
+	  dwmg = _w.getSystem(SimpleDrawableMgr.class);
 
         if (e < 0) return;
 

@@ -5,13 +5,17 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.draniksoft.ome.editor.base_gfx.EditorScreen;
+import com.draniksoft.ome.mgmnt_base.base.AppDO;
+import com.draniksoft.ome.mgmnt_base.base.AppDataManager;
+import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.utils.GUtils;
+import com.draniksoft.ome.utils.struct.ResponseListener;
 
 public class MainBase extends Game {
 
     private static final String tag = "MainBase";
 
-    public static World engine;
+    public static volatile World engine;
 
     MenuScreen ms;
     EditorScreen sc;
@@ -73,7 +77,27 @@ public class MainBase extends Game {
     @Override
     public void dispose() {
 
-        Gdx.app.debug(tag, "Disposing");
+        final IntelligentLoader l = new IntelligentLoader();
+        l.setMaxTs(1);
+        l.setPrefTs(1);
+
+
+        AppDO.I.C().setLoadState(AppDataManager.TERMINATE_RUN);
+        l.passRunnable(AppDO.I.C());
+
+
+        AppDO.I.setLoadState(AppDataManager.TERMINATE_RUN);
+        l.passRunnable(AppDO.I);
+
+
+        l.start();
+
+        l.setCompletionListener(new ResponseListener() {
+            @Override
+            public void onResponse(short code) {
+                l.terminate();
+            }
+        });
 
         super.dispose();
     }

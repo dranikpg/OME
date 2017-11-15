@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TransformDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.draniksoft.ome.editor.components.time.TimedMoveC;
-import com.draniksoft.ome.editor.manager.DrawableMgr;
+import com.draniksoft.ome.editor.manager.drawable.SimpleDrawableMgr;
 import com.draniksoft.ome.editor.support.container.MoveDesc;
 import com.draniksoft.ome.editor.support.render.core.OverlayPlaces;
 import com.draniksoft.ome.editor.support.render.core.OverlyRendererI;
@@ -56,7 +56,7 @@ public class PathRenderer implements OverlyRendererI {
     private void renderLines(int _e, Array<MoveDesc> a, SpriteBatch b) {
 
         float sx, sy;
-        Pair<Float, Float> ep = _w.getSystem(PhysicsSys.class).getPos(_e);
+	  Pair<Float, Float> ep = _w.getSystem(PhysicsSys.class).getPhysPos(_e);
 
         lastP.set(ep.getElement0(), ep.getElement1());
 
@@ -70,7 +70,7 @@ public class PathRenderer implements OverlyRendererI {
                 sy = d.start_y;
             }
 
-            GUtils.calcLine(sx, sy, d.end_x, d.end_y, tmpd, v);
+		GUtils.calcLine(sx, sy, d.end_x, d.end_y, tmpd);
 
             _d.draw(b, sx, sy, 0, 5, tmpd[0], h, 1 + (h / (tmpd[0] * 2)), 1, tmpd[1]);
 
@@ -82,7 +82,7 @@ public class PathRenderer implements OverlyRendererI {
 
     private void checkD() {
 
-        TextureRegion r = _w.getSystem(DrawableMgr.class).getRegion("i_ehr@hp");
+	  TextureRegion r = _w.getSystem(SimpleDrawableMgr.class).getRegion("i_ehr@hp");
 
         if (r == null) return;
 
