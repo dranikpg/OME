@@ -1,0 +1,208 @@
+{
+  com.badlogic.gdx.graphics.g2d.BitmapFont: {
+    futa_28: {
+      file: futa_28.fnt
+    }
+    futa_42: {
+      file: futa_42.fnt
+    }
+  }
+  com.badlogic.gdx.graphics.Color: {
+    blue_ls: {
+      r: 0.47058824
+      g: 0.78431374
+      b: 0.88235295
+      a: 1
+    }
+    dark_grey: {
+      r: 0.13333334
+      g: 0.13725491
+      b: 0.14117648
+      a: 1
+    }
+    grey: {
+      r: 0.9411765
+      g: 0.9411765
+      b: 0.9411765
+      a: 1
+    }
+    light_b: {
+      r: 0.15686275
+      g: 0.7058824
+      b: 0.84313726
+      a: 1
+    }
+    logo_b: {
+      r: 0
+      g: 0.627451
+      b: 0.8901961
+      a: 1
+    }
+    white: {
+      r: 1
+      g: 1
+      b: 1
+      a: 1
+    }
+  }
+  com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
+    d_grey: {
+      name: white
+      color: grey
+    }
+    d_darkgrey: {
+      name: white
+      color: dark_grey
+    }
+    d_logo_b: {
+      name: white
+      color: logo_b
+    }
+    d_light_strip_blue: {
+      name: white
+      color: blue_ls
+    }
+    menu_lb: {
+      name: menu
+      color: logo_b
+    }
+    menu_lib: {
+      name: menu
+      color: light_b
+    }
+    menu_dg: {
+      name: menu
+      color: dark_grey
+    }
+  }
+  com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+    default: {
+      font: futa_28
+      fontColor: dark_grey
+    }
+    small: {
+      font: futa_28
+      fontColor: dark_grey
+    }
+    title: {
+      font: futa_42
+      fontColor: dark_grey
+    }
+    editor_main_menu: {
+      font: futa_42
+      fontColor: dark_grey
+      background: d_grey
+    }
+    sm: {
+      font: futa_28
+      fontColor: dark_grey
+      background: d_grey
+    }
+  }
+  com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
+    default: {
+      label: default
+    }
+  }
+  com.kotcrab.vis.ui.widget.VisTextField$VisTextFieldStyle: {
+    default: {
+      font: futa_28
+      fontColor: dark_grey
+      selection: d_light_strip_blue
+      background: white
+      cursor: d_darkgrey
+    }
+  }
+  com.kotcrab.vis.ui.widget.VisImageButton$VisImageButtonStyle: {
+    default: {
+      over: white
+    }
+    menu: {
+      up: menu_lb
+      checked: menu_dg
+    }
+  }
+  com.kotcrab.vis.ui.widget.LinkLabel$LinkLabelStyle: {
+    default: {
+      fontColor: logo_b
+      underline: d_logo_b
+      font: futa_28
+    }
+  }
+  com.kotcrab.vis.ui.Sizes: {
+    default: {
+      scaleFactor: 1
+      spacingBottom: 8
+      spacingRight: 6
+      buttonBarSpacing: 10
+      menuItemIconSize: 22
+      borderSize: 1
+      spinnerButtonHeight: 12
+      spinnerFieldSize: 50
+      fileChooserViewModeBigIconsSize: 200
+      fileChooserViewModeMediumIconsSize: 128
+      fileChooserViewModeSmallIconsSize: 64
+      fileChooserViewModeListWidthSize: 150
+    }
+  }
+  com.kotcrab.vis.ui.widget.VisTextButton$VisTextButtonStyle: {
+    default: {
+      font: futa_42
+      fontColor: light_b
+      checkedFontColor: dark_grey
+      overFontColor: logo_b
+    },
+    small_blue: {
+      font: futa_28,
+      fontColor: light_b,
+      overFontColor: logo_b
+    },
+    small_dgrey: {
+      font: futa_28,
+      fontColor: dark_grey,
+      fontColor: dark_grey,
+    },
+    editor_main_menu: {
+      font: futa_42
+      fontColor: dark_grey
+      overFontColor: logo_b
+      up: d_grey
+      down: d_grey
+      over: d_grey
+    }
+    close: {
+      font: futa_42
+      fontColor: dark_grey
+      overFontColor: blue_ls
+    }
+    editor_main_menu_sm: {
+      font: futa_28
+      fontColor: dark_grey
+      overFontColor: logo_b
+      up: d_grey
+      down: d_grey
+      over: d_grey
+    }
+  }
+  com.kotcrab.vis.ui.widget.Separator$SeparatorStyle: {
+    default: {
+      thickness: 4
+    }
+    menu: {
+      thickness: 1
+    }
+  }
+  com.kotcrab.vis.ui.widget.tabbedpane.TabbedPane$TabbedPaneStyle: {
+    default: {
+      vertical: false
+      draggable: false
+    }
+  }
+  com.kotcrab.vis.ui.widget.BusyBar$BusyBarStyle: {
+    default: {
+      height: 5
+      segmentWidth: 150
+      segmentOverflow: 10
+    }
+  }
+}
