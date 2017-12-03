@@ -133,18 +133,19 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
         Config utils
      */
 
+
     public void log_cf() {
         Iterator<ConfigDao> i = AppDO.I.C().getConfI();
         ConfigDao d;
         while (i.hasNext()) {
             d = i.next();
-            console.log(d.getId() + "   ::" + d.getT().getSimpleName() + "  =  " + d.getV(d.getT()).toString());
+            console.log(d.getId() + "   ::" + d.getVT().getClass().getSimpleName() + "  =  " + d.getV(d.getT()).toString());
         }
     }
 
     public void log_cf(String id) {
         ConfigManager c = AppDO.I.C();
-        console.log(id + "    ::" + c.getConfT(id).getSimpleName() + "   =  " + c.getConfVal(id, c.getConfT(id)).toString());
+        console.log(id + "    ::" + c.getConfVT(id).getClass().getSimpleName() + "   =  " + c.getConfVal(id, c.getConfT(id)).toString());
     }
 
     public void set_cf(String id, boolean b) {

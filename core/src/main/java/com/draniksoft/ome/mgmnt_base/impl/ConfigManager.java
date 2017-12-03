@@ -10,7 +10,6 @@ import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.mgmnt_base.base.AppDataManager;
 import com.draniksoft.ome.support.configs.ConfigDao;
 import com.draniksoft.ome.support.configs.ConfigValueType;
-import com.draniksoft.ome.support.configs.configd_types.BundleConfigDao;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.utils.FUtills;
 import com.draniksoft.ome.utils.JsonUtils;
@@ -44,7 +43,6 @@ public class ConfigManager extends AppDataManager {
     }
 
     private void parseTrigger() {
-
         for (JsonValue v : jv) {
             if (!v.has("trig")) continue;
             for (JsonValue pv : v.get("trig")) {
@@ -56,7 +54,6 @@ public class ConfigManager extends AppDataManager {
                     Object vV;
                     kV = JsonUtils.parseTpye(kS, getConfT(pv.name));
                     vV = JsonUtils.parseTpye(vS, getConfT(v.name));
-                    Gdx.app.debug(tag, v.name + " " + pv.name);
                     trig.get(pv.name).get(v.name).put(kV, vV);
 
                 }
@@ -77,10 +74,10 @@ public class ConfigManager extends AppDataManager {
 
     @Override
     protected void terminateLoad() {
-
         for (ConfigDao d : m.values()) {
-            FUtills.putPrefsV(AppDO.I.getPrefs(), "cfg_" + d.getId(), d.getV(d.getT()), d.getT());
+            FUtills.putPrefsV(AppDO.I.getPrefs(), "_cfg_" + d.getId(), d.getV(d.getT()), d.getT());
         }
+        Gdx.app.debug(tag, "Moved config snapshot to prefs");
 
     }
 
@@ -90,6 +87,10 @@ public class ConfigManager extends AppDataManager {
 
     public Class getConfT(String id) {
         return m.get(id).getT();
+    }
+
+    public ConfigValueType getConfVT(String id) {
+        return m.get(id).getVT();
     }
 
     public <T> T getConfVal(String id, Class<T> val) {
@@ -125,31 +126,31 @@ public class ConfigManager extends AppDataManager {
         JsonReader rd = new JsonReader();
         jv = rd.parse(Gdx.files.internal("_data/configs.json"));
 
+        boolean forceNew = AppDO.I.getPrefs().getBoolean("cfg_reset", false);
+
         for (JsonValue v : jv) {
-            constructDao(v);
+            constructDao(v, forceNew);
         }
 
         Gdx.app.debug(tag, "Fetched " + m.size() + " configs");
 
     }
 
+
     private void addRdM(String id) {
         trig.put(id, new ObjectMap<String, ObjectMap<Object, Object>>());
     }
 
-    private void constructDao(JsonValue v) {
+    private void constructDao(JsonValue v, boolean forceDef) {
 
         String id = v.name;
 
         ConfigValueType t = fetchConfigVT(v.get("vt"));
 
-        String nameK = v.getString("namek");
-        String descK = v.getString("desck");
+        ConfigDao d = new ConfigDao(id, t);
 
-        ConfigDao d = new BundleConfigDao(id, t, nameK, descK);
-
-        if (AppDO.I.getPrefs().contains("cfg_" + id)) {
-            d.setV(FUtills.getVal(AppDO.I.getPrefs(), t.getT(), "cfg_" + id));
+        if (!forceDef && AppDO.I.getPrefs().contains("_cfg_" + id)) {
+            d.setV(FUtills.getVal(AppDO.I.getPrefs(), t.getT(), "_cfg_" + id));
         } else {
             d.setV(JsonUtils.getVal(t.getT(), v.get("defv")));
         }
@@ -160,11 +161,17 @@ public class ConfigManager extends AppDataManager {
     }
 
     private ConfigValueType fetchConfigVT(JsonValue vt) {
-
         if (vt.type() == JsonValue.ValueType.stringValue) {
             String v = vt.asString();
             if (v.equals("bool")) return ConfigValueType.boolT;
             if (v.equals("freestr")) return ConfigValueType.freeStringT;
+            if (v.equals("freeint")) return ConfigValueType.freeIntT;
+        } else {
+            String id = vt.getString("id");
+            if (id.equals("boundInt")) {
+                return ConfigValueType.constructBoundedIntT(vt.getInt("s"), vt.getInt("e"), vt.getInt("st", 1));
+            }
+
         }
 
         return null;

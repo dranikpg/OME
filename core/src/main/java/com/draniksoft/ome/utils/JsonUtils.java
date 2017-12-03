@@ -53,10 +53,13 @@ public class JsonUtils {
     public static Object parseTpye(String kS, Class confT) {
         if (confT == Boolean.class) {
             return Boolean.parseBoolean(kS);
-        } else if (confT == String.class) {
-            return kS;
-        }
+	  } else if (confT == String.class) {
+		return kS;
+	  } else if (confT == Integer.class) {
+		return Integer.valueOf(kS);
+	  }
 
         return null;
     }
+
 }

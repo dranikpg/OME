@@ -163,6 +163,8 @@ public class FUtills {
             prefs.putBoolean(id, (Boolean) v);
         } else if (t == String.class) {
             prefs.putString(id, (String) v);
+        } else if (t == Integer.class) {
+            prefs.putInteger(id, (Integer) v);
         }
 
     }

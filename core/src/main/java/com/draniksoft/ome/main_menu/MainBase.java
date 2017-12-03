@@ -81,6 +81,8 @@ public class MainBase extends Game {
         l.setMaxTs(1);
         l.setPrefTs(1);
 
+        AppDO.I.F().setLoadState(AppDataManager.TERMINATE_RUN);
+        l.passRunnable(AppDO.I.F());
 
         AppDO.I.C().setLoadState(AppDataManager.TERMINATE_RUN);
         l.passRunnable(AppDO.I.C());

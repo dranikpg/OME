@@ -1,20 +1,24 @@
 {
   "testV": {
-    "namek": "testV",
-    "desck": "testK",
     "vt": "freestr",
-    "defv": "difolt value",
-    "tags": []
+    "defv": "difolt value"
   },
   "depV": {
-    "namek": "testV",
-    "desck": "testK",
     "vt": "freestr",
-    "defv": "difolt value",
-    "tags": [],
+    "defv": "difolt value numba two",
     "trig": {
       "testV": {
         "LOL": "LOL DETECTED"
+      }
+    }
+  },
+  "inttv": {
+    "vt": "freeint",
+    "defv": 10,
+    "trig": {
+      "depV": {
+        "LOL DETECTED": 11,
+        "KURWA": 12
       }
     }
   }
