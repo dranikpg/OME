@@ -157,13 +157,13 @@ public class ProjectLoader {
 		MObjectC mc = moM.get(e);
 
 		DrawableC dwC = dwc.create(e);
-		dwC.d = FUtills.fetchDrawable(mc.dwbData);
+		dwC.d = FUtills.fetchDrawable(mc.getDwbData());
 
 		PosSizeC psc = psM.create(e);
-		psc.x = mc.x;
-		psc.y = mc.y;
-		psc.w = mc.w;
-		psc.h = mc.h;
+		psc.x = mc.getX();
+		psc.y = mc.getY();
+		psc.w = mc.getW();
+		psc.h = mc.getH();
 
 		w.getSystem(PhysicsSys.class).createBodyFromSPos(psc.x, psc.y, e);
 

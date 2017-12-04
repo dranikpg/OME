@@ -9,6 +9,7 @@ import com.draniksoft.ome.editor.support.actions.Action;
 import com.draniksoft.ome.editor.support.event.entityy.EntityDataChangeE;
 import com.draniksoft.ome.utils.FUtills;
 import net.mostlyoriginal.api.event.common.EventSystem;
+import org.jetbrains.annotations.NotNull;
 
 public class ChangeDwbA implements Action {
 
@@ -20,7 +21,7 @@ public class ChangeDwbA implements Action {
     String old;
 
     @Override
-    public void _do(World w) {
+    public void invoke(@NotNull World w) {
 
         changeD(w, dwid);
     }
@@ -34,8 +35,8 @@ public class ChangeDwbA implements Action {
 	  }
 
         MObjectC c = w.getMapper(MObjectC.class).get(_e);
-	  old = c.dwbData;
-	  c.dwbData = d;
+	  old = c.getDwbData();
+	  c.setDwbData(d);
 
         DrawableC dc = w.getMapper(DrawableC.class).get(_e);
 	  dc.d = dwb;
@@ -45,7 +46,7 @@ public class ChangeDwbA implements Action {
     }
 
     @Override
-    public void _undo(World w) {
+    public void undo(World w) {
 
         changeD(w, old);
 

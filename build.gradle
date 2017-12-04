@@ -1,5 +1,6 @@
 buildscript {
-  repositories {
+    ext.kotlin_version = '1.2.0'
+    repositories {
     mavenLocal()
     mavenCentral()
     jcenter()
@@ -8,8 +9,10 @@ buildscript {
   }
   dependencies {
     classpath "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+      classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
   }
 }
+apply plugin: 'kotlin'
 
 allprojects {
   apply plugin: 'eclipse'
@@ -37,4 +40,20 @@ tasks.eclipse.doLast {
   delete '.project'
   delete '.classpath'
   delete '.settings/'
+}
+repositories {
+    mavenCentral()
+}
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+}
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }

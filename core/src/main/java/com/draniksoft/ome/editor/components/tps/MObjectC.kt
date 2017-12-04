@@ -1,6 +1,6 @@
-package com.draniksoft.ome.editor.components.tps;
+package com.draniksoft.ome.editor.components.tps
 
-import com.artemis.Component;
+import com.artemis.Component
 
 
 /*
@@ -8,17 +8,18 @@ import com.artemis.Component;
      It is used to serialize itself
  */
 
-public class MObjectC extends Component {
+class MObjectC : Component() {
 
     // start positions :: center
-    public int x, y;
+    var x: Int = 0
+    var y: Int = 0
 
     // width height :: whole size
-    public int w;
-    public int h;
+    var w: Int = 0
+    var h: Int = 0
 
     /* id::uri for a drawable
     */
-    public String dwbData;
+    var dwbData: String? = null
 
 }

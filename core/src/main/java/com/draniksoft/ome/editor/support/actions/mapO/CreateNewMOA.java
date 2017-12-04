@@ -44,16 +44,16 @@ public class CreateNewMOA implements Action {
     }
 
     @Override
-    public void _do(World _w) {
+    public void invoke(World _w) {
         this._w = _w;
         _e = _w.getSystem(ArchTransmuterMgr.class).build(ArchTransmuterMgr.Codes.BASE_MO);
 
         MObjectC c = _w.getMapper(MObjectC.class).get(_e);
-        c.x = (int) x;
-        c.y = (int) y;
-        c.w = (int) w;
-        c.h = (int) h;
-	  c.dwbData = dwbID;
+        c.setX((int) x);
+        c.setY((int) y);
+        c.setW((int) w);
+        c.setH((int) h);
+        c.setDwbData(dwbID);
 
         PosSizeC psc = _w.getMapper(PosSizeC.class).get(_e);
         psc.x = (int) (x - (w / 2));
@@ -86,7 +86,7 @@ public class CreateNewMOA implements Action {
     }
 
     @Override
-    public void _undo(World w) {
+    public void undo(World w) {
 
         ESCUtils.removeSelectionBeforeRMV(_e, _w);
         _w.delete(_e);

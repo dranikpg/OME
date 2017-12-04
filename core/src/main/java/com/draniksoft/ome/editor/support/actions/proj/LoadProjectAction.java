@@ -4,6 +4,7 @@ import com.artemis.World;
 import com.draniksoft.ome.editor.load.MapLoadBundle;
 import com.draniksoft.ome.editor.support.actions.Action;
 import com.draniksoft.ome.editor.systems.file_mgmnt.ProjectLoadSystem;
+import org.jetbrains.annotations.NotNull;
 
 public class LoadProjectAction implements Action {
 
@@ -14,7 +15,7 @@ public class LoadProjectAction implements Action {
     }
 
     @Override
-    public void _do(World w) {
+    public void invoke(@NotNull World w) {
 
 	  w.getSystem(ProjectLoadSystem.class).setBundle(new MapLoadBundle(path));
 	  w.getSystem(ProjectLoadSystem.class).load();
@@ -22,7 +23,7 @@ public class LoadProjectAction implements Action {
     }
 
     @Override
-    public void _undo(World _w) {
+    public void undo(@NotNull World w) {
 
     }
 
@@ -45,4 +46,6 @@ public class LoadProjectAction implements Action {
     public void destruct() {
 
     }
+
+
 }

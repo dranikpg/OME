@@ -23,7 +23,6 @@ import com.draniksoft.ome.editor.manager.TimeMgr;
 import com.draniksoft.ome.editor.manager.drawable.SimpleDrawableMgr;
 import com.draniksoft.ome.editor.support.actions.Action;
 import com.draniksoft.ome.editor.support.actions.mapO.ChangeDwbA;
-import com.draniksoft.ome.editor.support.actions.timed._base_.AddTimeCA;
 import com.draniksoft.ome.editor.support.compositionObserver.abstr.CompositionObserver;
 import com.draniksoft.ome.editor.support.container.CO_actiondesc.ActionDesc;
 import com.draniksoft.ome.editor.support.container.EM_desc.EditModeDesc;
@@ -90,7 +89,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
         } catch (Exception e) {
             Gdx.app.error("", "", e);
         }
-        console.log("Show mode " + world.getSystem(WorkflowSys.class).SHOW_M);
+        console.log("Show mode " + world.getSystem(WorkflowSys.class).getSHOW_M());
 
     }
 
@@ -369,12 +368,6 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     }
 
-
-    public void te_addtc(int _e, int se, int ee) {
-
-        world.getSystem(ActionSystem.class).exec(new AddTimeCA(_e, se, ee));
-
-    }
 
     public void te_addMoveC(int s, int e, int x, int y, int _e) {
 
