@@ -1,0 +1,21 @@
+<:win pct_mode=false width=200 fullspan=true />
+
+<:include name="--" id="test2"/>
+
+
+<:macro busyBar>
+  <busyBar/>
+</:macro>
+
+
+<table id="root">
+    <:loop 100>
+        <label> {loop:index} </label>
+        <:row/>
+    </:loop>
+
+    <container expandx=true fillx=true id="incl">
+        <:busyBar/>
+    </container>
+
+</table>

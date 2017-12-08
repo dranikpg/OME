@@ -761,33 +761,16 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
      */
 
 
-    public void openwin(int code) {
-
-        try {
-            world.getSystem(UiSystem.class).open(code);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void openwin(String code) {
+	  try {
+		world.getSystem(UiSystem.class).openWin(code);
+	  } catch (Exception e) {
+		Gdx.app.error("CC", "", e);
+	  }
     }
 
-    public void openwin(int code, String uri) {
-
-        world.getSystem(UiSystem.class).open(uri, code);
-
-    }
-
-    public void closewin(int code) {
-
-        world.getSystem(UiSystem.class).close(code);
-
-    }
-
-    public void log_wincds() {
-
-        for (Map.Entry<Integer, Class> e : UiSystem.WinCodes.map.entrySet()) {
-            console.log(e.getKey() + " -> " + e.getValue());
-        }
-
+    public void closewin() {
+	  world.getSystem(UiSystem.class).closeWin();
     }
 
     /*

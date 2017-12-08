@@ -1,0 +1,10 @@
+{
+  "test": {
+    "lml": "i/test.lml",
+    "class": "com.draniksoft.ome.support.ui.viewsys.impl.TestV"
+  },
+  "test2": {
+    "lml": "i/test2.lml",
+    "class": "com.draniksoft.ome.support.ui.viewsys.impl.SecTest"
+  }
+}

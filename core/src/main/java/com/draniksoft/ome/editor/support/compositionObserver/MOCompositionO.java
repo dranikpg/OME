@@ -1,7 +1,6 @@
 package com.draniksoft.ome.editor.support.compositionObserver;
 
 import com.artemis.Aspect;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.IntMap;
 import com.draniksoft.ome.editor.components.gfx.DrawableC;
 import com.draniksoft.ome.editor.components.pos.PhysC;
@@ -9,6 +8,7 @@ import com.draniksoft.ome.editor.components.pos.PosSizeC;
 import com.draniksoft.ome.editor.components.tps.MObjectC;
 import com.draniksoft.ome.editor.support.compositionObserver.abstr.SimpleCompositionObserver;
 import com.draniksoft.ome.editor.support.container.CO_actiondesc.ActionDesc;
+import com.draniksoft.ome.support.ui.util.CompObViewIds;
 
 public class MOCompositionO extends SimpleCompositionObserver {
 
@@ -75,8 +75,13 @@ public class MOCompositionO extends SimpleCompositionObserver {
     }
 
     @Override
-    public Table getSettingsT() {
-        return null;
+    public boolean isViewAv(int id) {
+	  return id == CompObViewIds.VIEW_INSPECTOR;
+    }
+
+    @Override
+    public String getViewID() {
+	  return "";
     }
 
 

@@ -74,6 +74,10 @@
       name: menu
       color: dark_grey
     }
+    BRDWB: {
+      name: round
+      color: light_b
+    }
   }
   com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
     default: {
@@ -102,6 +106,13 @@
   com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
     default: {
       label: default
+    }
+  }
+  com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
+    default: {
+      background: d_grey
+      titleFont: futa_42
+      titleFontColor: dark_grey
     }
   }
   com.kotcrab.vis.ui.widget.VisTextField$VisTextFieldStyle: {
@@ -151,17 +162,7 @@
       fontColor: light_b
       checkedFontColor: dark_grey
       overFontColor: logo_b
-    },
-    small_blue: {
-      font: futa_28,
-      fontColor: light_b,
-      overFontColor: logo_b
-    },
-    small_dgrey: {
-      font: futa_28,
-      fontColor: dark_grey,
-      fontColor: dark_grey,
-    },
+    }
     editor_main_menu: {
       font: futa_42
       fontColor: dark_grey

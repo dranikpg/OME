@@ -17,13 +17,9 @@ public interface OverlyRendererI {
 
     }
 
-    void render(int _e, SpriteBatch b, OrthographicCamera c);
+    void render(SpriteBatch b, OrthographicCamera c);
 
     void added(World _w);
-
-    void removed();
-
-    void hidden();
 
     int[] getPos();
 

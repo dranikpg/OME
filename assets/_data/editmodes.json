@@ -16,14 +16,5 @@
     "iconID": "SomeId",
     "c": "MoveMOEM",
     "sav": 1
-  },
-  {
-    "id": 3,
-    "sr": true,
-    "name_en": "Edit timed moves Tool",
-    "name_ru": "Edit timed moves Tool",
-    "iconID": "SomeId",
-    "c": "timed.EditTimedMovsEM",
-    "sav": 3
   }
 ]

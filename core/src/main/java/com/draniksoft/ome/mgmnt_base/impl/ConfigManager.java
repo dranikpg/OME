@@ -97,6 +97,18 @@ public class ConfigManager extends AppDataManager {
         return m.get(id).getV(val);
     }
 
+    public int getConfVal_I(String id) {
+	  return getConfVal(id, Integer.class);
+    }
+
+    public boolean getConfVal_B(String id) {
+	  return getConfVal(id, Boolean.class);
+    }
+
+    public String getConfVal_S(String id) {
+	  return getConfVal(id, String.class);
+    }
+
     public void setConfVal(String id, Object val) {
         if (m.get(id).setV(val)) {
             Gdx.app.debug(tag, "Changing " + id);

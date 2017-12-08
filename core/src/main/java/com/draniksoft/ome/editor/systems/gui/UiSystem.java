@@ -5,39 +5,27 @@ import com.artemis.annotations.Wire;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.IntMap;
-import com.badlogic.gdx.utils.JsonReader;
-import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.draniksoft.ome.editor.support.event.base_gfx.ResizeEvent;
 import com.draniksoft.ome.editor.support.event.workflow.ModeChangeE;
-import com.draniksoft.ome.editor.ui.core.BaseWin;
-import com.draniksoft.ome.editor.ui.core.menu.Menu;
-import com.draniksoft.ome.editor.ui.core.menu.MenuContentSupplierI;
-import com.draniksoft.ome.editor.ui.wins.Inspector;
+import com.draniksoft.ome.editor.ui.BottomMenu;
+import com.draniksoft.ome.editor.ui.EditorWin;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.support.load.interfaces.IRunnable;
+import com.draniksoft.ome.support.ui.util.WindowAgent;
+import com.draniksoft.ome.utils.ui.MenuWinController;
+import net.mostlyoriginal.api.event.common.EventSystem;
 import net.mostlyoriginal.api.event.common.Subscribe;
 
-import java.util.HashMap;
-
 public class UiSystem extends BaseSystem {
-
     private static String tag = "UiSystem";
 
-    public static class WinCodes {
+    public static class Defaults {
 
-        public static final int inspector = 2;
-
-        public static HashMap<Integer, Class> map = new HashMap<Integer, Class>();
-
-        static {
-
-            map.put(inspector, Inspector.class);
-
-        }
-
+        // animation time per screenWidth pixels
+        public static float aTime100PCT = 2f;
     }
+
     @Wire(name = "top_stage")
     Stage uiStage;
     @Wire
@@ -47,173 +35,70 @@ public class UiSystem extends BaseSystem {
     @Wire(name = "ui_vp")
     Viewport vp;
 
+    BottomMenu m;
+    EditorWin w;
 
-    BaseWin w;
-    IntMap<BaseWin> wins;
-
-    Menu mn;
-
-    BaseWin bk;
-
+    MenuWinController ctr;
 
     @Override
     protected void initialize() {
 
         engineL.passRunnable(new Loader());
 
+        world.getSystem(EventSystem.class).registerEvents(this);
         multiplexer.addProcessor(0, uiStage);
 
     }
 
-    public void open(int code) {
-        open(null, code);
-    }
-
-    public void open(String args, int code) {
-
-        boolean d = false;
-        if (w != null) {
-            close(w.code);
-            d = true;
-        }
-
-        if (!wins.containsKey(code)) {
-            if (!constructWin(code)) return;
-        }
-
-        w = wins.get(code);
-        w.open(args, d);
-    }
-
-    private boolean constructWin(int code) {
-
-        if (!WinCodes.map.containsKey(code)) {
-            Gdx.app.error(tag, "NO win code " + code);
-            return false;
-        }
-
-        Gdx.app.debug(tag, "Constructing " + WinCodes.map.get(code).getClass().getSimpleName());
-
-        BaseWin w;
-        try {
-            w = (BaseWin) WinCodes.map.get(code).getConstructor().newInstance();
-        } catch (Exception e) {
-            Gdx.app.error(tag, "", e);
-            return false;
-        }
-
-        w.code = code;
-        wins.put(code, w);
-        w.init(world);
-
-        uiStage.addActor(w);
-
-        w.updateBounds(vp.getWorldWidth(), vp.getWorldHeight());
-        w.immdClose();
-
-
-        return true;
-    }
-
-    public void close(int code) {
-        try {
-            w.close();
-            w = null;
-        } catch (Exception e) {
-            Gdx.app.error(tag, "WIN::CLOSE", e);
-        }
-    }
-
-    public void createBK() {
-        if (w == null) return;
-        bk = w;
-        close(bk.code);
-    }
-
-    public void restoreBK() {
-        if (bk != null) open("#bkrestore", bk.code);
-        bk = null;
-    }
-
-    /*
-
-    Menu Part
-
-     */
-
-
-    public boolean isMenuOpen() {
-        return mn.isOpen();
-    }
-
-    public MenuContentSupplierI getMenuSupplier() {
-        if (!isMenuOpen()) return null;
-        return mn.getSup();
-    }
-
-    public void closeMenu() {
-        mn.close();
-    }
-
-    public void openMenu() {
-        openMenu(null);
-    }
-
-    public void openMenu(String args) {
-        mn.open(args);
-    }
-
     @Override
     protected void processSystem() {
-
         vp.getCamera().update(false);
-
         vp.apply();
-
         uiStage.act();
-
         uiStage.draw();
-
     }
 
-
-    @Subscribe
-    public void modeChanged(ModeChangeE e) {
-
-        Gdx.app.debug(tag, "Mode changed");
-
+    public void validateLayout() {
+        ctr.apply(MenuWinController.TT_REFRESH);
     }
 
-    @Subscribe
-    public void resized(ResizeEvent e) {
-
-        for (BaseWin win : wins.values()) {
-            win.setHeight(e.h);
-            win.updateBounds(vp.getWorldWidth(), vp.getWorldHeight());
-        }
-
-        mn.resized(e.w, e.h);
-
+    public void realignLayout() {
+        ctr.apply(MenuWinController.TT_RESIZE);
     }
+
+    public void openWin(String id) {
+        openWin(id, null);
+    }
+
+    public void openWin(String id, WindowAgent ag) {
+        if (!w.canOpen(id)) return;
+        w.setAgent(ag);
+        _open(id);
+    }
+
+    private void _open(String id) {
+        w.open(id);
+    }
+
+    public void closeWin() {
+        ctr.apply(MenuWinController.TT_RESTORE);
+    }
+
 
     private class Loader implements IRunnable {
 
-
         @Override
         public void run(IntelligentLoader l) {
+            m = new BottomMenu(UiSystem.this);
+            w = new EditorWin(world);
 
+            m.setHeight(70f);
+            w.setX(uiStage.getWidth());
 
-            wins = new IntMap<BaseWin>();
+            uiStage.addActor(w);
+            uiStage.addActor(m);
 
-            mn = new Menu();
-
-            JsonValue rootJV = new JsonReader().parse(Gdx.files.internal("_data/ui_vals.json"));
-
-            mn.init(world);
-            mn.buildSups(rootJV);
-            mn.addToStage(uiStage);
-
-            mn.resized(vp.getWorldHeight(), vp.getWorldHeight());
+            ctr = new MenuWinController(UiSystem.this, m, w);
 
         }
 
@@ -223,4 +108,29 @@ public class UiSystem extends BaseSystem {
         }
     }
 
+    @Subscribe
+    public void modeChanged(ModeChangeE e) {
+        Gdx.app.debug(tag, "Mode changed");
+    }
+
+    @Subscribe
+    public void resized(ResizeEvent e) {
+        if (w.isOpen()) {
+            w.recalc();
+        }
+        realignLayout();
+    }
+
+
+    public float getStageW() {
+        return uiStage.getWidth();
+    }
+
+    public float getStageH() {
+        return uiStage.getHeight();
+    }
+
+    public MenuWinController getCtr() {
+        return ctr;
+    }
 }

@@ -2,16 +2,14 @@ package com.draniksoft.ome.mgmnt_base.base;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import com.draniksoft.ome.mgmnt_base.impl.ConfigManager;
-import com.draniksoft.ome.mgmnt_base.impl.FileManager;
-import com.draniksoft.ome.mgmnt_base.impl.LangManager;
-import com.draniksoft.ome.mgmnt_base.impl.LoadHistoryMgr;
+import com.draniksoft.ome.mgmnt_base.impl.*;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.support.load.interfaces.IGLRunnable;
 import com.draniksoft.ome.utils.Const;
 import com.draniksoft.ome.utils.GUtils;
 
 import java.util.HashMap;
+import java.util.Iterator;
 
 /*
 Class for keeping track of other managers, loading and disposing them
@@ -26,7 +24,7 @@ public class AppDO extends AppDataManager {
     HashMap<Class, AppDataManager> m;
 
     Class<AppDataManager>[] defM = new Class[]{AppDO.class, LangManager.class, ConfigManager.class,
-            FileManager.class, LoadHistoryMgr.class};
+		FileManager.class, LoadHistoryMgr.class, LmlUIMgr.class};
 
     @Override
     protected void startupLoad(IntelligentLoader l) {
@@ -36,7 +34,6 @@ public class AppDO extends AppDataManager {
         m = new HashMap<Class, AppDataManager>();
 
         for (Class<AppDataManager> c : defM) {
-
             try {
                 m.put(c, c.getConstructor().newInstance());
             } catch (Exception e) {
@@ -73,6 +70,14 @@ public class AppDO extends AppDataManager {
 
     public <T extends AppDataManager> T getMgr(Class<T> t) {
         return (T) m.get(t);
+    }
+
+    public Iterator<AppDataManager> getMgrI() {
+	  return m.values().iterator();
+    }
+
+    public LmlUIMgr LML() {
+	  return getMgr(LmlUIMgr.class);
     }
 
     public LangManager L() {

@@ -83,23 +83,19 @@ public class BaseLoadController {
 
             ls.onResponse((short) LOAD_SUCCESS);
         } else if (s == LoadState.Lang) {
-
             AppDO.I.L().setLoadState(AppDataManager.STARTUP_LOAD);
             l.passRunnable(AppDO.I.L());
-
         } else if (s == LoadState.CONFIG) {
-
             AppDO.I.getMgr(ConfigManager.class).setLoadState(AppDataManager.STARTUP_LOAD);
             l.passRunnable(AppDO.I.getMgr(ConfigManager.class));
-
         } else if (s == LoadState.MISC) {
-
             AppDO.I.F().setLoadState(AppDO.STARTUP_LOAD);
             l.passRunnable(AppDO.I.F());
             AppDO.I.LH().setLoadState(AppDataManager.STARTUP_LOAD);
             l.passRunnable(AppDO.I.LH());
-
-        }
+		AppDO.I.LML().setLoadState(AppDataManager.STARTUP_LOAD);
+		l.passRunnable(AppDO.I.LML());
+	  }
 
     }
 

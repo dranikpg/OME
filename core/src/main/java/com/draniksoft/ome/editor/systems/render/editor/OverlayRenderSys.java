@@ -37,7 +37,6 @@ public class OverlayRenderSys extends BaseEntitySystem {
     @Override
     protected void initialize() {
 
-
         rs = new Array<OverlyRendererI>();
 
         restoreDef();
@@ -62,7 +61,7 @@ public class OverlayRenderSys extends BaseEntitySystem {
 
         for (int i = 0; i < rs.size; i++) {
 
-            rs.get(i).render(_e, b, cam);
+            rs.get(i).render(b, cam);
 
         }
 
@@ -71,10 +70,8 @@ public class OverlayRenderSys extends BaseEntitySystem {
     }
 
     public void restoreDef() {
-
         addRdr(new SelectionRenderer());
         addRdr(new PathRenderer());
-
 
     }
 
@@ -171,12 +168,8 @@ public class OverlayRenderSys extends BaseEntitySystem {
 
     @Subscribe
     public void modeChanged(ModeChangeE e) {
-
-
         if (e.SHOW_MODE) {
 
-            removeRdrByID(OverlyRendererI.IDs.SelR);
-            removeRdrByID(OverlyRendererI.IDs.PathR);
 
         } else {
             restoreDef();

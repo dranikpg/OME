@@ -33,12 +33,16 @@ import com.draniksoft.ome.editor.systems.render.obj.PhysRDebugSys;
 import com.draniksoft.ome.editor.systems.support.*;
 import com.draniksoft.ome.editor.systems.time.TimeActivitySys;
 import com.draniksoft.ome.main_menu.MainBase;
+import com.draniksoft.ome.mgmnt_base.base.AppDO;
+import com.draniksoft.ome.mgmnt_base.base.AppDataManager;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.support.load.interfaces.IGLRunnable;
 import com.draniksoft.ome.support.load.interfaces.IRunnable;
 import com.draniksoft.ome.utils.GUtils;
 import com.draniksoft.ome.utils.struct.ResponseListener;
 import net.mostlyoriginal.api.event.common.EventSystem;
+
+import java.util.Iterator;
 
 public class EngineLoader {
 
@@ -59,7 +63,7 @@ public class EngineLoader {
     }
 
     public enum LoadS {
-        SNULL_PTR, CONFIF_B_B, CONFIG_B, DEPENDENCY_B, WORLD_B, NULL_PTR
+	  SNULL_PTR, CONFIF_B_B, CONFIG_B, DEPENDENCY_B, MGR_NTF, WORLD_B, NULL_PTR
     }
 
     static LoadS cS = LoadS.CONFIF_B_B;
@@ -101,13 +105,21 @@ public class EngineLoader {
         } else if (cS == LoadS.DEPENDENCY_B) {
             l.passRunnable(new DependencyB());
             l.passGLRunnable(new GfxDependencyB());
-        } else if (cS == LoadS.WORLD_B) {
-            l.passRunnable(new WorldBuild());
-        } else if (cS == LoadS.NULL_PTR) {
-            Gdx.app.debug(tag, "Passed states");
-            L.onResponse((short) IntelligentLoader.LOAD_SUCCESS);
-            l.terminate();
-        }
+	  } else if (cS == LoadS.WORLD_B) {
+		l.passRunnable(new WorldBuild());
+	  } else if (cS == LoadS.MGR_NTF) {
+		Iterator<AppDataManager> i = AppDO.I.getMgrI();
+		AppDataManager m;
+		while (i.hasNext()) {
+		    m = i.next();
+		    m.setLoadState(AppDataManager.ENGINE_LOAD);
+		    l.passRunnable(m);
+		}
+	  } else if (cS == LoadS.NULL_PTR) {
+		Gdx.app.debug(tag, "Passed states");
+		L.onResponse((short) IntelligentLoader.LOAD_SUCCESS);
+		l.terminate();
+	  }
 
     }
 

@@ -12,6 +12,7 @@ import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.EditorSystem;
 import com.draniksoft.ome.editor.systems.support.InputSys;
 import com.draniksoft.ome.utils.ESCUtils;
+import com.draniksoft.ome.utils.FUtills;
 
 public class NewMOEM implements EditMode {
 
@@ -58,7 +59,7 @@ public class NewMOEM implements EditMode {
 
     public void createLoc(Vector2 tmp) {
 
-        CreateNewMOA a = new CreateNewMOA(tmp.x, tmp.y, 50, 50, "i_casB@mapTile@100");
+        CreateNewMOA a = new CreateNewMOA(tmp.x, tmp.y, 200, 200, FUtills.DrawablePrefix.P_SIMPLE_DW + "i_casB@mapTile@100");
 
         _w.getSystem(ActionSystem.class).exec(a);
 

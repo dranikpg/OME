@@ -12,8 +12,12 @@ import com.draniksoft.ome.editor.base_gfx.drawable.EmptyDrawable;
 import com.draniksoft.ome.editor.manager.drawable.SimpleDrawableMgr;
 import com.draniksoft.ome.main_menu.MainBase;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
+import com.kotcrab.vis.ui.VisUI;
 
 import java.io.File;
+
+import static com.draniksoft.ome.utils.FUtills.DrawablePrefix.P_NINEPATCH;
+import static com.draniksoft.ome.utils.FUtills.DrawablePrefix.P_SIMPLE_DW;
 
 /**
  * File utils class
@@ -33,6 +37,7 @@ public class FUtills {
     public static int createE(World world) {
         return world.create();
     }
+
 
     public static class PrefIdx {
 
@@ -118,8 +123,9 @@ public class FUtills {
 
     public static class DrawablePrefix {
         public static final String P_EMPTY = "E:";
-        public static final String P_SIMPLE_DW = "O:";
-        public static final String P_NINEPATCH = "N:";
+        public static final String P_SKINSRC = "S:";
+        public static final String P_SIMPLE_DW = "$:";
+        public static final String P_NINEPATCH = "P:";
         public static final String P_ANIM = "A:";
     }
 
@@ -145,10 +151,22 @@ public class FUtills {
     }
 
 
+    public static Drawable getSkinDwb(String name) {
+        if (name.startsWith(P_SIMPLE_DW)) {
+            return VisUI.getSkin().getDrawable(name.substring(2));
+        } else if (name.startsWith(P_NINEPATCH)) {
+            return VisUI.getSkin().getDrawable(name.substring(2));
+        }
+        return null;
+    }
+
+
     public static Drawable fetchDrawable(String data) {
-        if (data.startsWith(DrawablePrefix.P_EMPTY)) {
+        if (data.startsWith(DrawablePrefix.P_SKINSRC)) {
+            return getSkinDwb(data.substring(2));
+        } else if (data.startsWith(DrawablePrefix.P_EMPTY)) {
             return new EmptyDrawable();
-        } else if (data.startsWith(DrawablePrefix.P_SIMPLE_DW)) {
+        } else if (data.startsWith(P_SIMPLE_DW)) {
             return new TextureRegionDrawable(fetchAtlasR(data.substring(2)));
         }
 

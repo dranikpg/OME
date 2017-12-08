@@ -24,13 +24,16 @@ public class LangManager extends AppDataManager {
         b = I18NBundle.createBundle(baseFileHandle, locale);
 
         testLang();
-
     }
 
     private void testLang() {
 
         Gdx.app.log(tag, b.format("lang_tst", " [%Format::pass] "));
 
+    }
+
+    public String getLangS() {
+	  return enL ? "en" : "ru";
     }
 
     public String get(String v) {
@@ -53,5 +56,9 @@ public class LangManager extends AppDataManager {
     @Override
     protected void terminateLoad() {
 
+    }
+
+    public I18NBundle getBundle() {
+	  return b;
     }
 }

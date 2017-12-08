@@ -5,14 +5,12 @@ import com.artemis.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TransformDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
-import com.draniksoft.ome.editor.manager.drawable.SimpleDrawableMgr;
 import com.draniksoft.ome.editor.support.render.core.OverlayPlaces;
 import com.draniksoft.ome.editor.support.render.core.OverlyRendererI;
+import com.draniksoft.ome.utils.FUtills;
 
 public class SelectionRenderer implements OverlyRendererI {
 
@@ -21,11 +19,13 @@ public class SelectionRenderer implements OverlyRendererI {
 
     World _w;
 
-    TransformDrawable d;
+    NinePatchDrawable d;
     PosSizeC c;
     ComponentMapper<PosSizeC> pM;
 
     float bc = 20;
+
+    float v = 0;
 
 
     @Override
@@ -42,21 +42,21 @@ public class SelectionRenderer implements OverlyRendererI {
 
         float sh = c.h / bc * MathUtils.clamp(cam.zoom * 2, 0.5f, 20);
         float sw = c.w / bc * MathUtils.clamp(cam.zoom * 2, 0.5f, 20);
-        d.draw(b, c.x - sw, c.y + c.h, c.w + 2 * sw, sh);
-        d.draw(b, c.x - sw, c.y - sh, c.w + 2 * sw, sh);
-        d.draw(b, c.x + c.w, c.y, sw, c.h);
-        d.draw(b, c.x - sw, c.y, sw, c.h);
+
+        v = Math.min(sh, sw);
+
+        d.draw(b, c.x - v, c.y + c.h, c.w + v, sh);
+        d.draw(b, c.x - v, c.y - sh, c.w + v, sh);
+
+        d.draw(b, c.x + c.w, c.y - v, v, c.h + v);
+        d.draw(b, c.x - v, c.y - v, v, c.h + v);
 
 
     }
 
     private void checkD() {
 
-	  TextureRegion r = _w.getSystem(SimpleDrawableMgr.class).getRegion("overlay_r_base@hp");
-
-        if (r == null) return;
-
-        d = new TextureRegionDrawable(r);
+        d = (NinePatchDrawable) FUtills.fetchDrawable(FUtills.DrawablePrefix.P_SKINSRC + FUtills.DrawablePrefix.P_NINEPATCH + "BRDWB");
 
         Gdx.app.debug(tag, "Collected drawable");
 

@@ -1,7 +1,6 @@
 package com.draniksoft.ome.editor.support.compositionObserver.abstr;
 
 import com.artemis.World;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.JsonValue;
@@ -14,12 +13,7 @@ public abstract class CompositionObserver {
     private final static String tag = "CompositionObserver";
 
     public static class IDs {
-
         public static final short MO_CO = 1;
-        public static final short TIMED_CO = 2;
-        public static final short TIMED_MOV_CO = 3;
-        public static final short FLABEL_ID = 4;
-
     }
 
     public int id;
@@ -69,14 +63,17 @@ public abstract class CompositionObserver {
 
     }
 
+    public abstract boolean isViewAv(int id);
+
+    public abstract String getViewID();
+
+
 
     /**
      * Returns the settings Table, should return null if not present
      *
      * @return
      */
-
-    public abstract Table getSettingsT();
 
 
 }

@@ -7,7 +7,6 @@ import com.draniksoft.ome.editor.support.ems.core.EditMode;
 import com.draniksoft.ome.editor.support.input.MoveMOIC;
 import com.draniksoft.ome.editor.support.render.MoveMORenderer;
 import com.draniksoft.ome.editor.support.render.core.OverlayPlaces;
-import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.EditorSystem;
@@ -61,7 +60,6 @@ public class MoveMOEM implements EditMode {
             _w.getSystem(EditorSystem.class).detachEditMode();
         }
 
-        _w.getSystem(UiSystem.class).createBK();
 
     }
 
@@ -105,8 +103,6 @@ public class MoveMOEM implements EditMode {
     public void detached() {
 
         if (easyQ) return;
-
-        _w.getSystem(UiSystem.class).restoreBK();
 
         _w.getSystem(InputSys.class).clearMainIC();
         _w.getSystem(OverlayRenderSys.class).removeRdr(rdr);

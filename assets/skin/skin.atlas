@@ -39,9 +39,17 @@ menu
   orig: 128, 128
   offset: 0, 0
   index: -1
+round
+  rotate: false
+  xy: 1, 68
+  size: 90, 30
+  split: 7, 12, 11, 12
+  orig: 90, 30
+  offset: 0, 0
+  index: -1
 white
   rotate: false
-  xy: 1, 97
+  xy: 515, 611
   size: 1, 1
   orig: 1, 1
   offset: 0, 0
