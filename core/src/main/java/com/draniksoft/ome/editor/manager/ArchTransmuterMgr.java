@@ -7,9 +7,7 @@ import com.artemis.Manager;
 import com.badlogic.gdx.utils.IntMap;
 import com.draniksoft.ome.editor.components.gfx.DrawableC;
 import com.draniksoft.ome.editor.components.gfx.TexRegC;
-import com.draniksoft.ome.editor.components.pos.PhysC;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
-import com.draniksoft.ome.editor.components.time.TimedC;
 import com.draniksoft.ome.editor.components.tps.MObjectC;
 import com.draniksoft.ome.editor.components.tps.MapC;
 
@@ -46,17 +44,17 @@ public class ArchTransmuterMgr extends Manager{
         types.put(Codes.MAP_C,new ArchetypeBuilder().add(TexRegC.class)
                 .add(MapC.class).add(PosSizeC.class).build(world));
 
-        types.put(Codes.BASE_MO, new ArchetypeBuilder().add(PhysC.class)
-                .add(PosSizeC.class).add(DrawableC.class).add(MObjectC.class)
+	  types.put(Codes.BASE_MO, new ArchetypeBuilder()
+		    .add(PosSizeC.class).add(DrawableC.class).add(MObjectC.class)
                 .build(world));
 
-        types.put(Codes.BASE_LOCATION, new ArchetypeBuilder().add(PhysC.class)
-                .add(PosSizeC.class).add(DrawableC.class)
+	  types.put(Codes.BASE_LOCATION, new ArchetypeBuilder()
+		    .add(PosSizeC.class).add(DrawableC.class)
                 .build(world));
 
-        types.put(Codes.TIMED_LOCATION, new ArchetypeBuilder().add(PhysC.class)
-                .add(PosSizeC.class).add(DrawableC.class)
-                .add(TimedC.class).build(world));
+	  types.put(Codes.TIMED_LOCATION, new ArchetypeBuilder()
+		    .add(PosSizeC.class).add(DrawableC.class)
+		    .build(world));
 
     }
 

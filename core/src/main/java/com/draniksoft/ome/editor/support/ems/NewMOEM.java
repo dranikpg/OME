@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.draniksoft.ome.editor.support.actions.mapO.CreateNewMOA;
 import com.draniksoft.ome.editor.support.ems.core.EditMode;
 import com.draniksoft.ome.editor.support.input.NewMOIC;
-import com.draniksoft.ome.editor.support.input.SelectIC;
+import com.draniksoft.ome.editor.support.input.back.SelectIC;
 import com.draniksoft.ome.editor.support.render.NewMORenderer;
 import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
@@ -59,7 +59,7 @@ public class NewMOEM implements EditMode {
 
     public void createLoc(Vector2 tmp) {
 
-        CreateNewMOA a = new CreateNewMOA(tmp.x, tmp.y, 200, 200, FUtills.DrawablePrefix.P_SIMPLE_DW + "i_casB@mapTile@100");
+	  CreateNewMOA a = new CreateNewMOA(tmp.x, tmp.y, 50, 50, FUtills.DrawablePrefix.P_SIMPLE_DW + "i_casB@mapTile@100");
 
         _w.getSystem(ActionSystem.class).exec(a);
 

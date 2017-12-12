@@ -24,8 +24,7 @@ public class MapRenderSys extends BaseEntitySystem {
 
 
     ComponentMapper<TexRegC> dm;
-    ComponentMapper<PosSizeC> psm;
-
+    ComponentMapper<PosSizeC> ps;
 
     @Wire(name = "game_cam")
     OrthographicCamera cam;
@@ -60,10 +59,9 @@ public class MapRenderSys extends BaseEntitySystem {
 
       }
 
-        if (needrd) redraw();
-
-        cache.setProjectionMatrix(cam.combined);
-      cache.begin();
+	  if (needrd) redraw();
+	  cache.setProjectionMatrix(cam.combined);
+	  cache.begin();
 
       cache.draw(cid);
 
@@ -71,12 +69,10 @@ public class MapRenderSys extends BaseEntitySystem {
 
     }
 
-
     PosSizeC tPSC;
     public void redraw(){
 
         needrd = false;
-
         cache.clear();
         cache.beginCache();
 
@@ -85,8 +81,8 @@ public class MapRenderSys extends BaseEntitySystem {
         for(int i = 0; i < getEntityIds().size(); i++){
 
             e = getEntityIds().get(i);
+		tPSC = ps.get(e);
 
-            tPSC = psm.get(e);
             if (cam.frustum.boundsInFrustum(tPSC.x, tPSC.y, 0, tPSC.w, tPSC.h, 0)) {
 
                 cache.add(dm.get(e).d,tPSC.x,tPSC.y, tPSC.w,tPSC.h);

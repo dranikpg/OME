@@ -4,15 +4,12 @@ import com.artemis.BaseSystem
 import com.artemis.annotations.Wire
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.InputProcessor
-import com.badlogic.gdx.physics.box2d.World
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.draniksoft.ome.editor.support.input.InputController
-import com.draniksoft.ome.editor.support.input.SelectIC
+import com.draniksoft.ome.editor.support.input.back.SelectIC
 
 class InputSys : BaseSystem(), InputProcessor {
 
-    @Wire
-    internal var phys: World? = null
 
     @Wire(name = "game_vp")
     internal var gameVP: Viewport? = null

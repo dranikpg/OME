@@ -8,7 +8,7 @@ public abstract class ActionDesc {
 
     public abstract String getDesc();
 
-    public boolean noargpsb;
+    public boolean quickA;
 
     public static class BaseCodes {
 

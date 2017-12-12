@@ -2,52 +2,20 @@
   "1": {
     "a": [
       {
-        "c": 2,
-        "noargpsb": true,
-        "name_ru": "N",
-        "name_en": "NAME EN",
-        "desc_ru": "N",
-        "desc_en": "DESC EN"
-      }
-    ]
-  },
-  "2": {
-    "a": [
-      {
         "c": 1,
-        "noargpsb": true,
-        "name_ru": "N",
-        "name_en": "Add timed component",
-        "desc_ru": "N",
-        "desc_en": "DESC EN"
+        "quickA": false,
+        "name_ru": "Создать объект",
+        "name_en": "Create map object",
+        "desc_ru": "desc ru",
+        "desc_en": "desc en"
       },
       {
-        "c": 2,
-        "noargpsb": true,
-        "name_ru": "N",
-        "name_en": "Remove timed component",
-        "desc_ru": "N",
-        "desc_en": "DESC EN"
-      }
-    ]
-  },
-  "3": {
-    "a": [
-      {
-        "c": 1,
-        "noargpsb": true,
-        "name_ru": "N",
-        "name_en": "Add timed move component",
-        "desc_ru": "N",
-        "desc_en": "DESC EN"
-      },
-      {
-        "c": 2,
-        "noargpsb": true,
-        "name_ru": "N",
-        "name_en": "Remove timed move component",
-        "desc_ru": "N",
-        "desc_en": "DESC EN"
+        "c": 10,
+        "quickA": true,
+        "name_ru": "Передвинуть объект",
+        "name_en": "Move object",
+        "desc_ru": "desc ru",
+        "desc_en": "desc en"
       }
     ]
   }

@@ -36,7 +36,7 @@ public abstract class CompositionObserver {
 
     public abstract ActionDesc getDesc(int ac);
 
-    public abstract void execA(int id, int _e, Object... os);
+    public abstract void execA(int id, int _e, boolean aT, Object... os);
 
     public abstract String getName();
 
@@ -52,7 +52,7 @@ public abstract class CompositionObserver {
 
             BiLangActionDEsc d = new BiLangActionDEsc();
             d.code = v.getInt("c");
-            d.noargpsb = v.getBoolean("noargpsb");
+            d.quickA = v.getBoolean("quickA");
             d.name_en = v.getString("name_en");
             d.name_ru = v.getString("name_ru");
             d.desc_en = v.getString("desc_en");
@@ -65,15 +65,7 @@ public abstract class CompositionObserver {
 
     public abstract boolean isViewAv(int id);
 
-    public abstract String getViewID();
-
-
-
-    /**
-     * Returns the settings Table, should return null if not present
-     *
-     * @return
-     */
+    public abstract String getViewID(int id);
 
 
 }

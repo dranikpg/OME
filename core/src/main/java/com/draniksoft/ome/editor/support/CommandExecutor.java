@@ -2,7 +2,6 @@ package com.draniksoft.ome.editor.support;
 
 import com.artemis.Aspect;
 import com.artemis.BaseSystem;
-import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.artemis.utils.Bag;
 import com.artemis.utils.ImmutableBag;
@@ -15,7 +14,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.draniksoft.ome.editor.components.selection.SelectionC;
-import com.draniksoft.ome.editor.components.time.TimedMoveC;
 import com.draniksoft.ome.editor.esc_utils.OmeStrategy;
 import com.draniksoft.ome.editor.load.MapLoadBundle;
 import com.draniksoft.ome.editor.manager.MapMgr;
@@ -26,16 +24,14 @@ import com.draniksoft.ome.editor.support.actions.mapO.ChangeDwbA;
 import com.draniksoft.ome.editor.support.compositionObserver.abstr.CompositionObserver;
 import com.draniksoft.ome.editor.support.container.CO_actiondesc.ActionDesc;
 import com.draniksoft.ome.editor.support.container.EM_desc.EditModeDesc;
-import com.draniksoft.ome.editor.support.container.MoveDesc;
 import com.draniksoft.ome.editor.support.ems.core.EditMode;
 import com.draniksoft.ome.editor.support.input.InputController;
 import com.draniksoft.ome.editor.support.input.NewMOIC;
-import com.draniksoft.ome.editor.support.input.SelectIC;
-import com.draniksoft.ome.editor.support.input.TimedSelectIC;
+import com.draniksoft.ome.editor.support.input.back.SelectIC;
+import com.draniksoft.ome.editor.support.input.back.TimedSelectIC;
 import com.draniksoft.ome.editor.support.render.core.OverlyRendererI;
 import com.draniksoft.ome.editor.systems.file_mgmnt.ProjectLoadSystem;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
-import com.draniksoft.ome.editor.systems.pos.PhysicsSys;
 import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.support.*;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
@@ -44,7 +40,6 @@ import com.draniksoft.ome.support.configs.ConfigDao;
 import com.draniksoft.ome.utils.Const;
 import com.draniksoft.ome.utils.Env;
 import com.draniksoft.ome.utils.dao.AssetDDao;
-import com.draniksoft.ome.utils.struct.Pair;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -300,9 +295,6 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     public void le_ppos(int _e) {
 
-        Pair<Float, Float> p = world.getSystem(PhysicsSys.class).getPhysPos(_e);
-
-        console.log("" + p.getElement0() + " " + p.getElement1());
 
     }
 
@@ -340,7 +332,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
             for (ActionDesc d : o.getDesc().values()) {
 
-                console.log(d.code + " -> " + d.getName() + "  || " + " nooarg = " + d.noargpsb + " aviab = " + o.isAviab(d.code));
+		    console.log(d.code + " -> " + d.getName() + "  || " + " quick = " + d.quickA + " aviab = " + o.isAviab(d.code));
 
             }
         } catch (Exception e) {
@@ -371,27 +363,6 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     public void te_addMoveC(int s, int e, int x, int y, int _e) {
 
-        try {
-            ComponentMapper<TimedMoveC> cm = world.getMapper(TimedMoveC.class);
-
-            if (!cm.has(_e)) {
-                cm.create(_e);
-                cm.get(_e).a = new Array<MoveDesc>();
-            }
-
-            MoveDesc d = new MoveDesc();
-            d.time_s = s;
-            d.time_e = e;
-            d.end_x = x;
-            d.end_y = y;
-            Pair<Float, Float> p = world.getSystem(PhysicsSys.class).getPhysPos(_e);
-            d.start_x = p.getElement0().intValue();
-            d.start_y = p.getElement1().intValue();
-
-            cm.get(_e).a.add(d);
-        } catch (Exception er) {
-            Gdx.app.error("", ",", er);
-        }
 
     }
 

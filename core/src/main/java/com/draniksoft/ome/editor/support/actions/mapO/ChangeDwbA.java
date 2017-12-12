@@ -35,8 +35,8 @@ public class ChangeDwbA implements Action {
 	  }
 
         MObjectC c = w.getMapper(MObjectC.class).get(_e);
-	  old = c.getDwbData();
-	  c.setDwbData(d);
+        old = c.dwbID;
+        c.dwbID = d;
 
         DrawableC dc = w.getMapper(DrawableC.class).get(_e);
 	  dc.d = dwb;

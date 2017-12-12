@@ -10,8 +10,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteCache;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -23,13 +21,12 @@ import com.draniksoft.ome.editor.systems.file_mgmnt.AssetLScheduleSys;
 import com.draniksoft.ome.editor.systems.file_mgmnt.ProjectLoadSystem;
 import com.draniksoft.ome.editor.systems.gfx_support.CameraSys;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
-import com.draniksoft.ome.editor.systems.pos.PhysicsSys;
+import com.draniksoft.ome.editor.systems.pos.PositionSystem;
 import com.draniksoft.ome.editor.systems.render.BaseRenderSys;
 import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.render.map.MapRDebugSys;
 import com.draniksoft.ome.editor.systems.render.map.MapRenderSys;
 import com.draniksoft.ome.editor.systems.render.obj.ObjRSys;
-import com.draniksoft.ome.editor.systems.render.obj.PhysRDebugSys;
 import com.draniksoft.ome.editor.systems.support.*;
 import com.draniksoft.ome.editor.systems.time.TimeActivitySys;
 import com.draniksoft.ome.main_menu.MainBase;
@@ -147,11 +144,9 @@ public class EngineLoader {
         @Override
         public void run(IntelligentLoader l) {
 
-            World phys = new World(new Vector2(0, 0), true);
             InputMultiplexer mx = new InputMultiplexer();
             AssetManager assm = new AssetManager();
 
-            c.register(phys);
             c.register(mx);
             c.register(assm);
 
@@ -290,7 +285,7 @@ public class EngineLoader {
 
             // PHYS POS SYS
 
-            cb.with(new PhysicsSys());
+		cb.with(new PositionSystem());
 
             // RENDER PART
 
@@ -306,8 +301,6 @@ public class EngineLoader {
 
 
             cb.with(new ObjRSys());
-
-            cb.with(new PhysRDebugSys());
 
             cb.with(new UiSystem());
 

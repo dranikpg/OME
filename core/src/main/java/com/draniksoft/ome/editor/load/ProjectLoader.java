@@ -15,7 +15,6 @@ import com.draniksoft.ome.editor.manager.MapMgr;
 import com.draniksoft.ome.editor.manager.ProjectMgr;
 import com.draniksoft.ome.editor.manager.TimeMgr;
 import com.draniksoft.ome.editor.manager.drawable.SimpleDrawableMgr;
-import com.draniksoft.ome.editor.systems.pos.PhysicsSys;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.support.load.interfaces.IGLRunnable;
@@ -157,15 +156,13 @@ public class ProjectLoader {
 		MObjectC mc = moM.get(e);
 
 		DrawableC dwC = dwc.create(e);
-		dwC.d = FUtills.fetchDrawable(mc.getDwbData());
+		dwC.d = FUtills.fetchDrawable(mc.dwbID);
 
 		PosSizeC psc = psM.create(e);
-		psc.x = mc.getX();
-		psc.y = mc.getY();
-		psc.w = mc.getW();
-		psc.h = mc.getH();
-
-		w.getSystem(PhysicsSys.class).createBodyFromSPos(psc.x, psc.y, e);
+		psc.x = mc.x;
+		psc.y = mc.y;
+		psc.w = mc.w;
+		psc.h = mc.h;
 
 
 		i++;
@@ -217,13 +214,13 @@ public class ProjectLoader {
 
 	  Gdx.app.debug(tag, "Load successful");
 
-	  lst.onResponse((short) ResponseCode.SUCCESSFUL);
+	  lst.onResponse(ResponseCode.SUCCESSFUL);
 
     }
 
     private void notfiyFail() {
 
-	  lst.onResponse((short) ResponseCode.FAILED);
+	  lst.onResponse(ResponseCode.FAILED);
 
     }
 

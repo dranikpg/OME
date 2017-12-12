@@ -47,7 +47,7 @@ class ProjectLoadSystem : BaseSystem() {
 
         Gdx.app.debug(tag, "Loading")
 
-        logLoad(bundle.fPath)
+        logLoad(bundle.inDir)
 
         state = STATE_LOADING
 
@@ -68,7 +68,7 @@ class ProjectLoadSystem : BaseSystem() {
 
         Gdx.app.debug(tag, "Saving")
 
-        logLoad(bundle.fPath)
+        logLoad(bundle.outDir)
 
         state = STATE_SAVING
 

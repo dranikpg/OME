@@ -6,13 +6,12 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.draniksoft.ome.editor.support.ems.MoveMOEM;
-import com.draniksoft.ome.editor.support.render.MoveMORenderer;
 
 public class MoveMOIC implements InputController {
 
     private static final String tag = "MoveMOIC";
 
-    MoveMORenderer rdr;
+
     MoveMOEM em;
     int e;
 
@@ -38,7 +37,6 @@ public class MoveMOIC implements InputController {
 
         tmp = vp.unproject(tmp.set(Gdx.input.getX(), Gdx.input.getY()));
 
-        rdr.setMousePos(tmp.x, tmp.y);
 
 
     }
@@ -87,9 +85,6 @@ public class MoveMOIC implements InputController {
         this.em = em;
     }
 
-    public void setRdr(MoveMORenderer rdr) {
-        this.rdr = rdr;
-    }
 
     public void setReactOnKill(boolean reactOnKill) {
         this.reactOnKill = reactOnKill;

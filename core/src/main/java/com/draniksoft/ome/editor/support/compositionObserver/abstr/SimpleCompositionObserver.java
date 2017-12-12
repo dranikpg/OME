@@ -33,17 +33,15 @@ public abstract class SimpleCompositionObserver extends CompositionObserver {
 
     @Override
     public void setSelection(int e) {
-
         if (e == _selE) return;
-
         boolean bac = active;
+        int prevE = _selE;
         this._selE = e;
         active = matches(e);
-
-        on_selchanged(bac);
+        on_selchanged(bac, prevE);
     }
 
-    protected abstract void on_selchanged(boolean previousActivity);
+    protected abstract void on_selchanged(boolean previousActivity, int previd);
 
     @Override
     public void selectionCompChanged() {

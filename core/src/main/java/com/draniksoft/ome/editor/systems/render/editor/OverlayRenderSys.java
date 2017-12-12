@@ -1,28 +1,28 @@
 package com.draniksoft.ome.editor.systems.render.editor;
 
-import com.artemis.Aspect;
-import com.artemis.BaseEntitySystem;
+import com.artemis.BaseSystem;
 import com.artemis.annotations.Wire;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntArray;
-import com.draniksoft.ome.editor.components.selection.SelectionC;
 import com.draniksoft.ome.editor.support.event.workflow.ModeChangeE;
 import com.draniksoft.ome.editor.support.render.core.OverlyRendererI;
-import com.draniksoft.ome.editor.support.render.def.PathRenderer;
-import com.draniksoft.ome.editor.support.render.def.SelectionRenderer;
 import net.mostlyoriginal.api.event.common.EventSystem;
 import net.mostlyoriginal.api.event.common.Subscribe;
 
 
-public class OverlayRenderSys extends BaseEntitySystem {
+public class OverlayRenderSys extends BaseSystem {
 
     private final static String tag = "OverlayRenderSys";
 
     @Wire
     SpriteBatch b;
+
+    @Wire
+    ShapeRenderer r;
 
     @Wire(name = "game_cam")
     OrthographicCamera cam;
@@ -30,7 +30,7 @@ public class OverlayRenderSys extends BaseEntitySystem {
     Array<OverlyRendererI> rs;
 
     public OverlayRenderSys() {
-        super(Aspect.all(SelectionC.class));
+
     }
 
 
@@ -39,41 +39,34 @@ public class OverlayRenderSys extends BaseEntitySystem {
 
         rs = new Array<OverlyRendererI>();
 
-        restoreDef();
-
         world.getSystem(EventSystem.class).registerEvents(this);
 
     }
-
-    int _e;
 
     @Override
     protected void processSystem() {
 
 
-        if (getEntityIds().size() < 1)
-            _e = -1;
-        else
-            _e = getEntityIds().get(0);
-
         b.setProjectionMatrix(cam.combined);
         b.begin();
-
         for (int i = 0; i < rs.size; i++) {
-
             rs.get(i).render(b, cam);
-
         }
-
         b.end();
 
+
+        r.setProjectionMatrix(cam.combined);
+        r.setAutoShapeType(true);
+        r.begin();
+        for (int i = 0; i < rs.size; i++) {
+            rs.get(i).render(r, cam);
+
+        }
+        r.end();
+
     }
 
-    public void restoreDef() {
-        addRdr(new SelectionRenderer());
-        addRdr(new PathRenderer());
 
-    }
 
 
     public Array<OverlyRendererI> getRs() {
@@ -89,7 +82,7 @@ public class OverlayRenderSys extends BaseEntitySystem {
         rs.removeValue(r, true);
     }
 
-    public void removeRdrByID(int id) {
+    public void removeRdr(int id) {
 
         int ri = -1;
 
@@ -168,12 +161,7 @@ public class OverlayRenderSys extends BaseEntitySystem {
 
     @Subscribe
     public void modeChanged(ModeChangeE e) {
-        if (e.SHOW_MODE) {
 
-
-        } else {
-            restoreDef();
-        }
 
 
     }

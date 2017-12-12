@@ -127,7 +127,6 @@ public class EditorSystem extends BaseSystem {
     public void selectionChanged(SelectionChangeE e) {
 
         sel = e.n;
-
         for (CompositionObserver p : comObs.values()) {
             p.setSelection(e.n);
         }
