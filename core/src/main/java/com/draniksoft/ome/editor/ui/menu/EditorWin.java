@@ -1,4 +1,4 @@
-package com.draniksoft.ome.editor.ui;
+package com.draniksoft.ome.editor.ui.menu;
 
 import com.artemis.World;
 import com.badlogic.gdx.Gdx;
@@ -11,6 +11,7 @@ import com.draniksoft.ome.support.ui.util.WindowAgent;
 import com.draniksoft.ome.support.ui.viewsys.BaseWinView;
 import com.draniksoft.ome.utils.respone.ResponseCode;
 import com.draniksoft.ome.utils.struct.ResponseListener;
+import com.draniksoft.ome.utils.ui.editorMenu.WinControllerOverlay;
 import com.kotcrab.vis.ui.widget.VisWindow;
 
 public class EditorWin extends VisWindow implements WinControllerOverlay {
@@ -31,13 +32,13 @@ public class EditorWin extends VisWindow implements WinControllerOverlay {
 
     WindowAgent agent;
 
+    String curID = null;
+
 
     public EditorWin(World w) {
 	  super("");
-	  background("d_grey");
 	  this.w = w;
 	  this.uiSys = w.getSystem(UiSystem.class);
-
 	  root = new Table();
 	  pane = new ScrollPane(root);
 
@@ -61,7 +62,6 @@ public class EditorWin extends VisWindow implements WinControllerOverlay {
 	  if (agent != null)
 		agent.opened(vw);
 
-
 	  root.clearChildren();
 	  root.add(v.getActor()).expand().fill();
 
@@ -70,35 +70,50 @@ public class EditorWin extends VisWindow implements WinControllerOverlay {
 	  uiSys.validateLayout();
     }
 
+    public String getViewID() {
+	  return curID;
+    }
 
     public void clearWin() {
 	  root.clear();
-	  vw.closed();
+	  if (vw != null) vw.closed();
 	  if (agent != null) agent.closed();
 	  agent = null;
+	  curID = null;
     }
 
-    public void open(String id) {
+    public void open(final String id, final WindowAgent ag) {
 
 	  Gdx.app.debug(tag, "opening on");
 
 	  final LmlUIMgr m = AppDO.I.LML();
+
 	  if (m.hasViewAvailable(id)) {
+		clearWin();
+		agent = ag;
 		initFor((BaseWinView) m.getView(id));
+
+		curID = id;
+
 	  } else {
+
 		parsing = true;
 		m.parseView(new ResponseListener() {
 		    @Override
 		    public void onResponse(short code) {
 			  if (code == ResponseCode.SUCCESSFUL) {
+				clearWin();
+				agent = ag;
 				initFor((BaseWinView) m.obtainParsed());
+				curID = id;
 			  } else {
-				close();
+				clearWin();
 			  }
 			  parsing = false;
 		    }
 		}, id);
 	  }
+
     }
 
 
@@ -129,11 +144,6 @@ public class EditorWin extends VisWindow implements WinControllerOverlay {
 
     public BaseWinView getVw() {
 	  return vw;
-    }
-
-
-    public void setAgent(WindowAgent ag) {
-	  agent = ag;
     }
 
     //

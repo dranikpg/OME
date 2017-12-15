@@ -83,7 +83,7 @@ public class PositionSystem extends BaseEntitySystem {
 	  for (int i = 0; i < getEntityIds().size(); i++) {
 		PosSizeC c = m.get(getEntityIds().get(i));
 		r.setPosition(c.x, c.y);
-		r.setSize(c.x, c.y);
+		r.setSize(c.w, c.h);
 		if (r.contains(x, y)) {
 		    return getEntityIds().get(i);
 		}

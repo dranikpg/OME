@@ -8,12 +8,13 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.draniksoft.ome.editor.support.event.base_gfx.ResizeEvent;
 import com.draniksoft.ome.editor.support.event.workflow.ModeChangeE;
-import com.draniksoft.ome.editor.ui.BottomMenu;
-import com.draniksoft.ome.editor.ui.EditorWin;
+import com.draniksoft.ome.editor.ui.menu.BottomMenu;
+import com.draniksoft.ome.editor.ui.menu.EditorWin;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.support.load.interfaces.IRunnable;
 import com.draniksoft.ome.support.ui.util.WindowAgent;
-import com.draniksoft.ome.utils.ui.MenuWinController;
+import com.draniksoft.ome.utils.ui.editorMenu.MenuWinController;
+import com.kotcrab.vis.ui.widget.VisImageButton;
 import net.mostlyoriginal.api.event.common.EventSystem;
 import net.mostlyoriginal.api.event.common.Subscribe;
 
@@ -40,14 +41,13 @@ public class UiSystem extends BaseSystem {
 
     MenuWinController ctr;
 
+    String bkID;
+
     @Override
     protected void initialize() {
-
         engineL.passRunnable(new Loader());
-
         world.getSystem(EventSystem.class).registerEvents(this);
         multiplexer.addProcessor(0, uiStage);
-
     }
 
     @Override
@@ -72,12 +72,11 @@ public class UiSystem extends BaseSystem {
 
     public void openWin(String id, WindowAgent ag) {
         if (!w.canOpen(id)) return;
-        w.setAgent(ag);
-        _open(id);
+        _open(id, ag);
     }
 
-    private void _open(String id) {
-        w.open(id);
+    private void _open(String id, WindowAgent ag) {
+        w.open(id, ag);
     }
 
     public void closeWin() {
@@ -92,7 +91,13 @@ public class UiSystem extends BaseSystem {
             m = new BottomMenu(UiSystem.this);
             w = new EditorWin(world);
 
-            m.setHeight(70f);
+            m.setHeight(40f);
+
+            for (int i = 0; i < 5; i++) {
+                VisImageButton img = new VisImageButton("i_undo");
+                m.add(img).size(35).padLeft(20);
+            }
+
             w.setX(uiStage.getWidth());
 
             uiStage.addActor(w);
@@ -121,7 +126,6 @@ public class UiSystem extends BaseSystem {
         realignLayout();
     }
 
-
     public float getStageW() {
         return uiStage.getWidth();
     }
@@ -133,4 +137,15 @@ public class UiSystem extends BaseSystem {
     public MenuWinController getCtr() {
         return ctr;
     }
+
+    public void createBK() {
+        bkID = w.getViewID();
+    }
+
+    public void inflateBK() {
+        if (bkID != null) {
+            openWin(bkID);
+        }
+    }
+
 }

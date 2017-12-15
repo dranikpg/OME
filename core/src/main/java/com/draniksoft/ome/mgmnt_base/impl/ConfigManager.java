@@ -8,6 +8,7 @@ import com.draniksoft.ome.editor.support.event.config.ConfigValChangeE;
 import com.draniksoft.ome.main_menu.MainBase;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.mgmnt_base.base.AppDataManager;
+import com.draniksoft.ome.support.configs.ConfReferencer;
 import com.draniksoft.ome.support.configs.ConfigDao;
 import com.draniksoft.ome.support.configs.ConfigValueType;
 import com.draniksoft.ome.support.load.IntelligentLoader;
@@ -26,7 +27,7 @@ public class ConfigManager extends AppDataManager {
 
     ObjectMap<String,  // index that changes
             ObjectMap<String, // index that needs change
-                    ObjectMap<Object, Object>>> trig; // val :: key
+			  ConfReferencer<Object, Object>>> trig; // val :: key
 
     JsonValue jv;
 
@@ -35,7 +36,7 @@ public class ConfigManager extends AppDataManager {
         m = new HashMap<String, ConfigDao>();
 
         //            val that changes      val that needs ch   val : key
-        trig = new ObjectMap<String, ObjectMap<String, ObjectMap<Object, Object>>>();
+	  trig = new ObjectMap<String, ObjectMap<String, ConfReferencer<Object, Object>>>();
 
         loadDaos();
 
@@ -46,17 +47,16 @@ public class ConfigManager extends AppDataManager {
         for (JsonValue v : jv) {
             if (!v.has("trig")) continue;
             for (JsonValue pv : v.get("trig")) {
-                trig.get(pv.name).put(v.name, new ObjectMap<Object, Object>());
-                for (JsonValue uv : pv) {
+		    trig.get(pv.name).put(v.name, new ConfReferencer<Object, Object>());
+		    for (JsonValue uv : pv) {
                     String kS = uv.name;
                     String vS = uv.asString();
                     Object kV;
                     Object vV;
                     kV = JsonUtils.parseTpye(kS, getConfT(pv.name));
                     vV = JsonUtils.parseTpye(vS, getConfT(v.name));
-                    trig.get(pv.name).get(v.name).put(kV, vV);
-
-                }
+			  trig.get(pv.name).get(v.name).insert(kV, vV);
+		    }
             }
         }
 
@@ -121,10 +121,21 @@ public class ConfigManager extends AppDataManager {
     }
 
     private void checkTrigger(String id, Object val) {
-        for (ObjectMap.Entry<String, ObjectMap<Object, Object>> e : trig.get(id).entries()) {
-            if (e.value.containsKey(val)) {
-                setConfVal(e.key, e.value.get(val));
-            }
+	  for (ObjectMap.Entry<String, ConfReferencer<Object, Object>> e : trig.get(id).entries()) {
+		if (e.value.hasConf(val)) {
+		    Object nval = e.value.get(val);
+		    if (nval instanceof String && ((String) nval).startsWith("$+")) {
+			  String newID = ((String) nval).substring(2);
+			  if (hasConfig(newID)) {
+				nval = getConfVal(newID, getConfT(newID));
+			  }
+		    }
+		    setConfVal(e.key, nval);
+		} else {
+		    if (e.value.hasOption()) {
+			  setConfVal(e.key, e.value.getOptional());
+		    }
+		}
         }
     }
 
@@ -150,7 +161,7 @@ public class ConfigManager extends AppDataManager {
 
 
     private void addRdM(String id) {
-        trig.put(id, new ObjectMap<String, ObjectMap<Object, Object>>());
+	  trig.put(id, new ObjectMap<String, ConfReferencer<Object, Object>>());
     }
 
     private void constructDao(JsonValue v, boolean forceDef) {

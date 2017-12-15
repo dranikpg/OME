@@ -1,7 +1,8 @@
 package com.draniksoft.ome.support.ui.viewsys;
 
 import com.badlogic.gdx.math.MathUtils;
-import com.draniksoft.ome.editor.ui.WinControllerOverlay;
+import com.draniksoft.ome.editor.systems.gui.UiSystem;
+import com.draniksoft.ome.utils.ui.editorMenu.WinControllerOverlay;
 
 public abstract class BaseWinView extends BaseView {
 
@@ -42,7 +43,7 @@ public abstract class BaseWinView extends BaseView {
 
     }
 
-    public void consumeConfig(WinDao d) {
+    public final void consumeConfig(WinDao d) {
 	  percentMode = d.pctMode;
 	  pct = d.pct;
 	  w = d.w;
@@ -58,6 +59,10 @@ public abstract class BaseWinView extends BaseView {
     public void init(WinControllerOverlay c) {
 	  c.setMenuHide(hideM);
 	  c.setMenuReplace(replaceB);
+    }
+
+    public void closeWin() {
+	  _w.getSystem(UiSystem.class).closeWin();
     }
 
     public void calc(WinControllerOverlay c) {

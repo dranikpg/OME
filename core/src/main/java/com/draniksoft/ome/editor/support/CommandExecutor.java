@@ -241,8 +241,8 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
         EditModeDesc d;
         while (ds.hasNext()) {
             d = ds.next();
-            console.log(d.getName() + " [ " + d.id + " ] " + " (av" + d.aviabT + ")" + " -> " + d.c.getSimpleName());
-        }
+		console.log(d.getName() + " [ " + d.id + " ] " + " (av " + d.aviabT + ")" + " -> " + d.c.getSimpleName());
+	  }
 
 
     }
@@ -318,7 +318,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     }
 
-    public void log_cos_acts(int id) {
+    public void log_cos_a(int id) {
 
         CompositionObserver o = world.getSystem(EditorSystem.class).getComOb(id);
 

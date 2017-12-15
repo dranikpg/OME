@@ -1,4 +1,4 @@
-package com.draniksoft.ome.editor.ui;
+package com.draniksoft.ome.utils.ui.editorMenu;
 
 public interface WinControllerOverlay {
 

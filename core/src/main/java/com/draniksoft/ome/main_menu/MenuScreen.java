@@ -12,7 +12,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisImage;
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisTextButton;
 
 public class MenuScreen implements Screen {
 
@@ -40,8 +39,8 @@ public class MenuScreen implements Screen {
         contentT = new VisTable();
         controlT = new VisTable();
 
-        VisImage logo = new VisImage("logo");
-        controlT.add(logo);
+	  VisImage logo = new VisImage("logo-dark");
+	  controlT.add(logo);
         controlT.row();
         logo.addListener(new InputListener() {
             @Override
@@ -50,13 +49,6 @@ public class MenuScreen implements Screen {
                 return true;
             }
         });
-
-        controlT.add(new VisTextButton("LOL"));
-        controlT.row();
-        controlT.add(new VisTextButton("LOL"));
-        controlT.row();
-        controlT.add(new VisTextButton("LOL"));
-        controlT.row();
 
         rootT.add(controlT).fill().padBottom(50).padRight(50).padLeft(10).padTop(50);
         rootT.add(contentT).expand().fill().pad(50);

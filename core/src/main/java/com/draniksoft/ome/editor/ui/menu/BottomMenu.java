@@ -1,4 +1,4 @@
-package com.draniksoft.ome.editor.ui;
+package com.draniksoft.ome.editor.ui.menu;
 
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.kotcrab.vis.ui.widget.VisTable;
@@ -11,7 +11,7 @@ public class BottomMenu extends VisTable {
 
     public BottomMenu(UiSystem sys) {
 	  this.uiSys = sys;
-	  setBackground("d_light_strip_blue");
+	  setBackground("primary");
     }
 
 

@@ -1,10 +1,10 @@
-package com.draniksoft.ome.utils.ui;
+package com.draniksoft.ome.utils.ui.editorMenu;
 
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
-import com.draniksoft.ome.editor.ui.BottomMenu;
-import com.draniksoft.ome.editor.ui.EditorWin;
+import com.draniksoft.ome.editor.ui.menu.BottomMenu;
+import com.draniksoft.ome.editor.ui.menu.EditorWin;
 
 public class MenuWinController {
 
@@ -102,6 +102,8 @@ public class MenuWinController {
     }
 
     private void applyBasics() {
+
+	  w.clearActions();
 
 	  if (menuHide) {
 		m.setY(-m.getHeight());

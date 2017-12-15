@@ -11,6 +11,14 @@
       },
       {
         "c": 10,
+        "quickA": false,
+        "name_ru": "Передвинуть объект",
+        "name_en": "Move object",
+        "desc_ru": "desc ru",
+        "desc_en": "desc en"
+      },
+      {
+        "c": 20,
         "quickA": true,
         "name_ru": "Передвинуть объект",
         "name_en": "Move object",

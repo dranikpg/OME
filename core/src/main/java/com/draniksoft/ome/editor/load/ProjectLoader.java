@@ -164,7 +164,6 @@ public class ProjectLoader {
 		psc.w = mc.w;
 		psc.h = mc.h;
 
-
 		i++;
 
 		return IGLRunnable.RUNNING;

@@ -6,5 +6,9 @@
   "test2": {
     "lml": "i/test2.lml",
     "class": "com.draniksoft.ome.support.ui.viewsys.impl.SecTest"
+  },
+  "move_mo_em": {
+    "lml": "em/move_mo.lml",
+    "class": "com.draniksoft.ome.editor.ui.em_ui.MoveMOView"
   }
 }

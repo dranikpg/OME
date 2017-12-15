@@ -37,7 +37,7 @@ public class LoadingScreen implements Screen {
         vp = new FitViewport(1500, 700);
 
         VisUI.load("skin/skin.json");
-        logoT = VisUI.getSkin().getRegion("logo");
+	  logoT = VisUI.getSkin().getRegion("logo-dark");
 
         vp.apply();
 

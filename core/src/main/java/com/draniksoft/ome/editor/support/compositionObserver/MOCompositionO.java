@@ -10,20 +10,36 @@ import com.draniksoft.ome.editor.support.actions.mapO.CreateNewMOA;
 import com.draniksoft.ome.editor.support.actions.mapO.MoveMOA;
 import com.draniksoft.ome.editor.support.compositionObserver.abstr.SimpleCompositionObserver;
 import com.draniksoft.ome.editor.support.container.CO_actiondesc.ActionDesc;
+import com.draniksoft.ome.editor.support.container.EM_desc.EditModeDesc;
 import com.draniksoft.ome.editor.support.render.def.SelectionRenderer;
 import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
+import com.draniksoft.ome.editor.systems.support.EditorSystem;
 import com.draniksoft.ome.support.ui.util.CompObViewIds;
+
+import static com.draniksoft.ome.editor.support.compositionObserver.MOCompositionO.ActionCodes.*;
 
 public class MOCompositionO extends SimpleCompositionObserver {
 
     public static class ActionCodes {
         // X;Y;DWB_ID;W;H
         public static final int CREATE = ActionDesc.BaseCodes.ACTION_CREATE;
+        public static final int RESET = ActionDesc.BaseCodes.ACTION_RESET;
+
+        // 10 -> 20 setter
+
         // X;Y;CENTER?
         public static final int MOVE = 10;
         //
         public static final int RESIZE = 11;
+
+
+        // 20 -> 30 Quick EM launcher
+
+        public static final int MOVE_QEM = 20;
+
+
+
     }
 
     IntMap<ActionDesc> desc;
@@ -45,6 +61,7 @@ public class MOCompositionO extends SimpleCompositionObserver {
                 rSys.removeRdr(r);
             }
         }
+        _w.getSystem(EditorSystem.class).getEditModeDesc(EditModeDesc.IDS.moveMO).aviabT = isSelActive() ? EditModeDesc.AVAILABLE : EditModeDesc.AV_HIDDEN;
     }
 
     @Override
@@ -75,9 +92,12 @@ public class MOCompositionO extends SimpleCompositionObserver {
     @Override
     public boolean isAviab(int ac, int e) {
 
-        if (ac == ActionCodes.CREATE) {
+        if (ac == CREATE) {
             return !matches(e);
-        } else if (ac == ActionDesc.BaseCodes.ACTION_RESET || (ac >= ActionCodes.MOVE && ac <= ActionCodes.RESIZE)) {
+        } else if (
+                (ac >= MOVE && ac <= RESIZE) ||
+                        (ac == MOVE_QEM) ||
+                        ac == RESET) {
             return matches(e);
         }
 
@@ -98,7 +118,7 @@ public class MOCompositionO extends SimpleCompositionObserver {
     @Override
     public void execA(int id, int _e, boolean aT, Object... os) {
 
-        if (id == ActionCodes.CREATE) {
+        if (id == CREATE) {
 
             CreateNewMOA a = new CreateNewMOA();
             a._e = _e;
@@ -111,7 +131,7 @@ public class MOCompositionO extends SimpleCompositionObserver {
             if (aT) _w.getSystem(ActionSystem.class).exec(a);
             else a.invoke(_w);
 
-        } else if (id == ActionCodes.MOVE) {
+        } else if (id == MOVE) {
 
             MoveMOA a = new MoveMOA();
             a._e = _e;
@@ -121,6 +141,10 @@ public class MOCompositionO extends SimpleCompositionObserver {
 
             if (aT) _w.getSystem(ActionSystem.class).exec(a);
             else a.invoke(_w);
+
+        } else if (id == MOVE_QEM) {
+
+            _w.getSystem(EditorSystem.class).attachNewEditMode(EditModeDesc.IDS.moveMO);
 
         }
     }

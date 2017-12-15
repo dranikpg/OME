@@ -68,8 +68,6 @@ public class SelectIC implements InputController {
 
         w.getSystem(EventSystem.class).dispatch(ev);
 
-	  Gdx.app.debug(tag, "NEW INPUT " + e);
-
     }
 
     @Override

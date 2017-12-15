@@ -1,41 +1,41 @@
 {
   com.badlogic.gdx.graphics.g2d.BitmapFont: {
-    futa_28: {
-      file: futa_28.fnt
+    big: {
+      file: futa_37.fnt
     }
-    futa_42: {
-      file: futa_42.fnt
+    med: {
+      file: futa_25.fnt
     }
   }
   com.badlogic.gdx.graphics.Color: {
-    blue_ls: {
-      r: 0.47058824
-      g: 0.78431374
-      b: 0.88235295
-      a: 1
-    }
-    dark_grey: {
-      r: 0.13333334
-      g: 0.13725491
-      b: 0.14117648
+    black: {
+      r: 0.15686275
+      g: 0.15686275
+      b: 0.15686275
       a: 1
     }
     grey: {
-      r: 0.9411765
-      g: 0.9411765
-      b: 0.9411765
+      r: 0.9019608
+      g: 0.9019608
+      b: 0.9019608
       a: 1
     }
-    light_b: {
-      r: 0.15686275
-      g: 0.7058824
+    primary: {
+      r: 0.39215687
+      g: 0.74509805
       b: 0.84313726
       a: 1
     }
-    logo_b: {
-      r: 0
-      g: 0.627451
-      b: 0.8901961
+    primary_dark: {
+      r: 0.078431375
+      g: 0.5882353
+      b: 0.74509805
+      a: 1
+    }
+    secondary: {
+      r: 1
+      g: 0.65631115
+      b: 0.050000012
       a: 1
     }
     white: {
@@ -46,61 +46,151 @@
     }
   }
   com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
-    d_grey: {
-      name: white
+    black: {
+      name: w
+      color: black
+    }
+    grey: {
+      name: w
       color: grey
     }
-    d_darkgrey: {
-      name: white
-      color: dark_grey
+    primary: {
+      name: w
+      color: primary
     }
-    d_logo_b: {
-      name: white
-      color: logo_b
+    primary_dark: {
+      name: w
+      color: primary_dark
     }
-    d_light_strip_blue: {
-      name: white
-      color: blue_ls
+    secondary: {
+      name: w
+      color: secondary
     }
-    menu_lb: {
-      name: menu
-      color: logo_b
+    c_black: {
+      name: c
+      color: black
     }
-    menu_lib: {
-      name: menu
-      color: light_b
+    c_grey: {
+      name: c
+      color: grey
     }
-    menu_dg: {
-      name: menu
-      color: dark_grey
+    c_primary: {
+      name: c
+      color: primary
     }
-    BRDWB: {
-      name: round
-      color: light_b
+    c_secondary: {
+      name: c
+      color: secondary
+    }
+    i_edit: {
+      name: edit
+      color: black
+    }
+    i_export: {
+      name: export
+      color: black
+    }
+    i_globe: {
+      name: globe
+      color: black
+    }
+    i_open: {
+      name: open
+      color: black
+    }
+    i_save: {
+      name: save
+      color: black
+    }
+    i_stx: {
+      name: settings
+      color: black
+    }
+    i_undo: {
+      name: undo
+      color: black
+    }
+    i_undo_grey: {
+      name: undo
+      color: grey
+    }
+    i_edit_grey: {
+      name: edit
+      color: grey
+    }
+    i_export_grey: {
+      name: export
+      color: grey
+    }
+    i_globe_grey: {
+      name: globe
+      color: grey
+    }
+    i_open_grey: {
+      name: open
+      color: grey
+    }
+    i_save_grey: {
+      name: save
+      color: grey
+    }
+    i_stx_grey: {
+      name: settings
+      color: grey
     }
   }
   com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
     default: {
-      font: futa_28
-      fontColor: dark_grey
+      font: med
+      fontColor: black
     }
     small: {
-      font: futa_28
-      fontColor: dark_grey
+      font: med
+      fontColor: black
     }
     title: {
-      font: futa_42
-      fontColor: dark_grey
+      font: big
+      fontColor: black
     }
-    editor_main_menu: {
-      font: futa_42
-      fontColor: dark_grey
-      background: d_grey
+    grey: {
+      font: med
+      fontColor: grey
     }
-    sm: {
-      font: futa_28
-      fontColor: dark_grey
-      background: d_grey
+    primary: {
+      font: med
+      fontColor: primary
+    }
+    secondary: {
+      font: med
+      fontColor: secondary
+    }
+    big: {
+      font: big
+      fontColor: black
+    }
+    big_primary: {
+      font: big
+      fontColor: primary
+    }
+    big_secondary: {
+      font: big
+      fontColor: secondary
+    }
+    pimary_dark: {
+      font: med
+      fontColor: primary_dark
+    }
+    big_primary_dark: {
+      font: big
+      fontColor: primary_dark
+    }
+    white: {
+      font: med
+      fontColor: white
+    }
+    big_white: {
+      font: big
+      fontColor: white
     }
   }
   com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
@@ -110,34 +200,9 @@
   }
   com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
     default: {
-      background: d_grey
-      titleFont: futa_42
-      titleFontColor: dark_grey
-    }
-  }
-  com.kotcrab.vis.ui.widget.VisTextField$VisTextFieldStyle: {
-    default: {
-      font: futa_28
-      fontColor: dark_grey
-      selection: d_light_strip_blue
-      background: white
-      cursor: d_darkgrey
-    }
-  }
-  com.kotcrab.vis.ui.widget.VisImageButton$VisImageButtonStyle: {
-    default: {
-      over: white
-    }
-    menu: {
-      up: menu_lb
-      checked: menu_dg
-    }
-  }
-  com.kotcrab.vis.ui.widget.LinkLabel$LinkLabelStyle: {
-    default: {
-      fontColor: logo_b
-      underline: d_logo_b
-      font: futa_28
+      background: grey
+      titleFont: big
+      titleFontColor: black
     }
   }
   com.kotcrab.vis.ui.Sizes: {
@@ -156,33 +221,11 @@
       fileChooserViewModeListWidthSize: 150
     }
   }
-  com.kotcrab.vis.ui.widget.VisTextButton$VisTextButtonStyle: {
-    default: {
-      font: futa_42
-      fontColor: light_b
-      checkedFontColor: dark_grey
-      overFontColor: logo_b
-    }
-    editor_main_menu: {
-      font: futa_42
-      fontColor: dark_grey
-      overFontColor: logo_b
-      up: d_grey
-      down: d_grey
-      over: d_grey
-    }
-    close: {
-      font: futa_42
-      fontColor: dark_grey
-      overFontColor: blue_ls
-    }
-    editor_main_menu_sm: {
-      font: futa_28
-      fontColor: dark_grey
-      overFontColor: logo_b
-      up: d_grey
-      down: d_grey
-      over: d_grey
+  com.kotcrab.vis.ui.widget.VisImageButton$VisImageButtonStyle: {
+    i_undo: {
+      imageUp: i_undo
+      imageDown: i_undo_grey
+      imageOver: i_undo_grey
     }
   }
   com.kotcrab.vis.ui.widget.Separator$SeparatorStyle: {
@@ -201,9 +244,10 @@
   }
   com.kotcrab.vis.ui.widget.BusyBar$BusyBarStyle: {
     default: {
-      height: 5
-      segmentWidth: 150
-      segmentOverflow: 10
+      height: 10
+      segment: primary
+      segmentWidth: 200
+      segmentOverflow: 30
     }
   }
 }

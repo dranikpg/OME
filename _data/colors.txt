@@ -1,4 +1,4 @@
-white = 255,255,255
+40white = 255,255,255
 site bottom grey = 34,35,36
 light grey = 240, 240, 240
 logo blue = 0 160 227

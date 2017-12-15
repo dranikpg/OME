@@ -43,6 +43,10 @@ class InputSys : BaseSystem(), InputProcessor {
 
     }
 
+    fun restoreDef() {
+        setDefIC(SelectIC())
+    }
+
     fun clearMainIC() {
         setMainIC(null)
     }

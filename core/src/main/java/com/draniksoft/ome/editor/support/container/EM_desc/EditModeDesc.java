@@ -12,8 +12,8 @@ public abstract class EditModeDesc {
     public String iconID;
 
     public static final int AVAILABLE = 1;
-    public static final int AV_DISABLED = 2;
-    public static final int AV_HIDDEN = 3;
+    public static final int AV_HIDDEN = 2;
+    public static final int DISABLED = 3;
 
 
     public int aviabT = 3;

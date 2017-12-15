@@ -18,7 +18,8 @@
     "trig": {
       "depV": {
         "LOL DETECTED": 11,
-        "KURWA": 12
+        "KURWA": 12,
+        "$ELSE$": 13
       }
     }
   }

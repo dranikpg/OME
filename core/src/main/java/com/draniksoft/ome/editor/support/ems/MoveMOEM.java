@@ -4,10 +4,14 @@ import com.artemis.World;
 import com.badlogic.gdx.Gdx;
 import com.draniksoft.ome.editor.support.ems.core.EditMode;
 import com.draniksoft.ome.editor.support.input.MoveMOIC;
+import com.draniksoft.ome.editor.support.input.back.StebIC;
 import com.draniksoft.ome.editor.support.render.core.OverlayPlaces;
+import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.support.EditorSystem;
 import com.draniksoft.ome.editor.systems.support.InputSys;
+import com.draniksoft.ome.support.ui.util.WindowAgent;
+import com.draniksoft.ome.support.ui.viewsys.BaseWinView;
 import net.mostlyoriginal.api.event.common.EventSystem;
 
 public class MoveMOEM implements EditMode {
@@ -44,13 +48,25 @@ public class MoveMOEM implements EditMode {
 
         _w.getSystem(OverlayRenderSys.class).removeRdrByPlace(new int[]{}, new int[]{OverlayPlaces.ENTITY_MAIN_BODY});
         _w.getSystem(InputSys.class).setMainIC(ic);
+	  _w.getSystem(InputSys.class).setDefIC(new StebIC());
 
         _w.getSystem(EventSystem.class).registerEvents(this);
 
-        if (e < 0) {
-            _w.getSystem(EditorSystem.class).detachEditMode();
-        }
+	  _w.getSystem(UiSystem.class).createBK();
 
+	  _w.getSystem(UiSystem.class).openWin("move_mo_em", new WindowAgent() {
+
+		@Override
+		public void opened(BaseWinView vw) {
+
+		}
+
+		@Override
+		public void closed() {
+
+		}
+
+	  });
 
     }
 
@@ -75,8 +91,6 @@ public class MoveMOEM implements EditMode {
 
         Gdx.app.debug(tag, "Committing changes");
 
-
-
         _w.getSystem(EditorSystem.class).detachEditMode();
 
     }
@@ -92,6 +106,9 @@ public class MoveMOEM implements EditMode {
     public void detached() {
 
         if (easyQ) return;
+
+	  _w.getSystem(UiSystem.class).inflateBK();
+	  _w.getSystem(InputSys.class).restoreDef();
 
         _w.getSystem(InputSys.class).clearMainIC();
 
