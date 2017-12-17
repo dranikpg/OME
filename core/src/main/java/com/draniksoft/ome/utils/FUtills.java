@@ -2,16 +2,27 @@ package com.draniksoft.ome.utils;
 
 
 import com.artemis.World;
+import com.artemis.io.JsonArtemisSerializer;
+import com.artemis.io.KryoArtemisSerializer;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
 import com.draniksoft.ome.editor.base_gfx.drawable.EmptyDrawable;
 import com.draniksoft.ome.editor.manager.drawable.SimpleDrawableMgr;
 import com.draniksoft.ome.main_menu.MainBase;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
+import com.draniksoft.ome.utils.struct.Points;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.kotcrab.vis.ui.VisUI;
 
 import java.io.File;
@@ -193,6 +204,111 @@ public class FUtills {
     J FILE CHOOSER PART
 
      */
+
+
+    public static void registerJSrz(final JsonArtemisSerializer serializer) {
+
+        serializer.register(Points.class, new Json.Serializer() {
+            @Override
+            public void write(Json json, Object object, Class knownType) {
+                Points p = (Points) object;
+
+                json.writeArrayStart();
+
+                for (Vector2 pt : p) {
+                    json.writeValue(pt.x);
+                    json.writeValue(pt.y);
+                }
+
+                json.writeArrayEnd();
+
+            }
+
+            @Override
+            public Object read(Json json, JsonValue jsonData, Class type) {
+                Points inst = new Points();
+                float[] ar = jsonData.asFloatArray();
+
+                for (int i = 0; i < ar.length; i += 2) {
+                    inst.add(new Vector2(ar[i], ar[i + 1]));
+                }
+
+                return inst;
+            }
+        });
+
+    }
+
+
+    public static void registerBSrz(KryoArtemisSerializer serializer) {
+
+        serializer.register(Array.class, new Serializer<Array>() {
+            {
+                setAcceptsNull(true);
+            }
+
+            private Class genericType;
+
+            public void setGenerics(Kryo kryo, Class[] generics) {
+                if (kryo.isFinal(generics[0])) genericType = generics[0];
+            }
+
+            public void write(Kryo kryo, Output output, Array array) {
+                int length = array.size;
+                output.writeInt(length, true);
+                if (length == 0) {
+                    genericType = null;
+                    return;
+                }
+                if (genericType != null) {
+                    Serializer serializer = kryo.getSerializer(genericType);
+                    genericType = null;
+                    for (Object element : array)
+                        kryo.writeObjectOrNull(output, element, serializer);
+                } else {
+                    for (Object element : array)
+                        kryo.writeClassAndObject(output, element);
+                }
+            }
+
+            public Array read(Kryo kryo, Input input, Class<Array> type) {
+                Array array = new Array();
+                kryo.reference(array);
+                int length = input.readInt(true);
+                array.ensureCapacity(length);
+                if (genericType != null) {
+                    Class elementClass = genericType;
+                    Serializer serializer = kryo.getSerializer(genericType);
+                    genericType = null;
+                    for (int i = 0; i < length; i++)
+                        array.add(kryo.readObjectOrNull(input, elementClass, serializer));
+                } else {
+                    for (int i = 0; i < length; i++)
+                        array.add(kryo.readClassAndObject(input));
+                }
+                return array;
+            }
+        });
+
+        serializer.register(Vector2.class, new Serializer() {
+            @Override
+            public void write(Kryo kryo, Output output, Object object) {
+                Vector2 v = (Vector2) object;
+                output.writeFloat(v.x);
+                output.writeFloat(v.y);
+            }
+
+            @Override
+            public Object read(Kryo kryo, Input input, Class type) {
+                Vector2 inst = new Vector2();
+                inst.x = input.readFloat();
+                inst.y = input.readFloat();
+                return inst;
+            }
+        });
+    }
+
+
 
     public static int JF_OPTION = -5;
     public static File JF_FILE;

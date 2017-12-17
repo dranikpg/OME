@@ -48,12 +48,13 @@ public class OverlayRenderSys extends BaseSystem {
     protected void processSystem() {
 
 
-        b.setProjectionMatrix(cam.combined);
-        b.begin();
+        /*b.setProjectionMatrix(cam.combined);
+	  b.begin();
         for (int i = 0; i < rs.size; i++) {
             rs.get(i).render(b, cam);
         }
         b.end();
+       */
 
 
         r.setProjectionMatrix(cam.combined);

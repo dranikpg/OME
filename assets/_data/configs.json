@@ -22,6 +22,11 @@
         "$ELSE$": 13
       }
     }
+  },
+  "path_preview_factor": {
+    "vt": "freeint",
+    "defv": 5,
+    "comment//maxV": 5
   }
 
 }

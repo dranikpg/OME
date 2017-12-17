@@ -13,7 +13,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.draniksoft.ome.editor.components.selection.SelectionC;
 import com.draniksoft.ome.editor.esc_utils.OmeStrategy;
 import com.draniksoft.ome.editor.load.MapLoadBundle;
 import com.draniksoft.ome.editor.manager.MapMgr;
@@ -660,17 +659,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     public void log_sel() {
 
-        IntBag es = world.getAspectSubscriptionManager().get(Aspect.all(SelectionC.class)).getEntities();
-
-        StringBuilder out = new StringBuilder();
-
-        for (int i = 0; i < es.size(); i++) {
-
-            out.append(es.get(i)).append("  ");
-
-        }
-
-        console.log(out.toString());
+        console.log("" + world.getSystem(EditorSystem.class).sel);
 
     }
 

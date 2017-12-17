@@ -90,15 +90,19 @@ public class ObjTimeCalcSys extends IteratingSystem {
     }
 
     public void processEntityPath(int _e, int idx) {
+        processEntityPath(_e, idx, 1f);
+    }
+
+    public void processEntityPath(int _e, int idx, float precF) {
 
         PathDescC dc = pSM.get(_e);
         PathRunTimeC tc = pRM.get(_e);
 
         if (tc.p.get(idx) != null) {
-            processPathD(dc.ar.get(idx), tc.p.get(idx));
+            processPathD(dc.ar.get(idx), tc.p.get(idx), precF);
         } else {
             PathRTDesc d = new PathRTDesc();
-            processPathD(dc.ar.get(idx), d);
+            processPathD(dc.ar.get(idx), d, precF);
             tc.p.set(idx, d);
         }
     }
@@ -107,6 +111,7 @@ public class ObjTimeCalcSys extends IteratingSystem {
         PathDescC dc = pSM.get(_e);
         PathRunTimeC tc = pRM.has(_e) ? pRM.get(_e) : pRM.create(_e);
         if (tc.p == null) tc.p = new Array<PathRTDesc>();
+        tc.p.setSize(dc.ar.size);
         for (int i = 0; i < dc.ar.size; i++) {
             if (tc.p.get(i) != null) {
                 processPathD(dc.ar.get(i), tc.p.get(i));
@@ -118,8 +123,11 @@ public class ObjTimeCalcSys extends IteratingSystem {
         }
     }
 
-
     public void processPathD(PathDesc src, PathRTDesc dst) {
+        processPathD(src, dst, 1f);
+    }
+
+    public void processPathD(PathDesc src, PathRTDesc dst, float precF) {
         dst.st = src.st;
         dst.et = src.et;
 
@@ -137,7 +145,7 @@ public class ObjTimeCalcSys extends IteratingSystem {
 
         sp.set((Vector2[]) res.toArray(Vector2.class), false);
 
-        int k = (int) (sp.approxLength(src.ar.size) / pixelPerPathPoint);
+        int k = (int) (sp.approxLength(src.ar.size) / (pixelPerPathPoint) * precF);
         dst.ar.clear();
         dst.ar.ensureCapacity(k);
         dst.pixelPerPathPoint = pixelPerPathPoint;

@@ -2,17 +2,17 @@ package com.draniksoft.ome.editor.support.actions.path;
 
 import com.artemis.World;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 import com.draniksoft.ome.editor.components.path.PathDescC;
 import com.draniksoft.ome.editor.support.actions.Action;
 import com.draniksoft.ome.editor.support.container.path.PathSDesc;
 import com.draniksoft.ome.editor.systems.time.ObjTimeCalcSys;
+import com.draniksoft.ome.utils.struct.Points;
 import org.jetbrains.annotations.NotNull;
 
 public class CommitPathChangeA implements Action {
 
     public PathSDesc dsc;
-    public Array<Vector2> orig;
+    public Points orig;
 
     public int _e;
 

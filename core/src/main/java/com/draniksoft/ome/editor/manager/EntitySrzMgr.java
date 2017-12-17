@@ -10,22 +10,25 @@ import com.artemis.managers.WorldSerializationManager;
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.JsonValue;
+import com.draniksoft.ome.editor.components.path.PathDescC;
 import com.draniksoft.ome.editor.components.tps.MObjectC;
 import com.draniksoft.ome.editor.load.LoadSaveManager;
 import com.draniksoft.ome.editor.load.ProjectLoader;
 import com.draniksoft.ome.editor.load.ProjectSaver;
 import com.draniksoft.ome.editor.support.event.workflow.ReleaseDataE;
+import com.draniksoft.ome.editor.systems.time.ObjTimeCalcSys;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.support.load.IntelligentLoader;
-import com.draniksoft.ome.utils.ESCUtils;
 import com.draniksoft.ome.utils.Env;
+import com.draniksoft.ome.utils.FUtills;
 import com.draniksoft.ome.utils.JsonUtils;
 import net.mostlyoriginal.api.event.common.EventSystem;
 import net.mostlyoriginal.api.event.common.Subscribe;
 
 import java.io.*;
 
-public class EntitySrzMgr extends Manager implements LoadSaveManager {
+public class
+EntitySrzMgr extends Manager implements LoadSaveManager {
 
     private static final String tag = "EntitySrzManager";
 
@@ -44,11 +47,11 @@ public class EntitySrzMgr extends Manager implements LoadSaveManager {
 		if (Env.E_JSON_SRZ) {
 		    indexI = JsonUtils.createStringV("etty_T", "json");
 		    manager.setSerializer(new JsonArtemisSerializer(world));
-		    ESCUtils.registerJSrz((JsonArtemisSerializer) manager.getSerializer());
+		    FUtills.registerJSrz((JsonArtemisSerializer) manager.getSerializer());
 		} else {
 		    indexI = JsonUtils.createStringV("etty_T", "bin");
 		    manager.setSerializer(new KryoArtemisSerializer(world));
-		    ESCUtils.registerBSrz((KryoArtemisSerializer) manager.getSerializer());
+		    FUtills.registerBSrz((KryoArtemisSerializer) manager.getSerializer());
 		}
 
 
@@ -84,23 +87,36 @@ public class EntitySrzMgr extends Manager implements LoadSaveManager {
 
 		if (ld.getIndexV().get("etty_T").asString().equals("json")) {
 		    manager.setSerializer(new JsonArtemisSerializer(world));
-		    ESCUtils.registerJSrz((JsonArtemisSerializer) manager.getSerializer());
+		    FUtills.registerJSrz((JsonArtemisSerializer) manager.getSerializer());
 		} else {
 		    manager.setSerializer(new KryoArtemisSerializer(world));
-		    ESCUtils.registerBSrz((KryoArtemisSerializer) manager.getSerializer());
+		    FUtills.registerBSrz((KryoArtemisSerializer) manager.getSerializer());
 		}
 
 		final InputStream is = new FileInputStream(new File(AppDO.I.F().getTmpDir().getAbsolutePath() + "/etty.data"));
 
 		manager.load(is, SaveFileFormat.class);
 
-		Gdx.app.debug(tag, "Finished");
+		Gdx.app.debug(tag, "Finished file load");
 
+		prepareEtty();
+
+		Gdx.app.debug(tag, "Finished");
 
 	  } catch (Exception er) {
 
 		Gdx.app.error(tag, "", er);
 
+	  }
+
+    }
+
+    private void prepareEtty() {
+
+	  IntBag b = world.getAspectSubscriptionManager().get(Aspect.all(PathDescC.class)).getEntities();
+
+	  for (int i = 0; i < b.size(); i++) {
+		world.getSystem(ObjTimeCalcSys.class).processEntityPathC(b.get(i));
 	  }
 
     }

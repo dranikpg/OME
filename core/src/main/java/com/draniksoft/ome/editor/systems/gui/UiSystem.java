@@ -56,7 +56,6 @@ public class UiSystem extends BaseSystem {
         uiStage.act();
         uiStage.draw();
 
-        uiStage.setKeyboardFocus(null);
     }
 
     public void validateLayout() {

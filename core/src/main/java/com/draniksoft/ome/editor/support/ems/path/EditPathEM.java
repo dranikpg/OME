@@ -8,6 +8,7 @@ import com.draniksoft.ome.editor.components.path.PathRunTimeC;
 import com.draniksoft.ome.editor.support.actions.path.CommitPathAddA;
 import com.draniksoft.ome.editor.support.actions.path.CommitPathChangeA;
 import com.draniksoft.ome.editor.support.container.path.PathDesc;
+import com.draniksoft.ome.editor.support.container.path.PathRTDesc;
 import com.draniksoft.ome.editor.support.container.path.PathSDesc;
 import com.draniksoft.ome.editor.support.ems.core.SimpleEditMode;
 import com.draniksoft.ome.editor.support.event.entityy.EntityDataChangeE;
@@ -21,6 +22,8 @@ import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.EditorSystem;
 import com.draniksoft.ome.editor.systems.support.InputSys;
 import com.draniksoft.ome.editor.systems.time.ObjTimeCalcSys;
+import com.draniksoft.ome.mgmnt_base.base.AppDO;
+import com.draniksoft.ome.utils.struct.Points;
 import net.mostlyoriginal.api.event.common.Subscribe;
 
 public class EditPathEM extends SimpleEditMode {
@@ -48,6 +51,9 @@ public class EditPathEM extends SimpleEditMode {
 	  _e = _w.getSystem(EditorSystem.class).sel;
 	  rtC = _w.getMapper(PathRunTimeC.class).get(_e);
 	  dC = _w.getMapper(PathDescC.class).get(_e);
+
+	  if (dC.ar == null) dC.ar = new Array<PathSDesc>();
+	  if (rtC.p == null) rtC.p = new Array<PathRTDesc>();
 
 	  setUpRIC();
     }
@@ -80,12 +86,21 @@ public class EditPathEM extends SimpleEditMode {
 	  _w.getSystem(UiSystem.class).inflateBK();
     }
 
-
-    public void recompute() {
+    public void recompute(boolean pv) {
 	  if (curIDX > -1) {
 		Gdx.app.debug(tag, "Computing");
-		_w.getSystem(ObjTimeCalcSys.class).processEntityPath(_e, curIDX);
+		float f = 1f;
+
+		if (pv) {
+		    f = AppDO.I.C().getConfVal_I("path_preview_factor") / 5f;
+		}
+
+		_w.getSystem(ObjTimeCalcSys.class).processEntityPath(_e, curIDX, f);
 	  }
+    }
+
+    public void recompute() {
+	  recompute(true);
     }
 
     public void recompute(int id) {
@@ -97,6 +112,7 @@ public class EditPathEM extends SimpleEditMode {
 
     public void commit() {
 	  if (curIDX < 0) return;
+	  recompute(false);
 	  if (newM) {
 		CommitPathAddA a = new CommitPathAddA();
 		a.ar = getdC().ar;
@@ -178,14 +194,14 @@ public class EditPathEM extends SimpleEditMode {
 	  if (idx == curIDX) setSel(-1);
     }
 
-    Array<Vector2> orig;
+    Points orig;
     Vector2 nexS;
 
     private void notifySel() {
 	  r.newSel();
 	  ic.newSel();
 	  if (curIDX > -1) {
-		orig = new Array<Vector2>(getPathDesc().ar);
+		orig = new Points(getPathDesc().ar);
 		if (dC.ar.size > curIDX + 1 && dC.ar.get(curIDX + 1).alignToPrev) {
 		    nexS = new Vector2(dC.ar.get(curIDX + 1).ar.get(0));
 		} else {
@@ -194,7 +210,7 @@ public class EditPathEM extends SimpleEditMode {
 	  }
     }
 
-    public Array<Vector2> getOrig() {
+    public Points getOrig() {
 	  return orig;
     }
 

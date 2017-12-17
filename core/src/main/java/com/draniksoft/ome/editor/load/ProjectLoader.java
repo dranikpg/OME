@@ -91,7 +91,7 @@ public class ProjectLoader {
 	  if (s == Step.NULL_PTR) {
 		notifyEnd();
 	  } else if (s == Step.DATA_RELEASE) {
-		l.passRunnable(new Ts());
+		l.passRunnable(new ReleaseData());
 		//w.getSystem(EventSystem.class).dispatch(new ReleaseDataE());
 		updateLoad();
 	  } else if (s == Step.UNZIP) {
@@ -110,10 +110,14 @@ public class ProjectLoader {
 
     }
 
-    private class Ts implements IRunnable {
+    private class ReleaseData implements IRunnable {
 	  @Override
 	  public void run(IntelligentLoader l) {
-		w.create();
+		IntBag e = w.getAspectSubscriptionManager().get(Aspect.all()).getEntities();
+		for (int i = 0; i < e.size(); i++) {
+		    w.delete(e.get(i));
+		}
+
 	  }
 
 	  @Override
