@@ -1,4 +1,4 @@
-package com.draniksoft.ome.editor.support.render;
+package com.draniksoft.ome.editor.support.render.base_mo;
 
 import com.artemis.World;
 import com.badlogic.gdx.Gdx;

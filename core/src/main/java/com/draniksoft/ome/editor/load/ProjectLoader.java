@@ -104,7 +104,6 @@ public class ProjectLoader {
 		l.passRunnable(new LoadT(w.getSystem(SimpleDrawableMgr.class)));
 		l.passRunnable(new LoadT(w.getSystem(TimeMgr.class)));
 		l.passRunnable(new LoadT(w.getSystem(EntitySrzMgr.class)));
-
 	  } else if (s == Step.GFX_PAIR) {
 		l.passGLRunnable(new GfxC());
 	  }

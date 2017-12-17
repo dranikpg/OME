@@ -2,29 +2,15 @@
   "1": {
     "a": [
       {
-        "c": 1,
-        "quickA": false,
-        "name_ru": "Создать объект",
-        "name_en": "Create map object",
-        "desc_ru": "desc ru",
-        "desc_en": "desc en"
-      },
-      {
-        "c": 10,
-        "quickA": false,
-        "name_ru": "Передвинуть объект",
-        "name_en": "Move object",
-        "desc_ru": "desc ru",
-        "desc_en": "desc en"
-      },
-      {
         "c": 20,
-        "quickA": true,
-        "name_ru": "Передвинуть объект",
         "name_en": "Move object",
-        "desc_ru": "desc ru",
         "desc_en": "desc en"
       }
+    ]
+  },
+  "2": {
+    "a": [
+
     ]
   }
 }

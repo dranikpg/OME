@@ -26,9 +26,9 @@ import com.draniksoft.ome.editor.support.container.CO_actiondesc.ActionDesc;
 import com.draniksoft.ome.editor.support.container.EM_desc.EditModeDesc;
 import com.draniksoft.ome.editor.support.ems.core.EditMode;
 import com.draniksoft.ome.editor.support.input.InputController;
-import com.draniksoft.ome.editor.support.input.NewMOIC;
 import com.draniksoft.ome.editor.support.input.back.SelectIC;
 import com.draniksoft.ome.editor.support.input.back.TimedSelectIC;
+import com.draniksoft.ome.editor.support.input.base_mo.NewMOIC;
 import com.draniksoft.ome.editor.support.render.core.OverlyRendererI;
 import com.draniksoft.ome.editor.systems.file_mgmnt.ProjectLoadSystem;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
@@ -121,6 +121,14 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
         console.log(Const.appVFullName);
 
+    }
+
+    /*
+        Heap Utils
+     */
+
+    public void run_gc() {
+        System.gc();
     }
 
     /*
@@ -225,7 +233,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
         int[] o = new int[o_s.length];
         for (int i = 0; i < o_s.length; i++) o[i] = Integer.parseInt(o_s[i]);
 
-        world.getSystem(OverlayRenderSys.class).removeRdrByPlace(a, o);
+        world.getSystem(OverlayRenderSys.class).removeRdrByPlaceBK(a, o);
 
     }
 
@@ -293,10 +301,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
      *
      */
 
-    public void le_ppos(int _e) {
 
-
-    }
 
     /*
 
@@ -340,6 +345,12 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
             Gdx.app.error("Console", "", e);
 
         }
+
+    }
+
+    public void exec_cos(int _e, int id, int a) {
+
+        world.getSystem(EditorSystem.class).getComOb(id).execA(a, _e, false);
 
     }
 
@@ -602,6 +613,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
         }
     }
 
+
     public void log_ic() {
 
         InputController m = world.getSystem(InputSys.class).getMainIC();
@@ -671,11 +683,9 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
         LinkedList<Action> as = world.getSystem(ActionSystem.class).getStack();
 
-        int il = String.valueOf(as.size()).length() + 1;
-
         for (int i = 0; i < as.size(); i++) {
 
-            console.log(formatIntToStrCL(il, i + 1) + " - " + as.get(i).getClass().getSimpleName());
+            console.log("" + (i + 1) + " - " + as.get(i).getClass().getSimpleName());
 
         }
 
@@ -708,7 +718,6 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
         world.getSystem(ActionSystem.class).setMaxStackSize(i);
 
     }
-
 
     public void undoa() {
 

@@ -23,6 +23,8 @@ public class MenuWinController {
 	  this.sys = sys;
 	  this.m = m;
 	  this.w = w;
+
+	  w.setVisible(false);
     }
 
     public void setMenuHide(boolean menuHide) {
@@ -55,6 +57,7 @@ public class MenuWinController {
 			  @Override
 			  public boolean act(float delta) {
 				w.clearWin();
+				w.setVisible(false);
 				return true;
 			  }
 		    }
@@ -79,6 +82,7 @@ public class MenuWinController {
 		w.recalc();
 		w.setWidth(w.getCalcWidth());
 		w.setX(sys.getStageW() - w.getWidth());
+		w.setVisible(true);
 
 		if (menuReplace) {
 		    m.setWidth(w.getX());

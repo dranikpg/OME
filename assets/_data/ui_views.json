@@ -1,14 +1,14 @@
 {
-  "test": {
-    "lml": "i/test.lml",
-    "class": "com.draniksoft.ome.support.ui.viewsys.impl.TestV"
-  },
-  "test2": {
-    "lml": "i/test2.lml",
-    "class": "com.draniksoft.ome.support.ui.viewsys.impl.SecTest"
+  "bar_base_buttons": {
+    "lml": "base_ui/bar_base_buttons.lml",
+    "class": "com.draniksoft.ome.editor.ui.menu.BaseBarButtons"
   },
   "move_mo_em": {
     "lml": "em/move_mo.lml",
     "class": "com.draniksoft.ome.editor.ui.em_ui.MoveMOView"
+  },
+  "edit_path_em": {
+    "lml": "em/edit_path.lml",
+    "class": "com.draniksoft.ome.editor.ui.em_ui.PathEditView"
   }
 }

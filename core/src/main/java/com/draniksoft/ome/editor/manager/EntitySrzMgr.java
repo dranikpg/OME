@@ -17,6 +17,7 @@ import com.draniksoft.ome.editor.load.ProjectSaver;
 import com.draniksoft.ome.editor.support.event.workflow.ReleaseDataE;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.support.load.IntelligentLoader;
+import com.draniksoft.ome.utils.ESCUtils;
 import com.draniksoft.ome.utils.Env;
 import com.draniksoft.ome.utils.JsonUtils;
 import net.mostlyoriginal.api.event.common.EventSystem;
@@ -39,13 +40,18 @@ public class EntitySrzMgr extends Manager implements LoadSaveManager {
 		final WorldSerializationManager manager = world.getSystem(WorldSerializationManager.class);
 		JsonValue indexI = null;
 
+
 		if (Env.E_JSON_SRZ) {
 		    indexI = JsonUtils.createStringV("etty_T", "json");
 		    manager.setSerializer(new JsonArtemisSerializer(world));
+		    ESCUtils.registerJSrz((JsonArtemisSerializer) manager.getSerializer());
 		} else {
 		    indexI = JsonUtils.createStringV("etty_T", "bin");
 		    manager.setSerializer(new KryoArtemisSerializer(world));
+		    ESCUtils.registerBSrz((KryoArtemisSerializer) manager.getSerializer());
 		}
+
+
 		s.getIndexV().addChild(indexI);
 
             OutputStream st;
@@ -76,10 +82,13 @@ public class EntitySrzMgr extends Manager implements LoadSaveManager {
 
 		final WorldSerializationManager manager = world.getSystem(WorldSerializationManager.class);
 
-		if (ld.getIndexV().get("etty_T").asString().equals("json"))
+		if (ld.getIndexV().get("etty_T").asString().equals("json")) {
 		    manager.setSerializer(new JsonArtemisSerializer(world));
-		else
+		    ESCUtils.registerJSrz((JsonArtemisSerializer) manager.getSerializer());
+		} else {
 		    manager.setSerializer(new KryoArtemisSerializer(world));
+		    ESCUtils.registerBSrz((KryoArtemisSerializer) manager.getSerializer());
+		}
 
 		final InputStream is = new FileInputStream(new File(AppDO.I.F().getTmpDir().getAbsolutePath() + "/etty.data"));
 

@@ -3,6 +3,8 @@ package com.draniksoft.ome.utils;
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.World;
+import com.artemis.io.JsonArtemisSerializer;
+import com.artemis.io.KryoArtemisSerializer;
 import com.artemis.utils.IntBag;
 import com.draniksoft.ome.editor.components.selection.SelectionC;
 import com.draniksoft.ome.editor.support.event.entityy.SelectionChangeE;
@@ -64,4 +66,13 @@ public class ESCUtils {
     }
 
 
+    public static void registerJSrz(final JsonArtemisSerializer serializer) {
+
+
+    }
+
+    public static void registerBSrz(KryoArtemisSerializer serializer) {
+
+
+    }
 }

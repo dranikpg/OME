@@ -18,7 +18,6 @@ public abstract class SimpleEditMode implements EditMode {
     protected void deflateUI() {
 	  _w.getSystem(UiSystem.class).createBK();
 
-
     }
 
     protected void returnUIState() {

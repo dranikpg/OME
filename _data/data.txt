@@ -6,3 +6,18 @@ logo blue = 0 160 227
 site blue l-top = 40,180,215
 site blue l-top strip = 120 200 225
 site blue bottom 150 120 235
+
+
+## PANEL
+
+# FILE MGMNT
+    files
+    save
+
+# HANDLER
+    stx
+    map
+    edit
+
+# QUICK
+    undo

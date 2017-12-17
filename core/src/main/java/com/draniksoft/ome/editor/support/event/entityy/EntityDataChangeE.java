@@ -19,6 +19,12 @@ public class EntityDataChangeE implements Event {
         }
     }
 
+    public static class PathCountChangeE extends EntityDataChangeE {
+        public PathCountChangeE(int _e) {
+            super(_e);
+        }
+    }
+
     public static class DwbChangeE extends EntityDataChangeE {
 
         public DwbChangeE(int _e) {

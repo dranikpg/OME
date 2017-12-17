@@ -74,7 +74,7 @@ public abstract class BaseWinView extends BaseView {
 		_w = c.getCW();
 		_pct = c.getWW() / _w;
 	  } else if (percentMode) {
-		_w = c.getWW() * pct;
+		_w = c.getWW() * pct / 100f;
 		_pct = pct;
 	  } else {
 		_pct = w / c.getWW();

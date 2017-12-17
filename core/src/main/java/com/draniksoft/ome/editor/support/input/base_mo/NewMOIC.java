@@ -1,43 +1,66 @@
-package com.draniksoft.ome.editor.support.input;
+package com.draniksoft.ome.editor.support.input.base_mo;
 
 import com.artemis.World;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.draniksoft.ome.editor.support.ems.MoveMOEM;
+import com.draniksoft.ome.editor.support.ems.base_em.NewMOEM;
+import com.draniksoft.ome.editor.support.input.InputController;
+import com.draniksoft.ome.editor.support.render.base_mo.NewMORenderer;
 
-public class MoveMOIC implements InputController {
+/**
+ * The input controller used for adding new locations
+ */
 
-    private static final String tag = "MoveMOIC";
+public class NewMOIC implements InputController {
 
+    static final String tag = "NewMOIC";
 
-    MoveMOEM em;
-    int e;
+    boolean ter = false;
 
     World w;
-    Viewport vp;
 
     Vector2 tmp;
-    boolean reactOnKill = true;
+    Viewport vp;
+
+    NewMORenderer rdr;
+    NewMOEM m;
+
+    public boolean ignoreDestruct = false;
+
+    public void setRdr(NewMORenderer rdr) {
+        this.rdr = rdr;
+    }
+
+    public void setOwnerMode(NewMOEM m) {
+        this.m = m;
+    }
 
     @Override
     public void init(World w) {
+        this.w = w;
         tmp = new Vector2();
+
+
         vp = w.getInjector().getRegistered("game_vp");
     }
 
     @Override
     public void destruct() {
 
+        if (ignoreDestruct) return;
+
+        m.inputStopped();
+
     }
+
 
     @Override
     public void update() {
 
         tmp = vp.unproject(tmp.set(Gdx.input.getX(), Gdx.input.getY()));
 
-
+        rdr.setMousePos(tmp.x, tmp.y);
 
     }
 
@@ -48,11 +71,6 @@ public class MoveMOIC implements InputController {
 
     @Override
     public boolean keyUp(int keycode) {
-
-        if (keycode == Input.Keys.ESCAPE) em.keyPressed(0);
-
-        if (keycode == Input.Keys.ENTER) em.keyPressed(1);
-
         return false;
     }
 
@@ -63,34 +81,35 @@ public class MoveMOIC implements InputController {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
+
+        Gdx.app.debug(tag, "TD");
+
+        if (ter) {
+            ter = false;
+            return false;
+        }
+
+        tmp = ((Viewport) w.getInjector().getRegistered("game_vp")).unproject(tmp.set(screenX, screenY));
+
+        m.createLoc(tmp);
+
+        return true;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+        ter = true;
         return false;
     }
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
+
         return false;
     }
 
     @Override
     public boolean scrolled(int amount) {
         return false;
-    }
-
-    public void setEm(MoveMOEM em) {
-        this.em = em;
-    }
-
-
-    public void setReactOnKill(boolean reactOnKill) {
-        this.reactOnKill = reactOnKill;
-    }
-
-    public void setE(int e) {
-        this.e = e;
     }
 }

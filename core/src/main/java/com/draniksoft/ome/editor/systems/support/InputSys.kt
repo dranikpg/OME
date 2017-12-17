@@ -74,6 +74,9 @@ class InputSys : BaseSystem(), InputProcessor {
     }
 
     override fun keyDown(keycode: Int): Boolean {
+        if ((mainIC == null || !mainIC!!.keyDown(keycode)) && defIC != null) {
+            defIC!!.keyDown(keycode)
+        }
         return false
     }
 
@@ -109,11 +112,11 @@ class InputSys : BaseSystem(), InputProcessor {
 
     override fun touchDragged(screenX: Int, screenY: Int, pointer: Int): Boolean {
 
-        if ((mainIC == null || mainIC!!.touchDragged(screenX, screenY, pointer)) && defIC != null) {
-            defIC!!.touchDragged(screenX, screenY, pointer)
+        if ((mainIC == null || !mainIC!!.touchDragged(screenX, screenY, pointer)) && defIC != null) {
+            return defIC!!.touchDragged(screenX, screenY, pointer)
+        } else {
+            return mainIC != null && defIC != null
         }
-
-        return false
     }
 
     override fun mouseMoved(screenX: Int, screenY: Int): Boolean {

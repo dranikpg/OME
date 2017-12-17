@@ -5,6 +5,7 @@ public abstract class EditModeDesc {
     public static class IDS {
         public static final int newMO = 1;
         public static final int moveMO = 2;
+	  public static final int pathEdit = 11;
     }
 
 

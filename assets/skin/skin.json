@@ -86,10 +86,6 @@
       name: edit
       color: black
     }
-    i_export: {
-      name: export
-      color: black
-    }
     i_globe: {
       name: globe
       color: black
@@ -116,10 +112,6 @@
     }
     i_edit_grey: {
       name: edit
-      color: grey
-    }
-    i_export_grey: {
-      name: export
       color: grey
     }
     i_globe_grey: {
@@ -226,6 +218,31 @@
       imageUp: i_undo
       imageDown: i_undo_grey
       imageOver: i_undo_grey
+    }
+    i_save: {
+      imageUp: i_save
+      imageDown: i_save_grey
+      imageOver: i_save_grey
+    }
+    i_file: {
+      imageUp: i_open
+      imageDown: i_open_grey
+      imageOver: i_open_grey
+    }
+    i_edit: {
+      imageUp: i_edit
+      imageDown: i_edit_grey
+      imageOver: i_edit_grey
+    }
+    i_globe: {
+      imageUp: i_globe
+      imageDown: i_globe_grey
+      imageOver: i_globe_grey
+    }
+    i_stx: {
+      imageUp: i_stx
+      imageDown: i_stx_grey
+      imageOver: i_stx_grey
     }
   }
   com.kotcrab.vis.ui.widget.Separator$SeparatorStyle: {

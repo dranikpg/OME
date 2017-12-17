@@ -38,9 +38,6 @@ public class SelectionRenderer implements OverlyRendererI {
 
 	  if (c == null) return;
 
-
-	  // TODO better renderer
-
 	  r.set(ShapeRenderer.ShapeType.Filled);
 
 	  r.setColor(VisUI.getSkin().getColor("primary"));
@@ -72,6 +69,6 @@ public class SelectionRenderer implements OverlyRendererI {
 
     @Override
     public int getId() {
-	  return 0;
+	  return IDs.SelR;
     }
 }

@@ -14,7 +14,10 @@ public abstract class CompositionObserver {
 
     public static class IDs {
         public static final short MO_CO = 1;
+
+	  public static final short PATH_CO = 2;
     }
+
 
     public int id;
 
@@ -51,21 +54,22 @@ public abstract class CompositionObserver {
         for (JsonValue v : ar) {
 
             BiLangActionDEsc d = new BiLangActionDEsc();
+
             d.code = v.getInt("c");
-            d.quickA = v.getBoolean("quickA");
             d.name_en = v.getString("name_en");
-            d.name_ru = v.getString("name_ru");
-            d.desc_en = v.getString("desc_en");
-            d.desc_ru = v.getString("desc_ru");
+		d.name_ru = v.has("name_ru") ? v.getString("name_ru") : d.name_en;
+		d.desc_en = v.getString("desc_en");
+		d.desc_ru = v.has("desc_ru") ? v.getString("desc_ru") : d.desc_en;
 
             __ds.add(d);
-        }
+
+	  }
 
     }
 
-    public abstract boolean isViewAv(int id);
+    public abstract boolean isViewAv(short id);
 
-    public abstract String getViewID(int id);
+    public abstract String getViewID(short id);
 
 
 }

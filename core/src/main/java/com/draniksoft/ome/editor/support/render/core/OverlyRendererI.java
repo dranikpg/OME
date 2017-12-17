@@ -7,14 +7,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public interface OverlyRendererI {
 
-
     class IDs {
 
         public static final int SelR = 1;
         public static final int PathR = 2;
-        public static final int MoveMOR = 3;
         public static final int NewMOR = 4;
-        public static final int EditTimedMOR = 5;
 
     }
 

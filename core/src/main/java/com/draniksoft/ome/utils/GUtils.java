@@ -99,10 +99,10 @@ public class GUtils {
     }
 
     /**
-     * @param i   x start pos
-     * @param i1  y start pos
-     * @param i2  x end pos
-     * @param i3  y end pos
+     * @param i   x start base_em
+     * @param i1  y start base_em
+     * @param i2  x end base_em
+     * @param i3  y end base_em
      * @param data float array of size two to fetch data : first element - distance, second - the angle
      */
 

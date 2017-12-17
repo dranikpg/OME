@@ -1,12 +1,12 @@
-package com.draniksoft.ome.editor.support.ems;
+package com.draniksoft.ome.editor.support.ems.base_em;
 
 import com.artemis.World;
 import com.badlogic.gdx.math.Vector2;
 import com.draniksoft.ome.editor.support.actions.mapO.CreateNewMOA;
 import com.draniksoft.ome.editor.support.ems.core.EditMode;
-import com.draniksoft.ome.editor.support.input.NewMOIC;
 import com.draniksoft.ome.editor.support.input.back.SelectIC;
-import com.draniksoft.ome.editor.support.render.NewMORenderer;
+import com.draniksoft.ome.editor.support.input.base_mo.NewMOIC;
+import com.draniksoft.ome.editor.support.render.base_mo.NewMORenderer;
 import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.EditorSystem;

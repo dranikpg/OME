@@ -5,7 +5,7 @@
     "name_en": "New Location Tool",
     "name_ru": "New Location Tool",
     "iconID": "SomeId",
-    "c": "NewMOEM",
+    "c": "base_em.NewMOEM",
     "sav": 1
   },
   {
@@ -14,7 +14,16 @@
     "name_en": "Move Location Tool",
     "name_ru": "Move Location Tool",
     "iconID": "SomeId",
-    "c": "MoveMOEM",
+    "c": "base_em.MoveMOEM",
+    "sav": 2
+  },
+  {
+    "id": 11,
+    "sr": true,
+    "name_en": "Edit path Tool",
+    "name_ru": "Edit path Tool",
+    "iconID": "SomeId",
+    "c": "path.EditPathEM",
     "sav": 2
   }
 ]

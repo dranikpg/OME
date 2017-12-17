@@ -77,7 +77,7 @@ public class LmlUIMgr extends AppDataManager {
     private void parseBase() {
 
 	  p.parseTemplate(Gdx.files.internal("lml/base.lml"));
-	  p.parseTemplate(Gdx.files.internal("lml/stylebase.lml"));
+
 
     }
 
@@ -207,6 +207,10 @@ public class LmlUIMgr extends AppDataManager {
 		return vws.get(id);
 	  }
 	  return null;
+    }
+
+    public String getArgument(String arg) {
+	  return p.getData().getArgument(arg);
     }
 
     private void parseViewData() {

@@ -74,14 +74,15 @@ public class MOCompositionO extends SimpleCompositionObserver {
 
         desc = new IntMap<ActionDesc>();
 
-        if (__ds == null) return;
+	  rSys = _w.getSystem(OverlayRenderSys.class);
+	  r = new SelectionRenderer();
 
+        if (__ds == null) return;
         for (ActionDesc d : __ds) {
             desc.put(d.code, d);
         }
 
-        rSys = _w.getSystem(OverlayRenderSys.class);
-        r = new SelectionRenderer();
+
     }
 
     @Override
@@ -155,13 +156,13 @@ public class MOCompositionO extends SimpleCompositionObserver {
     }
 
     @Override
-    public boolean isViewAv(int id) {
+    public boolean isViewAv(short id) {
 	  return id == CompObViewIds.VIEW_INSPECTOR;
     }
 
     @Override
-    public String getViewID(int id) {
-        return "";
+    public String getViewID(short id) {
+	  return "";
     }
 
 

@@ -1,10 +1,10 @@
-package com.draniksoft.ome.editor.support.ems;
+package com.draniksoft.ome.editor.support.ems.base_em;
 
 import com.artemis.World;
 import com.badlogic.gdx.Gdx;
 import com.draniksoft.ome.editor.support.ems.core.EditMode;
-import com.draniksoft.ome.editor.support.input.MoveMOIC;
 import com.draniksoft.ome.editor.support.input.back.StebIC;
+import com.draniksoft.ome.editor.support.input.base_mo.MoveMOIC;
 import com.draniksoft.ome.editor.support.render.core.OverlayPlaces;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
@@ -46,8 +46,8 @@ public class MoveMOEM implements EditMode {
         ic.setEm(this);
 
 
-        _w.getSystem(OverlayRenderSys.class).removeRdrByPlace(new int[]{}, new int[]{OverlayPlaces.ENTITY_MAIN_BODY});
-        _w.getSystem(InputSys.class).setMainIC(ic);
+	  _w.getSystem(OverlayRenderSys.class).removeRdrByPlaceBK(new int[]{}, new int[]{OverlayPlaces.ENTITY_MAIN_BODY});
+	  _w.getSystem(InputSys.class).setMainIC(ic);
 	  _w.getSystem(InputSys.class).setDefIC(new StebIC());
 
         _w.getSystem(EventSystem.class).registerEvents(this);
@@ -109,8 +109,9 @@ public class MoveMOEM implements EditMode {
 
 	  _w.getSystem(UiSystem.class).inflateBK();
 	  _w.getSystem(InputSys.class).restoreDef();
-
         _w.getSystem(InputSys.class).clearMainIC();
+	  _w.getSystem(OverlayRenderSys.class).restoreBK();
+
 
     }
 

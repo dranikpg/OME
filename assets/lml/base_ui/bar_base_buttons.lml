@@ -1,0 +1,40 @@
+<table id=root>
+
+    <visImageButton
+            style=i_edit
+            size=50
+            size={bar_height}-5>
+
+    </visImageButton>
+
+    <visImageButton
+            style=i_globe
+            size=50
+            size={bar_height}-5>
+
+    </visImageButton>
+
+    <visImageButton
+            style=i_stx
+            size=50
+            size={bar_height}-5
+            padRight=50>
+
+    </visImageButton>
+
+    <visImageButton
+          style=i_save
+          size=50
+          size={bar_height}-5>
+
+    </visImageButton>
+
+    <visImageButton
+          style=i_file
+          size=50
+          size={bar_height}-5>
+
+    </visImageButton>
+
+
+</table>

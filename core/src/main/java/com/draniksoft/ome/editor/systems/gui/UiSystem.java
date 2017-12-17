@@ -14,7 +14,6 @@ import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.support.load.interfaces.IRunnable;
 import com.draniksoft.ome.support.ui.util.WindowAgent;
 import com.draniksoft.ome.utils.ui.editorMenu.MenuWinController;
-import com.kotcrab.vis.ui.widget.VisImageButton;
 import net.mostlyoriginal.api.event.common.EventSystem;
 import net.mostlyoriginal.api.event.common.Subscribe;
 
@@ -56,6 +55,8 @@ public class UiSystem extends BaseSystem {
         vp.apply();
         uiStage.act();
         uiStage.draw();
+
+        uiStage.setKeyboardFocus(null);
     }
 
     public void validateLayout() {
@@ -88,15 +89,9 @@ public class UiSystem extends BaseSystem {
 
         @Override
         public void run(IntelligentLoader l) {
+
             m = new BottomMenu(UiSystem.this);
             w = new EditorWin(world);
-
-            m.setHeight(40f);
-
-            for (int i = 0; i < 5; i++) {
-                VisImageButton img = new VisImageButton("i_undo");
-                m.add(img).size(35).padLeft(20);
-            }
 
             w.setX(uiStage.getWidth());
 
@@ -104,6 +99,7 @@ public class UiSystem extends BaseSystem {
             uiStage.addActor(m);
 
             ctr = new MenuWinController(UiSystem.this, m, w);
+
 
         }
 
@@ -143,6 +139,7 @@ public class UiSystem extends BaseSystem {
     }
 
     public void inflateBK() {
+        closeWin();
         if (bkID != null) {
             openWin(bkID);
         }

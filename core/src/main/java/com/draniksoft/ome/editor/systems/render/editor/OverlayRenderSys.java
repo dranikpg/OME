@@ -38,6 +38,7 @@ public class OverlayRenderSys extends BaseSystem {
     protected void initialize() {
 
         rs = new Array<OverlyRendererI>();
+	  bK = new Array<OverlyRendererI>();
 
         world.getSystem(EventSystem.class).registerEvents(this);
 
@@ -102,61 +103,69 @@ public class OverlayRenderSys extends BaseSystem {
             removeRdr(rs.get(ri));
     }
 
-    public void removeRdrByPlace(int[] all, int[] one) {
+    Array<OverlyRendererI> bK;
 
-        IntArray rmIds = new IntArray();
+    public void removeRdrByPlaceBK(int[] all, int[] one) {
+	  IntArray rmIds = new IntArray();
+	  for (int i = 0; i < getRs().size; i++) {
 
-        for (int i = 0; i < getRs().size; i++) {
+		int[] ps = rs.get(i).getPos();
 
-            int[] ps = rs.get(i).getPos();
+		int allsF = 0;
+		boolean globB = false;
+		for (int p_num : ps) {
 
-            int allsF = 0;
-            boolean globB = false;
-            for (int p_num : ps) {
+		    for (int op_num : one) {
 
-                for (int op_num : one) {
+			  if (p_num == op_num) {
 
-                    if (p_num == op_num) {
+				rmIds.add(i);
+				globB = true;
+				break;
 
-                        rmIds.add(i);
-                        globB = true;
-                        break;
+			  }
 
-                    }
+		    }
 
-                }
+		    if (globB) break;
 
-                if (globB) break;
+		    for (int ap_num : all) {
 
-                for (int ap_num : all) {
+			  if (ap_num == p_num) {
 
-                    if (ap_num == p_num) {
+				allsF++;
 
-                        allsF++;
+			  }
 
-                    }
-
-                }
-
-
-            }
-
-            if (!globB)
-                if (allsF == all.length)
-                    rmIds.add(i);
+		    }
 
 
-        }
+		}
 
-        Array<OverlyRendererI> torem = new Array<OverlyRendererI>();
-        for (int i = 0; i < rmIds.size; i++) {
-            Gdx.app.debug(tag, "Removing OverlayR :: " + rs.get(rmIds.get(i)).getClass().getSimpleName());
-            torem.add(rs.get(rmIds.get(i)));
-        }
-
-        rs.removeAll(torem, true);
+		if (!globB)
+		    if (allsF == all.length)
+			  rmIds.add(i);
 
 
+	  }
+
+	  Array<OverlyRendererI> torem = new Array<OverlyRendererI>();
+	  bK.clear();
+	  for (int i = 0; i < rmIds.size; i++) {
+		Gdx.app.debug(tag, "Removing OverlayR :: " + rs.get(rmIds.get(i)).getClass().getSimpleName());
+		torem.add(rs.get(rmIds.get(i)));
+		bK.add(rs.get(rmIds.get(i)));
+	  }
+
+	  rs.removeAll(torem, true);
+
+    }
+
+    public void restoreBK() {
+	  for (OverlyRendererI i : bK) {
+		addRdr(i);
+	  }
+	  bK.clear();
     }
 
     @Subscribe

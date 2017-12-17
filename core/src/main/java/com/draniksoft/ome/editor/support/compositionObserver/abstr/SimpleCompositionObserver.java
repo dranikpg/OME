@@ -7,10 +7,8 @@ public abstract class SimpleCompositionObserver extends CompositionObserver {
 
     public static final String tag = "SimpleCompositionObserver";
 
-    boolean active;
-
+    private boolean active;
     protected int _selE = -1;
-
     protected World _w;
 
     private Aspect.Builder aB;

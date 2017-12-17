@@ -27,8 +27,9 @@ import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.render.map.MapRDebugSys;
 import com.draniksoft.ome.editor.systems.render.map.MapRenderSys;
 import com.draniksoft.ome.editor.systems.render.obj.ObjRSys;
+import com.draniksoft.ome.editor.systems.render.obj.PathRenderSys;
 import com.draniksoft.ome.editor.systems.support.*;
-import com.draniksoft.ome.editor.systems.time.TimeActivitySys;
+import com.draniksoft.ome.editor.systems.time.ObjTimeCalcSys;
 import com.draniksoft.ome.main_menu.MainBase;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.mgmnt_base.base.AppDataManager;
@@ -278,7 +279,7 @@ public class EngineLoader {
             //
 
 
-            cb.with(new TimeActivitySys());
+		cb.with(new ObjTimeCalcSys());
 
             cb.with(new ActionSystem());
 
@@ -299,6 +300,8 @@ public class EngineLoader {
 
             cb.with(new OverlayRenderSys());
 
+
+		cb.with(new PathRenderSys());
 
             cb.with(new ObjRSys());
 
