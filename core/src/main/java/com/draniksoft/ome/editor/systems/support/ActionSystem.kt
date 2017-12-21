@@ -3,7 +3,7 @@ package com.draniksoft.ome.editor.systems.support
 import com.artemis.BaseSystem
 import com.badlogic.gdx.Gdx
 import com.draniksoft.ome.editor.support.actions.Action
-import com.draniksoft.ome.editor.support.event.ActionHistoryChangeE
+import com.draniksoft.ome.editor.support.event.action.ActionHistoryChangeE
 import net.mostlyoriginal.api.event.common.EventSystem
 import java.util.*
 

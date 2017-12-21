@@ -15,15 +15,13 @@ import com.draniksoft.ome.editor.components.tps.MObjectC;
 import com.draniksoft.ome.editor.load.LoadSaveManager;
 import com.draniksoft.ome.editor.load.ProjectLoader;
 import com.draniksoft.ome.editor.load.ProjectSaver;
-import com.draniksoft.ome.editor.support.event.workflow.ReleaseDataE;
+import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.systems.time.ObjTimeCalcSys;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.utils.Env;
 import com.draniksoft.ome.utils.FUtills;
 import com.draniksoft.ome.utils.JsonUtils;
-import net.mostlyoriginal.api.event.common.EventSystem;
-import net.mostlyoriginal.api.event.common.Subscribe;
 
 import java.io.*;
 
@@ -123,7 +121,7 @@ EntitySrzMgr extends Manager implements LoadSaveManager {
 
     @Override
     protected void initialize() {
-	  world.getSystem(EventSystem.class).registerEvents(this);
+	  world.getSystem(OmeEventSystem.class).registerEvents(this);
     }
 
     public EntitySubscription getEtty() {
@@ -132,19 +130,7 @@ EntitySrzMgr extends Manager implements LoadSaveManager {
     }
 
 
-    @Subscribe
-    public void releaseData(ReleaseDataE ev) {
 
-	  IntBag b = world.getAspectSubscriptionManager().get(Aspect.all(MObjectC.class)).getEntities();
 
-	  for (int e : b.getData()) {
-
-		//ESCUtils.removeSelectionBeforeRMV(e, world);
-
-		world.delete(e);
-
-	  }
-
-    }
 
 }

@@ -4,10 +4,29 @@ import net.mostlyoriginal.api.event.common.Event;
 
 public class ModeChangeE implements Event {
 
-    public ModeChangeE(boolean SHOW_MODE) {
-        this.SHOW_MODE = SHOW_MODE;
+    public static class ShowEnterEvent extends ModeChangeE {
+
     }
 
-    public boolean SHOW_MODE;
+    public static class ShowQuitEvent extends ModeChangeE {
+
+    }
+
+    public static class ShowRequestEvent implements Event {
+
+	  int c;
+
+	  public void await() {
+		c++;
+	  }
+
+	  public void ready() {
+		c--;
+	  }
+
+	  public int getC() {
+		return c;
+	  }
+    }
 
 }

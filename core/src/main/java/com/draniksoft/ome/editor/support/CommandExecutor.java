@@ -32,7 +32,11 @@ import com.draniksoft.ome.editor.support.render.core.OverlyRendererI;
 import com.draniksoft.ome.editor.systems.file_mgmnt.ProjectLoadSystem;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
-import com.draniksoft.ome.editor.systems.support.*;
+import com.draniksoft.ome.editor.systems.support.ActionSystem;
+import com.draniksoft.ome.editor.systems.support.ConsoleSys;
+import com.draniksoft.ome.editor.systems.support.InputSys;
+import com.draniksoft.ome.editor.systems.support.flows.EditorSystem;
+import com.draniksoft.ome.editor.systems.support.flows.WorkflowSys;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.mgmnt_base.impl.ConfigManager;
 import com.draniksoft.ome.support.configs.ConfigDao;
@@ -76,15 +80,12 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     public void set_mode(boolean m) {
 
-        try {
-
-            world.getSystem(WorkflowSys.class).switchMode(m);
-
-        } catch (Exception e) {
-            Gdx.app.error("", "", e);
-        }
+	  if (m) {
+		world.getSystem(WorkflowSys.class).requestShow();
+	  } else {
+		world.getSystem(WorkflowSys.class).requestEdit();
+	  }
         console.log("Show mode " + world.getSystem(WorkflowSys.class).getSHOW_M());
-
     }
 
 
@@ -696,13 +697,13 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     }
 
-    public void log_astd() {
+    public void log_act_sts() {
 
         console.log(world.getSystem(ActionSystem.class).getStack().size() + " of " + world.getSystem(ActionSystem.class).getMaxStackSize());
 
     }
 
-    public void set_asts(int i) {
+    public void set_act_sts(int i) {
 
         world.getSystem(ActionSystem.class).setMaxStackSize(i);
 

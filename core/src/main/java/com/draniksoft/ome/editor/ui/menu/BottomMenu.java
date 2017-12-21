@@ -1,42 +1,126 @@
 package com.draniksoft.ome.editor.ui.menu;
 
-import com.draniksoft.ome.editor.systems.gui.UiSystem;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
+import com.draniksoft.ome.editor.ui.menu.base_addons.BaseBarButtons;
+import com.draniksoft.ome.editor.ui.menu.base_addons.BaseShowButtons;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
-import com.draniksoft.ome.utils.respone.ResponseCode;
-import com.draniksoft.ome.utils.struct.ResponseListener;
+import com.draniksoft.ome.mgmnt_base.impl.LmlUIMgr;
+import com.draniksoft.ome.support.ui.viewsys.BaseView;
+import com.draniksoft.ome.utils.struct.Pair;
+import com.github.czyzby.lml.annotation.LmlActor;
+import com.kotcrab.vis.ui.widget.HorizontalCollapsibleWidget;
 import com.kotcrab.vis.ui.widget.VisTable;
 
-public class BottomMenu extends VisTable {
 
-    UiSystem uiSys;
+/*
+Not managed by any parent or container. Self validating panel
+ */
+public class BottomMenu extends BaseView {
 
-    BaseBarButtons btns;
+    private static final String tag = "BottomMenu";
 
+    @LmlActor("root")
+    VisTable root;
 
-    public BottomMenu(UiSystem sys) {
-	  this.uiSys = sys;
-	  setBackground("primary");
+    @LmlActor("btn_C")
+    Container btnC;
 
-	  init();
+    @LmlActor("hz")
+    HorizontalCollapsibleWidget hz;
 
+    @LmlActor("cnt")
+    VisTable cnt;
+
+    BaseShowButtons showB;
+    BaseBarButtons editB;
+
+    boolean showM = false;
+
+    public void modeChanged(boolean showM) {
+	  this.showM = showM;
+
+	  btnC.clearChildren();
+	  cnt.clearChildren();
+
+	  final LmlUIMgr mgr = AppDO.I.LML();
+
+	  clearInjectedIncludes();
+
+	  if (showB != null) {
+		showB = null;
+	  }
+	  if (editB != null) {
+		editB = null;
+	  }
+
+	  clearInclds();
+	  getInclds().add(Pair.createPair("btns", showM ? "bar_show_buttons" : "bar_base_buttons"));
+	  if (!showM) getInclds().add(Pair.createPair("ext", AppDO.I.C().getConfVal_S("base_bar_editor_addon")));
+	  mgr.injectIncludes(this);
     }
 
-    private void init() {
-	  setHeight(Float.parseFloat(AppDO.I.LML().getArgument("bar_height")));
+    public void resized(float w) {
 
-	  AppDO.I.LML().parseView(new ResponseListener() {
-		@Override
-		public void onResponse(short code) {
-		    if (code == ResponseCode.SUCCESSFUL) {
-			  btns = (BaseBarButtons) AppDO.I.LML().obtainParsed();
-			  add(btns.getActor());
-		    }
+	  if (w < root.getPrefWidth()) {
+		if (!hz.isCollapsed() && hz.getActions().size == 0) {
+		    hz.setCollapsed(true, true);
 		}
-	  }, "bar_base_buttons");
+	  } else {
+		if (hz.isCollapsed() && hz.getActions().size == 0) {
+		    hz.setCollapsed(false, true);
+		}
+	  }
+
+	  root.invalidate();
+    }
+
+    @Override
+    public void obtainIncld(String name, BaseView vw) {
+	  Gdx.app.debug(tag, "GOT " + name + " " + (vw == null ? "NULL" : vw.toString()));
+
+	  if (vw == null) {
+		Gdx.app.error(tag, name + " ->> NULL INCLUDE");
+		return;
+	  }
+	  super.obtainIncld(name, vw);
+
+	  if (vw instanceof BaseShowButtons) {
+		showB = (BaseShowButtons) vw;
+	  } else if (vw instanceof BaseBarButtons) {
+		editB = (BaseBarButtons) vw;
+	  }
+
+	  if (name.equals("btns")) {
+		btnC.setActor(vw.getActor());
+	  } else {
+		cnt.add(vw.getActor()).expand().fill();
+		root.invalidate();
+	  }
 
     }
 
+    @Override
+    public void opened() {
+	  super.opened();
+	  Gdx.app.debug(tag, "Opening");
+	  modeChanged(false);
+    }
 
+    @Override
+    public Actor getActor() {
+	  return root;
+    }
+
+    @Override
+    public void preinit() {
+    }
+
+    @Override
+    public void postinit() {
+	  root.setDebug(true);
+    }
 }
 
 

@@ -6,9 +6,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.draniksoft.ome.editor.components.gfx.DrawableC;
 import com.draniksoft.ome.editor.components.tps.MObjectC;
 import com.draniksoft.ome.editor.support.actions.Action;
+import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.entityy.EntityDataChangeE;
 import com.draniksoft.ome.utils.FUtills;
-import net.mostlyoriginal.api.event.common.EventSystem;
 import org.jetbrains.annotations.NotNull;
 
 public class ChangeDwbA implements Action {
@@ -41,7 +41,7 @@ public class ChangeDwbA implements Action {
         DrawableC dc = w.getMapper(DrawableC.class).get(_e);
 	  dc.d = dwb;
 
-        w.getSystem(EventSystem.class).dispatch(new EntityDataChangeE.DwbChangeE(_e));
+	  w.getSystem(OmeEventSystem.class).dispatch(new EntityDataChangeE.DwbChangeE(_e));
 
     }
 

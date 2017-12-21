@@ -11,7 +11,7 @@ import com.draniksoft.ome.editor.support.compositionObserver.abstr.SimpleComposi
 import com.draniksoft.ome.editor.support.container.CO_actiondesc.ActionDesc;
 import com.draniksoft.ome.editor.support.container.EM_desc.EditModeDesc;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
-import com.draniksoft.ome.editor.systems.support.EditorSystem;
+import com.draniksoft.ome.editor.systems.support.flows.EditorSystem;
 import com.draniksoft.ome.editor.systems.time.ObjTimeCalcSys;
 import com.draniksoft.ome.utils.struct.ResponseListener;
 

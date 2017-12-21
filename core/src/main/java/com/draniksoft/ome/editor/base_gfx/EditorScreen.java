@@ -5,9 +5,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.base_gfx.ResizeEvent;
 import com.draniksoft.ome.main_menu.MainBase;
-import net.mostlyoriginal.api.event.common.EventSystem;
 
 public class EditorScreen implements Screen {
 
@@ -57,7 +57,7 @@ public class EditorScreen implements Screen {
 
         try {
 
-            e.getSystem(EventSystem.class).dispatch(new ResizeEvent(width, height));
+		e.getSystem(OmeEventSystem.class).dispatch(new ResizeEvent(width, height));
 
         } catch (Exception e) {
 

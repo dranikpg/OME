@@ -1,7 +1,6 @@
 package com.draniksoft.ome.editor.support.compositionObserver;
 
 import com.artemis.Aspect;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.IntMap;
 import com.draniksoft.ome.editor.components.gfx.DrawableC;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
@@ -14,7 +13,7 @@ import com.draniksoft.ome.editor.support.container.EM_desc.EditModeDesc;
 import com.draniksoft.ome.editor.support.render.def.SelectionRenderer;
 import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
-import com.draniksoft.ome.editor.systems.support.EditorSystem;
+import com.draniksoft.ome.editor.systems.support.flows.EditorSystem;
 import com.draniksoft.ome.support.ui.util.CompObViewIds;
 
 import static com.draniksoft.ome.editor.support.compositionObserver.MOCompositionO.ActionCodes.*;
@@ -55,9 +54,7 @@ public class MOCompositionO extends SimpleCompositionObserver {
             }
             r.e = _selE;
         } else {
-            Gdx.app.debug(tag, "NO MORE ACTIVE " + previousActivity);
             if (previousActivity) {
-                Gdx.app.debug(tag, "Removing REnderer");
                 rSys.removeRdr(r);
             }
         }

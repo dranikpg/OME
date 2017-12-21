@@ -5,11 +5,11 @@ import com.artemis.annotations.Wire;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.draniksoft.ome.editor.support.CommandExecutor;
+import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.base_gfx.ResizeEvent;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.support.load.interfaces.IGLRunnable;
 import com.strongjoshua.console.GUIConsole;
-import net.mostlyoriginal.api.event.common.EventSystem;
 import net.mostlyoriginal.api.event.common.Subscribe;
 
 public class ConsoleSys extends BaseSystem {
@@ -31,7 +31,7 @@ public class ConsoleSys extends BaseSystem {
 
         l.passGLRunnable(new Gfx_ldr());
 
-        world.getSystem(EventSystem.class).registerEvents(this);
+	  world.getSystem(OmeEventSystem.class).registerEvents(this);
 
     }
 
@@ -43,6 +43,7 @@ public class ConsoleSys extends BaseSystem {
 
 
     }
+
 
     @Subscribe
     public void resize(ResizeEvent e) {

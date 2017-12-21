@@ -134,10 +134,10 @@ public class FUtills {
 
     public static class DrawablePrefix {
         public static final String P_EMPTY = "E:";
-        public static final String P_SKINSRC = "S:";
-        public static final String P_SIMPLE_DW = "$:";
-        public static final String P_NINEPATCH = "P:";
-        public static final String P_ANIM = "A:";
+	  public static final String P_SKINSRC = "K:";
+	  public static final String P_SIMPLE_DW = "S:";
+	  public static final String P_NINEPATCH = "P:";
+	  public static final String P_ANIM = "A:";
     }
 
     private static NinePatch fetchNinePatch(TextureAtlas.AtlasRegion region) {

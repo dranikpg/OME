@@ -17,6 +17,7 @@ import com.draniksoft.ome.editor.esc_utils.OmeStrategy;
 import com.draniksoft.ome.editor.load.MapLoadBundle;
 import com.draniksoft.ome.editor.manager.*;
 import com.draniksoft.ome.editor.manager.drawable.SimpleDrawableMgr;
+import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.systems.file_mgmnt.AssetLScheduleSys;
 import com.draniksoft.ome.editor.systems.file_mgmnt.ProjectLoadSystem;
 import com.draniksoft.ome.editor.systems.gfx_support.CameraSys;
@@ -28,7 +29,12 @@ import com.draniksoft.ome.editor.systems.render.map.MapRDebugSys;
 import com.draniksoft.ome.editor.systems.render.map.MapRenderSys;
 import com.draniksoft.ome.editor.systems.render.obj.ObjRSys;
 import com.draniksoft.ome.editor.systems.render.obj.PathRenderSys;
-import com.draniksoft.ome.editor.systems.support.*;
+import com.draniksoft.ome.editor.systems.support.ActionSystem;
+import com.draniksoft.ome.editor.systems.support.ConsoleSys;
+import com.draniksoft.ome.editor.systems.support.InputSys;
+import com.draniksoft.ome.editor.systems.support.flows.EditorSystem;
+import com.draniksoft.ome.editor.systems.support.flows.ShowSystem;
+import com.draniksoft.ome.editor.systems.support.flows.WorkflowSys;
 import com.draniksoft.ome.editor.systems.time.ObjTimeCalcSys;
 import com.draniksoft.ome.main_menu.MainBase;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
@@ -38,7 +44,6 @@ import com.draniksoft.ome.support.load.interfaces.IGLRunnable;
 import com.draniksoft.ome.support.load.interfaces.IRunnable;
 import com.draniksoft.ome.utils.GUtils;
 import com.draniksoft.ome.utils.struct.ResponseListener;
-import net.mostlyoriginal.api.event.common.EventSystem;
 
 import java.util.Iterator;
 
@@ -270,6 +275,8 @@ public class EngineLoader {
 
             cb.with(new EditorSystem());
 
+		cb.with(new ShowSystem());
+
             cb.with(new InputSys());
 
 		cb.with(new ProjectLoadSystem());
@@ -297,13 +304,11 @@ public class EngineLoader {
             cb.with(new MapRenderSys());
             cb.with(new MapRDebugSys());
 
-
-            cb.with(new OverlayRenderSys());
-
-
 		cb.with(new PathRenderSys());
 
             cb.with(new ObjRSys());
+
+		cb.with(new OverlayRenderSys());
 
             cb.with(new UiSystem());
 
@@ -316,7 +321,7 @@ public class EngineLoader {
 
             cb.with(new WorkflowSys());
 
-            cb.with(new EventSystem());
+		cb.with(new OmeEventSystem());
 
 		cb.register(new OmeStrategy());
 

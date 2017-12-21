@@ -5,11 +5,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.entityy.SelectionChangeE;
 import com.draniksoft.ome.editor.support.input.InputController;
 import com.draniksoft.ome.editor.systems.pos.PositionSystem;
-import com.draniksoft.ome.editor.systems.support.EditorSystem;
-import net.mostlyoriginal.api.event.common.EventSystem;
+import com.draniksoft.ome.editor.systems.support.flows.EditorSystem;
 
 public class TimedSelectIC implements InputController {
 
@@ -77,7 +77,7 @@ public class TimedSelectIC implements InputController {
         ev.n = e;
 	  ev.old = w.getSystem(EditorSystem.class).sel;
 
-        w.getSystem(EventSystem.class).dispatch(ev);
+	  w.getSystem(OmeEventSystem.class).dispatch(ev);
 
 
     }

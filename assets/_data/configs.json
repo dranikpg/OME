@@ -27,6 +27,10 @@
     "vt": "freeint",
     "defv": 5,
     "comment//maxV": 5
+  },
+  "base_bar_editor_addon": {
+    "vt": "freestr",
+    "defv": "em_button_strip"
   }
 
 }

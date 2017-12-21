@@ -7,8 +7,8 @@ import com.artemis.io.JsonArtemisSerializer;
 import com.artemis.io.KryoArtemisSerializer;
 import com.artemis.utils.IntBag;
 import com.draniksoft.ome.editor.components.selection.SelectionC;
+import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.entityy.SelectionChangeE;
-import net.mostlyoriginal.api.event.common.EventSystem;
 
 
 public class ESCUtils {
@@ -20,6 +20,7 @@ public class ESCUtils {
     public static final int EVENT_DEF_PRIORITY = 0;
     public static final int EVENT_LOW_PRIORITY = -20;
     public static final int EVENT_MIN_PRIORITY = -50;
+    public static final int EVENT_LAST = -100;
 
 
     public static void clearSelected(World w) {
@@ -38,7 +39,7 @@ public class ESCUtils {
         SelectionChangeE e = new SelectionChangeE();
         if (b.size() > 0)
             e.old = b.get(0);
-        w.getSystem(EventSystem.class).dispatch(e);
+	  w.getSystem(OmeEventSystem.class).dispatch(e);
 
 
     }
@@ -59,7 +60,7 @@ public class ESCUtils {
             e.old = _e;
             e.n = -1;
 
-            w.getSystem(EventSystem.class).dispatch(e);
+		w.getSystem(OmeEventSystem.class).dispatch(e);
 
         }
 

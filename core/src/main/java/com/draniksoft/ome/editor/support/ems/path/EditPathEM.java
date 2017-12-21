@@ -7,6 +7,7 @@ import com.draniksoft.ome.editor.components.path.PathDescC;
 import com.draniksoft.ome.editor.components.path.PathRunTimeC;
 import com.draniksoft.ome.editor.support.actions.path.CommitPathAddA;
 import com.draniksoft.ome.editor.support.actions.path.CommitPathChangeA;
+import com.draniksoft.ome.editor.support.container.EM_desc.EditModeDesc;
 import com.draniksoft.ome.editor.support.container.path.PathDesc;
 import com.draniksoft.ome.editor.support.container.path.PathRTDesc;
 import com.draniksoft.ome.editor.support.container.path.PathSDesc;
@@ -19,8 +20,8 @@ import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.editor.systems.pos.PositionSystem;
 import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
-import com.draniksoft.ome.editor.systems.support.EditorSystem;
 import com.draniksoft.ome.editor.systems.support.InputSys;
+import com.draniksoft.ome.editor.systems.support.flows.EditorSystem;
 import com.draniksoft.ome.editor.systems.time.ObjTimeCalcSys;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.utils.struct.Points;
@@ -88,13 +89,10 @@ public class EditPathEM extends SimpleEditMode {
 
     public void recompute(boolean pv) {
 	  if (curIDX > -1) {
-		Gdx.app.debug(tag, "Computing");
 		float f = 1f;
-
 		if (pv) {
 		    f = AppDO.I.C().getConfVal_I("path_preview_factor") / 5f;
 		}
-
 		_w.getSystem(ObjTimeCalcSys.class).processEntityPath(_e, curIDX, f);
 	  }
     }
@@ -105,7 +103,6 @@ public class EditPathEM extends SimpleEditMode {
 
     public void recompute(int id) {
 	  if (id > -1) {
-		Gdx.app.debug(tag, "Computing");
 		_w.getSystem(ObjTimeCalcSys.class).processEntityPath(_e, id);
 	  }
     }
@@ -275,5 +272,10 @@ public class EditPathEM extends SimpleEditMode {
     @Override
     protected void finalize() throws Throwable {
 	  Gdx.app.debug(tag, "Finalized");
+    }
+
+    @Override
+    public int ID() {
+	  return EditModeDesc.IDS.pathEdit;
     }
 }

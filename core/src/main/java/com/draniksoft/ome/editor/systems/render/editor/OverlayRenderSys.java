@@ -8,9 +8,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntArray;
+import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.workflow.ModeChangeE;
 import com.draniksoft.ome.editor.support.render.core.OverlyRendererI;
-import net.mostlyoriginal.api.event.common.EventSystem;
 import net.mostlyoriginal.api.event.common.Subscribe;
 
 
@@ -40,7 +40,7 @@ public class OverlayRenderSys extends BaseSystem {
         rs = new Array<OverlyRendererI>();
 	  bK = new Array<OverlyRendererI>();
 
-        world.getSystem(EventSystem.class).registerEvents(this);
+	  world.getSystem(OmeEventSystem.class).registerEvents(this);
 
     }
 
@@ -76,12 +76,14 @@ public class OverlayRenderSys extends BaseSystem {
     }
 
     public void addRdr(OverlyRendererI r) {
-        rs.add(r);
-        r.added(world);
+	  Gdx.app.debug(tag, "Adding " + r.toString());
+	  rs.add(r);
+	  r.added(world);
     }
 
     public void removeRdr(OverlyRendererI r) {
-        rs.removeValue(r, true);
+	  Gdx.app.debug(tag, "Removing " + r.toString());
+	  rs.removeValue(r, true);
     }
 
     public void removeRdr(int id) {

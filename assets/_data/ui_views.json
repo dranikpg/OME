@@ -1,14 +1,26 @@
 {
+  "bar": {
+    "class": "§editor.ui.menu.BottomMenu",
+    "lml": "base_ui/bar.lml"
+  },
   "bar_base_buttons": {
     "lml": "base_ui/bar_base_buttons.lml",
-    "class": "com.draniksoft.ome.editor.ui.menu.BaseBarButtons"
+    "class": "§editor.ui.menu.base_addons.BaseBarButtons"
+  },
+  "bar_show_buttons": {
+    "lml": "base_ui/bar_show_buttons.lml",
+    "class": "§editor.ui.menu.base_addons.BaseShowButtons"
+  },
+  "em_button_strip": {
+    "lml": "addon/em_button_strip.lml",
+    "class": "§editor.ui.menu.misc_addons.EMButtonStrip"
   },
   "move_mo_em": {
     "lml": "em/move_mo.lml",
-    "class": "com.draniksoft.ome.editor.ui.em_ui.MoveMOView"
+    "class": "§editor.ui.em_ui.MoveMOView"
   },
   "edit_path_em": {
     "lml": "em/edit_path.lml",
-    "class": "com.draniksoft.ome.editor.ui.em_ui.PathEditView"
+    "class": "§editor.ui.em_ui.PathEditView"
   }
 }

@@ -1,0 +1,19 @@
+<visTable
+    id=root
+    height={bar_height}
+    background=primary>
+
+
+    <horizontalCollapsibleWidget id="hz"
+        expandy=true filly=true
+        expandx=true>
+
+        <visTable id=cnt/>
+
+    </horizontalCollapsibleWidget>
+
+    <container id="btn_c"
+        expandy=true filly=true/>
+
+
+</visTable>

@@ -92,7 +92,7 @@ public class ProjectLoader {
 		notifyEnd();
 	  } else if (s == Step.DATA_RELEASE) {
 		l.passRunnable(new ReleaseData());
-		//w.getSystem(EventSystem.class).dispatch(new ReleaseDataE());
+		//w.getSystem(OmeEventSystem.class).dispatch(new ReleaseDataE());
 		updateLoad();
 	  } else if (s == Step.UNZIP) {
 		updateLoad();

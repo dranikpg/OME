@@ -1,14 +1,18 @@
-package com.draniksoft.ome.editor.ui.menu;
+package com.draniksoft.ome.editor.ui.menu.base_addons;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.draniksoft.ome.support.ui.viewsys.BaseView;
 import com.github.czyzby.lml.annotation.LmlActor;
+import com.kotcrab.vis.ui.widget.VisImageButton;
+import com.kotcrab.vis.ui.widget.VisTable;
 
 public class BaseBarButtons extends BaseView {
 
     @LmlActor("root")
-    Table t;
+    VisTable t;
+
+    @LmlActor("edit")
+    VisImageButton edit;
 
     @Override
     public Actor getActor() {
@@ -17,7 +21,6 @@ public class BaseBarButtons extends BaseView {
 
     @Override
     public void preinit() {
-
     }
 
     @Override

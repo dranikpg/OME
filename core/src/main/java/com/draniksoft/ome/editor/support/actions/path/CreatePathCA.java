@@ -7,8 +7,8 @@ import com.draniksoft.ome.editor.components.path.PathRunTimeC;
 import com.draniksoft.ome.editor.support.actions.Action;
 import com.draniksoft.ome.editor.support.container.path.PathRTDesc;
 import com.draniksoft.ome.editor.support.container.path.PathSDesc;
+import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.entityy.CompositionChangeE;
-import net.mostlyoriginal.api.event.common.EventSystem;
 import org.jetbrains.annotations.NotNull;
 
 public class CreatePathCA implements Action {
@@ -24,7 +24,7 @@ public class CreatePathCA implements Action {
 	  c.ar = new Array<PathSDesc>();
 	  c2.p = new Array<PathRTDesc>();
 
-	  w.getSystem(EventSystem.class).dispatch(new CompositionChangeE(_e));
+	  w.getSystem(OmeEventSystem.class).dispatch(new CompositionChangeE(_e));
     }
 
     @Override

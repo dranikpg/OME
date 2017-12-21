@@ -4,7 +4,7 @@
     "sr": false,
     "name_en": "New Location Tool",
     "name_ru": "New Location Tool",
-    "iconID": "SomeId",
+    "iconID": "i_newl_em",
     "c": "base_em.NewMOEM",
     "sav": 1
   },
@@ -13,7 +13,7 @@
     "sr": true,
     "name_en": "Move Location Tool",
     "name_ru": "Move Location Tool",
-    "iconID": "SomeId",
+    "iconID": "i_move_em",
     "c": "base_em.MoveMOEM",
     "sav": 2
   },
@@ -22,7 +22,7 @@
     "sr": true,
     "name_en": "Edit path Tool",
     "name_ru": "Edit path Tool",
-    "iconID": "SomeId",
+    "iconID": "i_path_em",
     "c": "path.EditPathEM",
     "sav": 2
   }

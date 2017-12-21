@@ -2,10 +2,10 @@ package com.draniksoft.ome.editor.support.actions.mapO;
 
 import com.artemis.World;
 import com.draniksoft.ome.editor.support.actions.Action;
+import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.entityy.EntityDataChangeE;
 import com.draniksoft.ome.editor.systems.pos.PositionSystem;
 import com.draniksoft.ome.utils.struct.Pair;
-import net.mostlyoriginal.api.event.common.EventSystem;
 
 public class MoveMOA implements Action {
 
@@ -36,7 +36,7 @@ public class MoveMOA implements Action {
 		sys.setByCornerPos(_e, x, y);
 	  }
 	  sys.save(_e);
-	  w.getSystem(EventSystem.class).dispatch(new EntityDataChangeE.MOPositonChangeE(_e));
+	  w.getSystem(OmeEventSystem.class).dispatch(new EntityDataChangeE.MOPositonChangeE(_e));
     }
 
     @Override

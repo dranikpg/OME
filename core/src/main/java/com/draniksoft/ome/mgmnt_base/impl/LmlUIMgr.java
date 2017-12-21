@@ -31,7 +31,7 @@ public class LmlUIMgr extends AppDataManager {
 
     ObjectMap<String, ViewConfSt> viewM;
 
-    ObjectMap<String, BaseView> vws;
+    volatile ObjectMap<String, BaseView> vws;
 
     volatile LmlParser p;
     BaseActionProvider pv;
@@ -43,6 +43,7 @@ public class LmlUIMgr extends AppDataManager {
     Queue<Pair<String, ResponseListener>> queue;
 
     public volatile BaseView tvw;
+    volatile boolean blding = false;
 
     @Override
     protected void startupLoad(IntelligentLoader l) {
@@ -102,74 +103,80 @@ public class LmlUIMgr extends AppDataManager {
 		l.onResponse(ResponseCode.FAILED);
 	  }
 
-	  if (tvw != null) {
+	  if (blding) {
 		queue.add(Pair.createPair(id, l));
 		return;
 	  }
 
-	  buildView(l, id);
+	  buildViewT(l, id);
 
     }
 
 
     private void loadView(BaseView vw, ViewConfSt st) {
 	  vw.preinit();
-
 	  if (st.lmlPath != null) {
 		vw.prepareParser(p);
+		Gdx.app.debug(tag, "Parsing " + st.lmlPath);
 		p.createView(vw, Gdx.files.internal("lml/" + st.lmlPath));
 		vw.clearParser(p);
 	  }
 	  vw.postinit();
     }
 
-    private void buildView(final ResponseListener l, final String id) {
+    private synchronized void buildViewT(final ResponseListener l, final String id) {
 	  new Thread() {
 		@Override
 		public void run() {
-		    try {
-			  setName("LML PARSE");
-			  Gdx.app.debug(tag, "Building " + id);
-
-			  ViewConfSt st = viewM.get(id);
-			  Class c = st.viewClass;
-			  BaseView vw = (BaseView) c.getConstructor().newInstance();
-			  vw.ID = id;
-			  vw.lang = AppDO.I.L().getLangS();
-			  tvw = vw;
-
-			  if (MainBase.engine != null) {
-				vw.injectW(MainBase.engine);
-			  }
-
-			  loadView(vw, st);
-
-			  vws.put(id, vw);
-			  l.onResponse(ResponseCode.SUCCESSFUL);
-
-		    } catch (Exception e) {
-			  Gdx.app.error(tag, "", e);
-		    }
-
-		    tvw = null;
-
-		    if (!queue.isEmpty()) {
-			  Pair<String, ResponseListener> e = queue.poll();
-			  buildView(e.getElement1(), e.getElement0());
-		    }
-
+		    setName("LML PARSE");
+		    buildView(l, id);
 		}
 	  }.start();
     }
 
-    public void injectInclude(final BaseView vw, final String name, String tag) {
+    private void buildView(final ResponseListener l, final String id) {
+	  try {
+		blding = true;
+		Gdx.app.debug(tag, "Building " + id);
+
+		ViewConfSt st = viewM.get(id);
+		Class c = st.viewClass;
+		BaseView vw = (BaseView) c.getConstructor().newInstance();
+		vw.ID = id;
+		vw.lang = AppDO.I.L().getLangS();
+		tvw = vw;
+
+		if (MainBase.engine != null) {
+		    vw.injectW(MainBase.engine);
+		}
+
+		loadView(vw, st);
+		vws.put(id, vw);
+
+		l.onResponse(ResponseCode.SUCCESSFUL);
+
+	  } catch (Exception e) {
+		Gdx.app.error(tag, "", e);
+	  }
+
+	  if (!queue.isEmpty()) {
+		Pair<String, ResponseListener> e = queue.poll();
+		buildView(e.getElement1(), e.getElement0());
+	  } else {
+		blding = false;
+	  }
+
+    }
+
+
+    public void injectInclude(final BaseView vw, final String name, final String tag) {
 	  if (hasViewAvailable(tag)) {
 		vw.obtainIncld(name, getView(tag));
 	  } else {
 		parseView(new ResponseListener() {
 		    @Override
 		    public void onResponse(short code) {
-			  vw.obtainIncld(name, obtainParsed());
+			  vw.obtainIncld(name, getView(tag));
 		    }
 		}, tag);
 	  }
@@ -183,10 +190,10 @@ public class LmlUIMgr extends AppDataManager {
     }
 
 
-    public BaseView obtainParsed() {
+    public <T extends BaseView> T obtainParsed() {
 	  BaseView v2 = tvw;
 	  tvw = null;
-	  return v2;
+	  return (T) v2;
     }
 
     public Class getViewStC(String id) {
@@ -209,6 +216,14 @@ public class LmlUIMgr extends AppDataManager {
 	  return null;
     }
 
+    // DC aka dynamic cast
+    public <T> T getViewDC(String id) {
+	  if (hasViewAvailable(id)) {
+		return (T) vws.get(id);
+	  }
+	  return null;
+    }
+
     public String getArgument(String arg) {
 	  return p.getData().getArgument(arg);
     }
@@ -220,9 +235,11 @@ public class LmlUIMgr extends AppDataManager {
 		ViewConfSt st = new ViewConfSt();
 		st.lmlPath = v.has("lml") ? v.getString("lml") : "";
 		try {
-		    st.viewClass = Class.forName(v.getString("class"));
+		    String cs = v.getString("class");
+		    if (cs.startsWith("§")) cs = "com.draniksoft.ome.".concat(cs.substring(1));
+		    st.viewClass = Class.forName(cs);
 		} catch (ClassNotFoundException e) {
-		    continue;
+		    Gdx.app.error(tag, "NO CLASS ", e);
 		}
 		viewM.put(v.name, st);
 	  }

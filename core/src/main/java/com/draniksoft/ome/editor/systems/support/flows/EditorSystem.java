@@ -1,4 +1,4 @@
-package com.draniksoft.ome.editor.systems.support;
+package com.draniksoft.ome.editor.systems.support.flows;
 
 import com.artemis.BaseSystem;
 import com.artemis.annotations.Wire;
@@ -13,6 +13,7 @@ import com.draniksoft.ome.editor.support.compositionObserver.abstr.CompositionOb
 import com.draniksoft.ome.editor.support.container.EM_desc.BiLangEMDs;
 import com.draniksoft.ome.editor.support.container.EM_desc.EditModeDesc;
 import com.draniksoft.ome.editor.support.ems.core.EditMode;
+import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.entityy.CompositionChangeE;
 import com.draniksoft.ome.editor.support.event.entityy.SelectionChangeE;
 import com.draniksoft.ome.editor.support.event.workflow.EditModeChangeE;
@@ -20,7 +21,6 @@ import com.draniksoft.ome.editor.support.event.workflow.ModeChangeE;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.support.load.interfaces.IRunnable;
 import com.draniksoft.ome.utils.ESCUtils;
-import net.mostlyoriginal.api.event.common.EventSystem;
 import net.mostlyoriginal.api.event.common.Subscribe;
 
 import java.lang.reflect.InvocationTargetException;
@@ -110,7 +110,7 @@ public class EditorSystem extends BaseSystem {
         Gdx.app.debug(tag, "Changed to new Editmode");
 
 
-        world.getSystem(EventSystem.class).dispatch(e);
+        world.getSystem(OmeEventSystem.class).dispatch(e);
 
     }
 
@@ -151,19 +151,9 @@ public class EditorSystem extends BaseSystem {
     @Subscribe
     public void modeChange(ModeChangeE e) {
 
-        if (e.SHOW_MODE) {
 
-            //ESCUtils.clearSelected(world);
-
-            detachEditMode();
-            setEnabled(false);
-        } else {
-            setEnabled(true);
-        }
 
     }
-
-
 
     public CompositionObserver getComOb(int id) {
         return comObs.containsKey(id) ? comObs.get(id) : null;
@@ -256,6 +246,7 @@ public class EditorSystem extends BaseSystem {
             d.name_ru = v.getString("name_ru");
             d.id = v.getInt("id");
             d.selRequired = v.getBoolean("sr");
+            d.iconID = v.has("iconID") ? v.getString("iconID") : "i_edit";
 
             if (v.has("sav")) d.aviabT = v.getInt("sav");
 

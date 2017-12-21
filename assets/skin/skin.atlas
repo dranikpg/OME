@@ -6,77 +6,119 @@ filter: Linear,Linear
 repeat: none
 c
   rotate: false
-  xy: 1438, 1504
+  xy: 1438, 1535
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 edit
   rotate: false
-  xy: 515, 1064
+  xy: 1, 67
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 futa_25
   rotate: false
-  xy: 1, 102
+  xy: 1, 133
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
 futa_37
   rotate: false
-  xy: 1, 616
+  xy: 1, 647
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+futa_digs_50
+  rotate: false
+  xy: 515, 647
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
 globe
   rotate: false
-  xy: 1, 36
+  xy: 515, 581
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 logo-dark
   rotate: false
-  xy: 1, 1130
+  xy: 1, 1161
   size: 1435, 438
   orig: 1435, 438
   offset: 0, 0
   index: -1
+move
+  rotate: false
+  xy: 581, 581
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+newl
+  rotate: false
+  xy: 1029, 1029
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
 open
   rotate: false
-  xy: 1438, 1438
+  xy: 1029, 1095
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+pause
+  rotate: false
+  xy: 515, 515
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+play
+  rotate: false
+  xy: 67, 67
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+route
+  rotate: false
+  xy: 1095, 1095
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 save
   rotate: false
-  xy: 1504, 1504
+  xy: 1438, 1469
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 settings
   rotate: false
-  xy: 515, 998
+  xy: 1504, 1535
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 undo
   rotate: false
-  xy: 581, 1064
+  xy: 1, 1
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 w
   rotate: false
-  xy: 1, 33
+  xy: 1438, 1466
   size: 1, 1
   orig: 1, 1
   offset: 0, 0

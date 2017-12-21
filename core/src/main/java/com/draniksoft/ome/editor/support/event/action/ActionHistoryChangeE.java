@@ -1,4 +1,4 @@
-package com.draniksoft.ome.editor.support.event;
+package com.draniksoft.ome.editor.support.event.action;
 
 import net.mostlyoriginal.api.event.common.Event;
 

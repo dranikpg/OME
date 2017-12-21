@@ -10,5 +10,6 @@ interface EditMode {
 
     fun detached()
 
+    fun ID(): Int
 
 }

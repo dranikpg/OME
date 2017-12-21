@@ -25,6 +25,8 @@ public class MenuWinController {
 	  this.w = w;
 
 	  w.setVisible(false);
+	  m.getActor().setWidth(sys.getStageW());
+	  m.getActor().setPosition(0, 0);
     }
 
     public void setMenuHide(boolean menuHide) {
@@ -49,7 +51,7 @@ public class MenuWinController {
     private void restore() {
 
 	  float tx = w.getWidth() / sys.getStageW() * UiSystem.Defaults.aTime100PCT;
-	  float ty = Math.abs(m.getY()) / sys.getStageH() * UiSystem.Defaults.aTime100PCT;
+	  float ty = Math.abs(m.getActor().getY()) / sys.getStageH() * UiSystem.Defaults.aTime100PCT;
 
 	  w.addAction(Actions.sequence(
 		    Actions.moveTo(sys.getStageW(), w.getY(), tx),
@@ -64,14 +66,14 @@ public class MenuWinController {
 	  ));
 
 	  if (menuHide) {
-		m.setWidth(sys.getStageW());
-		m.addAction(Actions.sequence(
+		m.getActor().setWidth(sys.getStageW());
+		m.getActor().addAction(Actions.sequence(
 			  Actions.delay(tx),
 			  Actions.moveTo(0, 0, ty))
 		);
 
 	  } else {
-		m.addAction(Actions.sizeTo(sys.getStageW(), m.getHeight(), tx));
+		m.getActor().addAction(Actions.sizeTo(sys.getStageW(), m.getActor().getHeight(), tx));
 	  }
 
     }
@@ -85,12 +87,12 @@ public class MenuWinController {
 		w.setVisible(true);
 
 		if (menuReplace) {
-		    m.setWidth(w.getX());
+		    m.getActor().setWidth(w.getX());
 		} else {
-		    m.setWidth(sys.getStageW());
+		    m.getActor().setWidth(sys.getStageW());
 		}
 	  } else {
-		m.setWidth(sys.getStageW());
+		m.getActor().setWidth(sys.getStageW());
 		w.setX(sys.getStageW() + 1);
 	  }
 
@@ -99,10 +101,11 @@ public class MenuWinController {
 		w.setY(0);
 		w.setHeight(sys.getStageH());
 	  } else {
-		w.setY(m.getHeight());
-		w.setHeight(sys.getStageH() - m.getHeight());
+		w.setY(m.getActor().getHeight());
+		w.setHeight(sys.getStageH() - m.getActor().getHeight());
 	  }
 
+	  m.resized(sys.getStageW());
     }
 
     private void applyBasics() {
@@ -110,7 +113,7 @@ public class MenuWinController {
 	  w.clearActions();
 
 	  if (menuHide) {
-		m.setY(-m.getHeight());
+		m.getActor().setY(-m.getActor().getHeight());
 	  }
 	  w.setWidth(w.getCalcWidth());
 

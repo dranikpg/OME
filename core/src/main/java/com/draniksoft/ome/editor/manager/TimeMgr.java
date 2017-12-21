@@ -5,10 +5,10 @@ import com.badlogic.gdx.Gdx;
 import com.draniksoft.ome.editor.load.LoadSaveManager;
 import com.draniksoft.ome.editor.load.ProjectLoader;
 import com.draniksoft.ome.editor.load.ProjectSaver;
+import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.workflow.ModeChangeE;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import dint.Dint;
-import net.mostlyoriginal.api.event.common.EventSystem;
 import net.mostlyoriginal.api.event.common.Subscribe;
 
 public class TimeMgr extends BaseSystem implements LoadSaveManager {
@@ -47,7 +47,7 @@ public class TimeMgr extends BaseSystem implements LoadSaveManager {
 
         setEnabled(false);
 
-        world.getSystem(EventSystem.class).registerEvents(this);
+	  world.getSystem(OmeEventSystem.class).registerEvents(this);
     }
 
     @Override
@@ -117,7 +117,7 @@ public class TimeMgr extends BaseSystem implements LoadSaveManager {
 
         this.cur = lowerB;
 
-        setEnabled(e.SHOW_MODE);
+	  setEnabled(false);
     }
 
     @Override

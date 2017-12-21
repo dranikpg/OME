@@ -2,3 +2,5 @@
     Sizes
 -->
 <:assign bar_height 50/>
+
+<:calculate _icon_w {bar_height}-5 />

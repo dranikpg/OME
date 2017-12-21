@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.config.ConfigValChangeE;
 import com.draniksoft.ome.main_menu.MainBase;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
@@ -14,7 +15,6 @@ import com.draniksoft.ome.support.configs.ConfigValueType;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.utils.FUtills;
 import com.draniksoft.ome.utils.JsonUtils;
-import net.mostlyoriginal.api.event.common.EventSystem;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -113,9 +113,9 @@ public class ConfigManager extends AppDataManager {
         if (m.get(id).setV(val)) {
             Gdx.app.debug(tag, "Changing " + id);
             if (MainBase.engine != null) {
-                MainBase.engine.getSystem(EventSystem.class).dispatch(new ConfigValChangeE(id));
-            }
-            checkTrigger(id, val);
+		    MainBase.engine.getSystem(OmeEventSystem.class).dispatch(new ConfigValChangeE(id));
+		}
+		checkTrigger(id, val);
         }
 
     }

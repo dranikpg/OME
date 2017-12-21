@@ -5,10 +5,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.draniksoft.ome.editor.support.actions.Action;
 import com.draniksoft.ome.editor.support.container.path.PathSDesc;
+import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.entityy.EntityDataChangeE;
 import com.draniksoft.ome.editor.systems.pos.PositionSystem;
 import com.draniksoft.ome.editor.systems.time.ObjTimeCalcSys;
-import net.mostlyoriginal.api.event.common.EventSystem;
 import org.jetbrains.annotations.NotNull;
 
 public class CommitPathAddA implements Action {
@@ -46,7 +46,7 @@ public class CommitPathAddA implements Action {
 
 	  w.getSystem(ObjTimeCalcSys.class).removePathIdx(_e, i);
 
-	  w.getSystem(EventSystem.class).dispatch(new EntityDataChangeE.PathCountChangeE(_e));
+	  w.getSystem(OmeEventSystem.class).dispatch(new EntityDataChangeE.PathCountChangeE(_e));
     }
 
     @Override

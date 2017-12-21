@@ -31,6 +31,7 @@ public class PathRenderSys extends IteratingSystem {
     protected void begin() {
 	  r.setProjectionMatrix(cam.combined);
 	  r.setColor(VisUI.getSkin().getColor("primary"));
+	  r.setAutoShapeType(true);
 	  r.begin();
     }
 
@@ -39,13 +40,15 @@ public class PathRenderSys extends IteratingSystem {
 
 	  PathRunTimeC c = rcM.get(e);
 
+	  r.set(ShapeRenderer.ShapeType.Filled);
+
 	  for (PathRTDesc d : c.p) {
 
 		if (d == null || !d.rendering || d.ar.size < 2) continue;
 
 		for (int i = 1; i < d.ar.size; i++) {
 
-		    r.line(d.ar.get(i - 1), d.ar.get(i));
+		    r.rectLine(d.ar.get(i - 1), d.ar.get(i), 10);
 
 		}
 

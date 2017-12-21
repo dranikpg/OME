@@ -7,10 +7,11 @@ import com.badlogic.gdx.assets.AssetManager
 import com.draniksoft.ome.editor.load.MapLoadBundle
 import com.draniksoft.ome.editor.load.ProjectLoader
 import com.draniksoft.ome.editor.load.ProjectSaver
+import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem
 import com.draniksoft.ome.editor.support.event.entityy.SelectionChangeE
-import com.draniksoft.ome.editor.systems.support.EditorSystem
+import com.draniksoft.ome.editor.support.event.load.MapLoadedE
+import com.draniksoft.ome.editor.systems.support.flows.EditorSystem
 import com.draniksoft.ome.mgmnt_base.base.AppDO
-import net.mostlyoriginal.api.event.common.EventSystem
 
 class ProjectLoadSystem : BaseSystem() {
 
@@ -50,7 +51,7 @@ class ProjectLoadSystem : BaseSystem() {
         e.old = world.getSystem(EditorSystem::class.java).sel
         e.n = -1
 
-        world.getSystem(EventSystem::class.java).dispatch(e)
+        world.getSystem(OmeEventSystem::class.java).dispatch(e)
 
     }
 
@@ -66,11 +67,14 @@ class ProjectLoadSystem : BaseSystem() {
 
         loader.setW(world)
         loader.start(bundle) {
+
             Gdx.app.debug(tag, "Load ready")
-
             state = STATE_IDLE
-
             loader.dispose()
+
+            Gdx.app.postRunnable(Runnable {
+                world.getSystem(OmeEventSystem::class.java).dispatch(MapLoadedE())
+            })
         }
 
 

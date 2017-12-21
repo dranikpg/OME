@@ -3,8 +3,8 @@ package com.draniksoft.ome.editor.systems.time;
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.EntitySubscription;
-import com.artemis.systems.IteratingSystem;
 import com.artemis.utils.IntBag;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.CatmullRomSpline;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -14,26 +14,27 @@ import com.draniksoft.ome.editor.components.state.InactiveC;
 import com.draniksoft.ome.editor.components.state.TInactiveC;
 import com.draniksoft.ome.editor.support.container.path.PathDesc;
 import com.draniksoft.ome.editor.support.container.path.PathRTDesc;
+import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.workflow.ModeChangeE;
 import com.draniksoft.ome.utils.respone.ResponseCode;
 import com.draniksoft.ome.utils.struct.ResponseListener;
-import net.mostlyoriginal.api.event.common.EventSystem;
 import net.mostlyoriginal.api.event.common.Subscribe;
+import net.mostlyoriginal.api.system.core.SpreadProcessingSystem;
 
-public class ObjTimeCalcSys extends IteratingSystem {
+public class ObjTimeCalcSys extends SpreadProcessingSystem {
 
     final static String tag = "ObjTimeCalcSys";
 
 
     public ObjTimeCalcSys() {
-        super(Aspect.exclude(InactiveC.class));
+	  super(Aspect.exclude(InactiveC.class), 1 / 20f);
 
         sp = new CatmullRomSpline<Vector2>();
         tmpV = new Vector2();
     }
 
 
-    int pixelPerPathPoint = 30;
+    int pathPointsPerPoint = 5;
     int lenSamples = 50;
 
     Vector2 tmpV;
@@ -63,7 +64,7 @@ public class ObjTimeCalcSys extends IteratingSystem {
             }
         });
         setEnabled(false);
-        world.getSystem(EventSystem.class).registerEvents(this);
+	  world.getSystem(OmeEventSystem.class).registerEvents(this);
     }
 
     @Override
@@ -75,7 +76,7 @@ public class ObjTimeCalcSys extends IteratingSystem {
     @Subscribe
     public void modeChanged(ModeChangeE e) {
 
-        setEnabled(e.SHOW_MODE);
+	  setEnabled(false);
 
     }
 
@@ -94,6 +95,8 @@ public class ObjTimeCalcSys extends IteratingSystem {
     }
 
     public void processEntityPath(int _e, int idx, float precF) {
+
+	  Gdx.app.debug(tag, "Processin " + _e + " " + idx + " PRC:: " + precF);
 
         PathDescC dc = pSM.get(_e);
         PathRunTimeC tc = pRM.get(_e);
@@ -145,10 +148,10 @@ public class ObjTimeCalcSys extends IteratingSystem {
 
         sp.set((Vector2[]) res.toArray(Vector2.class), false);
 
-        int k = (int) (sp.approxLength(src.ar.size) / (pixelPerPathPoint) * precF);
-        dst.ar.clear();
-        dst.ar.ensureCapacity(k);
-        dst.pixelPerPathPoint = pixelPerPathPoint;
+	  int k = (int) (res.size * pathPointsPerPoint * precF);
+	  dst.ar.clear();
+	  dst.ar.ensureCapacity(k);
+	  dst.pathPointsPerPoint = pathPointsPerPoint;
 
         for (int i = 0; i <= k; i++) {
             tmpV = sp.valueAt(tmpV, i * 1f / k);

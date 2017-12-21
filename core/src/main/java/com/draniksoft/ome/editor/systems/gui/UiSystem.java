@@ -2,7 +2,6 @@ package com.draniksoft.ome.editor.systems.gui;
 
 import com.artemis.BaseSystem;
 import com.artemis.annotations.Wire;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -10,11 +9,12 @@ import com.draniksoft.ome.editor.support.event.base_gfx.ResizeEvent;
 import com.draniksoft.ome.editor.support.event.workflow.ModeChangeE;
 import com.draniksoft.ome.editor.ui.menu.BottomMenu;
 import com.draniksoft.ome.editor.ui.menu.EditorWin;
+import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.support.load.interfaces.IRunnable;
 import com.draniksoft.ome.support.ui.util.WindowAgent;
+import com.draniksoft.ome.utils.struct.ResponseListener;
 import com.draniksoft.ome.utils.ui.editorMenu.MenuWinController;
-import net.mostlyoriginal.api.event.common.EventSystem;
 import net.mostlyoriginal.api.event.common.Subscribe;
 
 public class UiSystem extends BaseSystem {
@@ -45,8 +45,33 @@ public class UiSystem extends BaseSystem {
     @Override
     protected void initialize() {
         engineL.passRunnable(new Loader());
-        world.getSystem(EventSystem.class).registerEvents(this);
         multiplexer.addProcessor(0, uiStage);
+
+        AppDO.I.LML().parseView(new ResponseListener() {
+            @Override
+            public void onResponse(short code) {
+
+                initBase();
+
+            }
+        }, "bar");
+
+    }
+
+    private void initBase() {
+
+        m = AppDO.I.LML().obtainParsed();
+
+        w = new EditorWin(world);
+
+        uiStage.addActor(m.getActor());
+        uiStage.addActor(w);
+
+        m.opened();
+
+        ctr = new MenuWinController(this, m, w);
+
+
     }
 
     @Override
@@ -63,7 +88,7 @@ public class UiSystem extends BaseSystem {
     }
 
     public void realignLayout() {
-        ctr.apply(MenuWinController.TT_RESIZE);
+        if (ctr != null) ctr.apply(MenuWinController.TT_RESIZE);
     }
 
     public void openWin(String id) {
@@ -89,15 +114,6 @@ public class UiSystem extends BaseSystem {
         @Override
         public void run(IntelligentLoader l) {
 
-            m = new BottomMenu(UiSystem.this);
-            w = new EditorWin(world);
-
-            w.setX(uiStage.getWidth());
-
-            uiStage.addActor(w);
-            uiStage.addActor(m);
-
-            ctr = new MenuWinController(UiSystem.this, m, w);
 
 
         }
@@ -108,17 +124,22 @@ public class UiSystem extends BaseSystem {
         }
     }
 
-    @Subscribe
-    public void modeChanged(ModeChangeE e) {
-        Gdx.app.debug(tag, "Mode changed");
-    }
 
     @Subscribe
     public void resized(ResizeEvent e) {
-        if (w.isOpen()) {
-            w.recalc();
-        }
+
         realignLayout();
+    }
+
+    @Subscribe
+    public void modeC(ModeChangeE e) {
+        if (e instanceof ModeChangeE.ShowEnterEvent) {
+            createBK();
+            m.modeChanged(true);
+        } else {
+            inflateBK();
+            m.modeChanged(false);
+        }
     }
 
     public float getStageW() {

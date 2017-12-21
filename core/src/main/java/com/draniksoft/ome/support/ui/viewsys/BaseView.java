@@ -28,7 +28,7 @@ public abstract class BaseView {
     Kept for compatibility reasons here, is null in a non world env
     */
 
-    World _w;
+    protected World _w;
 
     public void injectW(World w) {
 	  this._w = w;
@@ -48,11 +48,15 @@ public abstract class BaseView {
     }
 
     public void closed() {
+	  clearInjectedIncludes();
+	  active = false;
+    }
+
+    public void clearInjectedIncludes() {
 	  for (BaseView v : rtIncs) {
 		v.closed();
 	  }
 	  rtIncs.clear();
-	  active = false;
     }
 
     //
