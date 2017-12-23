@@ -23,23 +23,24 @@ public class PathEditR implements OverlyRendererI {
     @Override
     public void render(ShapeRenderer r, OrthographicCamera c) {
 
+	  if (em.getCurIDX() < 0) {
+		r.setColor(VisUI.getSkin().getColor("secondary"));
+		Array<PathSDesc> dar = em.getdC().ar;
+		for (PathDesc _d : dar) {
+		    if (em.getPathDesc() != _d && _d.ar.size < 2) continue;
+		    Vector2 p = _d.ar.get(_d.ar.size - 1);
+		    r.circle(p.x, p.y, cclR);
+		}
 
-	  r.setColor(VisUI.getSkin().getColor("grey"));
-	  Array<PathSDesc> dar = em.getdC().ar;
-	  for (PathDesc _d : dar) {
-		if (em.getPathDesc() != _d && _d.ar.size < 2) continue;
-		Vector2 p = _d.ar.get(_d.ar.size - 1);
-		r.circle(p.x, p.y, cclR);
-	  }
+	  } else {
 
-	  if (em.getCurIDX() < 0) return;
-
-	  r.setColor(VisUI.getSkin().getColor("secondary"));
-	  PathDesc d = em.getPathDesc();
-	  int idx = 0;
-	  for (Vector2 p : d.ar) {
-		r.circle(p.x, p.y, cclR * ((idx == em.getDragIDX()) ? 1.5f : 1));
-		idx++;
+		r.setColor(VisUI.getSkin().getColor("secondary"));
+		PathDesc d = em.getPathDesc();
+		int idx = 0;
+		for (Vector2 p : d.ar) {
+		    r.circle(p.x, p.y, cclR * ((idx == em.getDragIDX()) ? 1.5f : 1));
+		    idx++;
+		}
 	  }
 
     }

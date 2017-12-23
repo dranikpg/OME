@@ -80,7 +80,9 @@ public class EditorWin extends VisWindow implements WinControllerOverlay {
 	  if (agent != null) agent.closed();
 	  agent = null;
 	  curID = null;
+	  vw = null;
     }
+
 
     public void open(final String id, final WindowAgent ag) {
 
@@ -178,6 +180,5 @@ public class EditorWin extends VisWindow implements WinControllerOverlay {
     public void setMenuHide(boolean h) {
 	  uiSys.getCtr().menuHide = h;
     }
-
 
 }

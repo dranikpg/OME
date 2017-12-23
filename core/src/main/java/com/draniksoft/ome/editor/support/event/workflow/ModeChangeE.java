@@ -1,5 +1,6 @@
 package com.draniksoft.ome.editor.support.event.workflow;
 
+import com.draniksoft.ome.utils.iface.Awaitable;
 import net.mostlyoriginal.api.event.common.Event;
 
 public class ModeChangeE implements Event {
@@ -12,9 +13,9 @@ public class ModeChangeE implements Event {
 
     }
 
-    public static class ShowRequestEvent implements Event {
+    public static class ShowRequestEvent extends ModeChangeE implements Awaitable {
 
-	  int c;
+	  volatile int c;
 
 	  public void await() {
 		c++;

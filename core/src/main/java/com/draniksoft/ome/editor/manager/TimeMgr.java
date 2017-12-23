@@ -8,6 +8,7 @@ import com.draniksoft.ome.editor.load.ProjectSaver;
 import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.workflow.ModeChangeE;
 import com.draniksoft.ome.support.load.IntelligentLoader;
+import com.draniksoft.ome.utils.ESCUtils;
 import dint.Dint;
 import net.mostlyoriginal.api.event.common.Subscribe;
 
@@ -67,7 +68,12 @@ public class TimeMgr extends BaseSystem implements LoadSaveManager {
 
         }
 
+        TT._T = getTime();
+        TT._RP = getStepPrecent();
+
+
     }
+
 
     public float getStepPrecent() {
 
@@ -112,12 +118,17 @@ public class TimeMgr extends BaseSystem implements LoadSaveManager {
         return upperB;
     }
 
-    @Subscribe
+    @Subscribe(priority = ESCUtils.EVENT_HIGH_PRIORITY)
     public void modeChanged(ModeChangeE e) {
-
-        this.cur = lowerB;
-
-	  setEnabled(false);
+        if (e instanceof ModeChangeE.ShowEnterEvent) {
+            this.cur = lowerB;
+            setEnabled(true);
+        } else if (e instanceof ModeChangeE.ShowQuitEvent) {
+            setEnabled(false);
+        } else if (e instanceof ModeChangeE.ShowRequestEvent) {
+            this.cur = lowerB;
+            setEnabled(false);
+        }
     }
 
     @Override
@@ -128,5 +139,11 @@ public class TimeMgr extends BaseSystem implements LoadSaveManager {
     @Override
     public void load(IntelligentLoader il, ProjectLoader ld) {
 
+    }
+
+    public static class TT {
+        public static int _T;
+        public static float _RP;
+        public static float _TSTEP = Dint.diff(Dint.create(1, 0, 0), 0);
     }
 }

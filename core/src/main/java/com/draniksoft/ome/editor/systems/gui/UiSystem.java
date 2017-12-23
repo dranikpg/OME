@@ -136,7 +136,7 @@ public class UiSystem extends BaseSystem {
         if (e instanceof ModeChangeE.ShowEnterEvent) {
             createBK();
             m.modeChanged(true);
-        } else {
+        } else if (e instanceof ModeChangeE.ShowQuitEvent) {
             inflateBK();
             m.modeChanged(false);
         }

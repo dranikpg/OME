@@ -27,6 +27,7 @@ public class PathRenderSys extends IteratingSystem {
 
     ComponentMapper<PathRunTimeC> rcM;
 
+
     @Override
     protected void begin() {
 	  r.setProjectionMatrix(cam.combined);
@@ -48,6 +49,7 @@ public class PathRenderSys extends IteratingSystem {
 
 		for (int i = 1; i < d.ar.size; i++) {
 
+		    r.circle(d.ar.get(i - 1).x, d.ar.get(i - 1).y, 5);
 		    r.rectLine(d.ar.get(i - 1), d.ar.get(i), 10);
 
 		}

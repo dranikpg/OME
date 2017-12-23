@@ -1,5 +1,6 @@
 package com.draniksoft.ome.editor.support.event.showM;
 
+import com.draniksoft.ome.utils.iface.Awaitable;
 import net.mostlyoriginal.api.event.common.Event;
 
 public class ShowMTimeEvent implements Event {
@@ -13,7 +14,7 @@ public class ShowMTimeEvent implements Event {
 
     }
 
-    public static class TimeChangeRequestEvent extends ShowMTimeEvent {
+    public static class TimeChangeRequestEvent extends ShowMTimeEvent implements Awaitable {
 
 	  public int time;
 
@@ -21,6 +22,11 @@ public class ShowMTimeEvent implements Event {
 
 	  public void await() {
 		c++;
+	  }
+
+	  @Override
+	  public void ready() {
+		c--;
 	  }
 
 	  public int getC() {

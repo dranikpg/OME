@@ -3,23 +3,23 @@
     <visImageButton
             id=edit
             style=i_edit
-            size=45/>
+            size={bar_icon_w}/>
 
     <visImageButton
             style=i_globe
-            size=45/>
+            size={bar_icon_w}/>
     <visImageButton
             style=i_stx
-            size=45
+            size={bar_icon_w}
             padRight=50/>
 
     <visImageButton
           style=i_save
-          size=45/>
+          size={bar_icon_w}/>
 
     <visImageButton
           style=i_file
-          size=45/>
+          size={bar_icon_w}/>
 
 
 </visTable>

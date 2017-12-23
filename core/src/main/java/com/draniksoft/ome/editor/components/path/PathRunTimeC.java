@@ -10,4 +10,11 @@ public class PathRunTimeC extends Component {
 
     public Array<PathRTDesc> p;
 
+    /**
+     * Idx -> index of the path THAT HAS NOT BEEN FULLY PROCESSED (can be -1 if there is no such matching for global T)
+     * . In case of time change the new index should be found
+     */
+
+    public int idx;
+
 }

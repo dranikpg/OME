@@ -12,6 +12,7 @@ import com.draniksoft.ome.editor.support.event.workflow.EditModeChangeE;
 import com.draniksoft.ome.editor.systems.support.flows.EditorSystem;
 import com.draniksoft.ome.support.ui.viewsys.BaseView;
 import com.github.czyzby.lml.annotation.LmlActor;
+import com.github.czyzby.lml.parser.LmlParser;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisTable;
 import net.mostlyoriginal.api.event.common.Subscribe;
@@ -27,6 +28,8 @@ public class EMButtonStrip extends BaseView {
 
     VisTable local;
     ScrollPane pane;
+
+    float s;
 
     ObjectMap<EditModeDesc, VisImageButton> bts;
 
@@ -58,7 +61,7 @@ public class EMButtonStrip extends BaseView {
 			  }
 		    });
 //		    new Tooltip.Builder(d.getName()).target(btn).build();
-		    local.add(btn).center().padRight(5f).fillY();
+		    local.add(btn).left().padLeft(20f).fillY().size(s);
 		}
 
 	  }
@@ -99,6 +102,12 @@ public class EMButtonStrip extends BaseView {
 	  if (b2 != null) {
 		b2.setChecked(false);
 	  }
+    }
+
+    @Override
+    public void clearParser(LmlParser p) {
+	  super.clearParser(p);
+	  s = p.parseFloat(p.getData().getArgument("bar_icon_w"));
     }
 
     @Subscribe

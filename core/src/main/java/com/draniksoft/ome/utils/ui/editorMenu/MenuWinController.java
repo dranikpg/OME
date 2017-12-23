@@ -1,5 +1,6 @@
 package com.draniksoft.ome.utils.ui.editorMenu;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
@@ -7,6 +8,8 @@ import com.draniksoft.ome.editor.ui.menu.BottomMenu;
 import com.draniksoft.ome.editor.ui.menu.EditorWin;
 
 public class MenuWinController {
+
+    private static final String tag = "MenuWinController";
 
     public boolean menuHide = false;
     public boolean menuReplace = false;
@@ -81,6 +84,7 @@ public class MenuWinController {
     private void recalc() {
 
 	  if (w.isOpen()) {
+		Gdx.app.debug(tag, "Win is open");
 		w.recalc();
 		w.setWidth(w.getCalcWidth());
 		w.setX(sys.getStageW() - w.getWidth());

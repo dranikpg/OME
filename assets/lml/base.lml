@@ -3,4 +3,4 @@
 -->
 <:assign bar_height 50/>
 
-<:calculate _icon_w {bar_height}-5 />
+<:calculate bar_icon_w {bar_height}-5 />

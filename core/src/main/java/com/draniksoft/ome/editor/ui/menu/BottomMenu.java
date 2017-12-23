@@ -10,7 +10,6 @@ import com.draniksoft.ome.mgmnt_base.impl.LmlUIMgr;
 import com.draniksoft.ome.support.ui.viewsys.BaseView;
 import com.draniksoft.ome.utils.struct.Pair;
 import com.github.czyzby.lml.annotation.LmlActor;
-import com.kotcrab.vis.ui.widget.HorizontalCollapsibleWidget;
 import com.kotcrab.vis.ui.widget.VisTable;
 
 
@@ -26,9 +25,6 @@ public class BottomMenu extends BaseView {
 
     @LmlActor("btn_C")
     Container btnC;
-
-    @LmlActor("hz")
-    HorizontalCollapsibleWidget hz;
 
     @LmlActor("cnt")
     VisTable cnt;
@@ -63,17 +59,6 @@ public class BottomMenu extends BaseView {
 
     public void resized(float w) {
 
-	  if (w < root.getPrefWidth()) {
-		if (!hz.isCollapsed() && hz.getActions().size == 0) {
-		    hz.setCollapsed(true, true);
-		}
-	  } else {
-		if (hz.isCollapsed() && hz.getActions().size == 0) {
-		    hz.setCollapsed(false, true);
-		}
-	  }
-
-	  root.invalidate();
     }
 
     @Override
@@ -96,7 +81,6 @@ public class BottomMenu extends BaseView {
 		btnC.setActor(vw.getActor());
 	  } else {
 		cnt.add(vw.getActor()).expand().fill();
-		root.invalidate();
 	  }
 
     }
