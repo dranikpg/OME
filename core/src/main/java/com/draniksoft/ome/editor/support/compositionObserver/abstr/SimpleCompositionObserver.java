@@ -2,6 +2,7 @@ package com.draniksoft.ome.editor.support.compositionObserver.abstr;
 
 import com.artemis.Aspect;
 import com.artemis.World;
+import com.artemis.utils.IntBag;
 
 public abstract class SimpleCompositionObserver extends CompositionObserver {
 
@@ -65,5 +66,9 @@ public abstract class SimpleCompositionObserver extends CompositionObserver {
 
 
     protected abstract Aspect.Builder getAspectB();
+
+    protected IntBag getMEs() {
+	  return _w.getAspectSubscriptionManager().get(getAspectB()).getEntities();
+    }
 
 }

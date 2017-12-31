@@ -69,7 +69,8 @@ public class CreateNewMOA implements Action {
     public void undo(World w) {
 
         ESCUtils.removeSelectionBeforeRMV(_e, _w);
-        _w.delete(_e);
+
+	  _w.delete(_e);
 
     }
 

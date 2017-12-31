@@ -7,9 +7,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.draniksoft.ome.editor.manager.drawable.SimpleDrawableMgr;
-import com.draniksoft.ome.editor.support.render.core.OverlyRendererI;
+import com.draniksoft.ome.editor.support.render.core.OverlayRendererI;
 
-public class NewMORenderer implements OverlyRendererI {
+public class NewMORenderer implements OverlayRendererI {
 
     private static final String tag = "NewMORenderer";
 

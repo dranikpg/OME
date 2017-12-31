@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
+import com.draniksoft.ome.editor.support.compositionObserver.LabelCompositionObserver;
 import com.draniksoft.ome.editor.support.compositionObserver.MOCompositionO;
 import com.draniksoft.ome.editor.support.compositionObserver.PathCompositionO;
 import com.draniksoft.ome.editor.support.compositionObserver.abstr.CompositionObserver;
@@ -136,8 +137,6 @@ public class EditorSystem extends BaseSystem {
 
     @Subscribe(priority = ESCUtils.EVENT_HIGH_PRIORITY)
     public void compositionChanged(CompositionChangeE e) {
-
-        Gdx.app.debug(tag, "Got composition change notfic");
 
         if (e.e == sel && sel >= 0) {
 
@@ -298,6 +297,7 @@ public class EditorSystem extends BaseSystem {
 
 	  addComOb(CompositionObserver.IDs.PATH_CO, new PathCompositionO());
 
+        addComOb(CompositionObserver.IDs.LABEL, new LabelCompositionObserver());
 
     }
 

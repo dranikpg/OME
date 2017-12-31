@@ -82,6 +82,13 @@ public class EMButtonStrip extends BaseView {
 	  rebuild();
     }
 
+
+    @Subscribe
+    public void compChangeEv(CompositionChangeE ev) {
+	  if (ev.e != _w.getSystem(EditorSystem.class).sel) return;
+	  rebuild();
+    }
+
     @Subscribe
     public void emChange(EditModeChangeE ev) {
 
@@ -110,11 +117,6 @@ public class EMButtonStrip extends BaseView {
 	  s = p.parseFloat(p.getData().getArgument("bar_icon_w"));
     }
 
-    @Subscribe
-    public void compChangeEv(CompositionChangeE ev) {
-	  if (ev.e != _w.getSystem(EditorSystem.class).sel) return;
-	  rebuild();
-    }
 
     @Override
     public void postinit() {

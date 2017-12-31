@@ -16,6 +16,8 @@ public abstract class CompositionObserver {
         public static final short MO_CO = 1;
 
 	  public static final short PATH_CO = 2;
+
+	  public static final short LABEL = 3;
     }
 
 
@@ -43,6 +45,9 @@ public abstract class CompositionObserver {
 
     public abstract String getName();
 
+    /*
+	  Array of parsed action configs, hidden with double __
+     */
     protected Array<ActionDesc> __ds;
 
     public void loadActionConfig(JsonValue rootv) {

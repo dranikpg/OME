@@ -10,6 +10,8 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.draniksoft.ome.editor.load.ProjectLoader;
 import com.draniksoft.ome.editor.load.ProjectSaver;
+import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
+import com.draniksoft.ome.editor.support.event.file_b.ResourceLoadedEvent;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.support.load.interfaces.IGLRunnable;
@@ -56,8 +58,8 @@ public class SimpleDrawableMgr extends DrawableMgr {
 		Pair<String, AssetDDao> p;
 		while (i.hasNext()) {
 		    p = i.next();
-		    if (assM.isLoaded(p.getElement0())) {
-			  flushDao(p.getElement0(), p.getElement1());
+		    if (assM.isLoaded(p.K())) {
+			  flushDao(p.K(), p.V());
 			  i.remove();
 		    }
 		}
@@ -78,6 +80,8 @@ public class SimpleDrawableMgr extends DrawableMgr {
 	  if (getRedirect(dao.id) != null) {
 		putRedirect(dao.id, dao.id);
 	  }
+
+	  world.getSystem(OmeEventSystem.class).dispatch(new ResourceLoadedEvent(ResourceLoadedEvent.TYPE_DWB, dao.id));
 
     }
 
@@ -168,11 +172,11 @@ public class SimpleDrawableMgr extends DrawableMgr {
 
 	  String p = FUtills.uriToPath(dao.uri) + "/f.atlas";
 	  for (Pair<String, AssetDDao> ds : loadW) {
-		if (ds.getElement0().equals(p)) return;
+		if (ds.K().equals(p)) return;
 	  }
 
 	  Gdx.app.debug(tag, "loading " + p);
-	  loadW.add(Pair.createPair(p, dao));
+	  loadW.add(Pair.P(p, dao));
 
 	  assM.load(p, TextureAtlas.class);
     }
@@ -191,9 +195,6 @@ public class SimpleDrawableMgr extends DrawableMgr {
 
 	  @Override
 	  public byte run() {
-
-		if (selfM) assM.update();
-
 		if (selfM) processSystem();
 
 		if (loadW.size > 0) {
@@ -243,8 +244,10 @@ public class SimpleDrawableMgr extends DrawableMgr {
     }
 
     private void parseInternal() {
-	  JsonReader r = new JsonReader();
-	  JsonValue root = r.parse(Gdx.files.internal("_data/iassets.json"));
+
+	  JsonReader r = FUtills.r;
+	  JsonValue root = r.parse(Gdx.files.internal("_data/i_dwbs.json"));
+
 	  for (JsonValue v : root) {
 		String id = v.getString("id");
 

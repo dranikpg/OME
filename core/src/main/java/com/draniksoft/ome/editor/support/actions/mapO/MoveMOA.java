@@ -41,7 +41,7 @@ public class MoveMOA implements Action {
 
     @Override
     public void undo(World w) {
-	  sys.setByCornerPos(_e, oldP.getElement0(), oldP.getElement0());
+	  sys.setByCornerPos(_e, oldP.K(), oldP.K());
 	  sys.save(_e);
     }
 

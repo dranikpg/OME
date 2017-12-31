@@ -32,12 +32,12 @@ public class PositionSystem extends BaseEntitySystem {
 
     public Pair<Integer, Integer> getCornerPos(int id) {
 	  PosSizeC c = m.get(id);
-	  return Pair.createPair(c.x, c.y);
+	  return Pair.P(c.x, c.y);
     }
 
     public Pair<Integer, Integer> getCenterP(int id) {
 	  PosSizeC c = m.get(id);
-	  return Pair.createPair(c.x + c.w / 2, c.y + c.h / 2);
+	  return Pair.P(c.x + c.w / 2, c.y + c.h / 2);
     }
 
     public Vector2 getCenterV(int id) {
@@ -102,4 +102,15 @@ public class PositionSystem extends BaseEntitySystem {
     }
 
 
+    /*
+    	Setts the PosSize to the Mo's
+     */
+    public void resetPos(int e) {
+	  PosSizeC c = m.get(e);
+	  MObjectC m = mM.get(e);
+	  c.x = m.x;
+	  c.y = m.y;
+	  c.w = m.w;
+	  c.h = m.h;
+    }
 }

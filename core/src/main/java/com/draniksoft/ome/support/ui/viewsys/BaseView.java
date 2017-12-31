@@ -81,7 +81,7 @@ public abstract class BaseView {
 
     public void removeIncldbName(String name) {
 	  for (int i = 0; i < inclds.size; i++) {
-		if (inclds.get(i).getElement0().equals(name)) {
+		if (inclds.get(i).K().equals(name)) {
 		    inclds.removeIndex(i);
 		}
 	  }
@@ -89,14 +89,14 @@ public abstract class BaseView {
 
     public void removeIncldbVID(String id) {
 	  for (int i = 0; i < inclds.size; i++) {
-		if (inclds.get(i).getElement1().equals(id)) {
+		if (inclds.get(i).V().equals(id)) {
 		    inclds.removeIndex(i);
 		}
 	  }
     }
 
     public void addIncld(String name, String id) {
-	  inclds.add(Pair.createPair(name, id));
+	  inclds.add(Pair.P(name, id));
     }
 
     public Array<Pair<String, String>> getInclds() {

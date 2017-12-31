@@ -13,7 +13,8 @@ public class AssetLScheduleSys extends BaseSystem {
     @Override
     protected void processSystem() {
 
-        mgr.update();
+	  if (mgr.getQueuedAssets() != 0)
+		mgr.update();
 
     }
 }

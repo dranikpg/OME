@@ -9,6 +9,7 @@ import com.draniksoft.ome.mgmnt_base.base.AppDataManager;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.utils.FUtills;
 import com.draniksoft.ome.utils.dao.AssetDDao;
+import com.draniksoft.ome.utils.dao.FontDao;
 
 import java.io.File;
 import java.util.Iterator;
@@ -24,7 +25,8 @@ public class FileManager extends AppDataManager {
 
     File tdir;
 
-    ObjectMap<String, AssetDDao> localDs;
+    ObjectMap<String, AssetDDao> localAssetDs;
+    ObjectMap<String, FontDao> localFontDs;
 
     @Override
     protected void startupLoad(IntelligentLoader l) {
@@ -43,20 +45,25 @@ public class FileManager extends AppDataManager {
 
 	  indexLocalDs();
 
-	  Gdx.app.debug(tag, "Indexed " + localDs.size + " local daos");
+	  Gdx.app.debug(tag, "Indexed " + localAssetDs.size + " local daos");
 
 
     }
 
     private void indexLocalDs() {
 
-	  localDs = new ObjectMap<String, AssetDDao>();
+	  localAssetDs = new ObjectMap<String, AssetDDao>();
+	  localFontDs = new ObjectMap<String, FontDao>();
 
 	  for (File f : hdirF.listFiles()) {
 
 		if (new File(f.getAbsolutePath() + "/f.atlas").exists()) {
 
-		    indexDao(f);
+		    indexAss(f);
+
+		} else if (new File(f.getAbsolutePath() + "/f.tff").exists()) {
+
+		    indexTtf(f);
 
 		}
 
@@ -64,8 +71,23 @@ public class FileManager extends AppDataManager {
 
     }
 
-    private void indexDao(File f) {
+    private void indexTtf(File f) {
 
+	  JsonValue v = FUtills.r.parse(new FileHandle(new File(f.getAbsolutePath() + "/f.json")));
+
+	  if (!v.has("id")) return;
+
+	  FontDao d = new FontDao();
+
+	  d.id = v.getString("id");
+
+	  d.uri = FUtills.pathToUri(f.getAbsolutePath(), FUtills.STORE_L_LOC);
+
+	  localFontDs.put(d.id, d);
+
+    }
+
+    private void indexAss(File f) {
 
 	  JsonValue v = FUtills.r.parse(new FileHandle(new File(f.getAbsolutePath() + "/f.json")));
 
@@ -77,25 +99,39 @@ public class FileManager extends AppDataManager {
 
 	  d.uri = FUtills.pathToUri(f.getAbsolutePath(), FUtills.STORE_L_LOC);
 
-	  localDs.put(d.id, d);
+	  localAssetDs.put(d.id, d);
 
 
+    }
+
+    public boolean hasLocalFont(String id) {
+	  return localFontDs.containsKey(id);
     }
 
     public boolean hasLocalAss(String id) {
-	  return localDs.containsKey(id);
+	  return localAssetDs.containsKey(id);
     }
 
     public AssetDDao getLocalAss(String id) {
-	  if (localDs.containsKey(id)) {
-		return localDs.get(id);
+	  if (localAssetDs.containsKey(id)) {
+		return localAssetDs.get(id);
 	  }
 	  return null;
     }
 
+    public FontDao getFontDao(String id) {
+	  if (localFontDs.containsKey(id)) {
+		return localFontDs.get(id);
+	  }
+	  return null;
+    }
+
+    public Iterator<FontDao> getFontD() {
+	  return localFontDs.values().iterator();
+    }
 
     public Iterator<AssetDDao> getLocalAssD() {
-	  return localDs.values().iterator();
+	  return localAssetDs.values().iterator();
     }
 
     private void checkHomeDir() {

@@ -10,8 +10,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.draniksoft.ome.editor.components.path.PathDescC;
 import com.draniksoft.ome.editor.components.path.PathRunTimeC;
+import com.draniksoft.ome.editor.components.pos.PosSizeC;
 import com.draniksoft.ome.editor.components.state.InactiveC;
 import com.draniksoft.ome.editor.components.state.TInactiveC;
+import com.draniksoft.ome.editor.components.tps.MObjectC;
 import com.draniksoft.ome.editor.manager.TimeMgr;
 import com.draniksoft.ome.editor.support.container.path.PathDesc;
 import com.draniksoft.ome.editor.support.container.path.PathRTDesc;
@@ -33,7 +35,7 @@ public class ObjTimeCalcSys extends SpreadProcessingSystem {
 
 
     public ObjTimeCalcSys() {
-	  super(Aspect.exclude(InactiveC.class), 1 / 20f);
+	  super(Aspect.all(MObjectC.class, PosSizeC.class).exclude(InactiveC.class), 1 / 20f);
 
         sp = new CatmullRomSpline<Vector2>();
         tmpV = new Vector2();
@@ -80,7 +82,8 @@ public class ObjTimeCalcSys extends SpreadProcessingSystem {
     @Subscribe
     public void modeChanged(ModeChangeE e) {
         if (e instanceof ModeChangeE.ShowQuitEvent) {
-            setEnabled(false);
+		new RestoreSHWThread().start();
+		setEnabled(false);
         } else if (e instanceof ModeChangeE.ShowEnterEvent) {
             setEnabled(true);
         } else if (e instanceof ModeChangeE.ShowRequestEvent) {
@@ -96,6 +99,21 @@ public class ObjTimeCalcSys extends SpreadProcessingSystem {
         t.aw = aw;
 
         t.start();
+    }
+
+    private class RestoreSHWThread extends Thread {
+
+	  public RestoreSHWThread() {
+		setName("ObjTimeCalcSys :: RELOAD");
+	  }
+
+	  @Override
+	  public void run() {
+		IntBag b = ObjTimeCalcSys.this.getEntityIds();
+		for (int i = 0; i < b.size(); i++) {
+		    world.getSystem(PositionSystem.class).resetPos(b.get(i));
+		}
+	  }
     }
 
     private class InitOnTimeThread extends Thread {

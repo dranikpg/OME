@@ -47,9 +47,14 @@ public class PathCompositionO extends SimpleCompositionObserver {
     @Override
     protected void on_selCompChanhed(boolean previousActivity) {
 
-	  if (previousActivity && !isSelActive()) rtM.remove(_selE);
-	  if (isSelActive() && !previousActivity) rtM.create(_selE);
+	  if (previousActivity && !isSelActive()) {
+		rtM.remove(_selE);
+	  }
+	  if (isSelActive() && !previousActivity) {
+		rtM.create(_selE);
+	  }
 
+	  _w.getSystem(EditorSystem.class).getEditModeDesc(EditModeDesc.IDS.pathEdit).aviabT = isSelActive() ? EditModeDesc.AVAILABLE : EditModeDesc.AV_HIDDEN;
     }
 
     @Override

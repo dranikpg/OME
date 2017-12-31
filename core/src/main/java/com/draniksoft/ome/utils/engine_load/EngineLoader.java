@@ -27,6 +27,7 @@ import com.draniksoft.ome.editor.systems.render.BaseRenderSys;
 import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.render.map.MapRDebugSys;
 import com.draniksoft.ome.editor.systems.render.map.MapRenderSys;
+import com.draniksoft.ome.editor.systems.render.obj.LabelRenderSys;
 import com.draniksoft.ome.editor.systems.render.obj.ObjRSys;
 import com.draniksoft.ome.editor.systems.render.obj.PathRenderSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
@@ -72,6 +73,8 @@ public class EngineLoader {
     static LoadS cS = LoadS.CONFIF_B_B;
 
     static IntelligentLoader l;
+
+    static volatile AssetManager assm;
 
     public static void startLoad() {
 
@@ -130,6 +133,7 @@ public class EngineLoader {
 
         if (l != null) l.update();
 
+        if (assm != null) assm.update();
     }
 
     private static class WorldBuild implements IRunnable {
@@ -151,7 +155,7 @@ public class EngineLoader {
         public void run(IntelligentLoader l) {
 
             InputMultiplexer mx = new InputMultiplexer();
-            AssetManager assm = new AssetManager();
+            assm = new AssetManager();
 
             c.register(mx);
             c.register(assm);
@@ -267,6 +271,8 @@ public class EngineLoader {
 
 		cb.with(new SimpleDrawableMgr());
 
+            cb.with(new FontManager());
+
             cb.with(new EntitySrzMgr());
 
             cb.with(new TimeMgr());
@@ -295,20 +301,35 @@ public class EngineLoader {
 
 		cb.with(new PositionSystem());
 
-            // RENDER PART
-
             cb.with(new CameraSys());
+
+
+            // RENDER PART
 
             cb.with(new BaseRenderSys());
 
+            //
+
             cb.with(new MapRenderSys());
             cb.with(new MapRDebugSys());
+
+            //
 
 		cb.with(new PathRenderSys());
 
             cb.with(new ObjRSys());
 
+            cb.with(new LabelRenderSys());
+
+
+            //
+
+
 		cb.with(new OverlayRenderSys());
+
+
+            //
+
 
             cb.with(new UiSystem());
 

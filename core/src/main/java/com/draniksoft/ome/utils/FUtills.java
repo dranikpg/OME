@@ -7,6 +7,7 @@ import com.artemis.io.KryoArtemisSerializer;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -48,6 +49,7 @@ public class FUtills {
     public static int createE(World world) {
         return world.create();
     }
+
 
 
     public static class PrefIdx {
@@ -308,6 +310,16 @@ public class FUtills {
         });
     }
 
+
+    public static FreeTypeFontGenerator.FreeTypeFontParameter parseTTFParameter(JsonValue jsonValue) {
+        FreeTypeFontGenerator.FreeTypeFontParameter p = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        p.size = 40;
+        return p;
+    }
+
+    public static JsonValue getTTFParameterJ(FreeTypeFontGenerator.FreeTypeFontParameter p) {
+        return new JsonValue(JsonValue.ValueType.object);
+    }
 
 
     public static int JF_OPTION = -5;

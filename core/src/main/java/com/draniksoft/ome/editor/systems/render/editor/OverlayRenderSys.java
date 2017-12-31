@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntArray;
 import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.workflow.ModeChangeE;
-import com.draniksoft.ome.editor.support.render.core.OverlyRendererI;
+import com.draniksoft.ome.editor.support.render.core.OverlayRendererI;
 import net.mostlyoriginal.api.event.common.Subscribe;
 
 
@@ -27,7 +27,7 @@ public class OverlayRenderSys extends BaseSystem {
     @Wire(name = "game_cam")
     OrthographicCamera cam;
 
-    Array<OverlyRendererI> rs;
+    Array<OverlayRendererI> rs;
 
     public OverlayRenderSys() {
 
@@ -37,8 +37,8 @@ public class OverlayRenderSys extends BaseSystem {
     @Override
     protected void initialize() {
 
-        rs = new Array<OverlyRendererI>();
-	  bK = new Array<OverlyRendererI>();
+	  rs = new Array<OverlayRendererI>();
+	  bK = new Array<OverlayRendererI>();
 
 	  world.getSystem(OmeEventSystem.class).registerEvents(this);
 
@@ -69,19 +69,17 @@ public class OverlayRenderSys extends BaseSystem {
     }
 
 
-
-
-    public Array<OverlyRendererI> getRs() {
-        return rs;
+    public Array<OverlayRendererI> getRs() {
+	  return rs;
     }
 
-    public void addRdr(OverlyRendererI r) {
+    public void addRdr(OverlayRendererI r) {
 	  Gdx.app.debug(tag, "Adding " + r.toString());
 	  rs.add(r);
 	  r.added(world);
     }
 
-    public void removeRdr(OverlyRendererI r) {
+    public void removeRdr(OverlayRendererI r) {
 	  Gdx.app.debug(tag, "Removing " + r.toString());
 	  rs.removeValue(r, true);
     }
@@ -92,7 +90,7 @@ public class OverlayRenderSys extends BaseSystem {
 
         for (int i = 0; i < rs.size; i++) {
 
-            OverlyRendererI r = rs.get(i);
+		OverlayRendererI r = rs.get(i);
 
             if (r.getId() == id) {
 
@@ -106,7 +104,7 @@ public class OverlayRenderSys extends BaseSystem {
             removeRdr(rs.get(ri));
     }
 
-    Array<OverlyRendererI> bK;
+    Array<OverlayRendererI> bK;
 
     public void removeRdrByPlaceBK(int[] all, int[] one) {
 	  IntArray rmIds = new IntArray();
@@ -152,7 +150,7 @@ public class OverlayRenderSys extends BaseSystem {
 
 	  }
 
-	  Array<OverlyRendererI> torem = new Array<OverlyRendererI>();
+	  Array<OverlayRendererI> torem = new Array<OverlayRendererI>();
 	  bK.clear();
 	  for (int i = 0; i < rmIds.size; i++) {
 		Gdx.app.debug(tag, "Removing OverlayR :: " + rs.get(rmIds.get(i)).getClass().getSimpleName());
@@ -165,7 +163,7 @@ public class OverlayRenderSys extends BaseSystem {
     }
 
     public void restoreBK() {
-	  for (OverlyRendererI i : bK) {
+	  for (OverlayRendererI i : bK) {
 		addRdr(i);
 	  }
 	  bK.clear();

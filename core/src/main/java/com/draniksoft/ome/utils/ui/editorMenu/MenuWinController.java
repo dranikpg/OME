@@ -32,14 +32,6 @@ public class MenuWinController {
 	  m.getActor().setPosition(0, 0);
     }
 
-    public void setMenuHide(boolean menuHide) {
-	  this.menuHide = menuHide;
-    }
-
-    public void setMenuR(boolean menuR) {
-	  this.menuReplace = menuR;
-    }
-
 
     public void apply(byte tt) {
 	  if (tt == TT_REFRESH) {
@@ -114,15 +106,37 @@ public class MenuWinController {
 
     private void applyBasics() {
 
-	  w.clearActions();
+	  menuHide = w.cfg_menuH;
+	  menuReplace = w.cfg_menuR;
+	  w.setVisible(true);
+
+	  float newW = w.getCalcWidth();
+	  float padd = sys.getStageW() - w.getCalcWidth();
+
+	  float tx = Math.abs(w.getX() - padd) / sys.getStageW() * UiSystem.Defaults.aTime100PCT;
 
 	  if (menuHide) {
-		m.getActor().setY(-m.getActor().getHeight());
+		m.getActor().setY(-m.getActor().getWidth());
+	  } else if (menuReplace) {
+		m.getActor().addAction(Actions.sizeTo(padd, m.getActor().getHeight(), tx));
+	  } else {
+		m.getActor().addAction(Actions.sizeTo(sys.getStageW(), m.getActor().getHeight(), tx));
 	  }
-	  w.setWidth(w.getCalcWidth());
 
-	  recalc();
+	  m.setHidden(menuHide);
 
+	  if (menuHide || menuReplace) {
+		w.setY(0);
+		w.setHeight(sys.getStageH());
+	  } else {
+		w.setY(m.getActor().getHeight());
+		w.setHeight(sys.getStageH() - m.getActor().getHeight());
+	  }
+
+	  w.addAction(Actions.sequence(
+		    Actions.moveTo(padd, w.getY(), tx),
+		    Actions.sizeTo(newW, w.getHeight(), tx)
+	  ));
     }
 
 }

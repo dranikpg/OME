@@ -7,12 +7,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
-import com.draniksoft.ome.editor.support.render.core.OverlyRendererI;
+import com.draniksoft.ome.editor.support.render.core.OverlayRendererI;
 import com.draniksoft.ome.editor.systems.pos.PositionSystem;
 import com.draniksoft.ome.utils.struct.Pair;
 import com.kotcrab.vis.ui.VisUI;
 
-public class SelectionRenderer implements OverlyRendererI {
+public class SelectionRenderer implements OverlayRendererI {
 
     public int e;
 
@@ -36,7 +36,7 @@ public class SelectionRenderer implements OverlyRendererI {
 
 	  _c = cM.get(e);
 
-	  if (c == null) return;
+	  if (_c == null) return;
 
 	  r.set(ShapeRenderer.ShapeType.Filled);
 

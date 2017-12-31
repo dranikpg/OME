@@ -171,14 +171,19 @@ public class EditorWin extends VisWindow implements WinControllerOverlay {
 	  nW = val;
     }
 
+
+    public boolean cfg_menuR;
     @Override
     public void setMenuReplace(boolean r) {
-	  uiSys.getCtr().menuReplace = r;
+	  cfg_menuR = r;
     }
+
+    public boolean cfg_menuH;
 
     @Override
     public void setMenuHide(boolean h) {
-	  uiSys.getCtr().menuHide = h;
+	  cfg_menuH = h;
     }
+
 
 }

@@ -11,6 +11,7 @@ import com.draniksoft.ome.editor.support.compositionObserver.abstr.SimpleComposi
 import com.draniksoft.ome.editor.support.container.CO_actiondesc.ActionDesc;
 import com.draniksoft.ome.editor.support.container.EM_desc.EditModeDesc;
 import com.draniksoft.ome.editor.support.render.def.SelectionRenderer;
+import com.draniksoft.ome.editor.systems.pos.PositionSystem;
 import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.flows.EditorSystem;
@@ -31,6 +32,11 @@ public class MOCompositionO extends SimpleCompositionObserver {
         public static final int MOVE = 10;
         //
         public static final int RESIZE = 11;
+
+	  // M_R - > map from runtime, R_M -> runtime from map (i.e A << B)
+
+	  public static final int SYNC_M_R = 12;
+	  public static final int SYNC_R_M = 13;
 
 
         // 20 -> 30 Quick EM launcher
@@ -92,14 +98,9 @@ public class MOCompositionO extends SimpleCompositionObserver {
 
         if (ac == CREATE) {
             return !matches(e);
-        } else if (
-                (ac >= MOVE && ac <= RESIZE) ||
-                        (ac == MOVE_QEM) ||
-                        ac == RESET) {
-            return matches(e);
+	  } else {
+		return matches(e);
         }
-
-        return false;
 
     }
 
@@ -137,14 +138,27 @@ public class MOCompositionO extends SimpleCompositionObserver {
             if (os.length > 1) a.y = (Integer) os[1];
             if (os.length > 2) a.center = (Boolean) os[2];
 
-            if (aT) _w.getSystem(ActionSystem.class).exec(a);
-            else a.invoke(_w);
 
-        } else if (id == MOVE_QEM) {
+	  } else if (id == MOVE_QEM) {
 
-            _w.getSystem(EditorSystem.class).attachNewEditMode(EditModeDesc.IDS.moveMO);
+		_w.getSystem(EditorSystem.class).attachNewEditMode(EditModeDesc.IDS.moveMO);
 
-        }
+	  } else if (id == SYNC_M_R) {
+
+		MoveMOA a = new MoveMOA();
+		PosSizeC c = _w.getMapper(PosSizeC.class).get(_e);
+		a._e = _e;
+		a.x = c.x;
+		a.y = c.y;
+
+		if (aT) _w.getSystem(ActionSystem.class).exec(a);
+		else a.invoke(_w);
+
+	  } else if (id == SYNC_R_M) {
+
+		_w.getSystem(PositionSystem.class).resetPos(_e);
+
+	  }
     }
 
     @Override

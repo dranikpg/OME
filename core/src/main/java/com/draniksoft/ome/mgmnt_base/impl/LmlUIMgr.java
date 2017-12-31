@@ -104,7 +104,7 @@ public class LmlUIMgr extends AppDataManager {
 	  }
 
 	  if (blding) {
-		queue.add(Pair.createPair(id, l));
+		queue.add(Pair.P(id, l));
 		return;
 	  }
 
@@ -161,7 +161,7 @@ public class LmlUIMgr extends AppDataManager {
 
 	  if (!queue.isEmpty()) {
 		Pair<String, ResponseListener> e = queue.poll();
-		buildView(e.getElement1(), e.getElement0());
+		buildView(e.V(), e.K());
 	  } else {
 		blding = false;
 	  }
@@ -185,7 +185,7 @@ public class LmlUIMgr extends AppDataManager {
     public void injectIncludes(final BaseView vw) {
 	  if (vw.getInclds().size > 0) Gdx.app.debug(tag, "Injecting includes for " + vw.ID);
 	  for (final Pair<String, String> p : vw.getInclds()) {
-		injectInclude(vw, p.getElement0(), p.getElement1());
+		injectInclude(vw, p.K(), p.V());
 	  }
     }
 

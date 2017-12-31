@@ -34,13 +34,11 @@ public class BottomMenu extends BaseView {
 
     boolean showM = false;
 
-    public void modeChanged(boolean showM) {
-	  this.showM = showM;
 
+    private void clearViews() {
 	  btnC.clearChildren();
 	  cnt.clearChildren();
 
-	  final LmlUIMgr mgr = AppDO.I.LML();
 
 	  clearInjectedIncludes();
 
@@ -50,10 +48,17 @@ public class BottomMenu extends BaseView {
 	  if (editB != null) {
 		editB = null;
 	  }
+    }
 
+    public void modeChanged(boolean showM) {
+	  this.showM = showM;
+
+	  clearViews();
+
+	  final LmlUIMgr mgr = AppDO.I.LML();
 	  clearInclds();
-	  getInclds().add(Pair.createPair("btns", showM ? "bar_show_buttons" : "bar_base_buttons"));
-	  if (!showM) getInclds().add(Pair.createPair("ext", AppDO.I.C().getConfVal_S("base_bar_editor_addon")));
+	  getInclds().add(Pair.P("btns", showM ? "bar_show_buttons" : "bar_base_buttons"));
+	  if (!showM) getInclds().add(Pair.P("ext", AppDO.I.C().getConfVal_S("base_bar_editor_addon")));
 	  mgr.injectIncludes(this);
     }
 
@@ -104,6 +109,19 @@ public class BottomMenu extends BaseView {
     @Override
     public void postinit() {
 	  root.setDebug(true);
+    }
+
+    /**
+     * LAYOUT PART
+     */
+
+    boolean hidden;
+
+    public void setHidden(boolean s) {
+	  if (!hidden && s) {
+		clearViews();
+	  }
+	  hidden = s;
     }
 }
 

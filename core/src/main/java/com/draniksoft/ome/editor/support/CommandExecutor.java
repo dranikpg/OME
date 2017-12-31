@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.draniksoft.ome.editor.esc_utils.OmeStrategy;
 import com.draniksoft.ome.editor.load.MapLoadBundle;
+import com.draniksoft.ome.editor.manager.FontManager;
 import com.draniksoft.ome.editor.manager.MapMgr;
 import com.draniksoft.ome.editor.manager.TimeMgr;
 import com.draniksoft.ome.editor.manager.drawable.SimpleDrawableMgr;
@@ -28,7 +29,7 @@ import com.draniksoft.ome.editor.support.input.InputController;
 import com.draniksoft.ome.editor.support.input.back.SelectIC;
 import com.draniksoft.ome.editor.support.input.back.TimedSelectIC;
 import com.draniksoft.ome.editor.support.input.base_mo.NewMOIC;
-import com.draniksoft.ome.editor.support.render.core.OverlyRendererI;
+import com.draniksoft.ome.editor.support.render.core.OverlayRendererI;
 import com.draniksoft.ome.editor.systems.file_mgmnt.ProjectLoadSystem;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
@@ -43,6 +44,7 @@ import com.draniksoft.ome.support.configs.ConfigDao;
 import com.draniksoft.ome.utils.Const;
 import com.draniksoft.ome.utils.Env;
 import com.draniksoft.ome.utils.dao.AssetDDao;
+import com.draniksoft.ome.utils.dao.FontDao;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -211,7 +213,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
         StringBuilder b = new StringBuilder();
 
-        for (OverlyRendererI r : world.getSystem(OverlayRenderSys.class).getRs()) {
+        for (OverlayRendererI r : world.getSystem(OverlayRenderSys.class).getRs()) {
 
             b.append(r.getId()).append("; ");
 
@@ -349,11 +351,13 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
     }
 
     public void exec_cos(int _e, int id, int a) {
-
-        world.getSystem(EditorSystem.class).getComOb(id).execA(a, _e, false);
-
+        try {
+            world.getSystem(EditorSystem.class).getComOb(id).execA(a, _e, false);
+        } catch (Exception e) {
+            console.log(e.getMessage());
+            Gdx.app.error("", "EXEC_COS :: " + _e + " " + id + " :: " + a + " \n ", e);
+        }
     }
-
 
 
 
@@ -453,6 +457,27 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     }
 
+
+    /*
+        Font managment utils
+     */
+
+    public void log_fnt() {
+
+        Iterator<FontDao> i = world.getSystem(FontManager.class).getLoadedI();
+
+        FontDao d;
+
+        while (i.hasNext()) {
+            d = i.next();
+            console.log(d.id + "  ->  " + d.uri);
+        }
+    }
+
+
+    public void log_av_fnt() {
+
+    }
 
     /**
      *

@@ -5,8 +5,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.draniksoft.ome.editor.components.pos.PosSizeC;
 import com.draniksoft.ome.editor.support.ems.base_em.MoveMOEM;
 import com.draniksoft.ome.editor.support.input.InputController;
+import com.draniksoft.ome.editor.systems.pos.PositionSystem;
 
 public class MoveMOIC implements InputController {
 
@@ -22,10 +24,14 @@ public class MoveMOIC implements InputController {
     Vector2 tmp;
     boolean reactOnKill = true;
 
+    PosSizeC c;
+
     @Override
     public void init(World w) {
-        tmp = new Vector2();
+	  this.w = w;
+	  tmp = new Vector2();
         vp = w.getInjector().getRegistered("game_vp");
+	  c = w.getMapper(PosSizeC.class).get(e);
     }
 
     @Override
@@ -35,11 +41,8 @@ public class MoveMOIC implements InputController {
 
     @Override
     public void update() {
-
         tmp = vp.unproject(tmp.set(Gdx.input.getX(), Gdx.input.getY()));
-
-
-
+	  w.getSystem(PositionSystem.class).setByCenterPos(e, (int) tmp.x, (int) tmp.y);
     }
 
     @Override
@@ -50,16 +53,20 @@ public class MoveMOIC implements InputController {
     @Override
     public boolean keyUp(int keycode) {
 
-        if (keycode == Input.Keys.ESCAPE) em.keyPressed(0);
+	  if (keycode == Input.Keys.ESCAPE) em.notify(0);
 
-        if (keycode == Input.Keys.ENTER) em.keyPressed(1);
+	  if (keycode == Input.Keys.ENTER) em.notify(1);
 
         return false;
     }
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
+	  if (button == Input.Buttons.RIGHT) {
+		update();
+		em.notify(1);
+	  }
+	  return false;
     }
 
     @Override

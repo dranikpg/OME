@@ -9,6 +9,7 @@ import com.artemis.utils.IntBag;
 import com.draniksoft.ome.editor.components.selection.SelectionC;
 import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.entityy.SelectionChangeE;
+import com.draniksoft.ome.editor.systems.support.flows.EditorSystem;
 
 
 public class ESCUtils {
@@ -54,15 +55,12 @@ public class ESCUtils {
 
     public static void removeSelectionBeforeRMV(int _e, World w) {
 
-        if (w.getMapper(SelectionC.class).has(_e)) {
-
-            SelectionChangeE e = new SelectionChangeE();
+	  if (w.getSystem(EditorSystem.class).sel == _e) {
+		SelectionChangeE e = new SelectionChangeE();
             e.old = _e;
             e.n = -1;
-
 		w.getSystem(OmeEventSystem.class).dispatch(e);
-
-        }
+	  }
 
     }
 

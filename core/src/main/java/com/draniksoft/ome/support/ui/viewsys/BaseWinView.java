@@ -86,6 +86,7 @@ public abstract class BaseWinView extends BaseView {
 
 	  c.setCalcW(_w);
 
+
     }
 
 

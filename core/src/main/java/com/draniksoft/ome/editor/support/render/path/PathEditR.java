@@ -10,10 +10,10 @@ import com.draniksoft.ome.editor.support.container.path.PathDesc;
 import com.draniksoft.ome.editor.support.container.path.PathSDesc;
 import com.draniksoft.ome.editor.support.ems.path.EditPathEM;
 import com.draniksoft.ome.editor.support.render.core.OverlayPlaces;
-import com.draniksoft.ome.editor.support.render.core.OverlyRendererI;
+import com.draniksoft.ome.editor.support.render.core.OverlayRendererI;
 import com.kotcrab.vis.ui.VisUI;
 
-public class PathEditR implements OverlyRendererI {
+public class PathEditR implements OverlayRendererI {
 
     public int _e;
     public EditPathEM em;
