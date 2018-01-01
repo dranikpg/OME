@@ -2,6 +2,7 @@ package com.draniksoft.ome.editor.systems.gui;
 
 import com.artemis.BaseSystem;
 import com.artemis.annotations.Wire;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -84,6 +85,7 @@ public class UiSystem extends BaseSystem {
     }
 
     public void validateLayout() {
+        Gdx.app.debug(tag, "validating layout");
         ctr.apply(MenuWinController.TT_REFRESH);
     }
 
@@ -159,6 +161,7 @@ public class UiSystem extends BaseSystem {
     }
 
     public void inflateBK() {
+        Gdx.app.debug(tag, "Inflating bk");
         closeWin();
         if (bkID != null) {
             openWin(bkID);

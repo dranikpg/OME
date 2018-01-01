@@ -68,6 +68,13 @@ public class FUtills {
         public static final String iAssF = "i_assets/";
     }
 
+    public static class ConfingN {
+
+	  public static String focusOnMapObjSel = "focus_on_mapobj_sel";
+
+    }
+
+
 
     public static <T> T getVal(Preferences prefs, Class<T> c, String id) {
 

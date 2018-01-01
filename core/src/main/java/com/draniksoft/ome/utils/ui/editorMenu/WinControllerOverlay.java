@@ -14,5 +14,8 @@ public interface WinControllerOverlay {
 
     void setMenuHide(boolean h);
 
+    void apply();
+
+    void setScroll(boolean enabledX, boolean enabledY);
 
 }

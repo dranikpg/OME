@@ -16,18 +16,21 @@ public class WinMacro extends AbstractMacroLmlTag {
 
 	  BaseWinView.WinDao d = new BaseWinView.WinDao();
 
-	  if (hasAttribute("pct_mode")) {
-		d.pctMode = parser.parseBoolean(getAttribute("pct_mode"));
+	  if (hasAttribute("w")) {
+		d.w = parser.parseInt(getAttribute("w"));
 	  }
 
-	  if (hasAttribute("pct")) {
-		d.pct = parser.parseFloat(getAttribute("pct"));
+	  if (hasAttribute("min")) {
+		d.min = parser.parseFloat(getAttribute("min"));
 	  }
 
-	  if (hasAttribute("width")) {
-		d.w = parser.parseInt(getAttribute("width"));
+	  if (hasAttribute("max")) {
+		d.max = parser.parseFloat(getAttribute("max"));
 	  }
 
+	  if (hasAttribute("dynamic")) {
+		d.dynamic = parser.parseBoolean(getAttribute("dynamic"));
+	  }
 
 	  if (hasAttribute("hide_menu")) {
 		d.hideM = parser.parseBoolean(getAttribute("hide_menu"));
@@ -37,25 +40,12 @@ public class WinMacro extends AbstractMacroLmlTag {
 		d.replaceM = parser.parseBoolean(getAttribute("fullspan"));
 	  }
 
-
-	  if (hasAttribute("pct_clamp")) {
-		d.pctClamp = parser.parseBoolean(getAttribute("pct_clamp"));
+	  if (hasAttribute("scX")) {
+		d.scrollX = parser.parseBoolean(getAttribute("scX"));
 	  }
 
-	  if (hasAttribute("minw")) {
-		d.minW = parser.parseFloat(getAttribute("minw"));
-	  }
-
-	  if (hasAttribute("maxw")) {
-		d.maxW = parser.parseFloat(getAttribute("maxw"));
-	  }
-
-	  if (hasAttribute("minp")) {
-		d.minp = parser.parseFloat(getAttribute("minp"));
-	  }
-
-	  if (hasAttribute("maxp")) {
-		d.maxp = parser.parseFloat(getAttribute("maxp"));
+	  if (hasAttribute("scY")) {
+		d.scrollY = parser.parseBoolean(getAttribute("scY"));
 	  }
 
 	  v.consumeConfig(d);

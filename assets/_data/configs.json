@@ -23,6 +23,12 @@
       }
     }
   },
+  "focus_on_mapobj_sel": {
+    "vt": "bool",
+    "defv": true
+  },
+
+
   "path_preview_factor": {
     "vt": "freeint",
     "defv": 5,

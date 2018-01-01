@@ -1,389 +1,568 @@
 {
-	com.badlogic.gdx.graphics.g2d.BitmapFont: {
-		big: {
-			file: futa_37.fnt
-		}
-		digs: {
-			file: futa_digs_50.fnt
-		}
-		med: {
-			file: futa_25.fnt
-		}
+  com.badlogic.gdx.graphics.g2d.BitmapFont: {
+    big: {
+      file: futa_37.fnt
+    }
+    digs: {
+      file: futa_digs_50.fnt
+    }
+    med: {
+      file: futa_25.fnt
+    }
+  }
+  com.badlogic.gdx.graphics.Color: {
+    black: {
+      r: 0.15686275
+      g: 0.15686275
+      b: 0.15686275
+      a: 1
+    }
+    grey: {
+      r: 0.9019608
+      g: 0.9019608
+      b: 0.9019608
+      a: 1
+    }
+    primary: {
+      r: 0.39215687
+      g: 0.74509805
+      b: 0.84313726
+      a: 1
+    }
+    primary_dark: {
+      r: 0.078431375
+      g: 0.5882353
+      b: 0.74509805
+      a: 1
+    }
+    secondary: {
+      r: 1
+      g: 0.65631115
+      b: 0.050000012
+      a: 1
+    }
+    white: {
+      r: 1
+      g: 1
+      b: 1
+      a: 1
+    }
+  }
+  com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
+    black: {
+      name: w
+      color: black
+    }
+    grey: {
+      name: w
+      color: grey
+    }
+    primary: {
+      name: w
+      color: primary
+    }
+    primary_dark: {
+      name: w
+      color: primary_dark
+    }
+    secondary: {
+      name: w
+      color: secondary
+    }
+    c_black: {
+      name: c
+      color: black
+    }
+    c_grey: {
+      name: c
+      color: grey
+    }
+    c_primary: {
+      name: c
+      color: primary
+    }
+    c_secondary: {
+      name: c
+      color: secondary
+    }
+    i_edit: {
+      name: edit
+      color: black
+    }
+    i_globe: {
+      name: globe
+      color: black
+    }
+    i_open: {
+      name: open
+      color: black
+    }
+    i_save: {
+      name: save
+      color: black
+    }
+    i_stx: {
+      name: settings
+      color: black
+    }
+    i_undo: {
+      name: undo
+      color: black
+    }
+    i_undo_grey: {
+      name: undo
+      color: grey
+    }
+    i_edit_grey: {
+      name: edit
+      color: grey
+    }
+    i_globe_grey: {
+      name: globe
+      color: grey
+    }
+    i_open_grey: {
+      name: open
+      color: grey
+    }
+    i_save_grey: {
+      name: save
+      color: grey
+    }
+    i_stx_grey: {
+      name: settings
+      color: grey
+    }
+    i_play: {
+      name: play
+      color: black
+    }
+    i_play_grey: {
+      name: play
+      color: grey
+    }
+    i_pause: {
+      name: pause
+      color: black
+    }
+    i_pause_grey: {
+      name: pause
+      color: grey
+    }
+    i_move: {
+      name: move
+      color: black
+    }
+    i_move_grey: {
+      name: move
+      color: grey
+    }
+    i_newl: {
+      name: newl
+      color: black
+    }
+    i_newl_grey: {
+      name: newl
+      color: grey
+    }
+    i_route: {
+      name: route
+      color: black
+    }
+    i_route_grey: {
+      name: route
+      color: grey
+    }
+    i_newl_sec: {
+      name: newl
+      color: secondary
+    }
+    i_move_sec: {
+      name: move
+      color: secondary
+    }
+    i_route_sec: {
+      name: route
+      color: secondary
+    }
+    btml_primary_dark: {
+      name: btml
+      color: primary_dark
+    }
+    btml_black: {
+      name: btml
+      color: black
+    }
+    btml_secondary: {
+      name: btml
+      color: secondary
+    }
+    btml_grey: {
+      name: btml
+      color: grey
+    }
+    ed_primary: {
+      name: ed
+      color: primary
+    }
+    ed_primary_dark: {
+      name: ed
+      color: primary_dark
+    }
+    ed_secondary: {
+      name: ed
+      color: secondary
+    }
+    ed_black: {
+      name: ed
+      color: black
+    }
+    ed_grey: {
+      name: ed
+      color: grey
+    }
+  }
+  com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+    default: {
+      font: med
+      fontColor: black
+    }
+    small: {
+      font: med
+      fontColor: black
+    }
+    title: {
+      font: big
+      fontColor: black
+    }
+    grey: {
+      font: med
+      fontColor: grey
+    }
+    primary: {
+      font: med
+      fontColor: primary
+    }
+    secondary: {
+      font: med
+      fontColor: secondary
+    }
+    big: {
+      font: big
+      fontColor: black
+    }
+    big_primary: {
+      font: big
+      fontColor: primary
+    }
+    big_secondary: {
+      font: big
+      fontColor: secondary
+    }
+    pimary_dark: {
+      font: med
+      fontColor: primary_dark
+    }
+    big_primary_dark: {
+      font: big
+      fontColor: primary_dark
+    }
+    white: {
+      font: med
+      fontColor: white
+    }
+    big_white: {
+      font: big
+      fontColor: white
+    }
+    dgs: {
+      font: digs
+      fontColor: black
+    }
+    big_cl: {
+      font: big
+    }
+  }
+  com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
+    default: {
+      hScrollKnob: ed_primary_dark
+      vScrollKnob: ed_primary_dark
+    }
+    white_barbg: {
+      hScroll: ed
+      hScrollKnob: ed_primary_dark
+      vScroll: ed
+      vScrollKnob: ed_primary_dark
+    }
+  }
+  com.badlogic.gdx.scenes.scene2d.ui.SplitPane$SplitPaneStyle: {
+    default-horizontal: {
+      handle: ed_secondary
+    }
+  }
+  com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+    default: {
+      font: med
+      fontColor: black
+      downFontColor: primary_dark
+      overFontColor: primary_dark
+    }
+    toggle: {
+      font: med
+      fontColor: black
+      downFontColor: primary_dark
+      overFontColor: primary_dark
+      checkedFontColor: primary_dark
+      checkedOverFontColor: primary_dark
+    }
+    btml: {
+      font: med
+      fontColor: black
+      downFontColor: primary_dark
+      overFontColor: primary_dark
+      up: btml_black
+      over: btml_primary_dark
+    }
+    btml_b_black: {
+      font: med
+      fontColor: black
+      downFontColor: primary_dark
+      overFontColor: primary_dark
+      up: btml_black
+      over: btml_black
+    }
+  }
+  com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
+    default: {
+      font: med
+      fontColor: primary_dark
+      focusedFontColor: black
+      background: btml_primary_dark
+      cursor: ed_primary_dark
+      selection: primary
+      messageFont: big
+      messageFontColor: grey
+    }
+  }
+  com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
+    default: {
+      label: default
+    }
+  }
+  com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
+    default: {
+      background: grey
+      titleFont: big
+      titleFontColor: black
+    }
+  }
+  com.kotcrab.vis.ui.Sizes: {
+    default: {
+      scaleFactor: 1
+      spacingBottom: 8
+      spacingRight: 6
+      buttonBarSpacing: 10
+      menuItemIconSize: 22
+      borderSize: 1
+      spinnerButtonHeight: 12
+      spinnerFieldSize: 50
+      fileChooserViewModeBigIconsSize: 200
+      fileChooserViewModeMediumIconsSize: 128
+      fileChooserViewModeSmallIconsSize: 64
+      fileChooserViewModeListWidthSize: 150
+    }
+  }
+  com.kotcrab.vis.ui.widget.VisTextField$VisTextFieldStyle: {
+    default: {
+      font: med
+      fontColor: black
+      selection: primary
+      background: btml_primary_dark
+      cursor: ed_primary_dark
+    }
+    big: {
+      font: big
+      fontColor: black
+      selection: primary
+      background: btml_primary_dark
+      cursor: ed_primary_dark
+    }
+  }
+  com.kotcrab.vis.ui.widget.VisTextButton$VisTextButtonStyle: {
+    default: {
+      font: med
+      fontColor: black
+      downFontColor: primary_dark
+      overFontColor: primary_dark
+    }
+    toggle: {
+      font: med
+      fontColor: black
+      downFontColor: primary_dark
+      overFontColor: primary_dark
+      checkedFontColor: primary_dark
+    }
+    btml: {
+      down: btml_primary_dark
+      up: btml_black
+      over: btml_primary_dark
+      font: med
+      fontColor: black
+      downFontColor: primary_dark
+      overFontColor: primary_dark
+    }
+    tab: {
+      font: med
+      fontColor: black
+      downFontColor: primary_dark
+      overFontColor: primary_dark
+    }
+    big: {
+      font: big
+      fontColor: black
+      downFontColor: primary_dark
+      overFontColor: primary_dark
+    }
+  }
+  com.kotcrab.vis.ui.widget.VisImageButton$VisImageButtonStyle: {
+    i_undo: {
+      imageUp: i_undo
+      imageDown: i_undo_grey
+      imageOver: i_undo_grey
+    }
+    i_save: {
+      imageUp: i_save
+      imageDown: i_save_grey
+      imageOver: i_save_grey
+    }
+    i_file: {
+      imageUp: i_open
+      imageDown: i_open_grey
+      imageOver: i_open_grey
+    }
+    i_edit: {
+      imageUp: i_edit
+      imageDown: i_edit_grey
+      imageOver: i_edit_grey
+    }
+    i_globe: {
+      imageUp: i_globe
+      imageDown: i_globe_grey
+      imageOver: i_globe_grey
+    }
+    i_stx: {
+      imageUp: i_stx
+      imageDown: i_stx_grey
+      imageOver: i_stx_grey
+    }
+    i_newl: {
+      imageUp: i_newl
+      imageDown: i_newl_grey
+      imageOver: i_newl_grey
+    }
+    i_move: {
+      imageUp: i_move
+      imageDown: i_move_grey
+      imageOver: i_move_grey
+    }
+    i_path: {
+      imageUp: i_route
+      imageDown: i_route_grey
+      imageOver: i_route_grey
+    }
+    i_newl_em: {
+      imageUp: i_newl
+      imageDown: i_newl_grey
+      imageOver: i_newl_grey
+      imageChecked: i_newl_sec
+      imageCheckedOver: i_newl_grey
+    }
+    i_move_em: {
+      imageUp: i_move
+      imageDown: i_move_grey
+      imageOver: i_move_grey
+      imageChecked: i_move_sec
+      imageCheckedOver: i_move_grey
+    }
+    i_path_em: {
+      imageUp: i_route
+      imageDown: i_route_grey
+      imageOver: i_route_grey
+      imageChecked: i_route_sec
+      imageCheckedOver: i_newl_grey
+    }
+  }
+  com.kotcrab.vis.ui.widget.Separator$SeparatorStyle: {
+    default: {
+      background: ed_primary_dark
+      thickness: 4
+    }
+    menu: {
+      thickness: 1
+    }
+  }
+  com.kotcrab.vis.ui.widget.MultiSplitPane$MultiSplitPaneStyle: {
+    default: {
+      handle: ed_secondary
+      handleOver: ed_primary_dark
+    }
+  }
+  com.kotcrab.vis.ui.widget.Tooltip$TooltipStyle: {
+    default: {
+      background: secondary
+    }
+  }
+  com.kotcrab.vis.ui.widget.LinkLabel$LinkLabelStyle: {
+    default: {
+      fontColor: primary_dark
+      underline: primary_dark
+      font: med
+    }
+    dif: {
+      fontColor: black
+      underline: secondary
+      font: med
+    }
+    dark_font: {
+      fontColor: black
+      underline: primary_dark
+      font: med
+    }
+  }
+  com.kotcrab.vis.ui.widget.tabbedpane.TabbedPane$TabbedPaneStyle: {
+    default: {
+      separatorBar: ed_black
+      buttonStyle: tab
+      vertical: false
+      draggable: false
+    }
+  }
+  com.kotcrab.vis.ui.widget.spinner.Spinner$SpinnerStyle: {
+    default: {
+      down: btml
+      up: btml_grey
+    }
+  }
+  com.kotcrab.vis.ui.widget.color.ColorPickerWidgetStyle: {
+    default: {
+      barSelector: ed
+      cross: ed
+      iconArrowRight: ed_black
+      verticalSelector: ed
+      horizontalSelector: ed
+    }
+  }
+  com.kotcrab.vis.ui.widget.BusyBar$BusyBarStyle: {
+    default: {
+      height: 10
+      segment: primary
+      segmentWidth: 200
+      segmentOverflow: 30
+    }
+  }
+  com.kotcrab.vis.ui.widget.ListViewStyle: {
+    default: {
+      scrollPaneStyle: default
 	}
-	com.badlogic.gdx.graphics.Color: {
-		black: {
-			r: 0.15686275
-			g: 0.15686275
-			b: 0.15686275
-			a: 1
-		}
-		grey: {
-			r: 0.9019608
-			g: 0.9019608
-			b: 0.9019608
-			a: 1
-		}
-		primary: {
-			r: 0.39215687
-			g: 0.74509805
-			b: 0.84313726
-			a: 1
-		}
-		primary_dark: {
-			r: 0.078431375
-			g: 0.5882353
-			b: 0.74509805
-			a: 1
-		}
-		secondary: {
-			r: 1
-			g: 0.65631115
-			b: 0.050000012
-			a: 1
-		}
-		white: {
-			r: 1
-			g: 1
-			b: 1
-			a: 1
-		}
-	}
-	com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
-		black: {
-			name: w
-			color: black
-		}
-		grey: {
-			name: w
-			color: grey
-		}
-		primary: {
-			name: w
-			color: primary
-		}
-		primary_dark: {
-			name: w
-			color: primary_dark
-		}
-		secondary: {
-			name: w
-			color: secondary
-		}
-		c_black: {
-			name: c
-			color: black
-		}
-		c_grey: {
-			name: c
-			color: grey
-		}
-		c_primary: {
-			name: c
-			color: primary
-		}
-		c_secondary: {
-			name: c
-			color: secondary
-		}
-		i_edit: {
-			name: edit
-			color: black
-		}
-		i_globe: {
-			name: globe
-			color: black
-		}
-		i_open: {
-			name: open
-			color: black
-		}
-		i_save: {
-			name: save
-			color: black
-		}
-		i_stx: {
-			name: settings
-			color: black
-		}
-		i_undo: {
-			name: undo
-			color: black
-		}
-		i_undo_grey: {
-			name: undo
-			color: grey
-		}
-		i_edit_grey: {
-			name: edit
-			color: grey
-		}
-		i_globe_grey: {
-			name: globe
-			color: grey
-		}
-		i_open_grey: {
-			name: open
-			color: grey
-		}
-		i_save_grey: {
-			name: save
-			color: grey
-		}
-		i_stx_grey: {
-			name: settings
-			color: grey
-		}
-		i_play: {
-			name: play
-			color: black
-		}
-		i_play_grey: {
-			name: play
-			color: grey
-		}
-		i_pause: {
-			name: pause
-			color: black
-		}
-		i_pause_grey: {
-			name: pause
-			color: grey
-		}
-		i_move: {
-			name: move
-			color: black
-		}
-		i_move_grey: {
-			name: move
-			color: grey
-		}
-		i_newl: {
-			name: newl
-			color: black
-		}
-		i_newl_grey: {
-			name: newl
-			color: grey
-		}
-		i_route: {
-			name: route
-			color: black
-		}
-		i_route_grey: {
-			name: route
-			color: grey
-		}
-		i_newl_sec: {
-			name: newl
-			color: secondary
-		}
-		i_move_sec: {
-			name: move
-			color: secondary
-		}
-		i_route_sec: {
-			name: route
-			color: secondary
-		}
-	}
-	com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
-		default: {
-			font: med
-			fontColor: black
-		}
-		small: {
-			font: med
-			fontColor: black
-		}
-		title: {
-			font: big
-			fontColor: black
-		}
-		grey: {
-			font: med
-			fontColor: grey
-		}
-		primary: {
-			font: med
-			fontColor: primary
-		}
-		secondary: {
-			font: med
-			fontColor: secondary
-		}
-		big: {
-			font: big
-			fontColor: black
-		}
-		big_primary: {
-			font: big
-			fontColor: primary
-		}
-		big_secondary: {
-			font: big
-			fontColor: secondary
-		}
-		pimary_dark: {
-			font: med
-			fontColor: primary_dark
-		}
-		big_primary_dark: {
-			font: big
-			fontColor: primary_dark
-		}
-		white: {
-			font: med
-			fontColor: white
-		}
-		big_white: {
-			font: big
-			fontColor: white
-		}
-		dgs: {
-			font: digs
-			fontColor: black
-		}
-	}
-	com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
-		default: {
-			label: default
-		}
-	}
-	com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
-		default: {
-			background: grey
-			titleFont: big
-			titleFontColor: black
-		}
-	}
-	com.kotcrab.vis.ui.Sizes: {
-		default: {
-			scaleFactor: 1
-			spacingBottom: 8
-			spacingRight: 6
-			buttonBarSpacing: 10
-			menuItemIconSize: 22
-			borderSize: 1
-			spinnerButtonHeight: 12
-			spinnerFieldSize: 50
-			fileChooserViewModeBigIconsSize: 200
-			fileChooserViewModeMediumIconsSize: 128
-			fileChooserViewModeSmallIconsSize: 64
-			fileChooserViewModeListWidthSize: 150
-		}
-	}
-	com.kotcrab.vis.ui.widget.VisTextButton$VisTextButtonStyle: {
-		default: {
-			up: secondary
-			over: grey
-			font: med
-		}
-	}
-	com.kotcrab.vis.ui.widget.VisImageButton$VisImageButtonStyle: {
-		i_undo: {
-			imageUp: i_undo
-			imageDown: i_undo_grey
-			imageOver: i_undo_grey
-		}
-		i_save: {
-			imageUp: i_save
-			imageDown: i_save_grey
-			imageOver: i_save_grey
-		}
-		i_file: {
-			imageUp: i_open
-			imageDown: i_open_grey
-			imageOver: i_open_grey
-		}
-		i_edit: {
-			imageUp: i_edit
-			imageDown: i_edit_grey
-			imageOver: i_edit_grey
-		}
-		i_globe: {
-			imageUp: i_globe
-			imageDown: i_globe_grey
-			imageOver: i_globe_grey
-		}
-		i_stx: {
-			imageUp: i_stx
-			imageDown: i_stx_grey
-			imageOver: i_stx_grey
-		}
-		i_newl: {
-			imageUp: i_newl
-			imageDown: i_newl_grey
-			imageOver: i_newl_grey
-		}
-		i_move: {
-			imageUp: i_move
-			imageDown: i_move_grey
-			imageOver: i_move_grey
-		}
-		i_path: {
-			imageUp: i_route
-			imageDown: i_route_grey
-			imageOver: i_route_grey
-		}
-		i_newl_em: {
-			imageUp: i_newl
-			imageDown: i_newl_grey
-			imageOver: i_newl_grey
-			imageChecked: i_newl_sec
-			imageCheckedOver: i_newl_grey
-		}
-		i_move_em: {
-			imageUp: i_move
-			imageDown: i_move_grey
-			imageOver: i_move_grey
-			imageChecked: i_move_sec
-			imageCheckedOver: i_move_grey
-		}
-		i_path_em: {
-			imageUp: i_route
-			imageDown: i_route_grey
-			imageOver: i_route_grey
-			imageChecked: i_route_sec
-			imageCheckedOver: i_newl_grey
-		}
-	}
-	com.kotcrab.vis.ui.widget.Separator$SeparatorStyle: {
-		default: {
-			thickness: 4
-		}
-		menu: {
-			thickness: 1
-		}
-	}
-	com.kotcrab.vis.ui.widget.Tooltip$TooltipStyle: {
-		default: {
-			background: secondary
-		}
-	}
-	com.kotcrab.vis.ui.widget.LinkLabel$LinkLabelStyle: {
-		default: {
-			fontColor: black
-			underline: primary
-			font: big
-		}
-		dif: {
-			fontColor: black
-			underline: secondary
-			font: med
-		}
-	}
-	com.kotcrab.vis.ui.widget.tabbedpane.TabbedPane$TabbedPaneStyle: {
-		default: {
-			vertical: false
-			draggable: false
-		}
-	}
-	com.kotcrab.vis.ui.widget.BusyBar$BusyBarStyle: {
-		default: {
-			height: 10
-			segment: primary
-			segmentWidth: 200
-			segmentOverflow: 30
-		}
-	}
+}
 }

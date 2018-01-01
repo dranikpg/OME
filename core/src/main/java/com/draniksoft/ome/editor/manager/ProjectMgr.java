@@ -12,18 +12,13 @@ public class ProjectMgr extends Manager implements LoadSaveManager {
 
     static final String tag = "ProjectMgr";
 
-    String mName = "";
+    String pName = "";
 
     @Override
     public void save(IntelligentLoader l, ProjectSaver s) {
-
-	  world.create();
-
         JsonValue jv = s.getIndexV().get("proj");
-
-        JsonValue n = JsonUtils.createStringV(mName);
-
-        if (jv == null) {
+	  JsonValue n = JsonUtils.createStringV(pName);
+	  if (jv == null) {
             jv = new JsonValue(JsonValue.ValueType.object);
             jv.setName("proj");
             s.getIndexV().addChild(jv);
@@ -33,7 +28,7 @@ public class ProjectMgr extends Manager implements LoadSaveManager {
 
     @Override
     public void load(IntelligentLoader il, ProjectLoader ld) {
-
-
+	  JsonValue root = ld.getIndexV().get("proj");
+	  pName = root.getString("name");
     }
 }

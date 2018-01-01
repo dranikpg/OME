@@ -9,12 +9,15 @@ import com.artemis.utils.IntBag;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.draniksoft.ome.editor.esc_utils.OmeStrategy;
 import com.draniksoft.ome.editor.load.MapLoadBundle;
+import com.draniksoft.ome.editor.manager.ColorManager;
 import com.draniksoft.ome.editor.manager.FontManager;
 import com.draniksoft.ome.editor.manager.MapMgr;
 import com.draniksoft.ome.editor.manager.TimeMgr;
@@ -31,7 +34,9 @@ import com.draniksoft.ome.editor.support.input.back.TimedSelectIC;
 import com.draniksoft.ome.editor.support.input.base_mo.NewMOIC;
 import com.draniksoft.ome.editor.support.render.core.OverlayRendererI;
 import com.draniksoft.ome.editor.systems.file_mgmnt.ProjectLoadSystem;
+import com.draniksoft.ome.editor.systems.gfx_support.CameraSys;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
+import com.draniksoft.ome.editor.systems.pos.PositionSystem;
 import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.ConsoleSys;
@@ -43,8 +48,11 @@ import com.draniksoft.ome.mgmnt_base.impl.ConfigManager;
 import com.draniksoft.ome.support.configs.ConfigDao;
 import com.draniksoft.ome.utils.Const;
 import com.draniksoft.ome.utils.Env;
+import com.draniksoft.ome.utils.cam.Target;
 import com.draniksoft.ome.utils.dao.AssetDDao;
 import com.draniksoft.ome.utils.dao.FontDao;
+import com.draniksoft.ome.utils.struct.EColor;
+import com.draniksoft.ome.utils.struct.MtPair;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -480,6 +488,41 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
     }
 
     /**
+     * Color UTILS
+     */
+
+    public void log_cl() {
+        ObjectMap.Entries<Integer, MtPair<EColor, String>> i = world.getSystem(ColorManager.class).getDataI();
+
+        ObjectMap.Entry<Integer, MtPair<EColor, String>> e;
+
+        while (i.hasNext()) {
+            e = i.next();
+            console.log(e.key + " - " + e.value.V() + " -> " +
+                    "[#" + e.value.K().toIntBits() + "]" + e.value.K().toIntBits() + "[]");
+        }
+
+    }
+
+    public void log_cl(int id) {
+        Color c = world.getSystem(ColorManager.class).get(id);
+
+        console.log(world.getSystem(ColorManager.class).getName(id) + " -> " +
+                "[#" + c.toIntBits() + "]" + c.toIntBits() + "[]");
+
+    }
+
+    public void set_cl(int id, int bits) {
+        world.getSystem(ColorManager.class).change(id, new Color(bits));
+    }
+
+    public void add_cl(String name) {
+        int id = world.getSystem(ColorManager.class).create(name, Color.MAGENTA);
+        log_cl(id);
+
+    }
+
+    /**
      *
      * Gfx utils like fps and delta time
      *
@@ -562,6 +605,28 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     }
 
+
+    public void cam_etg(int _e) {
+        cam_etg(_e, true);
+    }
+
+    public void cam_etg(int _e, boolean free) {
+        Target.EntityPosTarget t = new Target.EntityPosTarget();
+        t._e = _e;
+        t.freeOnReach = free;
+        t.ps = world.getSystem(PositionSystem.class);
+        world.getSystem(CameraSys.class).setTarget(t);
+    }
+
+    public void cam_ptg(int x, int y) {
+        Target.PosTarget t = new Target.PosTarget();
+        t.coords = new Vector2(x, y);
+        world.getSystem(CameraSys.class).setTarget(t);
+    }
+
+    public void cam_freet() {
+        world.getSystem(CameraSys.class).setTarget(null);
+    }
 
     /**
      * World System utilities
@@ -754,7 +819,6 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
     /**
      * UI UTILS
      */
-
 
     public void openwin(String code) {
 	  try {

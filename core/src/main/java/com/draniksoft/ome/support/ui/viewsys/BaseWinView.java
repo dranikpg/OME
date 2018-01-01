@@ -1,59 +1,59 @@
 package com.draniksoft.ome.support.ui.viewsys;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.utils.Layout;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.utils.ui.editorMenu.WinControllerOverlay;
 
+
 public abstract class BaseWinView extends BaseView {
 
+    public boolean WINMODE = false;
+
+    private static final String tag = "BaseWinView";
 
     boolean keepOld;
-    boolean percentMode;
-    float pct;
+
     float w;
 
-    boolean pctClamp;
-    float minP;
-    float maxP;
-    float minW;
-    float maxW;
+    float max = 1f;
+    float min = 0f;
 
     boolean hideM;
     boolean replaceB;
 
+    boolean dynamic;
+
+    boolean scrollX = true;
+    boolean scrollY = true;
+
     public static class WinDao {
 
-	  public boolean pctMode = false;
+	  public float w = 0;
 
-	  public float pct = 0f;
-	  public int w = 0;
-
-	  public boolean pctClamp = false;
-
-	  public float minp = 0;
-	  public float maxp = 1;
-
-	  public float minW = 0;
-	  public float maxW = Float.MAX_VALUE;
+	  public float max = 1f;
+	  public float min = 0f;
 
 	  public boolean hideM = false;
 	  public boolean replaceM = false;
 
-	  public boolean keepold = false;
+	  public boolean dynamic = false;
+
+	  public boolean scrollX = false;
+	  public boolean scrollY = true;
 
     }
 
     public final void consumeConfig(WinDao d) {
-	  percentMode = d.pctMode;
-	  pct = d.pct;
 	  w = d.w;
-	  maxW = d.maxW;
-	  minW = d.minW;
-	  minP = d.minp;
-	  maxP = d.maxp;
-	  pctClamp = d.pctClamp;
+	  max = d.max;
+	  min = d.min;
 	  hideM = d.hideM;
 	  replaceB = d.replaceM;
+	  dynamic = d.dynamic;
+	  scrollX = d.scrollX;
+	  scrollY = d.scrollY;
     }
 
     public void init(WinControllerOverlay c) {
@@ -65,27 +65,48 @@ public abstract class BaseWinView extends BaseView {
 	  _w.getSystem(UiSystem.class).closeWin();
     }
 
+    public void recalc() {
+	  if (WINMODE) _w.getSystem(UiSystem.class).validateLayout();
+    }
+
     public void calc(WinControllerOverlay c) {
 
+	  float ww = c.getWW();
 	  float _w = 0;
-	  float _pct = 0;
 
-	  if (keepOld) {
-		_w = c.getCW();
-		_pct = c.getWW() / _w;
-	  } else if (percentMode) {
-		_w = c.getWW() * pct / 100f;
-		_pct = pct;
+	  if (dynamic) {
+		if (getActor() instanceof Layout) {
+		    _w = ((Layout) getActor()).getPrefWidth();
+		} else {
+		    _w = getActor().getWidth();
+		}
 	  } else {
-		_pct = w / c.getWW();
-		_w = w;
+		float _pct = 0;
+
+		if (keepOld) {
+		    _w = c.getCW();
+		    _pct = c.getWW() / _w;
+		} else if (w < 2f) {
+		    _w = c.getWW() * w / 100f;
+		    _pct = w;
+		} else {
+		    _pct = w / c.getWW();
+		    _w = w;
+		}
 	  }
+	  Gdx.app.debug(tag, "Vals " + min + " " + max + " ww " + ww);
 
+	  float _minw = min; if (min < 2f) _minw = ww * min;
+	  float _maxw = max; if (max < 2f) _maxw = ww * max;
 
-	  _w = MathUtils.clamp(_w, minW, maxW);
+	  Gdx.app.debug(tag, "Setting on " + _w + " min " + _minw + " max " + _maxw);
+
+	  _w = MathUtils.clamp(_w, _minw, _maxw);
+
+	  Gdx.app.debug(tag, "Final w is " + _w);
 
 	  c.setCalcW(_w);
-
+	  c.setScroll(scrollX, scrollY);
 
     }
 

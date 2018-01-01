@@ -1,4 +1,4 @@
-<:win pct_mode=false width=200 fullspan=false />
+<:win w=200 fullspan=false />
 
 <table id=root>
     <label wrap=true expandx=true fillx=true>

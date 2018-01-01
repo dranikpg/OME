@@ -44,16 +44,22 @@ public class EditorWin extends VisWindow implements WinControllerOverlay {
 
 	  pane.setScrollingDisabled(true, false);
 
-	  add(pane).expand().fill();
+	  add(pane).expand().fill().padTop(40);
 
 	  setKeepWithinStage(false);
 	  setMovable(false);
 	  setResizable(false);
+
+	  setDebug(true, false);
     }
 
 
     public void initFor(BaseWinView v) {
 	  this.vw = v;
+	  v.WINMODE = true;
+
+	  Gdx.app.debug(tag, "initing on new win");
+
 	  nW = getWidth();
 
 	  v.init(this);
@@ -65,9 +71,11 @@ public class EditorWin extends VisWindow implements WinControllerOverlay {
 	  root.clearChildren();
 	  root.add(v.getActor()).expand().fill();
 
+
 	  vw.opened();
 
-	  uiSys.validateLayout();
+	  apply();
+
     }
 
     public String getViewID() {
@@ -75,6 +83,7 @@ public class EditorWin extends VisWindow implements WinControllerOverlay {
     }
 
     public void clearWin() {
+	  Gdx.app.debug(tag, "Clearin win");
 	  root.clear();
 	  if (vw != null) vw.closed();
 	  if (agent != null) agent.closed();
@@ -86,7 +95,7 @@ public class EditorWin extends VisWindow implements WinControllerOverlay {
 
     public void open(final String id, final WindowAgent ag) {
 
-	  Gdx.app.debug(tag, "opening on");
+	  Gdx.app.debug(tag, "opening on " + id);
 
 	  final LmlUIMgr m = AppDO.I.LML();
 
@@ -151,6 +160,9 @@ public class EditorWin extends VisWindow implements WinControllerOverlay {
     //
 
 
+    //
+
+
     @Override
     public float getCW() {
 	  return getWidth();
@@ -185,5 +197,19 @@ public class EditorWin extends VisWindow implements WinControllerOverlay {
 	  cfg_menuH = h;
     }
 
+    @Override
+    public void apply() {
+
+	  uiSys.validateLayout();
+    }
+
+    @Override
+    public void setScroll(boolean enabledX, boolean enabledY) {
+	  pane.setScrollingDisabled(!enabledX, !enabledY);
+    }
+
+    public void resized() {
+
+    }
 
 }

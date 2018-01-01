@@ -273,6 +273,8 @@ public class EngineLoader {
 
             cb.with(new FontManager());
 
+		cb.with(new ColorManager());
+
             cb.with(new EntitySrzMgr());
 
             cb.with(new TimeMgr());

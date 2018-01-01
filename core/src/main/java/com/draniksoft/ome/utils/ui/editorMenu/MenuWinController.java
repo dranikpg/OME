@@ -45,6 +45,7 @@ public class MenuWinController {
 
     private void restore() {
 
+	  Gdx.app.debug(tag, "WinC restorin");
 	  float tx = w.getWidth() / sys.getStageW() * UiSystem.Defaults.aTime100PCT;
 	  float ty = Math.abs(m.getActor().getY()) / sys.getStageH() * UiSystem.Defaults.aTime100PCT;
 
@@ -68,6 +69,8 @@ public class MenuWinController {
 		);
 
 	  } else {
+		Gdx.app.debug(tag, "sizin menu to full via action ");
+		m.getActor().setPosition(0, 0);
 		m.getActor().addAction(Actions.sizeTo(sys.getStageW(), m.getActor().getHeight(), tx));
 	  }
 
@@ -76,7 +79,6 @@ public class MenuWinController {
     private void recalc() {
 
 	  if (w.isOpen()) {
-		Gdx.app.debug(tag, "Win is open");
 		w.recalc();
 		w.setWidth(w.getCalcWidth());
 		w.setX(sys.getStageW() - w.getWidth());
@@ -106,6 +108,9 @@ public class MenuWinController {
 
     private void applyBasics() {
 
+	  m.getActor().getActions().clear();
+	  w.getActions().clear();
+
 	  menuHide = w.cfg_menuH;
 	  menuReplace = w.cfg_menuR;
 	  w.setVisible(true);
@@ -133,7 +138,7 @@ public class MenuWinController {
 		w.setHeight(sys.getStageH() - m.getActor().getHeight());
 	  }
 
-	  w.addAction(Actions.sequence(
+	  w.addAction(Actions.parallel(
 		    Actions.moveTo(padd, w.getY(), tx),
 		    Actions.sizeTo(newW, w.getHeight(), tx)
 	  ));

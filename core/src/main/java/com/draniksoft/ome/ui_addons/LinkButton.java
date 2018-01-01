@@ -1,6 +1,7 @@
-package com.draniksoft.ome.utils.ui;
+package com.draniksoft.ome.ui_addons;
 
 import com.kotcrab.vis.ui.widget.LinkLabel;
+import com.kotcrab.vis.ui.widget.VisLabel;
 
 public abstract class LinkButton extends LinkLabel {
 
@@ -18,6 +19,7 @@ public abstract class LinkButton extends LinkLabel {
             }
         });
 
+	  VisLabel l;
     }
 
     public abstract void on_press();

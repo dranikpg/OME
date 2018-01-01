@@ -13,6 +13,7 @@ public abstract class BaseView {
     public String lang;
     public boolean active = false;
 
+    // name :: tag
     Array<Pair<String, String>> inclds;
     Array<BaseView> rtIncs;
 
@@ -54,7 +55,7 @@ public abstract class BaseView {
 
     public void clearInjectedIncludes() {
 	  for (BaseView v : rtIncs) {
-		v.closed();
+		freeincld(v);
 	  }
 	  rtIncs.clear();
     }
@@ -99,6 +100,34 @@ public abstract class BaseView {
 	  inclds.add(Pair.P(name, id));
     }
 
+    public void pushIncld(String name, String id) {
+	  addIncld(name, id);
+	  AppDO.I.LML().injectInclude(this, name, id);
+    }
+
+    // deletes from runtime includes
+    public void deleteIncldbVID(String id) {
+	  removeIncldbVID(id);
+	  int res = -1;
+	  for (int i = 0; i < rtIncs.size; i++) {
+		if (rtIncs.get(i).ID.equals(id)) {
+		    res = i;
+		}
+	  }
+	  if (res > 0) {
+		freeincld(rtIncs.get(res));
+		rtIncs.removeIndex(res);
+	  }
+    }
+
+    public void deleteIncldbName(String name) {
+	  for (Pair<String, String> p : inclds) {
+		if (p.V().equals(name)) {
+		    deleteIncldbVID(p.K());
+		}
+	  }
+    }
+
     public Array<Pair<String, String>> getInclds() {
 	  return inclds;
     }
@@ -109,6 +138,10 @@ public abstract class BaseView {
 	  vw.addedAsInclude(vw);
 	  vw.opened();
 	  rtIncs.add(vw);
+    }
+
+    private void freeincld(BaseView v) {
+	  v.closed();
     }
 
     public void obtainIncld(String name, BaseView vw) {

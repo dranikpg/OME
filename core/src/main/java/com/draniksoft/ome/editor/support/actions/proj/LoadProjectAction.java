@@ -39,7 +39,7 @@ public class LoadProjectAction implements Action {
 
     @Override
     public String getSimpleConcl() {
-        return "Loaded project";
+	  return "Loaded proj";
     }
 
     @Override

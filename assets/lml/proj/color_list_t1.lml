@@ -1,0 +1,30 @@
+<:win
+    dynamic=false
+    min=450
+    max=0.7
+    fullspan=true
+    scY=false />
+
+<visTable id=root>
+
+    <visScrollPane id=spane expand=true fill=true row=true >
+        <container id=tc padLeft=50 padRight=50 />
+    </visScrollPane>
+
+    <separator padTop=10 padBottom=10 row=true growX=true/>
+
+    <container id=bc expandx=true fill=true/>
+
+</visTable>
+
+<:include id=color_edit_vw name=kek/>
+
+<!--
+ _1 = group spacing
+ _2 = space between label and circle
+ _3 = label width
+-->
+
+<:argument _1 10.0 />
+<:argument _2 5.0  />
+<:argument _3 300  />

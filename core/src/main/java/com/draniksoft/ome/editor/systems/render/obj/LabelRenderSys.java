@@ -42,7 +42,7 @@ public class LabelRenderSys extends IteratingSystem {
 	  PosSizeC sc = pM.get(_e);
 	  LabelRTC lc = rM.get(_e);
 
-        
+
 	  lc.c.setPosition(sc.x + sc.w / 2 - lc.w / 2, sc.y - lc.h);
 	  lc.c.draw(b);
 	  lc.c.getFont().getData().setScale(1);

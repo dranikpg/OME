@@ -21,3 +21,14 @@ site blue bottom 150 120 235
 
 # QUICK
     undo
+
+### USEFUL JVM TAGS
+
+-XX:+UnlockDiagnosticVMOptions ->
+
+-XX:+PrintCompilation
+-XX:+UnlockDiagnosticVMOptions
+-XX:+PrintInlining
+-XX:+CITime
+
+//-XX:+PrintOptoAssembly

@@ -11,11 +11,15 @@ import com.draniksoft.ome.editor.support.compositionObserver.abstr.SimpleComposi
 import com.draniksoft.ome.editor.support.container.CO_actiondesc.ActionDesc;
 import com.draniksoft.ome.editor.support.container.EM_desc.EditModeDesc;
 import com.draniksoft.ome.editor.support.render.def.SelectionRenderer;
+import com.draniksoft.ome.editor.systems.gfx_support.CameraSys;
 import com.draniksoft.ome.editor.systems.pos.PositionSystem;
 import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.flows.EditorSystem;
+import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.support.ui.util.CompObViewIds;
+import com.draniksoft.ome.utils.FUtills;
+import com.draniksoft.ome.utils.cam.Target;
 
 import static com.draniksoft.ome.editor.support.compositionObserver.MOCompositionO.ActionCodes.*;
 
@@ -54,11 +58,21 @@ public class MOCompositionO extends SimpleCompositionObserver {
 
     @Override
     protected void on_selchanged(boolean previousActivity, int prevID) {
+
         if (isSelActive()) {
-            if (!previousActivity) {
+
+		if (!previousActivity) {
                 rSys.addRdr(r);
             }
             r.e = _selE;
+
+		if (AppDO.I.C().getConfVal_B(FUtills.ConfingN.focusOnMapObjSel)) {
+		    Target.EntityPosTarget t = new Target.EntityPosTarget();
+		    t._e = _selE;
+		    t.ps = _w.getSystem(PositionSystem.class);
+		    _w.getSystem(CameraSys.class).setTarget(t);
+		}
+
         } else {
             if (previousActivity) {
                 rSys.removeRdr(r);
