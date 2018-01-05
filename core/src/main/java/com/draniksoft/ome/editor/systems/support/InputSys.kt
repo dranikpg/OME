@@ -23,6 +23,8 @@ class InputSys : BaseSystem(), InputProcessor {
     // aka the behavior
     internal var defIC: InputController? = null
 
+    internal var bkIC: InputController? = null
+
     override fun initialize() {
 
         mx!!.addProcessor(this)
@@ -41,6 +43,14 @@ class InputSys : BaseSystem(), InputProcessor {
             defIC!!.update()
         }
 
+    }
+
+    fun createDefBK() {
+        bkIC = defIC
+    }
+
+    fun restoreBK() {
+        defIC = bkIC
     }
 
     fun restoreDef() {

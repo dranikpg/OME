@@ -249,7 +249,7 @@ public class SimpleDrawableMgr extends DrawableMgr {
 	  JsonValue root = r.parse(Gdx.files.internal("_data/i_dwbs.json"));
 
 	  for (JsonValue v : root) {
-		String id = v.getString("id");
+		String id = v.getString("ID");
 
 		boolean smz = false;
 		if (v.has("sysmz")) smz = v.getBoolean("sysmz");

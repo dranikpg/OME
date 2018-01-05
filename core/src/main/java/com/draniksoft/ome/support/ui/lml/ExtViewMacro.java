@@ -18,7 +18,7 @@ public class ExtViewMacro extends AbstractMacroLmlTag {
 	  name = parser.parseString(getAttribute("name"));
 
 	  String id;
-	  id = parser.parseString(getAttribute("id"));
+	  id = parser.parseString(getAttribute("ID"));
 
 	  v.addIncld(name, id);
     }

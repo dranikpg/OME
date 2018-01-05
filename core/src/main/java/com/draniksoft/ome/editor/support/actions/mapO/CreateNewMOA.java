@@ -60,7 +60,6 @@ public class CreateNewMOA implements Action {
         DrawableC dwC = _w.getMapper(DrawableC.class).get(_e);
 	  dwC.d = FUtills.fetchDrawable(dwbID);
 
-
         String tag = "CreateNewMOA";
         Gdx.app.debug(tag, "Fully created MO with " + dwbID);
     }

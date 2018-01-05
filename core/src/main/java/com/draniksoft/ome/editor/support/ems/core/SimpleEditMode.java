@@ -1,7 +1,9 @@
 package com.draniksoft.ome.editor.support.ems.core;
 
 import com.artemis.World;
+import com.draniksoft.ome.editor.systems.gfx_support.CameraSys;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
+import com.draniksoft.ome.editor.systems.support.InputSys;
 
 public abstract class SimpleEditMode implements EditMode {
 
@@ -15,14 +17,21 @@ public abstract class SimpleEditMode implements EditMode {
 
     protected abstract void on_attached();
 
-    protected void deflateUI() {
+    protected void defalteEnv() {
+
+
+	  _w.getSystem(CameraSys.class).createBK();
 	  _w.getSystem(UiSystem.class).createBK();
+	  _w.getSystem(InputSys.class).createDefBK();
 
     }
 
-    protected void returnUIState() {
+    protected void returnEnv() {
 
+
+	  _w.getSystem(CameraSys.class).inflateBK();
 	  _w.getSystem(UiSystem.class).inflateBK();
+	  _w.getSystem(InputSys.class).restoreBK();
 
     }
 

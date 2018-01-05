@@ -6,6 +6,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.Layout;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.utils.ui.editorMenu.WinControllerOverlay;
 
+/*
+	Offers backwards compatibility to BaseView
+ */
 
 public abstract class BaseWinView extends BaseView {
 
@@ -65,8 +68,14 @@ public abstract class BaseWinView extends BaseView {
 	  _w.getSystem(UiSystem.class).closeWin();
     }
 
+    @Override
+    public void invalidateParent() {
+	  super.invalidateParent();
+	  if (WINMODE) recalc();
+    }
+
     public void recalc() {
-	  if (WINMODE) _w.getSystem(UiSystem.class).validateLayout();
+	  _w.getSystem(UiSystem.class).validateLayout();
     }
 
     public void calc(WinControllerOverlay c) {
@@ -80,6 +89,7 @@ public abstract class BaseWinView extends BaseView {
 		} else {
 		    _w = getActor().getWidth();
 		}
+		Gdx.app.debug(tag, "Fetched dynamic width " + _w);
 	  } else {
 		float _pct = 0;
 
@@ -94,7 +104,6 @@ public abstract class BaseWinView extends BaseView {
 		    _w = w;
 		}
 	  }
-	  Gdx.app.debug(tag, "Vals " + min + " " + max + " ww " + ww);
 
 	  float _minw = min; if (min < 2f) _minw = ww * min;
 	  float _maxw = max; if (max < 2f) _maxw = ww * max;
@@ -102,8 +111,6 @@ public abstract class BaseWinView extends BaseView {
 	  Gdx.app.debug(tag, "Setting on " + _w + " min " + _minw + " max " + _maxw);
 
 	  _w = MathUtils.clamp(_w, _minw, _maxw);
-
-	  Gdx.app.debug(tag, "Final w is " + _w);
 
 	  c.setCalcW(_w);
 	  c.setScroll(scrollX, scrollY);

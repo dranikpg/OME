@@ -2,8 +2,10 @@ package com.draniksoft.ome.editor.ui.menu;
 
 import com.artemis.World;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Array;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.mgmnt_base.impl.LmlUIMgr;
@@ -18,8 +20,10 @@ public class EditorWin extends VisWindow implements WinControllerOverlay {
 
     private static final String tag = "EditorWin";
 
-    BaseWinView vw;
-    boolean parsing = false;
+    volatile BaseWinView vw;
+
+    volatile boolean parsing = false;
+    volatile boolean closing = false;
 
     World w;
     UiSystem uiSys;
@@ -29,10 +33,8 @@ public class EditorWin extends VisWindow implements WinControllerOverlay {
 
     float nW = 0;
 
-
-    WindowAgent agent;
-
-    String curID = null;
+    volatile WindowAgent agent;
+    volatile String curID = null;
 
 
     public EditorWin(World w) {
@@ -57,13 +59,10 @@ public class EditorWin extends VisWindow implements WinControllerOverlay {
     public void initFor(BaseWinView v) {
 	  this.vw = v;
 	  v.WINMODE = true;
-
-	  Gdx.app.debug(tag, "initing on new win");
+	  Gdx.app.debug(tag, "initing on " + v.toString());
 
 	  nW = getWidth();
-
 	  v.init(this);
-	  v.calc(this);
 
 	  if (agent != null)
 		agent.opened(vw);
@@ -71,25 +70,53 @@ public class EditorWin extends VisWindow implements WinControllerOverlay {
 	  root.clearChildren();
 	  root.add(v.getActor()).expand().fill();
 
-
 	  vw.opened();
 
 	  apply();
-
     }
 
     public String getViewID() {
 	  return curID;
     }
 
+
+    @Override
+    public synchronized void setVisible(boolean visible) {
+	  super.setVisible(visible);
+    }
+
+    @Override
+    public synchronized Array<Action> getActions() {
+	  return super.getActions();
+    }
+
+    public void notifyClosing() {
+	  if (closing) return;
+	  closing = true;
+	  Gdx.app.debug(tag, "Close notification");
+	  if (agent != null) agent.notifyClosing();
+    }
+
     public void clearWin() {
+
 	  Gdx.app.debug(tag, "Clearin win");
+
 	  root.clear();
+	  closing = false;
+
+	  if (!isOpen()) return;
+
+	  Gdx.app.debug(tag, "Clearing adv win");
+
+	  clearActions();
+
 	  if (vw != null) vw.closed();
-	  if (agent != null) agent.closed();
-	  agent = null;
 	  curID = null;
 	  vw = null;
+
+	  if (agent != null) agent.closed();
+	  agent = null;
+
     }
 
 
@@ -151,6 +178,10 @@ public class EditorWin extends VisWindow implements WinControllerOverlay {
 
     public boolean isBusy() {
 	  return isOpen() || parsing;
+    }
+
+    public boolean isClosing() {
+	  return closing;
     }
 
     public BaseWinView getVw() {

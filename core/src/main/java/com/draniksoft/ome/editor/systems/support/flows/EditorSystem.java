@@ -243,8 +243,8 @@ public class EditorSystem extends BaseSystem {
             BiLangEMDs d = new BiLangEMDs();
             d.name_en = v.getString("name_en");
             d.name_ru = v.getString("name_ru");
-            d.id = v.getInt("id");
-            d.selRequired = v.getBoolean("sr");
+		d.id = v.getInt("ID");
+		d.selRequired = v.getBoolean("sr");
             d.iconID = v.has("iconID") ? v.getString("iconID") : "i_edit";
 
             if (v.has("sav")) d.aviabT = v.getInt("sav");
@@ -280,9 +280,9 @@ public class EditorSystem extends BaseSystem {
         while (i.hasNext()) {
             o = i.next();
 
-            if (root.has("" + o.id)) {
+		if (root.has("" + o.ID)) {
 
-                o.loadActionConfig(root.get("" + o.id));
+		    o.loadActionConfig(root.get("" + o.ID));
 
             }
 
@@ -303,7 +303,7 @@ public class EditorSystem extends BaseSystem {
 
     private void addComOb(int c, CompositionObserver o) {
         comObs.put(c, o);
-        o.id = c;
+	  o.ID = c;
     }
 
     public void setEMDavbt(int emd, int i) {

@@ -16,7 +16,7 @@ public class TimeMgr extends BaseSystem implements LoadSaveManager {
 
     private static final String tag = "TimeMgr";
 
-    // map data
+    // map colorData
     int lowerB;
     int upperB;
 

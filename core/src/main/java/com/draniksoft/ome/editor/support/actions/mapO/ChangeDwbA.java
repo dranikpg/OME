@@ -2,7 +2,7 @@ package com.draniksoft.ome.editor.support.actions.mapO;
 
 import com.artemis.World;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.draniksoft.ome.editor.base_gfx.drawable.Drawable;
 import com.draniksoft.ome.editor.components.gfx.DrawableC;
 import com.draniksoft.ome.editor.components.tps.MObjectC;
 import com.draniksoft.ome.editor.support.actions.Action;

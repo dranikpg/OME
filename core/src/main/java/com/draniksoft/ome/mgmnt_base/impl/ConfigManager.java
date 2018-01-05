@@ -27,7 +27,7 @@ public class ConfigManager extends AppDataManager {
     HashMap<String, ConfigDao> m;
 
     ObjectMap<String,  // index that changes
-            ObjectMap<String, // index that needs change
+		ObjectMap<String, // index that needs changeColor
 			  ConfReferencer<Object, Object>>> trig; // val :: key
 
     JsonValue jv;
@@ -191,8 +191,8 @@ public class ConfigManager extends AppDataManager {
             if (v.equals("freestr")) return ConfigValueType.freeStringT;
             if (v.equals("freeint")) return ConfigValueType.freeIntT;
         } else {
-            String id = vt.getString("id");
-            if (id.equals("boundInt")) {
+		String id = vt.getString("ID");
+		if (id.equals("boundInt")) {
                 return ConfigValueType.constructBoundedIntT(vt.getInt("s"), vt.getInt("e"), vt.getInt("st", 1));
             }
 

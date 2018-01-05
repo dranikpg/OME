@@ -51,7 +51,7 @@ public class OverlayRenderSys extends BaseSystem {
         /*b.setProjectionMatrix(cam.combined);
 	  b.begin();
         for (int i = 0; i < rs.size; i++) {
-            rs.get(i).render(b, cam);
+            rs.getColor(i).render(b, cam);
         }
         b.end();
        */

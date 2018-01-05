@@ -5,7 +5,6 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -60,13 +59,6 @@ public class GUtils {
 
     }
 
-    public static class Colors {
-	  public static Color PRIMARY = Color.BLUE;
-	  public static Color PRIMARY_BRIGHT = Color.SKY;
-	  public static Color PRIMARY_DARK = Color.NAVY;
-	  public static Color ACCENT = Color.MAGENTA;
-	  public static Color SECONDARY = Color.LIGHT_GRAY;
-    }
 
     public static int fetchMaxTexSize() {
         IntBuffer intBuffer = BufferUtils.newIntBuffer(16);

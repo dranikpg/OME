@@ -13,10 +13,13 @@ public class EntityDataChangeE implements Event {
     public EntityDataChangeE() {
     }
 
+    /* USAGE:
+	  TODO update fist path root pos on update
+     */
     public static class MOPositonChangeE extends EntityDataChangeE {
-        public MOPositonChangeE(int _e) {
-            super(_e);
-        }
+	  public MOPositonChangeE(int _e) {
+		super(_e);
+	  }
     }
 
     public static class PathCountChangeE extends EntityDataChangeE {

@@ -11,15 +11,11 @@ import com.draniksoft.ome.editor.support.compositionObserver.abstr.SimpleComposi
 import com.draniksoft.ome.editor.support.container.CO_actiondesc.ActionDesc;
 import com.draniksoft.ome.editor.support.container.EM_desc.EditModeDesc;
 import com.draniksoft.ome.editor.support.render.def.SelectionRenderer;
-import com.draniksoft.ome.editor.systems.gfx_support.CameraSys;
 import com.draniksoft.ome.editor.systems.pos.PositionSystem;
 import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.flows.EditorSystem;
-import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.support.ui.util.CompObViewIds;
-import com.draniksoft.ome.utils.FUtills;
-import com.draniksoft.ome.utils.cam.Target;
 
 import static com.draniksoft.ome.editor.support.compositionObserver.MOCompositionO.ActionCodes.*;
 
@@ -29,6 +25,8 @@ public class MOCompositionO extends SimpleCompositionObserver {
         // X;Y;DWB_ID;W;H
         public static final int CREATE = ActionDesc.BaseCodes.ACTION_CREATE;
         public static final int RESET = ActionDesc.BaseCodes.ACTION_RESET;
+
+	  public static final int CREATE_VW = ActionDesc.BaseCodes.ACTION_EDITVW_CREATE;
 
         // 10 -> 20 setter
 
@@ -66,13 +64,6 @@ public class MOCompositionO extends SimpleCompositionObserver {
             }
             r.e = _selE;
 
-		if (AppDO.I.C().getConfVal_B(FUtills.ConfingN.focusOnMapObjSel)) {
-		    Target.EntityPosTarget t = new Target.EntityPosTarget();
-		    t._e = _selE;
-		    t.ps = _w.getSystem(PositionSystem.class);
-		    _w.getSystem(CameraSys.class).setTarget(t);
-		}
-
         } else {
             if (previousActivity) {
                 rSys.removeRdr(r);
@@ -88,8 +79,9 @@ public class MOCompositionO extends SimpleCompositionObserver {
 
     @Override
     protected void _init() {
+	  HEAD = true;
 
-        desc = new IntMap<ActionDesc>();
+	  desc = new IntMap<ActionDesc>();
 
 	  rSys = _w.getSystem(OverlayRenderSys.class);
 	  r = new SelectionRenderer();
@@ -98,7 +90,6 @@ public class MOCompositionO extends SimpleCompositionObserver {
         for (ActionDesc d : __ds) {
             desc.put(d.code, d);
         }
-
 
     }
 
@@ -110,11 +101,10 @@ public class MOCompositionO extends SimpleCompositionObserver {
     @Override
     public boolean isAviab(int ac, int e) {
 
-        if (ac == CREATE) {
-            return !matches(e);
-	  } else {
-		return matches(e);
-        }
+	  if (ac == CREATE) {
+		return !matches(e);
+	  } else
+		return ac != CREATE_VW && matches(e);
 
     }
 
@@ -187,7 +177,7 @@ public class MOCompositionO extends SimpleCompositionObserver {
 
     @Override
     public String getViewID(short id) {
-	  return "";
+	  return "base_mo_insp";
     }
 
 

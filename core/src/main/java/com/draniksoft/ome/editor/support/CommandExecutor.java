@@ -14,12 +14,14 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.draniksoft.ome.editor.base_gfx.drawable.Drawable;
 import com.draniksoft.ome.editor.esc_utils.OmeStrategy;
 import com.draniksoft.ome.editor.load.MapLoadBundle;
-import com.draniksoft.ome.editor.manager.ColorManager;
 import com.draniksoft.ome.editor.manager.FontManager;
 import com.draniksoft.ome.editor.manager.MapMgr;
+import com.draniksoft.ome.editor.manager.ProjValsManager;
 import com.draniksoft.ome.editor.manager.TimeMgr;
 import com.draniksoft.ome.editor.manager.drawable.SimpleDrawableMgr;
 import com.draniksoft.ome.editor.support.actions.Action;
@@ -48,6 +50,7 @@ import com.draniksoft.ome.mgmnt_base.impl.ConfigManager;
 import com.draniksoft.ome.support.configs.ConfigDao;
 import com.draniksoft.ome.utils.Const;
 import com.draniksoft.ome.utils.Env;
+import com.draniksoft.ome.utils.FUtills;
 import com.draniksoft.ome.utils.cam.Target;
 import com.draniksoft.ome.utils.dao.AssetDDao;
 import com.draniksoft.ome.utils.dao.FontDao;
@@ -327,7 +330,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
         Iterator<CompositionObserver> i = world.getSystem(EditorSystem.class).getComObsI();
         while (i.hasNext()) {
             o = i.next();
-            console.log(o.getName() + " [Lang dep]" + o.getClass().getSimpleName() + "(" + +o.id + ")" + " :: " + (o.isSelActive() ? "Triggered" : "Unaffected"));
+            console.log(o.getName() + " [Lang dep]" + o.getClass().getSimpleName() + "(" + +o.ID + ")" + " :: " + (o.isSelActive() ? "Triggered" : "Unaffected"));
 
         }
 
@@ -347,7 +350,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
             for (ActionDesc d : o.getDesc().values()) {
 
-		    console.log(d.code + " -> " + d.getName() + "  || " + " quick = " + d.quickA + " aviab = " + o.isAviab(d.code));
+                console.log(d.code + " -> " + d.getName() + "  || " + " aviab = " + o.isAviab(d.code));
 
             }
         } catch (Exception e) {
@@ -431,7 +434,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
         for (TextureAtlas.AtlasRegion r : rs) {
 
-            console.log("name= " + r.name + "; ~id = " + r.index);
+            console.log("name= " + r.name + "; ~ID = " + r.index);
 
         }
 
@@ -487,12 +490,32 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     }
 
+    /*
+     * DRAWABLE UTILS
+     */
+
+
+    public void log_dwb() {
+        Iterator<IntMap.Entry<MtPair<Drawable, String>>> it = world.getSystem(ProjValsManager.class).getDrawableItAll();
+        IntMap.Entry<MtPair<Drawable, String>> e;
+        while (it.hasNext()) {
+            e = it.next();
+            console.log(e.key + " -> " + e.value.V() + " " + e.value.K().toString());
+        }
+    }
+
+    public void add_dwb(String name, String t) {
+        ProjValsManager m = world.getSystem(ProjValsManager.class);
+        int id = m.createNewDrawable(name);
+        m.setDrawable(id, FUtills.fetchDrawable(t));
+    }
+
     /**
      * Color UTILS
      */
 
     public void log_cl() {
-        ObjectMap.Entries<Integer, MtPair<EColor, String>> i = world.getSystem(ColorManager.class).getDataI();
+        ObjectMap.Entries<Integer, MtPair<EColor, String>> i = world.getSystem(ProjValsManager.class).getColorData();
 
         ObjectMap.Entry<Integer, MtPair<EColor, String>> e;
 
@@ -505,19 +528,19 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
     }
 
     public void log_cl(int id) {
-        Color c = world.getSystem(ColorManager.class).get(id);
+        Color c = world.getSystem(ProjValsManager.class).getColor(id);
 
-        console.log(world.getSystem(ColorManager.class).getName(id) + " -> " +
+        console.log(world.getSystem(ProjValsManager.class).getColorName(id) + " -> " +
                 "[#" + c.toIntBits() + "]" + c.toIntBits() + "[]");
 
     }
 
     public void set_cl(int id, int bits) {
-        world.getSystem(ColorManager.class).change(id, new Color(bits));
+        world.getSystem(ProjValsManager.class).changeColor(id, new Color(bits));
     }
 
     public void add_cl(String name) {
-        int id = world.getSystem(ColorManager.class).create(name, Color.MAGENTA);
+        int id = world.getSystem(ProjValsManager.class).createColor(name, Color.MAGENTA);
         log_cl(id);
 
     }

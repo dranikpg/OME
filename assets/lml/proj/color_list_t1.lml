@@ -1,7 +1,7 @@
 <:win
-    dynamic=false
+    dynamic=true
     min=450
-    max=0.7
+    max=0.4
     fullspan=true
     scY=false />
 

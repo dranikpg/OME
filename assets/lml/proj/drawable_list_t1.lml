@@ -1,0 +1,36 @@
+<:win
+    dynamic=true
+    min=600
+    max=0.6
+    fullspan=true
+    scY=false
+/>
+
+<visTable id=root>
+
+    <visTextField
+        growx=true
+        id="search"
+    />
+
+    <:row />
+
+    <visTable
+        growx=true
+        growy=true
+        id=lwt
+    />
+
+</visTable>
+
+<!--
+    1 = textW
+    2 = dwbSite
+    3 = padding
+    4 = list view spacing
+-->
+
+<:assign _1 200 />
+<:assign _2 100 />
+<:assign _3 10 />
+<:assign _4 10 />

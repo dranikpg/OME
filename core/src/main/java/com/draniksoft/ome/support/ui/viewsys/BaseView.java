@@ -60,6 +60,17 @@ public abstract class BaseView {
 	  rtIncs.clear();
     }
 
+    /*
+    	Should be called when a widget wants to notify the parent that its preferred site changed and it requests a new layout
+     */
+    public void invalidateParent() {
+	  if (parent != null) parent.invalidateReq(this);
+    }
+
+    public void invalidateReq(BaseView vw) {
+
+    }
+
     //
 
     public void setParent(BaseView vw) {

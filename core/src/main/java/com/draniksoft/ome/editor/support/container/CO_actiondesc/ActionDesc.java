@@ -8,13 +8,14 @@ public abstract class ActionDesc {
 
     public abstract String getDesc();
 
-    public boolean quickA;
-
     public static class BaseCodes {
 
         public static final short ACTION_CREATE = 1;
         public static final short ACTION_DELETE = 2;
         public static final short ACTION_RESET = 3;
+
+	  // starting at 700+
+	  public static final short ACTION_EDITVW_CREATE = 5;
 
     }
 }

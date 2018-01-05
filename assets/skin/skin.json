@@ -221,6 +221,15 @@
       name: ed
       color: grey
     }
+    clear: {
+      name: w
+      color: {
+        r: 1
+        g: 1
+        b: 1
+        a: 0
+      }
+    }
   }
   com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
     default: {
@@ -423,8 +432,21 @@
       downFontColor: primary_dark
       overFontColor: primary_dark
     }
+    btml_big: {
+      down: btml_primary_dark
+      up: btml_black
+      over: btml_primary_dark
+      font: big
+      fontColor: black
+      downFontColor: primary_dark
+      overFontColor: primary_dark
+    }
   }
   com.kotcrab.vis.ui.widget.VisImageButton$VisImageButtonStyle: {
+    default: {
+      down: clear
+      up: clear
+    }
     i_undo: {
       imageUp: i_undo
       imageDown: i_undo_grey
@@ -495,10 +517,11 @@
   com.kotcrab.vis.ui.widget.Separator$SeparatorStyle: {
     default: {
       background: ed_primary_dark
-      thickness: 4
+      thickness: 5
     }
-    menu: {
-      thickness: 1
+    small: {
+      background: ed_primary_dark
+      thickness: 2
     }
   }
   com.kotcrab.vis.ui.widget.MultiSplitPane$MultiSplitPaneStyle: {

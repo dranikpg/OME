@@ -7,13 +7,16 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.draniksoft.ome.editor.support.event.base_gfx.ResizeEvent;
+import com.draniksoft.ome.editor.support.event.entityy.SelectionChangeE;
 import com.draniksoft.ome.editor.support.event.workflow.ModeChangeE;
+import com.draniksoft.ome.editor.ui.insp.InspView;
 import com.draniksoft.ome.editor.ui.menu.BottomMenu;
 import com.draniksoft.ome.editor.ui.menu.EditorWin;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.support.load.interfaces.IRunnable;
 import com.draniksoft.ome.support.ui.util.WindowAgent;
+import com.draniksoft.ome.support.ui.viewsys.BaseWinView;
 import com.draniksoft.ome.utils.struct.ResponseListener;
 import com.draniksoft.ome.utils.ui.editorMenu.MenuWinController;
 import net.mostlyoriginal.api.event.common.Subscribe;
@@ -24,7 +27,7 @@ public class UiSystem extends BaseSystem {
     public static class Defaults {
 
         // animation time per screenWidth pixels
-        public static float aTime100PCT = 2f;
+	  public static float aTime100PCT = 0.7f;
     }
 
     @Wire(name = "top_stage")
@@ -103,11 +106,14 @@ public class UiSystem extends BaseSystem {
     }
 
     private void _open(String id, WindowAgent ag) {
-        w.open(id, ag);
+	  w.notifyClosing();
+	  w.open(id, ag);
     }
 
     public void closeWin() {
-        ctr.apply(MenuWinController.TT_RESTORE);
+	  Gdx.app.debug(tag, "Called closewin");
+	  ctr.apply(MenuWinController.TT_RESTORE);
+	  w.notifyClosing();
     }
 
 
@@ -127,6 +133,7 @@ public class UiSystem extends BaseSystem {
     }
 
 
+
     @Subscribe
     public void resized(ResizeEvent e) {
 
@@ -142,6 +149,42 @@ public class UiSystem extends BaseSystem {
             inflateBK();
             m.modeChanged(false);
         }
+    }
+
+    public void openInspector(final int id) {
+
+	  openWin("inspector", new WindowAgent() {
+		@Override
+		public void opened(BaseWinView vw) {
+		    ((InspView) vw).initFor(id);
+		}
+
+		@Override
+		public void notifyClosing() {
+		    Gdx.app.debug(tag, "Inspector is closing ");
+
+		}
+
+		@Override
+		public void closed() {
+
+		}
+	  });
+    }
+
+    @Subscribe
+    public void selChanged(SelectionChangeE e) {
+	  Gdx.app.debug(tag, "Win wget " + w.getViewID());
+	  if (e.n >= 0) {
+		openInspector(e.n);
+	  } else if (w.getViewID() != null && w.getViewID().equals("inspector")) {
+		closeWin();
+	  }
+
+    }
+
+    public float getWinW() {
+	  return w.isOpen() ? w.getWidth() : 0;
     }
 
     public float getStageW() {
@@ -161,8 +204,11 @@ public class UiSystem extends BaseSystem {
     }
 
     public void inflateBK() {
-        Gdx.app.debug(tag, "Inflating bk");
-        closeWin();
+
+	  Gdx.app.debug(tag, "Inflating bk");
+
+	  if (w.isOpen()) closeWin();
+
         if (bkID != null) {
             openWin(bkID);
         }

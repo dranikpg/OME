@@ -75,11 +75,11 @@ public class FileManager extends AppDataManager {
 
 	  JsonValue v = FUtills.r.parse(new FileHandle(new File(f.getAbsolutePath() + "/f.json")));
 
-	  if (!v.has("id")) return;
+	  if (!v.has("ID")) return;
 
 	  FontDao d = new FontDao();
 
-	  d.id = v.getString("id");
+	  d.id = v.getString("ID");
 
 	  d.uri = FUtills.pathToUri(f.getAbsolutePath(), FUtills.STORE_L_LOC);
 
@@ -91,11 +91,11 @@ public class FileManager extends AppDataManager {
 
 	  JsonValue v = FUtills.r.parse(new FileHandle(new File(f.getAbsolutePath() + "/f.json")));
 
-	  if (!v.has("id")) return;
+	  if (!v.has("ID")) return;
 
 	  AssetDDao d = new AssetDDao();
 
-	  d.id = v.getString("id");
+	  d.id = v.getString("ID");
 
 	  d.uri = FUtills.pathToUri(f.getAbsolutePath(), FUtills.STORE_L_LOC);
 

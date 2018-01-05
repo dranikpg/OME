@@ -168,7 +168,7 @@ public class FontManager extends BaseSystem implements LoadSaveManager {
 	  for (JsonValue v : root) {
 		FontDao d = new FontDao();
 
-		d.id = v.getString("id");
+		d.id = v.getString("ID");
 		d.uri = FUtills.pathToUri(d.id, FUtills.STORE_L_INT);
 		d.sysmz = v.has("sysmz") && v.getBoolean("sysmz");
 

@@ -74,7 +74,8 @@ public class EditPathEM extends SimpleEditMode {
 	  _w.getSystem(InputSys.class).setMainIC(ic);
 	  _w.getSystem(InputSys.class).setDefIC(new StebIC());
 
-	  _w.getSystem(UiSystem.class).createBK();
+	  defalteEnv();
+
 	  _w.getSystem(UiSystem.class).openWin("edit_path_em");
 
     }
@@ -84,7 +85,7 @@ public class EditPathEM extends SimpleEditMode {
 	  _w.getSystem(InputSys.class).clearMainIC();
 	  _w.getSystem(InputSys.class).restoreDef();
 
-	  _w.getSystem(UiSystem.class).inflateBK();
+	  returnEnv();
     }
 
     public void recompute(boolean pv) {

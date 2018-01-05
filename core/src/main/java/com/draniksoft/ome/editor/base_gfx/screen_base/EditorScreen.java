@@ -1,4 +1,4 @@
-package com.draniksoft.ome.editor.base_gfx;
+package com.draniksoft.ome.editor.base_gfx.screen_base;
 
 import com.artemis.World;
 import com.badlogic.gdx.Gdx;

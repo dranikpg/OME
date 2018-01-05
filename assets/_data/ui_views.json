@@ -11,23 +11,40 @@
     "lml": "base_ui/bar_show_buttons.lml",
     "class": "§editor.ui.menu.base_addons.BaseShowButtons"
   },
+  "inspector": {
+    "lml": "insp/_insp_mw.lml",
+    "class": "§editor.ui.insp.InspView"
+  },
+  "base_mo_insp": {
+    "lml": "insp/base_mo.lml",
+    "class": "§editor.ui.insp.BaseMOInspView"
+  },
+  "add_comp": {
+    "lml": "edit/add_comp.lml",
+    "class": "§editor.ui.edit.AddCompView"
+  },
+  "color_edit_vw": {
+    "lml": "edit/color_edit_vw.lml",
+    "class": "§editor.ui.edit.ColorEditView",
+    "//desc": "Edits specific color"
+  },
+
+
+
   "proj_base_prop": {
     "lml": "proj/proj_base_prop.lml",
     "class": "§editor.ui.proj.ProjBasePropView",
-    "//desc": ""
+    "//desc": "Name time etc"
   },
   "color_list_t1": {
     "lml": "proj/color_list_t1.lml",
     "class": "§editor.ui.proj.ColorListT1View",
     "//desc": "Lists all colors, offers you to modify them"
   },
-  "color_edit_vw": {
-    "lml": "proj/color_edit_vw.lml",
-    "class": "§editor.ui.proj.ColorEditView",
-    "//desc": "Edits specific color"
+  "drawable_list_t1": {
+    "lml": "proj/drawable_list_t1.lml",
+    "class": "§editor.ui.proj.DrawableListT1View"
   },
-
-
   "em_button_strip": {
     "lml": "addon/em_button_strip.lml",
     "class": "§editor.ui.menu.misc_addons.EMButtonStrip"

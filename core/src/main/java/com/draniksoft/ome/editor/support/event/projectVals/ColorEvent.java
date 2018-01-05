@@ -1,4 +1,4 @@
-package com.draniksoft.ome.editor.support.event.color;
+package com.draniksoft.ome.editor.support.event.projectVals;
 
 import net.mostlyoriginal.api.event.common.Event;
 

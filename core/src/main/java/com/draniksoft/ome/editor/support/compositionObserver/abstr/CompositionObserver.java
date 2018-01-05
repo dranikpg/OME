@@ -21,7 +21,9 @@ public abstract class CompositionObserver {
     }
 
 
-    public int id;
+    public boolean HEAD = false;
+
+    public int ID;
 
     public abstract void init(World w);
 

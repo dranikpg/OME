@@ -9,13 +9,13 @@ import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
+import com.draniksoft.ome.editor.base_gfx.drawable.Drawable;
 import com.draniksoft.ome.editor.base_gfx.drawable.EmptyDrawable;
+import com.draniksoft.ome.editor.base_gfx.drawable.SimpleDrawable;
 import com.draniksoft.ome.editor.manager.drawable.SimpleDrawableMgr;
 import com.draniksoft.ome.main_menu.MainBase;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
@@ -24,11 +24,9 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.kotcrab.vis.ui.VisUI;
 
 import java.io.File;
 
-import static com.draniksoft.ome.utils.FUtills.DrawablePrefix.P_NINEPATCH;
 import static com.draniksoft.ome.utils.FUtills.DrawablePrefix.P_SIMPLE_DW;
 
 /**
@@ -143,10 +141,7 @@ public class FUtills {
 
     public static class DrawablePrefix {
         public static final String P_EMPTY = "E:";
-	  public static final String P_SKINSRC = "K:";
 	  public static final String P_SIMPLE_DW = "S:";
-	  public static final String P_NINEPATCH = "P:";
-	  public static final String P_ANIM = "A:";
     }
 
     private static NinePatch fetchNinePatch(TextureAtlas.AtlasRegion region) {
@@ -164,33 +159,20 @@ public class FUtills {
         return patch;
     }
 
-    private static TextureAtlas.AtlasRegion fetchAtlasR(String id) {
+    public static TextureAtlas.AtlasRegion fetchAtlasR(String id) {
 
         return MainBase.engine.getSystem(SimpleDrawableMgr.class).getRegion(id);
 
     }
 
 
-    public static Drawable getSkinDwb(String name) {
-        if (name.startsWith(P_SIMPLE_DW)) {
-            return VisUI.getSkin().getDrawable(name.substring(2));
-        } else if (name.startsWith(P_NINEPATCH)) {
-            return VisUI.getSkin().getDrawable(name.substring(2));
-        }
-        return null;
-    }
-
 
     public static Drawable fetchDrawable(String data) {
-        if (data.startsWith(DrawablePrefix.P_SKINSRC)) {
-            return getSkinDwb(data.substring(2));
-        } else if (data.startsWith(DrawablePrefix.P_EMPTY)) {
+        if (data.startsWith(DrawablePrefix.P_EMPTY)) {
             return new EmptyDrawable();
         } else if (data.startsWith(P_SIMPLE_DW)) {
-            return new TextureRegionDrawable(fetchAtlasR(data.substring(2)));
+            return SimpleDrawable.parse(data.substring(2));
         }
-
-
         return null;
     }
 

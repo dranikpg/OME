@@ -1,4 +1,4 @@
-package com.draniksoft.ome.editor.ui.proj;
+package com.draniksoft.ome.editor.ui.edit;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.draniksoft.ome.editor.manager.ColorManager;
+import com.draniksoft.ome.editor.manager.ProjValsManager;
 import com.draniksoft.ome.editor.support.actions.color.RemoveColorA;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.support.ui.viewsys.BaseWinView;
@@ -22,6 +22,7 @@ import com.kotcrab.vis.ui.widget.color.ColorPickerListener;
 
 public class ColorEditView extends BaseWinView {
 
+    private static final String tag = "ColorEditView";
 
     VisTextField nameF;
     VisTextButton delB;
@@ -31,8 +32,13 @@ public class ColorEditView extends BaseWinView {
 
     int curID;
 
+    boolean needCU = false;
+
     public void initfor(int id) {
 	  this.curID = id;
+
+	  Gdx.app.debug(tag, "Intiting for " + id);
+
 	  picker.setVisible(id >= 0);
 
 	  if (id < 0) {
@@ -40,12 +46,14 @@ public class ColorEditView extends BaseWinView {
 		return;
 	  }
 
+	  needCU = true;
+
 	  getActor().setVisible(true);
 
-	  MtPair<EColor, String> p = _w.getSystem(ColorManager.class).getP(id);
+	  MtPair<EColor, String> p = _w.getSystem(ProjValsManager.class).getColorPair(id);
 	  nameF.setText(p.V());
 
-	  _w.getSystem(ColorManager.class).reg(c, id);
+	  _w.getSystem(ProjValsManager.class).registerColor(c, id);
 	  picker.setColor(c);
 
     }
@@ -68,7 +76,17 @@ public class ColorEditView extends BaseWinView {
 	  Gdx.app.postRunnable(new Runnable() {
 		@Override
 		public void run() {
-		    picker = new BasicColorPicker();
+		    picker = new BasicColorPicker() {
+			  @Override
+			  public void act(float delta) {
+				super.act(delta);
+				if (needCU && curID > 0) {
+				    _w.getSystem(ProjValsManager.class).registerColor(c, curID);
+				    picker.setColor(c);
+				    needCU = false;
+				}
+			  }
+		    };
 
 		    picker.setListener(new ColorPickerListener() {
 			  @Override
@@ -78,7 +96,7 @@ public class ColorEditView extends BaseWinView {
 
 			  @Override
 			  public void changed(Color newColor) {
-				_w.getSystem(ColorManager.class).change(curID, newColor);
+				_w.getSystem(ProjValsManager.class).changeColor(curID, newColor);
 			  }
 
 			  @Override
@@ -88,7 +106,7 @@ public class ColorEditView extends BaseWinView {
 
 			  @Override
 			  public void finished(Color newColor) {
-				_w.getSystem(ColorManager.class).change(curID, newColor);
+				_w.getSystem(ProjValsManager.class).changeColor(curID, newColor);
 			  }
 		    });
 		}
@@ -107,7 +125,7 @@ public class ColorEditView extends BaseWinView {
 	  nameF.setTextFieldListener(new VisTextField.TextFieldListener() {
 		@Override
 		public void keyTyped(VisTextField textField, char c) {
-		    if (c == '\n') _w.getSystem(ColorManager.class).changeName(nameF.getText(), curID);
+		    if (c == '\n') _w.getSystem(ProjValsManager.class).changeColorName(nameF.getText(), curID);
 		}
 	  });
 

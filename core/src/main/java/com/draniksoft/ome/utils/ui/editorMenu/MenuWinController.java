@@ -34,6 +34,7 @@ public class MenuWinController {
 
 
     public void apply(byte tt) {
+	  Gdx.app.debug(tag, "Applyin " + tt);
 	  if (tt == TT_REFRESH) {
 		applyBasics();
 	  } else if (tt == TT_RESIZE) {
@@ -45,10 +46,11 @@ public class MenuWinController {
 
     private void restore() {
 
-	  Gdx.app.debug(tag, "WinC restorin");
+	  Gdx.app.debug(tag, "Closing win " + w.getViewID());
 	  float tx = w.getWidth() / sys.getStageW() * UiSystem.Defaults.aTime100PCT;
 	  float ty = Math.abs(m.getActor().getY()) / sys.getStageH() * UiSystem.Defaults.aTime100PCT;
 
+	  final String tag = w.getViewID();
 	  w.addAction(Actions.sequence(
 		    Actions.moveTo(sys.getStageW(), w.getY(), tx),
 		    new Action() {
@@ -56,6 +58,8 @@ public class MenuWinController {
 			  public boolean act(float delta) {
 				w.clearWin();
 				w.setVisible(false);
+
+				Gdx.app.debug(MenuWinController.tag, "Win close action completed {" + tag + "}");
 				return true;
 			  }
 		    }
@@ -108,15 +112,21 @@ public class MenuWinController {
 
     private void applyBasics() {
 
-	  m.getActor().getActions().clear();
-	  w.getActions().clear();
+	  m.getActor().clearActions();
+	  w.clearActions();
 
 	  menuHide = w.cfg_menuH;
 	  menuReplace = w.cfg_menuR;
+
 	  w.setVisible(true);
 
+	  w.recalc();
 	  float newW = w.getCalcWidth();
 	  float padd = sys.getStageW() - w.getCalcWidth();
+
+
+	  Gdx.app.debug(tag, "Applyin basics with neww " + newW);
+
 
 	  float tx = Math.abs(w.getX() - padd) / sys.getStageW() * UiSystem.Defaults.aTime100PCT;
 
@@ -125,7 +135,7 @@ public class MenuWinController {
 	  } else if (menuReplace) {
 		m.getActor().addAction(Actions.sizeTo(padd, m.getActor().getHeight(), tx));
 	  } else {
-		m.getActor().addAction(Actions.sizeTo(sys.getStageW(), m.getActor().getHeight(), tx));
+		m.getActor().addAction(Actions.sizeTo(sys.getStageW(), m.getActor().getHeight(), 0));
 	  }
 
 	  m.setHidden(menuHide);
@@ -138,10 +148,15 @@ public class MenuWinController {
 		w.setHeight(sys.getStageH() - m.getActor().getHeight());
 	  }
 
-	  w.addAction(Actions.parallel(
-		    Actions.moveTo(padd, w.getY(), tx),
-		    Actions.sizeTo(newW, w.getHeight(), tx)
-	  ));
+	  w.setLayoutEnabled(true);
+	  w.addAction(
+		    Actions.sequence(
+				Actions.parallel(
+					  Actions.moveTo(padd, w.getY(), tx),
+					  Actions.sizeTo(newW, w.getHeight(), tx)
+				)
+		    ));
+
     }
 
 }

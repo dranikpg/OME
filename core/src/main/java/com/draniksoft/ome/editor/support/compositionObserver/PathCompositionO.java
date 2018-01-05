@@ -23,6 +23,8 @@ public class PathCompositionO extends SimpleCompositionObserver {
 	  public static final int CREATE = ActionDesc.BaseCodes.ACTION_CREATE;
 	  public static final int REMOVE = ActionDesc.BaseCodes.ACTION_DELETE;
 
+	  public static final int CREATE_VW = ActionDesc.BaseCodes.ACTION_EDITVW_CREATE;
+
 	  public static final int EDIT_M = 11;
 
 	  public static final int RECALC = 21;
@@ -82,9 +84,9 @@ public class PathCompositionO extends SimpleCompositionObserver {
     @Override
     public boolean isAviab(int ac, int e) {
 	  if (matches(e)) {
-		return true;
+		return ac != CREATE_VW;
 	  } else {
-		return ac == CREATE;
+		return ac == CREATE || ac == CREATE_VW;
 	  }
     }
 

@@ -1,0 +1,31 @@
+<:win
+    dynamic=true
+    min=400
+    max=0.5
+    fullspan=true
+    scY=false/>
+
+<visTable id=root>
+
+    <visScrollPane id=pane grow=true row=true>
+
+        <visTable>
+
+            <container growx=true id=headC row=true/>
+
+            <separator growx=true row=true/>
+
+            <visTable growx=true id=content row=true/>
+
+        </visTable>
+
+    </visScrollPane>
+
+    <visTable id=btm growx=true padBottom=5>
+        <visTextButton style=btml_big onChange=$l.addclick >
+            @add_comp
+        </visTextButton>
+    </visTable>
+
+
+</visTable>

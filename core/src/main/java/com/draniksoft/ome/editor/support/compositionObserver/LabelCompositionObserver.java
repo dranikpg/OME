@@ -10,8 +10,7 @@ import com.draniksoft.ome.editor.support.compositionObserver.abstr.SimpleComposi
 import com.draniksoft.ome.editor.support.container.CO_actiondesc.ActionDesc;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 
-import static com.draniksoft.ome.editor.support.compositionObserver.LabelCompositionObserver.ActionID.CREATE;
-import static com.draniksoft.ome.editor.support.compositionObserver.LabelCompositionObserver.ActionID.SET_TEXT;
+import static com.draniksoft.ome.editor.support.compositionObserver.LabelCompositionObserver.ActionID.*;
 
 public class LabelCompositionObserver extends SimpleCompositionObserver {
 
@@ -19,6 +18,7 @@ public class LabelCompositionObserver extends SimpleCompositionObserver {
 	  public static final int CREATE = ActionDesc.BaseCodes.ACTION_CREATE;
 	  public static final int DELETE = ActionDesc.BaseCodes.ACTION_CREATE;
 	  public static final int RESET = ActionDesc.BaseCodes.ACTION_RESET;
+	  public static final int CREATE_VW = ActionDesc.BaseCodes.ACTION_EDITVW_CREATE;
 
 	  public static final int SET_TEXT = 11;
 	  public static final int SET_COLOR = 12;
@@ -26,6 +26,8 @@ public class LabelCompositionObserver extends SimpleCompositionObserver {
 	  public static final int REFRESH = 13;
 
     }
+
+    IntMap<ActionDesc> desc;
 
     @Override
     protected void on_selchanged(boolean previousActivity, int previd) {
@@ -39,7 +41,13 @@ public class LabelCompositionObserver extends SimpleCompositionObserver {
 
     @Override
     protected void _init() {
+	  desc = new IntMap<ActionDesc>();
 
+
+	  if (__ds == null) return;
+	  for (ActionDesc d : __ds) {
+		desc.put(d.code, d);
+	  }
     }
 
     @Override
@@ -49,12 +57,12 @@ public class LabelCompositionObserver extends SimpleCompositionObserver {
 
     @Override
     public IntMap<ActionDesc> getDesc() {
-	  return null;
+	  return desc;
     }
 
     @Override
     public boolean isAviab(int ac, int e) {
-	  if (ac == CREATE) {
+	  if (ac == CREATE || ac == CREATE_VW) {
 		return !matches(e);
 	  } else {
 		return matches(e);
@@ -68,7 +76,7 @@ public class LabelCompositionObserver extends SimpleCompositionObserver {
 
     @Override
     public ActionDesc getDesc(int ac) {
-	  return null;
+	  return desc.get(ac);
     }
 
     @Override

@@ -3,12 +3,14 @@ package com.draniksoft.ome.editor.ui.proj;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.draniksoft.ome.editor.manager.ColorManager;
+import com.draniksoft.ome.editor.manager.ProjValsManager;
 import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
-import com.draniksoft.ome.editor.support.event.color.ColorEvent;
+import com.draniksoft.ome.editor.support.event.projectVals.ColorEvent;
+import com.draniksoft.ome.editor.ui.edit.ColorEditView;
 import com.draniksoft.ome.support.ui.viewsys.BaseView;
 import com.draniksoft.ome.support.ui.viewsys.BaseWinView;
 import com.draniksoft.ome.ui_addons.ColoredCirlceWget;
@@ -68,6 +70,29 @@ public class ColorListT1View extends BaseWinView {
 
 	  pane.setScrollingDisabled(false, true);
 
+
+	  root.addListener(new InputListener() {
+
+		@Override
+		public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+		    super.enter(event, x, y, pointer, fromActor);
+		    pane.getStage().setScrollFocus(pane);
+		}
+
+		@Override
+		public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+		    super.exit(event, x, y, pointer, toActor);
+		    if (pane.getStage() != null) pane.getStage().setScrollFocus(null);
+		}
+
+		@Override
+		public boolean scrolled(InputEvent event, float x, float y, int amount) {
+		    super.scrolled(event, x, y, amount);
+		    return true;
+		}
+	  });
+
+
 	  _w.getSystem(OmeEventSystem.class).registerEvents(this);
 
 
@@ -77,10 +102,14 @@ public class ColorListT1View extends BaseWinView {
 
     @Subscribe
     public void colorEV(ColorEvent ev) {
+	  Gdx.app.debug(tag, "Got event");
 	  if (active) {
 		if (ev instanceof ColorEvent.ColorAddedEvent) {
-		    group.addActor(new LWTable(_w.getSystem(ColorManager.class).getP(ev.id)));
-		    recalc();
+		    LWTable t = new LWTable(_w.getSystem(ProjValsManager.class).getColorPair(ev.id));
+		    group.addActor(t);
+
+		    setSelected(ev.id, t);
+
 		} else {
 		    for (Actor a : group.getChildren()) {
 			  if (a instanceof LWTable && ((LWTable) a).getId() == ev.id) {
@@ -88,6 +117,14 @@ public class ColorListT1View extends BaseWinView {
 			  }
 		    }
 		}
+
+		if (ev instanceof ColorEvent.ColorRemovedEvent || ev instanceof ColorEvent.ColorAddedEvent) {
+		    root.invalidateHierarchy();
+		    pane.setScrollPercentX(1);
+		}
+
+
+		invalidateParent();
 
 	  } else {
 		neeedU = true;
@@ -100,7 +137,7 @@ public class ColorListT1View extends BaseWinView {
 	  Gdx.app.debug(tag, "Rebuilding");
 
 	  group.clear();
-	  ObjectMap.Entries<Integer, MtPair<EColor, String>> i = _w.getSystem(ColorManager.class).getDataI();
+	  ObjectMap.Entries<Integer, MtPair<EColor, String>> i = _w.getSystem(ProjValsManager.class).getColorData();
 	  ObjectMap.Entry<Integer, MtPair<EColor, String>> e;
 	  while (i.hasNext()) {
 		e = i.next();
@@ -142,7 +179,7 @@ public class ColorListT1View extends BaseWinView {
 		name = new VisLabel("", sel ? "big_primary_dark" : "big");
 		name.setEllipsis(true);
 
-		wget = new ColoredCirlceWget(_w.getSystem(ColorManager.class).newMgnd(id));
+		wget = new ColoredCirlceWget(_w.getSystem(ProjValsManager.class).obtainColor(id));
 
 		add(wget).padRight(labelPad);
 		add(name).left().width(cellw);
@@ -155,23 +192,23 @@ public class ColorListT1View extends BaseWinView {
 	  }
 
 	  public void rebuild() {
-		if (!_w.getSystem(ColorManager.class).has(id)) {
+		if (!_w.getSystem(ProjValsManager.class).hasColor(id)) {
 		    setSelected(-1);
 		    group.removeActor(this, true);
 		} else {
-		    name.setText(_w.getSystem(ColorManager.class).getName(id));
+		    name.setText(_w.getSystem(ProjValsManager.class).getColorName(id));
 		}
 	  }
 
 	  public void deselect() {
 		sel = false;
-		if (_w.getSystem(ColorManager.class).has(id)) collosalReb();
+		if (_w.getSystem(ProjValsManager.class).hasColor(id)) setBackground("grey");
 	  }
 
 
 	  public void select() {
 		sel = true;
-		collosalReb();
+		setBackground("w");
 	  }
     }
 
@@ -189,7 +226,6 @@ public class ColorListT1View extends BaseWinView {
 	  }
 	  editV.initfor(id);
     }
-
 
     @Override
     public void opened() {
@@ -213,6 +249,8 @@ public class ColorListT1View extends BaseWinView {
 
     @Override
     public void obtainIncld(String name, BaseView vw) {
+	  super.obtainIncld(name, vw);
+
 	  editV = (ColorEditView) vw;
 	  editV.initfor(-1);
 

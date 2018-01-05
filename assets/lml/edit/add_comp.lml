@@ -1,0 +1,32 @@
+<:win
+    dynamic=true
+    max=0.5
+    min=500
+    fullspan=false />
+
+<!--
+    1 = spacing between rows
+-->
+
+<:assign _1 10 />
+
+<visTable id=root>
+
+    <visTextButton onChange=l.cancel style=btml_big expandx=true align=left padTop={_1}>
+
+        @cancel
+
+        </visTextButton>
+
+     <:row />
+
+    <separator fillx=true expandx=true padBottom={_1} padTop={_1}/>
+
+    <:row />
+
+    <visTable id=cnt growY=true>
+
+        </visTable>
+
+</visTable>
+

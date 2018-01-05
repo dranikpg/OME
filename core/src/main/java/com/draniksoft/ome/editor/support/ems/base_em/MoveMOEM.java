@@ -11,6 +11,7 @@ import com.draniksoft.ome.editor.support.input.back.StebIC;
 import com.draniksoft.ome.editor.support.input.base_mo.MoveMOIC;
 import com.draniksoft.ome.editor.support.render.base_mo.MoveMORenderer;
 import com.draniksoft.ome.editor.support.render.core.OverlayPlaces;
+import com.draniksoft.ome.editor.systems.gfx_support.CameraSys;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.editor.systems.pos.PositionSystem;
 import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
@@ -63,6 +64,8 @@ public class MoveMOEM implements EditMode {
 	  _w.getSystem(InputSys.class).setMainIC(ic);
 	  _w.getSystem(InputSys.class).setDefIC(new StebIC());
 
+	  _w.getSystem(CameraSys.class).createBK();
+
 	  _w.getSystem(OmeEventSystem.class).registerEvents(this);
 
 	  _w.getSystem(UiSystem.class).createBK();
@@ -74,10 +77,14 @@ public class MoveMOEM implements EditMode {
 		}
 
 		@Override
-		public void closed() {
+		public void notifyClosing() {
 
 		}
 
+		@Override
+		public void closed() {
+
+		}
 	  });
 
     }
@@ -127,6 +134,8 @@ public class MoveMOEM implements EditMode {
 
         if (easyQ) return;
 
+
+	  _w.getSystem(CameraSys.class).createBK();
 	  _w.getSystem(UiSystem.class).inflateBK();
 
 	  _w.getSystem(InputSys.class).restoreDef();

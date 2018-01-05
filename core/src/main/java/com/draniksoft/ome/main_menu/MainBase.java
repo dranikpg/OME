@@ -4,7 +4,7 @@ import com.artemis.World;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.draniksoft.ome.editor.base_gfx.EditorScreen;
+import com.draniksoft.ome.editor.base_gfx.screen_base.EditorScreen;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.mgmnt_base.base.AppDataManager;
 import com.draniksoft.ome.support.load.IntelligentLoader;

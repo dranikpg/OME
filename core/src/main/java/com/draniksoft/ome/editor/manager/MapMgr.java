@@ -110,7 +110,7 @@ public class MapMgr extends BaseSystem implements LoadSaveManager {
 	  IntBag aff = world.getAspectSubscriptionManager().get(Aspect.all(MapC.class)).getEntities();
 
 	  /*for (int e : aff.getData()) {
-		world.delete(e);
+		world.deleteColor(e);
 	  }*/
 
 	  loadMap(AppDO.I.F().getTmpDir().getAbsolutePath() + "/data/m.png");

@@ -12,7 +12,7 @@ public class PathRunTimeC extends Component {
 
     /**
      * Idx -> index of the path THAT HAS NOT BEEN FULLY PROCESSED (can be -1 if there is no such matching for global T)
-     * . In case of time change the new index should be found
+     * . In case of time changeColor the new index should be found
      */
 
     public int idx;
