@@ -1,0 +1,45 @@
+<:win dynamic=true min=0.5 fullspan=true />
+
+<visTable id=root>
+
+    <visSplitPane expand=true fill=true>
+
+        <visTable>
+
+            <container minsize=100 padBottom=20 row=true>
+
+                <visImage id=fullimg style=clear />
+
+            </container>
+
+            <visScrollPane growy=true expandx=true align=left row=true>
+
+                <visTree id=tree>
+
+                </visTree>
+
+            </visScrollPane>
+
+            <separator growx=true row=true />
+
+            <visTable growx=true padBottom=20>
+
+                <visTextButton text=addLeaf style=btml onClick=l.leaf_add padRight=20 />
+
+                <visTextButton text=addGroup style=btml onClick=l.group_add  />
+
+            </visTable>
+
+        </visTable>
+
+
+        <visTable id=edit>
+
+
+        </visTable>
+
+
+    </visSplitPane>
+
+</visTable>
+

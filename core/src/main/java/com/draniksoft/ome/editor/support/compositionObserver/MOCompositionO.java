@@ -10,12 +10,17 @@ import com.draniksoft.ome.editor.support.actions.mapO.MoveMOA;
 import com.draniksoft.ome.editor.support.compositionObserver.abstr.SimpleCompositionObserver;
 import com.draniksoft.ome.editor.support.container.CO_actiondesc.ActionDesc;
 import com.draniksoft.ome.editor.support.container.EM_desc.EditModeDesc;
+import com.draniksoft.ome.editor.support.input.back.SelectIC;
+import com.draniksoft.ome.editor.support.input.back.TimedSelectIC;
 import com.draniksoft.ome.editor.support.render.def.SelectionRenderer;
+import com.draniksoft.ome.editor.systems.gfx_support.CameraSys;
 import com.draniksoft.ome.editor.systems.pos.PositionSystem;
 import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
+import com.draniksoft.ome.editor.systems.support.InputSys;
 import com.draniksoft.ome.editor.systems.support.flows.EditorSystem;
 import com.draniksoft.ome.support.ui.util.CompObViewIds;
+import com.draniksoft.ome.utils.cam.Target;
 
 import static com.draniksoft.ome.editor.support.compositionObserver.MOCompositionO.ActionCodes.*;
 
@@ -41,11 +46,13 @@ public class MOCompositionO extends SimpleCompositionObserver {
 	  public static final int SYNC_R_M = 13;
 
 
+
         // 20 -> 30 Quick EM launcher
 
         public static final int MOVE_QEM = 20;
 
 
+	  public static final int FOCUS_SEL = 31;
 
     }
 
@@ -64,12 +71,26 @@ public class MOCompositionO extends SimpleCompositionObserver {
             }
             r.e = _selE;
 
+		focusOnSel();
+
+		_w.getSystem(InputSys.class).setDefIC(new TimedSelectIC());
+
         } else {
             if (previousActivity) {
                 rSys.removeRdr(r);
             }
+
+		_w.getSystem(InputSys.class).setDefIC(new SelectIC());
+
         }
         _w.getSystem(EditorSystem.class).getEditModeDesc(EditModeDesc.IDS.moveMO).aviabT = isSelActive() ? EditModeDesc.AVAILABLE : EditModeDesc.AV_HIDDEN;
+    }
+
+    private void focusOnSel() {
+	  Target.EntityPosTarget t = new Target.EntityPosTarget();
+	  t._e = _selE;
+	  t.ps = _w.getSystem(PositionSystem.class);
+	  _w.getSystem(CameraSys.class).setTarget(t);
     }
 
     @Override
@@ -162,6 +183,8 @@ public class MOCompositionO extends SimpleCompositionObserver {
 
 		_w.getSystem(PositionSystem.class).resetPos(_e);
 
+	  } else if (id == FOCUS_SEL) {
+		if (_selE > 0) focusOnSel();
 	  }
     }
 

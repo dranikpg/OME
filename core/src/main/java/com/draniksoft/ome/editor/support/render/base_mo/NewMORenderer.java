@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.draniksoft.ome.editor.manager.drawable.SimpleDrawableMgr;
+import com.draniksoft.ome.editor.manager.drawable.SimpleAssMgr;
 import com.draniksoft.ome.editor.support.render.core.OverlayRendererI;
 
 public class NewMORenderer implements OverlayRendererI {
@@ -29,7 +29,7 @@ public class NewMORenderer implements OverlayRendererI {
 
     private void checkD() {
 
-	  TextureRegion r = _w.getSystem(SimpleDrawableMgr.class).getRegion("i_casB@mapTile@99");
+	  TextureRegion r = _w.getSystem(SimpleAssMgr.class).getRegion("i_casB@mapTile@99");
 
         if (r == null) return;
 
@@ -37,7 +37,7 @@ public class NewMORenderer implements OverlayRendererI {
         w = d.getRegionWidth();
         h = d.getRegionHeight();
 
-        Gdx.app.debug(tag, "Collected drawable");
+	  Gdx.app.debug(tag, "Collected dwb_typevw");
 
 
     }

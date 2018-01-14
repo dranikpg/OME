@@ -3,7 +3,7 @@ package com.draniksoft.ome.editor.ui.insp;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
-import com.draniksoft.ome.editor.base_gfx.drawable.GdxCompatibleDrawable;
+import com.draniksoft.ome.editor.base_gfx.drawable.utils.GdxCompatibleDrawable;
 import com.draniksoft.ome.editor.components.tps.MObjectC;
 import com.draniksoft.ome.editor.support.container.EM_desc.EditModeDesc;
 import com.draniksoft.ome.editor.systems.support.flows.EditorSystem;

@@ -1,0 +1,5 @@
+<visTable id=root>
+
+</visTable>
+
+<:include name=l id=asset_list_hc />

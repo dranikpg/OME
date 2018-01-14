@@ -2,6 +2,7 @@ package com.draniksoft.ome.editor.systems.support
 
 import com.artemis.BaseSystem
 import com.artemis.annotations.Wire
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.utils.viewport.Viewport
@@ -54,6 +55,7 @@ class InputSys : BaseSystem(), InputProcessor {
     }
 
     fun restoreDef() {
+        Gdx.app.debug(tag, "Def restore")
         setDefIC(SelectIC())
     }
 

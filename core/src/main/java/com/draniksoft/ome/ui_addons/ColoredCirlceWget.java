@@ -5,13 +5,15 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.Layout;
-import com.draniksoft.ome.utils.struct.EColor;
+import com.draniksoft.ome.editor.base_gfx.color.ColorProvider;
+import com.draniksoft.ome.editor.base_gfx.color.LinkColor;
+import com.draniksoft.ome.editor.base_gfx.color.RootColorProvider;
 import com.kotcrab.vis.ui.VisUI;
 
 public class ColoredCirlceWget extends Actor implements Layout {
 
     Drawable d;
-    EColor c;
+    ColorProvider c;
 
     Color tmpC;
 
@@ -20,12 +22,12 @@ public class ColoredCirlceWget extends Actor implements Layout {
 	  tmpC = new Color();
     }
 
-    public ColoredCirlceWget(EColor c) {
+    public ColoredCirlceWget(RootColorProvider c) {
 	  this();
 	  this.c = c;
     }
 
-    public void setC(EColor c) {
+    public void setC(LinkColor c) {
 	  this.c = c;
     }
 
@@ -40,8 +42,8 @@ public class ColoredCirlceWget extends Actor implements Layout {
 
 	  Color bc = batch.getColor();
 
-	  tmpC.set(c);
-	  tmpC.a = Math.min(parentAlpha, c.a);
+	  c.get(tmpC);
+	  tmpC.a = Math.min(parentAlpha, tmpC.a);
 	  batch.setColor(tmpC);
 
 	  d.draw(batch, getX(), getY(), getWidth(), getHeight());

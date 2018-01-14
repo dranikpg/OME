@@ -1,8 +1,10 @@
-package com.draniksoft.ome.editor.base_gfx.drawable;
+package com.draniksoft.ome.editor.base_gfx.drawable.group;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.utils.JsonValue;
+import com.draniksoft.ome.editor.base_gfx.drawable.utils.Drawable;
 
 public class AnimatedDrawable implements Drawable {
 
@@ -22,8 +24,8 @@ public class AnimatedDrawable implements Drawable {
     }
 
     @Override
-    public String serialize() {
-	  return null;
+    public void serialize(JsonValue value) {
+	  return;
     }
 
 

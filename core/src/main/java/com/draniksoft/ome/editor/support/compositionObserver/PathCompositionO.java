@@ -13,6 +13,7 @@ import com.draniksoft.ome.editor.support.container.EM_desc.EditModeDesc;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.flows.EditorSystem;
 import com.draniksoft.ome.editor.systems.time.ObjTimeCalcSys;
+import com.draniksoft.ome.support.ui.util.CompObViewIds;
 import com.draniksoft.ome.utils.struct.ResponseListener;
 
 import static com.draniksoft.ome.editor.support.compositionObserver.PathCompositionO.ActIDs.*;
@@ -145,11 +146,11 @@ public class PathCompositionO extends SimpleCompositionObserver {
 
     @Override
     public boolean isViewAv(short id) {
-	  return false;
+	  return id == CompObViewIds.VIEW_INSPECTOR;
     }
 
     @Override
     public String getViewID(short id) {
-	  return null;
+	  return "path_insp";
     }
 }

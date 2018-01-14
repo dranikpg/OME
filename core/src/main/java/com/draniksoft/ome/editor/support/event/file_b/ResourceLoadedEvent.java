@@ -13,7 +13,7 @@ public class ResourceLoadedEvent implements Event {
     public String id;
 
 
-    public static int TYPE_DWB = 1;
+    public static int TYPE_ASSEt = 1;
     public static int TYPE_FONT = 2;
 
 }

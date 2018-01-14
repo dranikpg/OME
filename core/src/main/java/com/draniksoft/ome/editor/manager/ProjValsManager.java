@@ -1,14 +1,15 @@
 package com.draniksoft.ome.editor.manager;
 
 import com.artemis.BaseSystem;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.draniksoft.ome.editor.base_gfx.drawable.Drawable;
-import com.draniksoft.ome.editor.base_gfx.drawable.EmptyDrawable;
-import com.draniksoft.ome.editor.base_gfx.drawable.LinkedDrawable;
+import com.draniksoft.ome.editor.base_gfx.color.ColorProvider;
+import com.draniksoft.ome.editor.base_gfx.color.LinkColor;
+import com.draniksoft.ome.editor.base_gfx.color.LinkDestColorProvider;
+import com.draniksoft.ome.editor.base_gfx.drawable.simple.EmptyDrawable;
+import com.draniksoft.ome.editor.base_gfx.drawable.simple.LinkedDrawable;
+import com.draniksoft.ome.editor.base_gfx.drawable.utils.Drawable;
 import com.draniksoft.ome.editor.load.LoadSaveManager;
 import com.draniksoft.ome.editor.load.ProjectLoader;
 import com.draniksoft.ome.editor.load.ProjectSaver;
@@ -16,7 +17,6 @@ import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.projectVals.ColorEvent;
 import com.draniksoft.ome.editor.support.event.projectVals.DrawableEvent;
 import com.draniksoft.ome.support.load.IntelligentLoader;
-import com.draniksoft.ome.utils.struct.EColor;
 import com.draniksoft.ome.utils.struct.MtPair;
 
 import java.util.Iterator;
@@ -116,14 +116,14 @@ public class ProjValsManager extends BaseSystem implements LoadSaveManager {
     /*  COLOR PART */
 
 
-    IntMap<Array<EColor>> managedColors;
-    ObjectMap<Integer, MtPair<EColor, String>> colorData;
+    IntMap<Array<LinkColor>> managedColors;
+    ObjectMap<Integer, MtPair<LinkDestColorProvider, String>> colorData;
 
     int colorIdx = 0;
 
     private void initColorData() {
-	  colorData = new ObjectMap<Integer, MtPair<EColor, String>>();
-	  managedColors = new IntMap<Array<EColor>>();
+	  colorData = new ObjectMap<Integer, MtPair<LinkDestColorProvider, String>>();
+	  managedColors = new IntMap<Array<LinkColor>>();
     }
 
     public String getColorName(int id) {
@@ -135,11 +135,11 @@ public class ProjValsManager extends BaseSystem implements LoadSaveManager {
 	  if (ET) world.getSystem(OmeEventSystem.class).dispatch(new ColorEvent.ColorNameChangeE(id));
     }
 
-    public MtPair<EColor, String> getColorPair(int id) {
+    public MtPair<LinkDestColorProvider, String> getColorPair(int id) {
 	  return colorData.get(id);
     }
 
-    public EColor getColor(int id) {
+    public ColorProvider getColor(int id) {
 	  return colorData.get(id).K();
     }
 
@@ -147,82 +147,35 @@ public class ProjValsManager extends BaseSystem implements LoadSaveManager {
 	  return colorData.containsKey(id);
     }
 
-    public void changeColor(int id, Color cc) {
-	  colorData.get(id).K().set(cc);
-	  for (Color c : managedColors.get(id)) {
-		c.set(cc);
+    public ColorProvider getColorProvider(int id) {
+	  return colorData.get(id).K();
+    }
+
+    public void register(LinkColor c, int id) {
+	  if (c.id >= 0) {
+		managedColors.get(id).removeValue(c, true);
 	  }
-    }
-
-    public int createColor() {
-	  return createColor(null);
-    }
-
-    public int createColor(String name) {
-	  EColor c = new EColor();
-	  c.id = ++colorIdx;
-	  if (name == null) name = String.valueOf(c.id);
-	  colorData.put(colorIdx, MtPair.P(c, name));
-	  managedColors.put(colorIdx, new Array<EColor>());
-
-	  if (ET) world.getSystem(OmeEventSystem.class).dispatch(new ColorEvent.ColorAddedEvent(colorIdx));
-
-	  return colorIdx;
-    }
-
-    public int createColor(String name, Color c) {
-	  int id = createColor(name);
-	  changeColor(id, c);
-	  return id;
-    }
-
-    public Array<EColor> deleteColor(int id) {
-	  Array<EColor> ar = new Array<EColor>();
-	  colorData.remove(id);
-
-	  for (EColor c : managedColors.get(id)) {
-		ar.add(c);
-		freeColor(c);
-	  }
-
-	  managedColors.get(id).clear();
-	  managedColors.remove(id);
-	  return ar;
-    }
-
-    public void registerColor(EColor c, int id) {
-	  Gdx.app.debug(tag, "Migrating projectVals " + c.id + " to " + id);
-	  if (c.id > 0) {
-		if (managedColors.get(c.id) != null) managedColors.get(c.id).removeValue(c, true);
-	  }
-	  if (id > 0) {
-		c.set(colorData.get(id).K());
-		managedColors.get(id).add(c);
-	  }
+	  c.pv = colorData.get(id).K();
 	  c.id = id;
+	  managedColors.get(id).add(c);
     }
 
-    public EColor obtainColor(int id) {
-	  EColor c = new EColor();
-	  registerColor(c, id);
-	  return c;
+    public void free(LinkColor c) {
+
+	  if (c.id >= 0) {
+		managedColors.get(c.id).removeValue(c, true);
+	  }
+
+	  // TODO : CHANGE REFERENCE
+
     }
 
-    public void freeColor(EColor c) {
-	  registerColor(c, -1);
+
+    public ObjectMap.Entries<Integer, MtPair<LinkDestColorProvider, String>> getColorData() {
+	  return colorData.entries();
     }
 
-    public ObjectMap.Entries<Integer, MtPair<EColor, String>> getColorData() {
-	  return colorData.iterator();
-    }
 
-    public Iterator<IntMap.Entry<Array<EColor>>> getManagerColorsIt() {
-	  return managedColors.iterator();
-    }
-
-    public Array<MtPair<EColor, String>> getColorArray() {
-	  return colorData.values().toArray();
-    }
 
     /* */
 
@@ -240,4 +193,6 @@ public class ProjValsManager extends BaseSystem implements LoadSaveManager {
     public void load(IntelligentLoader il, ProjectLoader ld) {
 
     }
+
+
 }

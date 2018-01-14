@@ -9,21 +9,20 @@ import com.artemis.utils.IntBag;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.draniksoft.ome.editor.base_gfx.drawable.Drawable;
+import com.draniksoft.ome.editor.base_gfx.drawable.utils.Drawable;
 import com.draniksoft.ome.editor.esc_utils.OmeStrategy;
 import com.draniksoft.ome.editor.load.MapLoadBundle;
 import com.draniksoft.ome.editor.manager.FontManager;
 import com.draniksoft.ome.editor.manager.MapMgr;
 import com.draniksoft.ome.editor.manager.ProjValsManager;
 import com.draniksoft.ome.editor.manager.TimeMgr;
-import com.draniksoft.ome.editor.manager.drawable.SimpleDrawableMgr;
+import com.draniksoft.ome.editor.manager.drawable.SimpleAssMgr;
 import com.draniksoft.ome.editor.support.actions.Action;
 import com.draniksoft.ome.editor.support.actions.mapO.ChangeDwbA;
 import com.draniksoft.ome.editor.support.compositionObserver.abstr.CompositionObserver;
@@ -48,13 +47,13 @@ import com.draniksoft.ome.editor.systems.support.flows.WorkflowSys;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.mgmnt_base.impl.ConfigManager;
 import com.draniksoft.ome.support.configs.ConfigDao;
+import com.draniksoft.ome.support.ui.viewsys.BaseView;
 import com.draniksoft.ome.utils.Const;
 import com.draniksoft.ome.utils.Env;
 import com.draniksoft.ome.utils.FUtills;
 import com.draniksoft.ome.utils.cam.Target;
 import com.draniksoft.ome.utils.dao.AssetDDao;
 import com.draniksoft.ome.utils.dao.FontDao;
-import com.draniksoft.ome.utils.struct.EColor;
 import com.draniksoft.ome.utils.struct.MtPair;
 
 import java.lang.reflect.Field;
@@ -399,7 +398,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     public void log_avass() {
 
-        Iterator<AssetDDao> i = world.getSystem(SimpleDrawableMgr.class).getAviabDaoI();
+        Iterator<AssetDDao> i = world.getSystem(SimpleAssMgr.class).getAviabDaoI();
 
         AssetDDao d;
         while (i.hasNext()) {
@@ -414,7 +413,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
         try {
 
-            Iterator<AssetDDao> i = world.getSystem(SimpleDrawableMgr.class).getLoadedDaoI();
+            Iterator<AssetDDao> i = world.getSystem(SimpleAssMgr.class).getLoadedDaoI();
 
             AssetDDao d;
             while (i.hasNext()) {
@@ -429,7 +428,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     public void log_asspc(String id) {
 
-        Array<TextureAtlas.AtlasRegion> rs = world.getSystem(SimpleDrawableMgr.class).getAtlas(id).getRegions();
+        Array<TextureAtlas.AtlasRegion> rs = world.getSystem(SimpleAssMgr.class).getAtlas(id).getRegions();
 
 
         for (TextureAtlas.AtlasRegion r : rs) {
@@ -444,7 +443,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     public void log_assrds() {
 
-        Iterator<ObjectMap.Entry<String, String>> m = world.getSystem(SimpleDrawableMgr.class).getRedirectsI();
+        Iterator<ObjectMap.Entry<String, String>> m = world.getSystem(SimpleAssMgr.class).getRedirectsI();
 
         ObjectMap.Entry<String, String> e;
 
@@ -458,11 +457,11 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     public void load_ass(String id) {
 
-        AssetDDao d = world.getSystem(SimpleDrawableMgr.class).getAviabDao(id);
+        AssetDDao d = world.getSystem(SimpleAssMgr.class).getAviabDao(id);
 
         if (d != null) {
 
-            world.getSystem(SimpleDrawableMgr.class).loadDao(d);
+            world.getSystem(SimpleAssMgr.class).loadDao(d);
 
         }
 
@@ -514,10 +513,10 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
      * Color UTILS
      */
 
-    public void log_cl() {
-        ObjectMap.Entries<Integer, MtPair<EColor, String>> i = world.getSystem(ProjValsManager.class).getColorData();
+    /*public void log_cl() {
+        ObjectMap.Entries<Integer, MtPair<LinkColor, String>> i = world.getSystem(ProjValsManager.class).getColorData();
 
-        ObjectMap.Entry<Integer, MtPair<EColor, String>> e;
+        ObjectMap.Entry<Integer, MtPair<LinkColor, String>> e;
 
         while (i.hasNext()) {
             e = i.next();
@@ -543,7 +542,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
         int id = world.getSystem(ProjValsManager.class).createColor(name, Color.MAGENTA);
         log_cl(id);
 
-    }
+    }*/
 
     /**
      *
@@ -842,6 +841,20 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
     /**
      * UI UTILS
      */
+
+
+    public void log_ui() {
+
+        ObjectMap.Entries<String, BaseView> i = AppDO.I.LML().getVI();
+
+        ObjectMap.Entry<String, BaseView> n;
+
+        while (i.hasNext()) {
+            n = i.next();
+            console.log(n.key + " :: " + (n.value.active ? "active" : "available"));
+        }
+
+    }
 
     public void openwin(String code) {
 	  try {

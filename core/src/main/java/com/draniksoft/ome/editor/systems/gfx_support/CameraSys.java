@@ -68,11 +68,13 @@ public class CameraSys extends BaseSystem implements InputProcessor {
 		    Gdx.app.debug(tag, "Freeing target on reach");
 		    t = null;
 		}
+
 	  }
 
     }
 
     public void setTarget(Target t) {
+	  Gdx.app.debug(tag, "New target");
 	  this.t = t;
     }
 

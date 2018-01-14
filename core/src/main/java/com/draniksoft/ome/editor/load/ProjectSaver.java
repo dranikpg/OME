@@ -11,7 +11,7 @@ import com.draniksoft.ome.editor.manager.EntitySrzMgr;
 import com.draniksoft.ome.editor.manager.MapMgr;
 import com.draniksoft.ome.editor.manager.ProjectMgr;
 import com.draniksoft.ome.editor.manager.TimeMgr;
-import com.draniksoft.ome.editor.manager.drawable.SimpleDrawableMgr;
+import com.draniksoft.ome.editor.manager.drawable.SimpleAssMgr;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.support.load.interfaces.IRunnable;
@@ -89,7 +89,7 @@ public class ProjectSaver {
         } else if (s == State.MGR_RUN) {
             l.passRunnable(new SaveT(w.getSystem(ProjectMgr.class)));
             l.passRunnable(new SaveT(w.getSystem(MapMgr.class)));
-		l.passRunnable(new SaveT(w.getSystem(SimpleDrawableMgr.class)));
+		l.passRunnable(new SaveT(w.getSystem(SimpleAssMgr.class)));
 		l.passRunnable(new SaveT(w.getSystem(TimeMgr.class)));
             l.passRunnable(new SaveT(w.getSystem(EntitySrzMgr.class)));
         } else if (s == State.JSON_FLUSH) {
@@ -115,7 +115,7 @@ public class ProjectSaver {
 
     private void notifyEnd() {
 
-        lst.onResponse((short) ResponseCode.SUCCESSFUL);
+	  lst.onResponse(ResponseCode.SUCCESSFUL);
 
     }
 

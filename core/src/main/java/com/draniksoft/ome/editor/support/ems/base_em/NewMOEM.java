@@ -4,18 +4,20 @@ import com.artemis.World;
 import com.badlogic.gdx.math.Vector2;
 import com.draniksoft.ome.editor.support.actions.mapO.CreateNewMOA;
 import com.draniksoft.ome.editor.support.container.EM_desc.EditModeDesc;
-import com.draniksoft.ome.editor.support.ems.core.EditMode;
-import com.draniksoft.ome.editor.support.input.back.SelectIC;
+import com.draniksoft.ome.editor.support.ems.core.SimpleEditMode;
 import com.draniksoft.ome.editor.support.input.base_mo.NewMOIC;
 import com.draniksoft.ome.editor.support.render.base_mo.NewMORenderer;
+import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.InputSys;
 import com.draniksoft.ome.editor.systems.support.flows.EditorSystem;
+import com.draniksoft.ome.support.ui.util.WindowAgent;
+import com.draniksoft.ome.support.ui.viewsys.BaseWinView;
 import com.draniksoft.ome.utils.ESCUtils;
 import com.draniksoft.ome.utils.FUtills;
 
-public class NewMOEM implements EditMode {
+public class NewMOEM extends SimpleEditMode {
 
 
     World _w;
@@ -24,8 +26,7 @@ public class NewMOEM implements EditMode {
     NewMORenderer newRdr;
 
     @Override
-    public void attached(World _w) {
-        this._w = _w;
+    protected void on_attached() {
 
         newLIC = new NewMOIC();
         newRdr = new NewMORenderer();
@@ -33,12 +34,31 @@ public class NewMOEM implements EditMode {
         newLIC.setOwnerMode(this);
         newLIC.setRdr(newRdr);
 
-        _w.getSystem(InputSys.class).setDefIC(null);
+	  defalteEnv();
+
+	  ESCUtils.clearSelected(_w);
+
         _w.getSystem(InputSys.class).setMainIC(newLIC);
         _w.getSystem(OverlayRenderSys.class).addRdr(newRdr);
 
-        ESCUtils.clearSelected(_w);
+	  _w.getSystem(UiSystem.class).openWin("new_mo_em", new WindowAgent() {
 
+		@Override
+		public <T extends BaseWinView> void opened(T vw) {
+
+		}
+
+
+		@Override
+		public void notifyClosing() {
+
+		}
+
+		@Override
+		public void closed() {
+
+		}
+	  });
     }
 
     @Override
@@ -49,10 +69,8 @@ public class NewMOEM implements EditMode {
     @Override
     public void detached() {
 
-        _w.getSystem(InputSys.class).setMainIC(null);
-        _w.getSystem(OverlayRenderSys.class).removeRdr(newRdr);
-
-        _w.getSystem(InputSys.class).setDefIC(new SelectIC());
+	  _w.getSystem(InputSys.class).clearMainIC();
+	  returnEnv();
 
     }
 
@@ -72,11 +90,6 @@ public class NewMOEM implements EditMode {
     // called when child is interrupted/detached
     public void inputStopped() {
 
-        /*
-        GOD DAMN IT I AM THE RULER AND WILL FORCE U MY INPUT CONTROLLER !!
-         */
-
-        //_w.getSystem(InputSys.class).setMainIC(newLIC);
 
         newLIC.ignoreDestruct = true;
 

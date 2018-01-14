@@ -1,6 +1,5 @@
-package com.draniksoft.ome.editor.base_gfx.drawable;
+package com.draniksoft.ome.editor.base_gfx.drawable.utils;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
@@ -8,13 +7,15 @@ public class GdxCompatibleDrawable implements Drawable {
 
     private static final String tag = "GdxCompatibleDrawable";
 
-    public com.draniksoft.ome.editor.base_gfx.drawable.Drawable d;
+    public com.draniksoft.ome.editor.base_gfx.drawable.utils.Drawable d;
 
     @Override
     public void draw(Batch batch, float x, float y, float width, float height) {
-	  Gdx.app.debug(tag, "Drawing " + width + " " + height);
 	  if (d != null) d.draw(batch, x, y, width, height);
     }
+
+    float mw = 0;
+    float mh = 0;
 
     @Override
     public float getLeftWidth() {
@@ -58,25 +59,25 @@ public class GdxCompatibleDrawable implements Drawable {
 
     @Override
     public float getMinWidth() {
-	  return 0;
+	  return mw;
     }
 
     @Override
     public void setMinWidth(float minWidth) {
-
+	  mw = minWidth;
     }
 
     @Override
     public float getMinHeight() {
-	  return 0;
+	  return mh;
     }
 
     @Override
     public void setMinHeight(float minHeight) {
-
+	  mh = minHeight;
     }
 
-    public static GdxCompatibleDrawable from(com.draniksoft.ome.editor.base_gfx.drawable.Drawable d) {
+    public static GdxCompatibleDrawable from(com.draniksoft.ome.editor.base_gfx.drawable.utils.Drawable d) {
 	  GdxCompatibleDrawable gd = new GdxCompatibleDrawable();
 	  gd.d = d;
 	  return gd;

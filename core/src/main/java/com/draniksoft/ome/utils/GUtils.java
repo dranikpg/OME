@@ -26,6 +26,20 @@ import java.nio.IntBuffer;
 
 public class GUtils {
 
+    public static int FRAME = 0;
+
+    public static int LAST_FRAME = -1;
+
+    public static int FRAME_LIMIT = (int) 1e9;
+
+    public static void frame() {
+	  LAST_FRAME = FRAME;
+	  FRAME++;
+	  if (FRAME > FRAME_LIMIT) {
+		FRAME = 0;
+	  }
+    }
+
     public static int maxTSize = 16000;
 
     public static ShapeRenderer sr;
@@ -55,7 +69,8 @@ public class GUtils {
 
         configuration.setBackBufferConfig(8, 8, 8, 8, 16, 8, 2);
 
-        return configuration;
+
+	  return configuration;
 
     }
 

@@ -23,7 +23,7 @@ public class TimedSelectIC implements InputController {
     boolean removeMain = false;
 
     float tl = 10;
-    float pressT = .5f;
+    float pressT = .3f;
 
     Vector2 tV;
     IntArray es;

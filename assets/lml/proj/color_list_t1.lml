@@ -13,11 +13,9 @@
 
     <separator padTop=10 padBottom=10 row=true growX=true/>
 
-    <container id=bc expandx=true fill=true/>
 
 </visTable>
 
-<:include id=color_edit_vw name=kek/>
 
 <!--
  _1 = group spacing

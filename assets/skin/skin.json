@@ -41,6 +41,12 @@
       b: 0.050000012
       a: 1
     }
+    shd_grey: {
+      r: 0.78431374
+      g: 0.78431374
+      b: 0.78431374
+      a: 1
+    }
     white: {
       r: 1
       g: 1
@@ -230,6 +236,36 @@
         a: 0
       }
     }
+    btml_shd_grey: {
+      name: btml
+      color: shd_grey
+    }
+    ed_shd_grey: {
+      name: ed
+      color: shd_grey
+    }
+    shd_grey: {
+      name: w
+      color: shd_grey
+    }
+  }
+  com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
+    sel: {
+      up: grey
+      down: shd_grey
+      over: shd_grey
+      checked: shd_grey
+    }
+  }
+  com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
+    default: {
+      imageUp: open
+      imageDown: open
+      up: grey
+      down: shd_grey
+      over: shd_grey
+      checked: shd_grey
+    }
   }
   com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
     default: {
@@ -292,6 +328,15 @@
       font: big
     }
   }
+  com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle: {
+    default: {
+      font: med
+      fontColorSelected: black
+      fontColorUnselected: black
+      selection: primary
+      background: ed_grey
+    }
+  }
   com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
     default: {
       hScrollKnob: ed_primary_dark
@@ -302,6 +347,16 @@
       hScrollKnob: ed_primary_dark
       vScroll: ed
       vScrollKnob: ed_primary_dark
+    }
+  }
+  com.badlogic.gdx.scenes.scene2d.ui.SelectBox$SelectBoxStyle: {
+    default: {
+      font: med
+      fontColor: black
+      background: btml_primary_dark
+      scrollStyle: default
+      listStyle: default
+      backgroundOpen: btml_grey
     }
   }
   com.badlogic.gdx.scenes.scene2d.ui.SplitPane$SplitPaneStyle: {
@@ -356,6 +411,13 @@
   com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
     default: {
       label: default
+    }
+  }
+  com.badlogic.gdx.scenes.scene2d.ui.Tree$TreeStyle: {
+    default: {
+      plus: clear
+      minus: clear
+      selection: btml_primary_dark
     }
   }
   com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
@@ -444,8 +506,10 @@
   }
   com.kotcrab.vis.ui.widget.VisImageButton$VisImageButtonStyle: {
     default: {
-      down: clear
-      up: clear
+      down: shd_grey
+      up: grey
+      over: shd_grey
+      checked: shd_grey
     }
     i_undo: {
       imageUp: i_undo
@@ -516,12 +580,30 @@
   }
   com.kotcrab.vis.ui.widget.Separator$SeparatorStyle: {
     default: {
-      background: ed_primary_dark
+      background: shd_grey
       thickness: 5
     }
     small: {
       background: ed_primary_dark
       thickness: 2
+    }
+    primary_d: {
+      background: primary_dark
+      thickness: 5
+    }
+    small_primary_d: {
+      background: primary_dark
+      thickness: 2
+    }
+  }
+  com.kotcrab.vis.ui.widget.VisSplitPane$VisSplitPaneStyle: {
+    default: {
+      handle: ed_primary_dark
+      handleOver: ed_secondary
+    }
+    default-horizontal: {
+      handle: ed_primary_dark
+      handleOver: ed_secondary
     }
   }
   com.kotcrab.vis.ui.widget.MultiSplitPane$MultiSplitPaneStyle: {

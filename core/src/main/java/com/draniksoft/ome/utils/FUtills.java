@@ -13,10 +13,10 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
-import com.draniksoft.ome.editor.base_gfx.drawable.Drawable;
-import com.draniksoft.ome.editor.base_gfx.drawable.EmptyDrawable;
-import com.draniksoft.ome.editor.base_gfx.drawable.SimpleDrawable;
-import com.draniksoft.ome.editor.manager.drawable.SimpleDrawableMgr;
+import com.draniksoft.ome.editor.base_gfx.drawable.simple.EmptyDrawable;
+import com.draniksoft.ome.editor.base_gfx.drawable.simple.SimpleDrawable;
+import com.draniksoft.ome.editor.base_gfx.drawable.utils.Drawable;
+import com.draniksoft.ome.editor.manager.drawable.SimpleAssMgr;
 import com.draniksoft.ome.main_menu.MainBase;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.utils.struct.Points;
@@ -161,7 +161,7 @@ public class FUtills {
 
     public static TextureAtlas.AtlasRegion fetchAtlasR(String id) {
 
-        return MainBase.engine.getSystem(SimpleDrawableMgr.class).getRegion(id);
+	  return MainBase.engine.getSystem(SimpleAssMgr.class).getRegion(id);
 
     }
 

@@ -19,6 +19,12 @@
     "lml": "insp/base_mo.lml",
     "class": "§editor.ui.insp.BaseMOInspView"
   },
+  "path_insp": {
+    "lml": "insp/path.lml",
+    "class": "§editor.ui.insp.PathView"
+  },
+
+
   "add_comp": {
     "lml": "edit/add_comp.lml",
     "class": "§editor.ui.edit.AddCompView"
@@ -28,7 +34,14 @@
     "class": "§editor.ui.edit.ColorEditView",
     "//desc": "Edits specific color"
   },
-
+  "dwb_edit_vw": {
+    "lml": "edit/edit_dwb.lml",
+    "class": "§editor.ui.edit.EditDwbView"
+  },
+  "dwbedit_leaf_prop": {
+    "lml": "edit/dwbedit_leaf_prop.lml",
+    "class": "§editor.ui.edit.dwb_typevw.DwbLeafView"
+  },
 
 
   "proj_base_prop": {
@@ -45,6 +58,12 @@
     "lml": "proj/drawable_list_t1.lml",
     "class": "§editor.ui.proj.DrawableListT1View"
   },
+  "asset_list_hc": {
+    "lml": "proj/asset_list_hc.lml",
+    "class": "§editor.ui.proj.AssetListView"
+  },
+
+
   "em_button_strip": {
     "lml": "addon/em_button_strip.lml",
     "class": "§editor.ui.menu.misc_addons.EMButtonStrip"
@@ -56,5 +75,9 @@
   "edit_path_em": {
     "lml": "em/edit_path.lml",
     "class": "§editor.ui.em_ui.PathEditView"
+  },
+  "new_mo_em": {
+    "lml": "em/new_mo.lml",
+    "class": "§editor.ui.em_ui.NewMoView"
   }
 }

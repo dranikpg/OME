@@ -53,6 +53,8 @@ public class InspView extends BaseWinView implements ActionContainer {
 
     int id;
 
+    float tp;
+
 
     public void initFor(int id) {
 	  this.id = id;
@@ -130,7 +132,10 @@ public class InspView extends BaseWinView implements ActionContainer {
 		headC.fill();
 		headC.setActor(vw.getActor());
 	  } else {
+
 		content.add(vw.getActor()).expandX().fillX();
+		content.row();
+
 	  }
     }
 

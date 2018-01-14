@@ -91,7 +91,7 @@ public abstract class BaseView {
 	  inclds.clear();
     }
 
-    public void removeIncldbName(String name) {
+    public void dyleteIncldByName(String name) {
 	  for (int i = 0; i < inclds.size; i++) {
 		if (inclds.get(i).K().equals(name)) {
 		    inclds.removeIndex(i);
@@ -99,7 +99,7 @@ public abstract class BaseView {
 	  }
     }
 
-    public void removeIncldbVID(String id) {
+    public void dyleteIncldByVID(String id) {
 	  for (int i = 0; i < inclds.size; i++) {
 		if (inclds.get(i).V().equals(id)) {
 		    inclds.removeIndex(i);
@@ -117,8 +117,8 @@ public abstract class BaseView {
     }
 
     // deletes from runtime includes
-    public void deleteIncldbVID(String id) {
-	  removeIncldbVID(id);
+    public void removeIncldbVID(String id) {
+	  dyleteIncldByVID(id);
 	  int res = -1;
 	  for (int i = 0; i < rtIncs.size; i++) {
 		if (rtIncs.get(i).ID.equals(id)) {
@@ -131,10 +131,10 @@ public abstract class BaseView {
 	  }
     }
 
-    public void deleteIncldbName(String name) {
+    public void removeIncldByName(String name) {
 	  for (Pair<String, String> p : inclds) {
 		if (p.V().equals(name)) {
-		    deleteIncldbVID(p.K());
+		    removeIncldbVID(p.K());
 		}
 	  }
     }

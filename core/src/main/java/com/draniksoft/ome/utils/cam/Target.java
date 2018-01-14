@@ -52,10 +52,8 @@ public abstract class Target {
 	  Viewport vpU;
 	  Viewport vpW;
 
-	  Vector2 tmpV = new Vector2();
-
 	  public EntityPosWINCALCTarget(World w) {
-		freeOnReach = false;
+		freeOnReach = true;
 		ps = w.getSystem(PositionSystem.class);
 		sys = w.getSystem(UiSystem.class);
 		vpU = w.getInjector().getRegistered("ui_vp");

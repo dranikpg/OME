@@ -1,6 +1,8 @@
-package com.draniksoft.ome.editor.base_gfx.drawable;
+package com.draniksoft.ome.editor.base_gfx.drawable.simple;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.utils.JsonValue;
+import com.draniksoft.ome.editor.base_gfx.drawable.utils.Drawable;
 
 public class EmptyDrawable implements Drawable {
 
@@ -14,7 +16,7 @@ public class EmptyDrawable implements Drawable {
     }
 
     @Override
-    public String serialize() {
-	  return null;
+    public void serialize(JsonValue value) {
+	  return;
     }
 }

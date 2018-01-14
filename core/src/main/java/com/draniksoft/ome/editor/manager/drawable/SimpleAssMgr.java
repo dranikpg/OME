@@ -25,9 +25,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-public class SimpleDrawableMgr extends DrawableMgr {
+public class SimpleAssMgr extends AssManager {
 
-    static final String tag = "SimpleDrawableMgr";
+    static final String tag = "SimpleAssMgr";
 
     @Wire
     AssetManager assM;
@@ -81,7 +81,7 @@ public class SimpleDrawableMgr extends DrawableMgr {
 		putRedirect(dao.id, dao.id);
 	  }
 
-	  world.getSystem(OmeEventSystem.class).dispatch(new ResourceLoadedEvent(ResourceLoadedEvent.TYPE_DWB, dao.id));
+	  world.getSystem(OmeEventSystem.class).dispatch(new ResourceLoadedEvent(ResourceLoadedEvent.TYPE_ASSEt, dao.id));
 
     }
 

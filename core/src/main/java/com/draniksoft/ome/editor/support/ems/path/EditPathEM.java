@@ -72,9 +72,10 @@ public class EditPathEM extends SimpleEditMode {
 	  _w.getSystem(OverlayRenderSys.class).addRdr(r);
 
 	  _w.getSystem(InputSys.class).setMainIC(ic);
-	  _w.getSystem(InputSys.class).setDefIC(new StebIC());
 
 	  defalteEnv();
+
+	  _w.getSystem(InputSys.class).setDefIC(new StebIC());
 
 	  _w.getSystem(UiSystem.class).openWin("edit_path_em");
 
@@ -82,8 +83,6 @@ public class EditPathEM extends SimpleEditMode {
 
     private void removeRIC() {
 	  _w.getSystem(OverlayRenderSys.class).removeRdr(r);
-	  _w.getSystem(InputSys.class).clearMainIC();
-	  _w.getSystem(InputSys.class).restoreDef();
 
 	  returnEnv();
     }

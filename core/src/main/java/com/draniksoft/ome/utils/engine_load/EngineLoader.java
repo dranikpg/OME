@@ -16,7 +16,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.draniksoft.ome.editor.esc_utils.OmeStrategy;
 import com.draniksoft.ome.editor.load.MapLoadBundle;
 import com.draniksoft.ome.editor.manager.*;
-import com.draniksoft.ome.editor.manager.drawable.SimpleDrawableMgr;
+import com.draniksoft.ome.editor.manager.drawable.SimpleAssMgr;
 import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.systems.file_mgmnt.AssetLScheduleSys;
 import com.draniksoft.ome.editor.systems.file_mgmnt.ProjectLoadSystem;
@@ -269,7 +269,7 @@ public class EngineLoader {
 
             cb.with(new MapMgr());
 
-		cb.with(new SimpleDrawableMgr());
+		cb.with(new SimpleAssMgr());
 
             cb.with(new FontManager());
 

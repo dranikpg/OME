@@ -8,7 +8,7 @@ import com.draniksoft.ome.utils.dao.AssetDDao;
 
 import java.util.Iterator;
 
-public abstract class DrawableMgr extends BaseSystem implements LoadSaveManager {
+public abstract class AssManager extends BaseSystem implements LoadSaveManager {
 
     public abstract Iterator<AssetDDao> getLoadedDaoI();
 

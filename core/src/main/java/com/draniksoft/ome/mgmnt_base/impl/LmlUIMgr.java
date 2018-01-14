@@ -1,6 +1,8 @@
 package com.draniksoft.ome.mgmnt_base.impl;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.draniksoft.ome.main_menu.MainBase;
@@ -21,6 +23,7 @@ import com.github.czyzby.lml.parser.LmlParser;
 import com.github.czyzby.lml.vis.util.VisLml;
 import com.github.czyzby.lml.vis.util.VisLmlParserBuilder;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.color.BasicColorPicker;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -35,6 +38,12 @@ public class LmlUIMgr extends AppDataManager {
 
     volatile LmlParser p;
     BaseActionProvider pv;
+
+    volatile IntMap<Actor> heavyActors;
+
+    public static class ActorIDS {
+	  public static final int COLOR_PICKER = 1;
+    }
 
     /*
     Parse process
@@ -245,6 +254,32 @@ public class LmlUIMgr extends AppDataManager {
 	  }
 
 	  Gdx.app.debug(tag, "Parsed " + viewM.size + " views");
+    }
+
+    public ObjectMap.Entries<String, BaseView> getVI() {
+	  return vws.iterator();
+    }
+
+
+    public <T> T getActor(int id) {
+
+	  if (heavyActors.containsKey(id)) {
+		return (T) heavyActors.get(id);
+	  } else {
+		buildActor(id);
+		return (T) heavyActors.get(id, null);
+	  }
+
+    }
+
+    private void buildActor(int id) {
+
+	  if (id == ActorIDS.COLOR_PICKER) {
+
+		heavyActors.put(id, new BasicColorPicker());
+
+	  }
+
     }
 
     @Override

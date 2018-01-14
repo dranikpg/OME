@@ -2,7 +2,7 @@ package com.draniksoft.ome.editor.support.actions.mapO;
 
 import com.artemis.World;
 import com.badlogic.gdx.Gdx;
-import com.draniksoft.ome.editor.base_gfx.drawable.Drawable;
+import com.draniksoft.ome.editor.base_gfx.drawable.utils.Drawable;
 import com.draniksoft.ome.editor.components.gfx.DrawableC;
 import com.draniksoft.ome.editor.components.tps.MObjectC;
 import com.draniksoft.ome.editor.support.actions.Action;
@@ -64,7 +64,7 @@ public class ChangeDwbA implements Action {
 
     @Override
     public String getSimpleConcl() {
-        return "Changed drawable";
+	  return "Changed dwb_typevw";
     }
 
     @Override

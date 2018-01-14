@@ -1,31 +1,27 @@
-package com.draniksoft.ome.editor.ui.edit;
+package com.draniksoft.ome.editor.ui.insp;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.draniksoft.ome.support.ui.viewsys.BaseWinView;
+import com.draniksoft.ome.support.ui.viewsys.BaseView;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.kotcrab.vis.ui.widget.VisTable;
 
-public class ColorEditView extends BaseWinView {
+public class PathView extends BaseView implements InspView.InspectorManagable {
 
-    private static final String tag = "ColorEditView";
+    @LmlActor("root")
+    VisTable root;
 
-
-
-    public void initfor(int id) {
+    @Override
+    public void initFor(int e) {
 
     }
 
-    @LmlActor("root")
-    VisTable t;
-
     @Override
     public Actor getActor() {
-	  return t;
+	  return root;
     }
 
     @Override
     public void preinit() {
-
 
     }
 
@@ -33,4 +29,5 @@ public class ColorEditView extends BaseWinView {
     public void postinit() {
 
     }
+
 }

@@ -4,17 +4,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.draniksoft.ome.editor.base_gfx.color.LinkDestColorProvider;
 import com.draniksoft.ome.editor.manager.ProjValsManager;
 import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.projectVals.ColorEvent;
-import com.draniksoft.ome.editor.ui.edit.ColorEditView;
 import com.draniksoft.ome.support.ui.viewsys.BaseView;
 import com.draniksoft.ome.support.ui.viewsys.BaseWinView;
 import com.draniksoft.ome.ui_addons.ColoredCirlceWget;
-import com.draniksoft.ome.utils.struct.EColor;
 import com.draniksoft.ome.utils.struct.MtPair;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.parser.LmlParser;
@@ -33,15 +31,12 @@ public class ColorListT1View extends BaseWinView {
     VisTable root;
 
 
-    @LmlActor("bc")
-    Container bc;
 
     @LmlActor("spane")
     VisScrollPane pane;
 
     VerticalFlowGroup group;
 
-    ColorEditView editV;
 
 
     float space = 10;
@@ -137,8 +132,8 @@ public class ColorListT1View extends BaseWinView {
 	  Gdx.app.debug(tag, "Rebuilding");
 
 	  group.clear();
-	  ObjectMap.Entries<Integer, MtPair<EColor, String>> i = _w.getSystem(ProjValsManager.class).getColorData();
-	  ObjectMap.Entry<Integer, MtPair<EColor, String>> e;
+	  ObjectMap.Entries<Integer, MtPair<LinkDestColorProvider, String>> i = _w.getSystem(ProjValsManager.class).getColorData();
+	  ObjectMap.Entry<Integer, MtPair<LinkDestColorProvider, String>> e;
 	  while (i.hasNext()) {
 		e = i.next();
 		LWTable t = new LWTable(e.value);
@@ -156,7 +151,7 @@ public class ColorListT1View extends BaseWinView {
 
 	  boolean sel = false;
 
-	  LWTable(final MtPair<EColor, String> data) {
+	  LWTable(final MtPair<LinkDestColorProvider, String> data) {
 		this.id = data.K().id;
 
 		addListener(new ClickListener() {
@@ -179,7 +174,7 @@ public class ColorListT1View extends BaseWinView {
 		name = new VisLabel("", sel ? "big_primary_dark" : "big");
 		name.setEllipsis(true);
 
-		wget = new ColoredCirlceWget(_w.getSystem(ProjValsManager.class).obtainColor(id));
+		wget = new ColoredCirlceWget();
 
 		add(wget).padRight(labelPad);
 		add(name).left().width(cellw);
@@ -224,7 +219,6 @@ public class ColorListT1View extends BaseWinView {
 		curSel = t;
 		t.select();
 	  }
-	  editV.initfor(id);
     }
 
     @Override
@@ -251,11 +245,7 @@ public class ColorListT1View extends BaseWinView {
     public void obtainIncld(String name, BaseView vw) {
 	  super.obtainIncld(name, vw);
 
-	  editV = (ColorEditView) vw;
-	  editV.initfor(-1);
 
-	  bc.setActor(vw.getActor());
-	  bc.fill();
     }
 
 }

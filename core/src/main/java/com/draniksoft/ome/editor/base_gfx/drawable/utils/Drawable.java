@@ -1,6 +1,7 @@
-package com.draniksoft.ome.editor.base_gfx.drawable;
+package com.draniksoft.ome.editor.base_gfx.drawable.utils;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.utils.JsonValue;
 
 public interface Drawable {
 
@@ -8,5 +9,6 @@ public interface Drawable {
 
     Drawable copy();
 
-    String serialize();
+    void serialize(JsonValue value);
+
 }

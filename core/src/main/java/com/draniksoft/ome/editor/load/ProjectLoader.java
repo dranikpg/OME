@@ -14,7 +14,7 @@ import com.draniksoft.ome.editor.manager.EntitySrzMgr;
 import com.draniksoft.ome.editor.manager.MapMgr;
 import com.draniksoft.ome.editor.manager.ProjectMgr;
 import com.draniksoft.ome.editor.manager.TimeMgr;
-import com.draniksoft.ome.editor.manager.drawable.SimpleDrawableMgr;
+import com.draniksoft.ome.editor.manager.drawable.SimpleAssMgr;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.support.load.interfaces.IGLRunnable;
@@ -101,7 +101,7 @@ public class ProjectLoader {
 	  } else if (s == Step.BASE) {
 		l.passRunnable(new LoadT(w.getSystem(ProjectMgr.class)));
 		l.passRunnable(new LoadT(w.getSystem(MapMgr.class)));
-		l.passRunnable(new LoadT(w.getSystem(SimpleDrawableMgr.class)));
+		l.passRunnable(new LoadT(w.getSystem(SimpleAssMgr.class)));
 		l.passRunnable(new LoadT(w.getSystem(TimeMgr.class)));
 		l.passRunnable(new LoadT(w.getSystem(EntitySrzMgr.class)));
 	  } else if (s == Step.GFX_PAIR) {

@@ -1,8 +1,0 @@
-*_b means that this belongs to a button
-
-lang_tst - Test output for language in logs (i.e. American English language pack successfully initialized) [please use the language the bundle belongs to]
-
-exit_b - Exit button on b bar
-
-editor_b - Button bar editor button
-new_map_b - Button for creating a new Map
