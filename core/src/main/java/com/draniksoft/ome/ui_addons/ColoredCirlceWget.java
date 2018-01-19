@@ -5,9 +5,9 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.Layout;
-import com.draniksoft.ome.editor.base_gfx.color.ColorProvider;
-import com.draniksoft.ome.editor.base_gfx.color.LinkColor;
-import com.draniksoft.ome.editor.base_gfx.color.RootColorProvider;
+import com.draniksoft.ome.editor.base_gfx.color.simple.LinkColor;
+import com.draniksoft.ome.editor.base_gfx.color.utils.ColorProvider;
+import com.draniksoft.ome.editor.base_gfx.color.utils.RootColorProvider;
 import com.kotcrab.vis.ui.VisUI;
 
 public class ColoredCirlceWget extends Actor implements Layout {

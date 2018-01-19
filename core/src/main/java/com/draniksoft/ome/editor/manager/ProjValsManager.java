@@ -2,11 +2,11 @@ package com.draniksoft.ome.editor.manager;
 
 import com.artemis.BaseSystem;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.IntMap;
-import com.badlogic.gdx.utils.ObjectMap;
-import com.draniksoft.ome.editor.base_gfx.color.ColorProvider;
-import com.draniksoft.ome.editor.base_gfx.color.LinkColor;
-import com.draniksoft.ome.editor.base_gfx.color.LinkDestColorProvider;
+import com.draniksoft.ome.editor.base_gfx.color.simple.EmptyColor;
+import com.draniksoft.ome.editor.base_gfx.color.simple.LinkColor;
+import com.draniksoft.ome.editor.base_gfx.color.utils.ColorProvider;
 import com.draniksoft.ome.editor.base_gfx.drawable.simple.EmptyDrawable;
 import com.draniksoft.ome.editor.base_gfx.drawable.simple.LinkedDrawable;
 import com.draniksoft.ome.editor.base_gfx.drawable.utils.Drawable;
@@ -41,11 +41,14 @@ public class ProjValsManager extends BaseSystem implements LoadSaveManager {
     IntMap<MtPair<Drawable, String>> drawableData;
     IntMap<Array<LinkedDrawable>> managedDrawables;
 
+    IntMap<String> rawDwbSrc;
+
     int drawableIdx = 0;
 
     private void initDrawableData() {
 	  drawableData = new IntMap<MtPair<Drawable, String>>();
 	  managedDrawables = new IntMap<Array<LinkedDrawable>>();
+	  rawDwbSrc = new IntMap<String>();
     }
 
     public void register(LinkedDrawable d, int id) {
@@ -84,7 +87,7 @@ public class ProjValsManager extends BaseSystem implements LoadSaveManager {
 	  Drawable d = new EmptyDrawable();
 	  drawableData.put(drawableIdx, MtPair.P(d, name));
 
-	  world.getSystem(OmeEventSystem.class).dispatch(new DrawableEvent.DrawableAddedE(drawableIdx));
+	  if (ET) world.getSystem(OmeEventSystem.class).dispatch(new DrawableEvent.DrawableAddedE(drawableIdx));
 	  return drawableIdx;
     }
 
@@ -102,6 +105,9 @@ public class ProjValsManager extends BaseSystem implements LoadSaveManager {
 
     public void setDrawable(int id, Drawable d) {
 	  drawableData.get(id).K(d);
+	  for (LinkedDrawable mg : managedDrawables.get(id)) {
+		mg.link = d;
+	  }
     }
 
     public String getDrawableName(int id) {
@@ -110,19 +116,27 @@ public class ProjValsManager extends BaseSystem implements LoadSaveManager {
 
     public void setDrawableName(int id, String val) {
 	  drawableData.get(id).V(val);
+	  if (ET) world.getSystem(OmeEventSystem.class).dispatch(new DrawableEvent.DrawableNameChangedE(id));
     }
 
+    public String getDwbRawSrc(int id) {
+	  return rawDwbSrc.get(id);
+    }
+
+    public IntArray getDrawableKeys() {
+	  return drawableData.keys().toArray();
+    }
 
     /*  COLOR PART */
 
 
     IntMap<Array<LinkColor>> managedColors;
-    ObjectMap<Integer, MtPair<LinkDestColorProvider, String>> colorData;
+    IntMap<MtPair<ColorProvider, String>> colorData;
 
     int colorIdx = 0;
 
     private void initColorData() {
-	  colorData = new ObjectMap<Integer, MtPair<LinkDestColorProvider, String>>();
+	  colorData = new IntMap<MtPair<ColorProvider, String>>();
 	  managedColors = new IntMap<Array<LinkColor>>();
     }
 
@@ -130,12 +144,12 @@ public class ProjValsManager extends BaseSystem implements LoadSaveManager {
 	  return colorData.get(id).V();
     }
 
-    public void changeColorName(String name, int id) {
+    public void setColorName(String name, int id) {
 	  colorData.get(id).V(name);
 	  if (ET) world.getSystem(OmeEventSystem.class).dispatch(new ColorEvent.ColorNameChangeE(id));
     }
 
-    public MtPair<LinkDestColorProvider, String> getColorPair(int id) {
+    public MtPair<ColorProvider, String> getColorPair(int id) {
 	  return colorData.get(id);
     }
 
@@ -166,13 +180,43 @@ public class ProjValsManager extends BaseSystem implements LoadSaveManager {
 		managedColors.get(c.id).removeValue(c, true);
 	  }
 
-	  // TODO : CHANGE REFERENCE
+    }
+
+    public void createNewColor() {
+	  createNewColor(null);
+    }
+
+    public void createNewColor(String name) {
+	  colorIdx++;
+
+	  colorData.put(colorIdx, MtPair.P((ColorProvider) new EmptyColor(), name == null ? "" : name));
+	  managedColors.put(colorIdx, new Array<LinkColor>());
+
+	  if (ET) world.getSystem(OmeEventSystem.class).dispatch(new ColorEvent.ColorAddedEvent(colorIdx));
 
     }
 
+    public void changeColor(int id, ColorProvider newpv) {
+	  colorData.get(id).K(newpv);
+	  for (LinkColor lc : managedColors.get(id)) {
+		lc.pv = newpv;
+	  }
+    }
 
-    public ObjectMap.Entries<Integer, MtPair<LinkDestColorProvider, String>> getColorData() {
+    // CREATION UTILS
+
+    public LinkColor obtainColor(int id) {
+	  LinkColor c = new LinkColor();
+	  register(c, id);
+	  return c;
+    }
+
+    public IntMap.Entries<MtPair<ColorProvider, String>> getColorData() {
 	  return colorData.entries();
+    }
+
+    public IntArray getColorKeys() {
+	  return colorData.keys().toArray();
     }
 
 

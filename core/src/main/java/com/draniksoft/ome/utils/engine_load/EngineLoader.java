@@ -31,6 +31,7 @@ import com.draniksoft.ome.editor.systems.render.obj.LabelRenderSys;
 import com.draniksoft.ome.editor.systems.render.obj.ObjRSys;
 import com.draniksoft.ome.editor.systems.render.obj.PathRenderSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
+import com.draniksoft.ome.editor.systems.support.CacheSystem;
 import com.draniksoft.ome.editor.systems.support.ConsoleSys;
 import com.draniksoft.ome.editor.systems.support.InputSys;
 import com.draniksoft.ome.editor.systems.support.flows.EditorSystem;
@@ -259,10 +260,6 @@ public class EngineLoader {
         public void run(IntelligentLoader l) {
             cb = new WorldConfigurationBuilder();
 
-            // ESC MANAGER
-
-            cb.with(new ArchTransmuterMgr());
-
             // OTHER MANAGER
 
             cb.with(new ProjectMgr());
@@ -344,7 +341,12 @@ public class EngineLoader {
 
             cb.with(new WorkflowSys());
 
+		cb.with(new CacheSystem());
+
 		cb.with(new OmeEventSystem());
+
+		cb.with(new ArchTransmuterMgr());
+
 
 		cb.register(new OmeStrategy());
 

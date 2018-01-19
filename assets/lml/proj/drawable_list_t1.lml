@@ -1,6 +1,6 @@
 <:win
     dynamic=true
-    min=600
+    min=800
     max=0.6
     fullspan=true
     scY=false
@@ -20,6 +20,33 @@
         growy=true
         id=lwt
     />
+
+    <:row />
+
+    <visTable id=sb growx=true padBottom=10>
+
+            <visTextField id=namef  growx=true padRight=20 />
+
+            <visTextButton id=edit text=edit onClick=l.edit padRight=20 />
+
+            <visTextButton id=remove text=remove />
+
+
+    </visTable>
+
+    <:row />
+
+    <separator style=small growx=true />
+
+    <:row />
+
+    <visTable>
+
+        <visTextButton onClick=l.add_dwb  text=ADDNEW />
+
+    </visTable>
+
+
 
 </visTable>
 

@@ -46,13 +46,12 @@ public class EditorWin extends VisWindow implements WinControllerOverlay {
 
 	  pane.setScrollingDisabled(true, false);
 
-	  add(pane).expand().fill().padTop(40);
+	  add(pane).expand().fill().padTop(40).padRight(2).padLeft(2).padBottom(2);
 
 	  setKeepWithinStage(false);
 	  setMovable(false);
 	  setResizable(false);
 
-	  setDebug(true, false);
     }
 
 

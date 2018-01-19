@@ -1,7 +1,6 @@
 package com.draniksoft.ome.editor.base_gfx.drawable.simple;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.utils.JsonValue;
 import com.draniksoft.ome.editor.base_gfx.drawable.utils.Drawable;
 
 public class LinkedDrawable implements Drawable {
@@ -20,7 +19,7 @@ public class LinkedDrawable implements Drawable {
     }
 
     @Override
-    public void serialize(JsonValue value) {
-	  return;
+    public void destruct() {
+
     }
 }

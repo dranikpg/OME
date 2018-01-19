@@ -2,10 +2,9 @@ package com.draniksoft.ome.editor.base_gfx.drawable.group;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.JsonValue;
 import com.draniksoft.ome.editor.base_gfx.drawable.utils.Drawable;
 
-public class StackDrawable implements Drawable {
+public class StackDrawable implements Drawable, GroupDrawable {
 
     Array<Drawable> ar;
 
@@ -24,12 +23,21 @@ public class StackDrawable implements Drawable {
 	  }
     }
 
-    public Drawable copy() {
-	  return null;
+
+    @Override
+    public void destruct() {
+
     }
 
     @Override
-    public void serialize(JsonValue value) {
-	  return;
+    public Drawable copy(Array<Drawable> ar) {
+	  StackDrawable dwb = new StackDrawable(ar);
+	  return dwb;
     }
+
+    @Override
+    public Drawable newCopy(Array<Drawable> ar) {
+	  return copy(ar);
+    }
+
 }

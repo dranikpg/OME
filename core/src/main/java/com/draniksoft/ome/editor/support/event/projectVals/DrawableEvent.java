@@ -21,4 +21,11 @@ public class DrawableEvent implements Event {
 		super(id);
 	  }
     }
+
+    public static class DrawableNameChangedE extends DrawableEvent {
+
+	  public DrawableNameChangedE(int id) {
+		super(id);
+	  }
+    }
 }

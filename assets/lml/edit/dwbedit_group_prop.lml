@@ -1,0 +1,11 @@
+<visTable id=root>
+
+    <visTable id=topT expand=true align=top fillx=true>
+
+        <visSelectBox id=typebox>
+
+        </visSelectBox>
+
+    </visTable>
+
+</visTable>

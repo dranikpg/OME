@@ -1,15 +1,23 @@
 package com.draniksoft.ome.editor.ui.edit;
 
+import com.artemis.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Tree;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
+import com.draniksoft.ome.editor.base_gfx.drawable.simple.EmptyDrawable;
 import com.draniksoft.ome.editor.base_gfx.drawable.utils.Drawable;
+import com.draniksoft.ome.editor.base_gfx.drawable.utils.GdxCompatibleDrawable;
+import com.draniksoft.ome.editor.base_gfx.drawable_contructor.DrawableParser;
 import com.draniksoft.ome.editor.base_gfx.drawable_contructor.DwbConstructor;
 import com.draniksoft.ome.editor.base_gfx.drawable_contructor.GroupConstructor;
 import com.draniksoft.ome.editor.base_gfx.drawable_contructor.LeafConstructor;
+import com.draniksoft.ome.editor.components.tps.MObjectC;
+import com.draniksoft.ome.editor.manager.ProjValsManager;
+import com.draniksoft.ome.editor.systems.gui.UiSystem;
+import com.draniksoft.ome.editor.systems.support.CacheSystem;
 import com.draniksoft.ome.editor.ui.edit.dwb_typevw.DwbEditI;
 import com.draniksoft.ome.support.ui.viewsys.BaseView;
 import com.draniksoft.ome.support.ui.viewsys.BaseWinView;
@@ -17,11 +25,10 @@ import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.parser.LmlParser;
 import com.github.czyzby.lml.parser.action.ActionContainer;
-import com.kotcrab.vis.ui.widget.VisImage;
-import com.kotcrab.vis.ui.widget.VisLabel;
-import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisTree;
+import com.kotcrab.vis.ui.widget.*;
 import org.jetbrains.annotations.Nullable;
+
+import java.lang.reflect.Field;
 
 public class EditDwbView extends BaseWinView implements ActionContainer {
 
@@ -39,30 +46,31 @@ public class EditDwbView extends BaseWinView implements ActionContainer {
     @LmlActor("fullimg")
     VisImage fullI;
 
+    @LmlActor("leaf_b")
+    VisTextButton leafB;
+
+    @LmlActor("group_b")
+    VisTextButton groupB;
+
     DwbEditI editVW;
 
     ActionHandler handler;
 
-    DwbConstructor rootC;
+    volatile DwbConstructor rootC;
 
 
-    private static class TypeHolder {
-	  public int id;
-	  public String name;
-	  public Class c;
+    public void init(ActionHandler h) {
+	  this.handler = h;
 
-	  public TypeHolder(int id, String name, Class c) {
-		this.id = id;
-		this.name = name;
-		this.c = c;
-	  }
+	  rootC = null;
+	  tree.clearChildren();
 
-	  @Override
-	  public String toString() {
-		return name;
-	  }
+	  rootUpdated();
+	  updateSelection();
+
+	  new ParserC().start();
+
     }
-
 
     @Override
     public Actor getActor() {
@@ -77,6 +85,7 @@ public class EditDwbView extends BaseWinView implements ActionContainer {
 
     @Override
     public void postinit() {
+
 	  tree.getSelection().setMultiple(false);
 	  tree.getSelection().setProgrammaticChangeEvents(true);
 
@@ -92,24 +101,39 @@ public class EditDwbView extends BaseWinView implements ActionContainer {
 	  initDragAndDrop();
 
 
+	  try {
+		Field field = Tree.class.getDeclaredField("indentSpacing");
+		field.setAccessible(true);
+		field.set(tree, 24);
+	  } catch (Exception e) {
+		e.printStackTrace();
+	  }
+
+
     }
+
+    String wt_view;
 
     private void updateEditT(DwbConstructor c) {
 
+
 	  String incl = "";
 	  if (c instanceof GroupConstructor) {
-		return;
+		incl = "dwbedit_group_prop";
 	  } else {
 		incl = "dwbedit_leaf_prop";
 	  }
 
 	  if (editVW != null && editVW.getID().equals(incl)) {
-		editVW.setFor(c);
+		editVW.setFor(c, handler);
 		return;
 	  }
 
 	  editT.clearChildren();
+
 	  removeIncldByName("edit");
+
+	  wt_view = incl;
 
 	  pushIncld("edit", incl);
 
@@ -119,13 +143,26 @@ public class EditDwbView extends BaseWinView implements ActionContainer {
     protected void handleInclude(String nm, BaseView vw) {
 	  super.handleInclude(nm, vw);
 
-	  editVW = (DwbEditI) vw;
-	  editT.add(vw.getActor()).expand().fill();
+	  if (!vw.ID.equals(wt_view)) return;
 
-	  editVW.setFor((DwbConstructor) tree.getSelection().getLastSelected().getObject());
+	  try {
+		editVW = (DwbEditI) vw;
+
+		editT.add(vw.getActor()).expand().fill();
+
+		editVW.setFor((DwbConstructor) tree.getSelection().getLastSelected().getObject(), handler);
+
+	  } catch (Exception e) {
+		Gdx.app.error(tag, "", e);
+	  }
     }
 
     private void updateSelection() {
+
+	  Gdx.app.debug(tag, "Selection update");
+
+	  leafB.setVisible(true);
+	  groupB.setVisible(true);
 
 	  if (tree.getSelection().isEmpty()) {
 		editT.setVisible(false);
@@ -214,15 +251,24 @@ public class EditDwbView extends BaseWinView implements ActionContainer {
     @Override
     public void closed() {
 	  super.closed();
+	  removeIncldByName("edit");
 	  handler = null;
     }
 
-    void rootUpdated() {
-	  fullI.setDrawable(rootC.getGdxSnapshot());
+    private void connectRoot() {
+	  tree.clearChildren();
+	  tree.add(rootC.getNode());
+    }
+
+    private void rootUpdated() {
+	  Gdx.app.debug(tag, "Root updated");
+	  if (rootC != null) fullI.setDrawable(rootC.getGdxSnapshot());
+	  else fullI.setDrawable(GdxCompatibleDrawable.from(new EmptyDrawable()));
+	  updateSelection();
     }
 
 
-    void add(DwbConstructor c, @Nullable DwbNode parent, @Nullable DwbNode after) {
+    private void add(DwbConstructor c, @Nullable DwbNode parent, @Nullable DwbNode after) {
 
 	  if (rootC == null) {
 
@@ -318,6 +364,16 @@ public class EditDwbView extends BaseWinView implements ActionContainer {
 	  addOnSel(new GroupConstructor());
     }
 
+    @LmlAction("save")
+    public void save() {
+	  Gdx.app.debug(tag, "Saving");
+	  handler.save(rootC);
+	  _w.getSystem(UiSystem.class).closeWin();
+    }
+
+    @LmlAction("restore")
+    public void restore() {
+    }
 
     public static class DwbNode extends Tree.Node {
 
@@ -348,40 +404,105 @@ public class EditDwbView extends BaseWinView implements ActionContainer {
 
     }
 
-    public static class DwbTable extends VisTable {
+    private static class DwbTable extends VisTable {
 
 	  public DwbTable() {
 		add("LLELLELE");
 	  }
     }
 
-    private static final class ParserC extends Thread {
+    private final class ParserC extends Thread {
 	  @Override
 	  public void run() {
+		DwbConstructor c = handler.prepare(_w);
+		rootC = c;
+		connectRoot();
+		rootUpdated();
 
+		updateSelection();
+	  }
+    }
+
+    public interface ActionHandler {
+
+	  DwbConstructor prepare(World w);
+
+	  void save(DwbConstructor c);
+
+
+    }
+
+    public static class ValDwbHandler implements ActionHandler {
+
+	  int id;
+
+	  World _w;
+
+	  public ValDwbHandler(int id) {
+		this.id = id;
+	  }
+
+
+	  @Override
+	  public DwbConstructor prepare(World w) {
+		this._w = w;
+
+		if (_w.getSystem(ProjValsManager.class).getDrawable(id) instanceof EmptyDrawable) return null;
+
+		if (_w.getSystem(CacheSystem.class).hasGlobAttrib(CacheSystem.RESOURCE.DWB_CONST, id)) {
+		    Gdx.app.debug(tag, "Fetching global from cache");
+		    return _w.getSystem(CacheSystem.class).getGlobAttrib(CacheSystem.RESOURCE.DWB_CONST, id);
+		} else {
+		    Gdx.app.debug(tag, "Parsing from raw sources");
+		    DwbConstructor c = DrawableParser.I().parse(_w.getSystem(ProjValsManager.class).getDwbRawSrc(id));
+		    _w.getSystem(CacheSystem.class).putGlobAttrib(CacheSystem.RESOURCE.DWB_CONST, id, c);
+		}
+
+		return null;
+	  }
+
+	  @Override
+	  public void save(DwbConstructor c) {
+
+		Drawable build = c.construct();
+
+		_w.getSystem(ProjValsManager.class).setDrawable(id, build);
+
+		_w.getSystem(CacheSystem.class).putGlobAttrib(CacheSystem.RESOURCE.DWB_CONST, id, c);
 
 	  }
     }
 
-    private interface ActionHandler {
+    public class EttyDwbHandler implements ActionHandler {
 
-	  Drawable getSource();
+	  int id;
 
-    }
 
-    private class ValDwbHandler implements ActionHandler {
+	  public EttyDwbHandler(int id) {
+		this.id = id;
+	  }
+
+
+	  World _w;
 
 	  @Override
-	  public Drawable getSource() {
+	  public DwbConstructor prepare(World w) {
+		this._w = w;
+
+		if (_w.getSystem(CacheSystem.class).hasEttyAttrib(CacheSystem.RESOURCE.DWB_CONST, id)) {
+		    return _w.getSystem(CacheSystem.class).getEttyAttrib(CacheSystem.RESOURCE.DWB_CONST, id);
+		} else {
+		    Gdx.app.debug(tag + " ETD", " Parsing from scratch ");
+		    MObjectC mc = _w.getMapper(MObjectC.class).get(id);
+		    DwbConstructor c = DrawableParser.I().parse(mc.dwbID);
+		}
+
 		return null;
 	  }
-    }
-
-    private class EttyDwbHandler implements ActionHandler {
 
 	  @Override
-	  public Drawable getSource() {
-		return null;
+	  public void save(DwbConstructor c) {
+
 	  }
     }
 

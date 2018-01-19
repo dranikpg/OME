@@ -3,7 +3,6 @@ package com.draniksoft.ome.editor.base_gfx.drawable.simple;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.JsonValue;
 import com.draniksoft.ome.editor.base_gfx.drawable.utils.Drawable;
 import com.draniksoft.ome.utils.FUtills;
 
@@ -35,8 +34,7 @@ public class SimpleDrawable implements Drawable {
     }
 
     @Override
-    public void serialize(JsonValue value) {
-	  return;
-    }
+    public void destruct() {
 
+    }
 }

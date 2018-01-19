@@ -1,6 +1,7 @@
 package com.draniksoft.ome.support.ui.viewsys;
 
 import com.artemis.World;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
@@ -8,6 +9,8 @@ import com.draniksoft.ome.utils.struct.Pair;
 import com.github.czyzby.lml.parser.LmlParser;
 
 public abstract class BaseView {
+
+    private static final String tag = "BaseView";
 
     public String ID;
     public String lang;
@@ -51,6 +54,7 @@ public abstract class BaseView {
     public void closed() {
 	  clearInjectedIncludes();
 	  active = false;
+	  parent = null;
     }
 
     public void clearInjectedIncludes() {
@@ -128,13 +132,15 @@ public abstract class BaseView {
 	  if (res > 0) {
 		freeincld(rtIncs.get(res));
 		rtIncs.removeIndex(res);
+
+		Gdx.app.debug(tag, "Removed include at runtime");
 	  }
     }
 
     public void removeIncldByName(String name) {
 	  for (Pair<String, String> p : inclds) {
-		if (p.V().equals(name)) {
-		    removeIncldbVID(p.K());
+		if (p.K().equals(name)) {
+		    removeIncldbVID(p.V());
 		}
 	  }
     }

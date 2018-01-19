@@ -3,6 +3,7 @@ package com.draniksoft.ome.editor.ui.edit.dwb_typevw;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.draniksoft.ome.editor.base_gfx.drawable_contructor.DwbConstructor;
 import com.draniksoft.ome.editor.base_gfx.drawable_contructor.LeafConstructor;
+import com.draniksoft.ome.editor.ui.edit.EditDwbView;
 import com.draniksoft.ome.editor.ui.proj.AssetListView;
 import com.draniksoft.ome.support.ui.viewsys.BaseView;
 import com.draniksoft.ome.utils.struct.ResponseListener;
@@ -11,10 +12,14 @@ import com.kotcrab.vis.ui.widget.VisTable;
 
 public class DwbLeafView extends BaseView implements DwbEditI {
 
+    private static final String tag = "DwbLeafView";
+
     LeafConstructor c;
 
     @LmlActor("root")
     VisTable root;
+
+    AssetListView lw;
 
     @Override
     public Actor getActor() {
@@ -35,9 +40,10 @@ public class DwbLeafView extends BaseView implements DwbEditI {
     protected void handleInclude(String nm, BaseView vw) {
 	  super.handleInclude(nm, vw);
 
+	  root.clearChildren();
 	  root.add(vw.getActor()).expand().fill();
 
-	  final AssetListView lw = (AssetListView) vw;
+	  this.lw = (AssetListView) vw;
 
 	  lw.setListener(new ResponseListener() {
 		@Override
@@ -56,9 +62,11 @@ public class DwbLeafView extends BaseView implements DwbEditI {
 
     }
 
+
     @Override
-    public void setFor(DwbConstructor c) {
+    public void setFor(DwbConstructor c, EditDwbView.ActionHandler h) {
 	  this.c = (LeafConstructor) c;
+
     }
 
     @Override

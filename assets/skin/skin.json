@@ -334,7 +334,7 @@
       fontColorSelected: black
       fontColorUnselected: black
       selection: primary
-      background: ed_grey
+      background: shd_grey
     }
   }
   com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
@@ -356,7 +356,7 @@
       background: btml_primary_dark
       scrollStyle: default
       listStyle: default
-      backgroundOpen: btml_grey
+      backgroundOpen: btml_primary_dark
     }
   }
   com.badlogic.gdx.scenes.scene2d.ui.SplitPane$SplitPaneStyle: {
@@ -415,7 +415,7 @@
   }
   com.badlogic.gdx.scenes.scene2d.ui.Tree$TreeStyle: {
     default: {
-      plus: clear
+      plus: play
       minus: clear
       selection: btml_primary_dark
     }
@@ -584,7 +584,7 @@
       thickness: 5
     }
     small: {
-      background: ed_primary_dark
+      background: shd_grey
       thickness: 2
     }
     primary_d: {

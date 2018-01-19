@@ -42,6 +42,10 @@
     "lml": "edit/dwbedit_leaf_prop.lml",
     "class": "§editor.ui.edit.dwb_typevw.DwbLeafView"
   },
+  "dwbedit_group_prop": {
+    "lml": "edit/dwbedit_group_prop.lml",
+    "class": "§editor.ui.edit.dwb_typevw.DwbGroupView"
+  },
 
 
   "proj_base_prop": {

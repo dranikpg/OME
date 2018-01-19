@@ -40,6 +40,7 @@ import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.editor.systems.pos.PositionSystem;
 import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
+import com.draniksoft.ome.editor.systems.support.CacheSystem;
 import com.draniksoft.ome.editor.systems.support.ConsoleSys;
 import com.draniksoft.ome.editor.systems.support.InputSys;
 import com.draniksoft.ome.editor.systems.support.flows.EditorSystem;
@@ -141,6 +142,10 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     public void run_gc() {
         System.gc();
+    }
+
+    public void log_mem() {
+	  console.log("MB: " + world.getSystem(CacheSystem.class).getRuntimeRamUsg());
     }
 
     /*

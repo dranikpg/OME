@@ -4,14 +4,15 @@ import com.artemis.World;
 import com.draniksoft.ome.editor.systems.gfx_support.CameraSys;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.editor.systems.support.InputSys;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class SimpleEditMode implements EditMode {
 
     protected World _w;
 
     @Override
-    public final void attached(World _w) {
-        this._w = _w;
+    public final void attached(@NotNull World _w) {
+	  this._w = _w;
         on_attached();
     }
 

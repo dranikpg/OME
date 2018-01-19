@@ -131,11 +131,8 @@ public class AssetListView extends BaseView {
 	  Array<AssetImg> ar = new Array<AssetImg>();
 
 	  for (TextureAtlas.AtlasRegion r : _w.getSystem(SimpleAssMgr.class).getAtlas(id).getRegions()) {
-		Gdx.app.debug(tag, "adding");
-
 		AssetImg img = new AssetImg();
 		img.setFor(r);
-		img.setSize(r.getRegionWidth(), r.getRegionHeight());
 
 		contentT.add(img).minSize(50f);
 		ar.add(img);
@@ -190,7 +187,7 @@ public class AssetListView extends BaseView {
 		super(VisUI.getSkin(), "sel");
 
 		i = new VisImage();
-		add(i).expand().fill();
+		add(i).expand().fill().pad(10);
 
 		setProgrammaticChangeEvents(false);
 		addListener(new ChangeListener() {

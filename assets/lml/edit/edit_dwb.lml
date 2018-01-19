@@ -22,11 +22,21 @@
 
             <separator growx=true row=true />
 
-            <visTable growx=true padBottom=20>
+            <visTable growx=true row=true>
 
-                <visTextButton text=addLeaf style=btml onClick=l.leaf_add padRight=20 />
+                <visTextButton id=leaf_b text=addLeaf style=btml onClick=l.leaf_add padRight=20 />
 
-                <visTextButton text=addGroup style=btml onClick=l.group_add  />
+                <visTextButton id=group_b text=addGroup style=btml onClick=l.group_add  />
+
+            </visTable>
+
+            <separator growx=true row=true padBottom=10 padTop=10 />
+
+            <visTable growx=true  padBottom=20>
+
+                <visTextButton text=save style=btml onClick=l.save padRight=20 />
+
+                <visTextButton text=restore style=btml onClick=l.restore  />
 
             </visTable>
 

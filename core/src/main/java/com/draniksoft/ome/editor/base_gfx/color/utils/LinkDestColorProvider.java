@@ -1,4 +1,4 @@
-package com.draniksoft.ome.editor.base_gfx.color;
+package com.draniksoft.ome.editor.base_gfx.color.utils;
 
 public class LinkDestColorProvider extends RootColorProvider {
 
