@@ -84,7 +84,7 @@ public class BaseMOInspView extends BaseView implements ActionContainer, InspVie
     }
 
     @Override
-    public Actor getActor() {
+    public Actor get() {
 	  return root;
     }
 

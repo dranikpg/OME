@@ -16,13 +16,13 @@ public class TestV extends BaseWinView {
     Container c;
 
     @Override
-    public Actor getActor() {
+    public Actor get() {
 	  return t;
     }
 
     @Override
     public void obtainIncld(String name, BaseView vw) {
-	  c.setActor(vw.getActor());
+	  c.setActor(vw.get());
 	  c.fill();
     }
 

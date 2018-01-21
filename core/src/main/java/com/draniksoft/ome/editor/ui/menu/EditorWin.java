@@ -67,7 +67,7 @@ public class EditorWin extends VisWindow implements WinControllerOverlay {
 		agent.opened(vw);
 
 	  root.clearChildren();
-	  root.add(v.getActor()).expand().fill();
+	  root.add(v.get()).expand().fill();
 
 	  vw.opened();
 

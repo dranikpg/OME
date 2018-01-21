@@ -84,10 +84,10 @@ public abstract class BaseWinView extends BaseView {
 	  float _w = 0;
 
 	  if (dynamic) {
-		if (getActor() instanceof Layout) {
-		    _w = ((Layout) getActor()).getPrefWidth();
+		if (get() instanceof Layout) {
+		    _w = ((Layout) get()).getPrefWidth();
 		} else {
-		    _w = getActor().getWidth();
+		    _w = get().getWidth();
 		}
 		Gdx.app.debug(tag, "Fetched dynamic width " + _w);
 	  } else {

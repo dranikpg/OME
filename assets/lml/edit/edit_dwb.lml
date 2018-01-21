@@ -6,50 +6,27 @@
 
         <visTable>
 
-            <container minsize=100 padBottom=20 row=true>
+            <visTable id=tree expand=true fillx=true/>
 
-                <visImage id=fullimg style=clear />
+            <:row />
 
-            </container>
+            <visTable>
 
-            <visScrollPane growy=true expandx=true align=left row=true>
+                <visTextButton style=btml onChange=l.add_leaf text=leafADD padRight=50 />
 
-                <visTree id=tree>
+                <visTextButton style=btml onChange=l.group_add text=goupAdd />
 
-                </visTree>
-
-            </visScrollPane>
-
-            <separator growx=true row=true />
-
-            <visTable growx=true row=true>
-
-                <visTextButton id=leaf_b text=addLeaf style=btml onClick=l.leaf_add padRight=20 />
-
-                <visTextButton id=group_b text=addGroup style=btml onClick=l.group_add  />
-
-            </visTable>
-
-            <separator growx=true row=true padBottom=10 padTop=10 />
-
-            <visTable growx=true  padBottom=20>
-
-                <visTextButton text=save style=btml onClick=l.save padRight=20 />
-
-                <visTextButton text=restore style=btml onClick=l.restore  />
+                <visTextButton style=btml onChange=l.save text=Save />
 
             </visTable>
 
         </visTable>
 
-
-        <visTable id=edit>
-
-
-        </visTable>
-
+        <visTable id=edit />
 
     </visSplitPane>
 
 </visTable>
+
+<:include name=tree id=resource_tree />
 

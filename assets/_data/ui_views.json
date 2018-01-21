@@ -23,8 +23,6 @@
     "lml": "insp/path.lml",
     "class": "§editor.ui.insp.PathView"
   },
-
-
   "add_comp": {
     "lml": "edit/add_comp.lml",
     "class": "§editor.ui.edit.AddCompView"
@@ -65,6 +63,10 @@
   "asset_list_hc": {
     "lml": "proj/asset_list_hc.lml",
     "class": "§editor.ui.proj.AssetListView"
+  },
+  "resource_tree": {
+    "lml": "supp/resource_tree.lml",
+    "class": "§editor.ui.supp.ResourceTree"
   },
 
 

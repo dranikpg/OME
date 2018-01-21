@@ -16,7 +16,7 @@ public class PathView extends BaseView implements InspView.InspectorManagable {
     }
 
     @Override
-    public Actor getActor() {
+    public Actor get() {
 	  return root;
     }
 

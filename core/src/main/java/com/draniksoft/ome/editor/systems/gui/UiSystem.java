@@ -68,8 +68,8 @@ public class UiSystem extends BaseSystem {
 
         w = new EditorWin(world);
 
-        uiStage.addActor(m.getActor());
-        uiStage.addActor(w);
+	  uiStage.addActor(m.get());
+	  uiStage.addActor(w);
 
         m.opened();
 

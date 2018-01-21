@@ -83,9 +83,9 @@ public class BottomMenu extends BaseView {
 	  }
 
 	  if (name.equals("btns")) {
-		btnC.setActor(vw.getActor());
+		btnC.setActor(vw.get());
 	  } else {
-		cnt.add(vw.getActor()).expand().fill();
+		cnt.add(vw.get()).expand().fill();
 	  }
 
     }
@@ -98,7 +98,7 @@ public class BottomMenu extends BaseView {
     }
 
     @Override
-    public Actor getActor() {
+    public Actor get() {
 	  return root;
     }
 
@@ -108,7 +108,7 @@ public class BottomMenu extends BaseView {
 
     @Override
     public void postinit() {
-	  root.setDebug(true);
+
     }
 
     /**

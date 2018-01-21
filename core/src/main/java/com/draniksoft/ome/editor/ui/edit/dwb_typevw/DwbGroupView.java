@@ -1,14 +1,11 @@
 package com.draniksoft.ome.editor.ui.edit.dwb_typevw;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.draniksoft.ome.editor.base_gfx.drawable_contructor.DwbConstructor;
-import com.draniksoft.ome.editor.base_gfx.drawable_contructor.GroupConstructor;
-import com.draniksoft.ome.editor.base_gfx.drawable_contructor.t.DwbGroupTypes;
+import com.draniksoft.ome.editor.base_gfx.drawable.utils.Drawable;
+import com.draniksoft.ome.editor.res_mgmnt.constructor.ResConstructor;
 import com.draniksoft.ome.editor.ui.edit.EditDwbView;
 import com.draniksoft.ome.support.ui.viewsys.BaseView;
 import com.github.czyzby.lml.annotation.LmlActor;
-import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.VisTable;
 
 public class DwbGroupView extends BaseView implements DwbEditI {
@@ -18,14 +15,10 @@ public class DwbGroupView extends BaseView implements DwbEditI {
     @LmlActor("root")
     VisTable root;
 
-    @LmlActor("typebox")
-    VisSelectBox<DwbGroupTypes> typebox;
-
-    GroupConstructor c;
 
     @Override
-    public Actor getActor() {
-	  return root;
+    public Actor get() {
+        return root;
     }
 
     @Override
@@ -36,25 +29,16 @@ public class DwbGroupView extends BaseView implements DwbEditI {
     @Override
     public void postinit() {
 
-	  typebox.setItems(DwbGroupTypes.values());
 
-	  typebox.addListener(new ChangeListener() {
-		@Override
-		public void changed(ChangeEvent event, Actor actor) {
-
-		    if (c == null) return;
-
-		    c.setType(typebox.getSelected());
-
-		}
-	  });
     }
 
     @Override
-    public void setFor(DwbConstructor c, EditDwbView.ActionHandler h) {
-	  this.c = (GroupConstructor) c;
+    public void setFor(ResConstructor<Drawable> c, EditDwbView.Handler h) {
 
-	  typebox.setSelected(((GroupConstructor) c).getType());
+    }
+
+    @Override
+    public void typeUpdated() {
 
     }
 

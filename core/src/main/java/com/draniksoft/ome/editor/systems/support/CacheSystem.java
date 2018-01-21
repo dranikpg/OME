@@ -1,76 +1,57 @@
 package com.draniksoft.ome.editor.systems.support;
 
 import com.artemis.BaseSystem;
-import com.artemis.ComponentMapper;
 import com.badlogic.gdx.utils.IntMap;
-import com.draniksoft.ome.editor.base_gfx.drawable_contructor.DwbConstructor;
-import com.draniksoft.ome.editor.components.cache.mo.MOCacheC;
+import com.badlogic.gdx.utils.IntSet;
+import com.draniksoft.ome.editor.support.caching.RESOURCE;
+import com.draniksoft.ome.editor.support.caching.STORAGE_TYPE;
 
 public class CacheSystem extends BaseSystem {
 
     private static String tag = "CacheSystem";
 
-    IntMap<DwbConstructor> dwbGlobCacheM;
 
-    public static class PRIORITY {
-	  public static int NULL = 0;
-	  public static int SMALL = 5;
-	  public static int MED = 10;
-	  public static int HIGH = 15;
-    }
+    IntMap<IntMap<Object>> sMap;
 
-    public enum RESOURCE {
-
-	  DWB_CONST
-
-    }
-
-    ComponentMapper<MOCacheC> moCM;
+    IntMap<IntSet> sSet;
 
     @Override
     protected void initialize() {
-	  dwbGlobCacheM = new IntMap<DwbConstructor>();
+
+	  sMap = new IntMap<IntMap<Object>>();
+	  sSet = new IntMap<IntSet>();
+
     }
 
     @Override
     protected void processSystem() {
+
     }
 
-    public void putEttyAttrib(RESOURCE type, int id, Object attrib) {
-	  MOCacheC c = safeCCGet(id);
-	  c.rootDwbCache = (DwbConstructor) attrib;
+    public boolean has(RESOURCE r, STORAGE_TYPE t, int id) {
+	  return t.has(r, id, world);
     }
 
-    public void putGlobAttrib(RESOURCE type, int id, Object attrib) {
-	  dwbGlobCacheM.put(id, (DwbConstructor) attrib);
+    public <T> void put(RESOURCE r, STORAGE_TYPE t, int id, T val) {
+	  t.put(r, id, val, world);
     }
 
-    public <TYPE> TYPE getEttyAttrib(RESOURCE type, int id) {
-	  MOCacheC c = safeCCGet(id);
-	  return (TYPE) c.rootDwbCache;
+    public <T> T get(Class<T> c, RESOURCE r, STORAGE_TYPE t, int id) {
+	  return t.get(r, id, world);
     }
 
-    public <TYPE> TYPE getGlobAttrib(RESOURCE type, int id) {
-	  return (TYPE) dwbGlobCacheM.get(id);
+    public void _mapPut(RESOURCE r, int id, Object o) {
+	  if (!sMap.containsKey(r.ordinal())) sMap.put(r.ordinal(), new IntMap<Object>());
+	  sMap.get(r.ordinal()).put(id, o);
     }
 
-    public boolean hasEttyAttrib(RESOURCE type, int id) {
-	  if (ccCheck(id)) return false;
-	  MOCacheC c = safeCCGet(id);
-	  return c.rootDwbCache != null;
+    public <T> T _mapGet(RESOURCE r, int id) {
+	  return (T) sMap.get(r.ordinal()).get(id);
     }
 
-    public boolean hasGlobAttrib(RESOURCE type, int id) {
-	  return dwbGlobCacheM.containsKey(id);
-    }
-
-    private boolean ccCheck(int id) {
-	  return !moCM.has(id);
-    }
-
-    private MOCacheC safeCCGet(int id) {
-	  if (moCM.has(id)) return moCM.get(id);
-	  return moCM.create(id);
+    public boolean _mapHas(RESOURCE r, int id) {
+	  if (!sMap.containsKey(r.ordinal())) return false;
+	  return sMap.get(r.ordinal()).containsKey(id);
     }
 
 

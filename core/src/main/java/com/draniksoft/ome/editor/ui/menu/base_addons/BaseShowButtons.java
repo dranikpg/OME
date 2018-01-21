@@ -11,7 +11,7 @@ public class BaseShowButtons extends BaseView {
     VisLabel l;
 
     @Override
-    public Actor getActor() {
+    public Actor get() {
 	  return l;
     }
 

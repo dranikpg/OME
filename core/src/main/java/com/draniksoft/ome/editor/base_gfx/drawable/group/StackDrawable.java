@@ -3,8 +3,9 @@ package com.draniksoft.ome.editor.base_gfx.drawable.group;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Array;
 import com.draniksoft.ome.editor.base_gfx.drawable.utils.Drawable;
+import com.draniksoft.ome.editor.res_mgmnt.res_ifaces.GroupResource;
 
-public class StackDrawable implements Drawable, GroupDrawable {
+public class StackDrawable extends GroupDrawable implements GroupResource<Drawable> {
 
     Array<Drawable> ar;
 
@@ -24,20 +25,16 @@ public class StackDrawable implements Drawable, GroupDrawable {
     }
 
 
-    @Override
-    public void destruct() {
 
+    @Override
+    public void update(Array<Drawable> ar) {
+	  this.ar.clear();
+	  this.ar.addAll(ar);
     }
 
     @Override
-    public Drawable copy(Array<Drawable> ar) {
-	  StackDrawable dwb = new StackDrawable(ar);
-	  return dwb;
+    public Drawable copy() {
+	  StackDrawable d = new StackDrawable(ar);
+	  return d;
     }
-
-    @Override
-    public Drawable newCopy(Array<Drawable> ar) {
-	  return copy(ar);
-    }
-
 }

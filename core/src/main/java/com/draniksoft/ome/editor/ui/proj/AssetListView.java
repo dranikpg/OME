@@ -41,7 +41,7 @@ public class AssetListView extends BaseView {
 
 
     @Override
-    public Actor getActor() {
+    public Actor get() {
 	  return root;
     }
 
@@ -194,7 +194,6 @@ public class AssetListView extends BaseView {
 		    @Override
 		    public void changed(ChangeEvent event, Actor actor) {
 			  if (!isChecked()) {
-				Gdx.app.debug(tag, "removed sel");
 				s.remove(AssetImg.this);
 			  } else {
 				Gdx.app.debug(tag, "set sel");

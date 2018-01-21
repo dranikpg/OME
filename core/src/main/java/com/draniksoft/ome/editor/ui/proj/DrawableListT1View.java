@@ -8,8 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntMap;
-import com.draniksoft.ome.editor.base_gfx.drawable.utils.Drawable;
 import com.draniksoft.ome.editor.base_gfx.drawable.utils.GdxCompatibleDrawable;
+import com.draniksoft.ome.editor.base_gfx.drawable.utils.RootDrawable;
 import com.draniksoft.ome.editor.manager.ProjValsManager;
 import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.projectVals.DrawableEvent;
@@ -74,8 +74,6 @@ public class DrawableListT1View extends BaseWinView implements ActionContainer {
 
 		selid = e.id;
 
-		invalidateParent();
-
 	  } else if (e instanceof DrawableEvent.DrawableRemovedE) {
 
 		a.removeValue(e.id, false);
@@ -86,16 +84,13 @@ public class DrawableListT1View extends BaseWinView implements ActionContainer {
 
 	  a.itemsChanged();
 
-
-	  if (selid >= 0) a.getSelectionManager().select(selid);
-
-
-
+	  a.getSelectionManager().select(selid);
+	  updateSelection(selid);
     }
 
     public void refresh() {
 
-	  Iterator<IntMap.Entry<MtPair<Drawable, String>>> it = m.getDrawableItAll();
+	  Iterator<IntMap.Entry<MtPair<RootDrawable, String>>> it = m.getDrawableItAll();
 
 	  while (it.hasNext()) {
 		a.add(it.next().key);
@@ -105,15 +100,14 @@ public class DrawableListT1View extends BaseWinView implements ActionContainer {
 
     }
 
-    public void updateSelection() {
+    public void updateSelection(int id) {
 
-	  if (a.getSelection().size < 1) {
+	  if (id < 1) {
 		selid = -1;
 		updateBottomT(-1);
 		return;
 	  }
 
-	  int id = a.getSelection().get(0);
 	  selid = id;
 
 	  updateBottomT(id);
@@ -144,7 +138,8 @@ public class DrawableListT1View extends BaseWinView implements ActionContainer {
 		newS = false;
 		refresh();
 	  }
-	  updateSelection();
+	  a.getSelectionManager().deselectAll();
+	  updateSelection(-1);
     }
 
     @Override
@@ -186,8 +181,15 @@ public class DrawableListT1View extends BaseWinView implements ActionContainer {
 	  listViewT.add(lw.getMainTable()).expand().fill();
 
 	  lw.setUpdatePolicy(ListView.UpdatePolicy.IMMEDIATELY);
+	  lw.setItemClickListener(new ListView.ItemClickListener<Integer>() {
+		@Override
+		public void clicked(Integer item) {
+		    updateSelection(item);
+		}
+	  });
 
 	  a.setSelectionMode(AbstractListAdapter.SelectionMode.SINGLE);
+	  a.getSelectionManager().setProgrammaticChangeEvents(true);
 
     }
 
@@ -221,7 +223,7 @@ public class DrawableListT1View extends BaseWinView implements ActionContainer {
 
 		name = new VisLabel(m.getDrawableName(id));
 
-		img = new VisImage(GdxCompatibleDrawable.from(m.getDrawable(id)));
+		img = new VisImage(GdxCompatibleDrawable.from(m.getRawDrawable(id)));
 
 		add(img).minSize(dwbSize).padRight(pad).padLeft(pad);
 		add(name).expandX();
@@ -239,7 +241,7 @@ public class DrawableListT1View extends BaseWinView implements ActionContainer {
 
 		name.setText(m.getDrawableName(id));
 
-		img.setDrawable(GdxCompatibleDrawable.from(m.getDrawable(id)));
+		img.setDrawable(GdxCompatibleDrawable.from(m.getRawDrawable(id)));
 
 	  }
 
@@ -248,7 +250,7 @@ public class DrawableListT1View extends BaseWinView implements ActionContainer {
 	  }
 
 	  public boolean matches(String filter) {
-		Gdx.app.debug(tag, "Matches ... " + m.getDrawableName(id) + " == " + filter + " ? 2-f ");
+
 		return m.getDrawableName(id).contains(filter);
 	  }
 
@@ -264,14 +266,11 @@ public class DrawableListT1View extends BaseWinView implements ActionContainer {
 	  @Override
 	  public void fillTable(VisTable itemsTable) {
 
-		Gdx.app.debug(tag, "Table fill");
-
 
 		String f = "";
 		if (searchField != null && searchField.getText() != null) f = searchField.getText().trim();
 
 		for (final Integer item : iterable()) {
-		    Gdx.app.debug(tag, "ON  " + item);
 		    final DrawableView view = getView(item);
 
 		    prepareViewBeforeAddingToTable(item, view);
@@ -287,12 +286,14 @@ public class DrawableListT1View extends BaseWinView implements ActionContainer {
 	  @Override
 	  protected void selectView(DrawableView view) {
 		view.setSelected(true);
+		Gdx.app.debug(tag, "View selected");
 
 	  }
 
 	  @Override
 	  protected void deselectView(DrawableView view) {
 		view.setSelected(false);
+		Gdx.app.debug(tag, "View deselected");
 
 	  }
 
@@ -337,7 +338,7 @@ public class DrawableListT1View extends BaseWinView implements ActionContainer {
 		public <T extends BaseWinView> void opened(T vw) {
 
 		    EditDwbView dw = (EditDwbView) vw;
-		    dw.init(new EditDwbView.ValDwbHandler(selid));
+		    dw.ifor(new EditDwbView.ProjDwbHandler(selid));
 
 		}
 
@@ -374,7 +375,7 @@ public class DrawableListT1View extends BaseWinView implements ActionContainer {
     }
 
     @Override
-    public Actor getActor() {
+    public Actor get() {
 	  return root;
     }
 }

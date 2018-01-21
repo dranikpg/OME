@@ -12,7 +12,7 @@ public class MoveMOView extends BaseWinView {
     Table root;
 
     @Override
-    public Actor getActor() {
+    public Actor get() {
 	  return root;
     }
 

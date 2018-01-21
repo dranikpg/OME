@@ -11,7 +11,7 @@ public class ProjBasePropView extends BaseWinView {
     VisTable root;
 
     @Override
-    public Actor getActor() {
+    public Actor get() {
 	  return root;
     }
 

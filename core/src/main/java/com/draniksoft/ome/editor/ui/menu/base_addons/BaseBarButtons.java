@@ -15,7 +15,7 @@ public class BaseBarButtons extends BaseView {
     VisImageButton edit;
 
     @Override
-    public Actor getActor() {
+    public Actor get() {
 	  return t;
     }
 

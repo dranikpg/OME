@@ -130,10 +130,10 @@ public class InspView extends BaseWinView implements ActionContainer {
 
 	  if (name.equals("head")) {
 		headC.fill();
-		headC.setActor(vw.getActor());
+		headC.setActor(vw.get());
 	  } else {
 
-		content.add(vw.getActor()).expandX().fillX();
+		content.add(vw.get()).expandX().fillX();
 		content.row();
 
 	  }
@@ -155,7 +155,7 @@ public class InspView extends BaseWinView implements ActionContainer {
     }
 
     @Override
-    public Actor getActor() {
+    public Actor get() {
 	  return root;
     }
 

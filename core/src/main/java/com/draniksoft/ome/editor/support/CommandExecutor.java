@@ -15,7 +15,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.draniksoft.ome.editor.base_gfx.drawable.utils.Drawable;
+import com.draniksoft.ome.editor.base_gfx.drawable.utils.RootDrawable;
 import com.draniksoft.ome.editor.esc_utils.OmeStrategy;
 import com.draniksoft.ome.editor.load.MapLoadBundle;
 import com.draniksoft.ome.editor.manager.FontManager;
@@ -500,8 +500,8 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
 
     public void log_dwb() {
-        Iterator<IntMap.Entry<MtPair<Drawable, String>>> it = world.getSystem(ProjValsManager.class).getDrawableItAll();
-        IntMap.Entry<MtPair<Drawable, String>> e;
+        Iterator<IntMap.Entry<MtPair<RootDrawable, String>>> it = world.getSystem(ProjValsManager.class).getDrawableItAll();
+        IntMap.Entry<MtPair<RootDrawable, String>> e;
         while (it.hasNext()) {
             e = it.next();
             console.log(e.key + " -> " + e.value.V() + " " + e.value.K().toString());

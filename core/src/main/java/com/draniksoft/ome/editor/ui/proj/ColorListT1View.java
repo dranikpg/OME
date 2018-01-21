@@ -131,7 +131,7 @@ public class ColorListT1View extends BaseWinView {
     }
 
     @Override
-    public Actor getActor() {
+    public Actor get() {
 	  return root;
     }
 

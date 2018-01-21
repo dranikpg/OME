@@ -8,7 +8,9 @@ import com.draniksoft.ome.editor.base_gfx.drawable.simple.EmptyDrawable;
 import com.draniksoft.ome.editor.base_gfx.drawable.utils.Drawable;
 import com.draniksoft.ome.utils.GUtils;
 
-public class AnimatedDrawable implements Drawable, GroupDrawable {
+import java.util.Arrays;
+
+public class AnimatedDrawable extends GroupDrawable {
 
     public Animation<Drawable> a;
 
@@ -24,36 +26,32 @@ public class AnimatedDrawable implements Drawable, GroupDrawable {
 	  if (dwbA.size == 0) dwbA.add(new EmptyDrawable());
 	  a = new Animation<Drawable>(0.5f, dwbA);
 	  a.setPlayMode(Animation.PlayMode.LOOP);
+
     }
 
     @Override
     public void draw(Batch b, float x, float y, float w, float h) {
-
 	  if (lf != GUtils.FRAME) {
 		d += Gdx.graphics.getRawDeltaTime();
 		lf = GUtils.FRAME;
 	  }
-
 	  a.getKeyFrame(d).draw(b, x, y, w, h);
     }
 
 
+
     @Override
-    public void destruct() {
+    public void update(Array<Drawable> ar) {
+
+	  a = new Animation<Drawable>(a.getFrameDuration(), ar.toArray());
+	  a.setPlayMode(Animation.PlayMode.LOOP);
 
     }
 
     @Override
-    public Drawable copy(Array<Drawable> ar) {
-	  if (ar.size == 0) return new EmptyDrawable();
-	  AnimatedDrawable dwb = new AnimatedDrawable();
-	  dwb.a = new Animation<Drawable>(a.getFrameDuration(), ar);
-	  dwb.a.setPlayMode(Animation.PlayMode.LOOP);
-	  return dwb;
-    }
-
-    @Override
-    public Drawable newCopy(Array<Drawable> ar) {
-	  return copy(ar);
+    public Drawable copy() {
+	  AnimatedDrawable n = new AnimatedDrawable();
+	  n.a = new Animation<Drawable>(a.getFrameDuration(), Arrays.copyOf(a.getKeyFrames(), a.getKeyFrames().length));
+	  return n;
     }
 }

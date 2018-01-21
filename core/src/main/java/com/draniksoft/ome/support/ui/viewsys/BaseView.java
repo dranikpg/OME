@@ -38,7 +38,7 @@ public abstract class BaseView {
 	  this._w = w;
     }
 
-    public abstract Actor getActor();
+    public abstract Actor get();
 
     public abstract void preinit();
 
@@ -152,7 +152,7 @@ public abstract class BaseView {
 
     protected void handleInclude(String nm, BaseView vw) {
 	  if (!active) return;
-	  vw.addedAsInclude(vw);
+	  vw.addedAsInclude(this);
 	  vw.opened();
 	  rtIncs.add(vw);
     }

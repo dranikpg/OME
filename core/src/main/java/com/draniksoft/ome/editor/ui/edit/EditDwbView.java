@@ -2,33 +2,34 @@ package com.draniksoft.ome.editor.ui.edit;
 
 import com.artemis.World;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Tree;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
+import com.draniksoft.ome.editor.base_gfx.drawable.constr.DrawableGroupConstructor;
+import com.draniksoft.ome.editor.base_gfx.drawable.constr.DrawableLeafContructor;
 import com.draniksoft.ome.editor.base_gfx.drawable.simple.EmptyDrawable;
 import com.draniksoft.ome.editor.base_gfx.drawable.utils.Drawable;
-import com.draniksoft.ome.editor.base_gfx.drawable.utils.GdxCompatibleDrawable;
-import com.draniksoft.ome.editor.base_gfx.drawable_contructor.DrawableParser;
-import com.draniksoft.ome.editor.base_gfx.drawable_contructor.DwbConstructor;
-import com.draniksoft.ome.editor.base_gfx.drawable_contructor.GroupConstructor;
-import com.draniksoft.ome.editor.base_gfx.drawable_contructor.LeafConstructor;
-import com.draniksoft.ome.editor.components.tps.MObjectC;
 import com.draniksoft.ome.editor.manager.ProjValsManager;
-import com.draniksoft.ome.editor.systems.gui.UiSystem;
+import com.draniksoft.ome.editor.res_mgmnt.constructor.GroupResConstructor;
+import com.draniksoft.ome.editor.res_mgmnt.constructor.LeafConstructor;
+import com.draniksoft.ome.editor.res_mgmnt.constructor.ResConstructor;
+import com.draniksoft.ome.editor.res_mgmnt.t.ResSubT;
+import com.draniksoft.ome.editor.res_mgmnt.t.ResTypes;
+import com.draniksoft.ome.editor.res_mgmnt.ui_br.NodeDeliverer;
+import com.draniksoft.ome.editor.support.caching.RESOURCE;
+import com.draniksoft.ome.editor.support.caching.STORAGE_TYPE;
 import com.draniksoft.ome.editor.systems.support.CacheSystem;
 import com.draniksoft.ome.editor.ui.edit.dwb_typevw.DwbEditI;
+import com.draniksoft.ome.editor.ui.supp.ResourceTree;
 import com.draniksoft.ome.support.ui.viewsys.BaseView;
 import com.draniksoft.ome.support.ui.viewsys.BaseWinView;
+import com.draniksoft.ome.ui_addons.resource_ui.ResTreeNode;
+import com.draniksoft.ome.ui_addons.resource_ui.dwb.ResDwbNode;
 import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.parser.LmlParser;
 import com.github.czyzby.lml.parser.action.ActionContainer;
-import com.kotcrab.vis.ui.widget.*;
-import org.jetbrains.annotations.Nullable;
-
-import java.lang.reflect.Field;
+import com.kotcrab.vis.ui.widget.VisSelectBox;
+import com.kotcrab.vis.ui.widget.VisTable;
 
 public class EditDwbView extends BaseWinView implements ActionContainer {
 
@@ -38,203 +39,254 @@ public class EditDwbView extends BaseWinView implements ActionContainer {
     VisTable root;
 
     @LmlActor("tree")
-    VisTree tree;
+    VisTable treeT;
 
     @LmlActor("edit")
     VisTable editT;
 
-    @LmlActor("fullimg")
-    VisImage fullI;
+    ResourceTree tree;
+    ResConstructor rootC;
+    String waitID;
 
-    @LmlActor("leaf_b")
-    VisTextButton leafB;
+    Handler h;
+    DwbEditI editUI;
 
-    @LmlActor("group_b")
-    VisTextButton groupB;
-
-    DwbEditI editVW;
-
-    ActionHandler handler;
-
-    volatile DwbConstructor rootC;
+    ResConstructor target;
 
 
-    public void init(ActionHandler h) {
-	  this.handler = h;
+    public void ifor(Handler h) {
+	  this.h = h;
+	  rootC = h.get(_w);
 
-	  rootC = null;
-	  tree.clearChildren();
 
-	  rootUpdated();
-	  updateSelection();
-
-	  new ParserC().start();
-
+	  if (tree != null) {
+		tree.clearTree();
+		tree.rootChanged(rootC);
+	  }
     }
+
+
 
     @Override
-    public Actor getActor() {
-	  return root;
+    protected void handleInclude(String nm, BaseView vw) {
+	  super.handleInclude(nm, vw);
+
+	  if (nm.equals("edit")) {
+
+		if (editUI != null) {
+		    removeIncldbVID(editUI.getID());
+		}
+
+		if (vw == null) return;
+
+		if (!vw.ID.equals(waitID)) return;
+		waitID = null;
+
+		editUI = (DwbEditI) vw;
+		editUI.setFor(target, h);
+
+		editT.clearChildren();
+		editT.add(vw.get()).expand().fill();
+
+	  } else if (nm.equals("tree")) {
+		handleTree((ResourceTree) vw);
+	  }
+
     }
+
+    private void handleTree(ResourceTree t) {
+
+	  Gdx.app.debug(tag, "Tree injection");
+
+	  tree = t;
+	  tree.clearTree();
+	  tree.init(new ResourceTree.ResourceTreeL() {
+
+		@Override
+		public void selChanged(ResConstructor ct) {
+		    updateSel(ct);
+		}
+
+		@Override
+		public void newRoot(ResConstructor ct) {
+		    EditDwbView.this.rootC = ct;
+		}
+
+		@Override
+		public void ddend(boolean removed) {
+
+		}
+
+		@Override
+		public NodeDeliverer getNoded() {
+		    return new NodeDeliverer() {
+			  @Override
+			  public ResTreeNode node(ResConstructor ct) {
+				return getNode(ct);
+			  }
+		    };
+		}
+	  });
+	  tree.rootChanged(rootC);
+
+
+	  treeT.clearChildren();
+	  treeT.add(tree.get()).expandY().fillY();
+    }
+
+    private ResTreeNode getNode(final ResConstructor ct) {
+
+	  VisTable t = new VisTable();
+
+	  VisSelectBox<ResSubT> sb = new VisSelectBox<ResSubT>() {
+		@Override
+		public void draw(Batch batch, float parentAlpha) {
+		    super.draw(batch, parentAlpha);
+		    if (this.getSelected() != ct.type()) {
+			  ct.setType(getSelected());
+			  if (ct == target) updateSel(ct);
+		    }
+		}
+	  };
+
+	  sb.setItems(ResSubT.fetchAll(ResTypes.DRAWABLE, ct instanceof GroupResConstructor));
+
+	  t.add("::");
+	  t.add(sb);
+	  ResDwbNode n = new ResDwbNode(ct, t);
+	  n.setExpanded(true);
+
+	  return n;
+    }
+
+    protected void updateDeTT(ResConstructor ct) {
+
+	  String w = "";
+
+	  if (ct instanceof GroupResConstructor) {
+		w = "dwbedit_group_prop";
+	  } else if (ct instanceof LeafConstructor) {
+		w = "dwbedit_leaf_prop";
+	  } else {
+		editT.clearChildren();
+		removeIncldByName("edit");
+		return;
+	  }
+
+	  if (editUI != null && w.equals(editUI.getID())) {
+		editUI.setFor(ct, h);
+		return;
+	  }
+
+	  if (w.equals(waitID)) {
+		return;
+	  }
+
+	  waitID = w;
+	  pushIncld("edit", w);
+
+    }
+
+    private void updateSel(ResConstructor ct) {
+
+	  target = ct;
+
+	  updateDeTT(ct);
+
+    }
+
+    //
+
+    @Override
+    public void closed() {
+	  super.closed();
+	  treeT.clearChildren();
+	  editT.clearChildren();
+	  removeIncldByName("edit");
+    }
+
+
+    //
+
+    @LmlAction("leaf_add")
+    public void add_leaf() {
+	  DrawableLeafContructor leafC = new DrawableLeafContructor();
+	  leafC.updateSources();
+	  if (tree != null) tree.addOnSelection(leafC);
+    }
+
+    @LmlAction("group_add")
+    public void add_group() {
+	  DrawableGroupConstructor groupC = new DrawableGroupConstructor();
+	  groupC.updateSources();
+	  if (tree != null) tree.addOnSelection(groupC);
+    }
+
+    public void save() {
+	  h.save(rootC, _w);
+	  closeWin();
+    }
+
+    //
+
+    public interface Handler {
+
+	  ResConstructor<Drawable> get(World w);
+
+	  void save(ResConstructor<Drawable> root, World w);
+
+    }
+
+    public static class ProjDwbHandler implements Handler {
+
+	  int id;
+
+	  public ProjDwbHandler(int id) {
+		this.id = id;
+	  }
+
+	  @Override
+	  public ResConstructor<Drawable> get(World w) {
+
+		if (w.getSystem(CacheSystem.class).has(RESOURCE.DRAWABLE_CONSTR, STORAGE_TYPE.PROJ_VAL, id)) {
+
+		    Gdx.app.debug(tag, "Fetching cached");
+		    return w.getSystem(CacheSystem.class).get(ResConstructor.class, RESOURCE.DRAWABLE_CONSTR, STORAGE_TYPE.PROJ_VAL, id);
+
+		}
+		return null;
+	  }
+
+	  @Override
+	  public void save(ResConstructor<Drawable> root, World w) {
+
+		Gdx.app.debug(tag, "Saving");
+
+		Drawable rb;
+
+		if (root == null) rb = new EmptyDrawable();
+		else rb = root.build();
+
+		w.getSystem(ProjValsManager.class).setDrawable(id, rb);
+
+		if (root != null)
+		    w.getSystem(CacheSystem.class).put(RESOURCE.DRAWABLE_CONSTR, STORAGE_TYPE.PROJ_VAL, id, root);
+
+	  }
+    }
+
+    //
+
 
     @Override
     public void preinit() {
-
 
     }
 
     @Override
     public void postinit() {
 
-	  tree.getSelection().setMultiple(false);
-	  tree.getSelection().setProgrammaticChangeEvents(true);
-
-	  tree.setYSpacing(10);
-
-	  tree.addListener(new ChangeListener() {
-		@Override
-		public void changed(ChangeEvent event, Actor actor) {
-		    updateSelection();
-		}
-	  });
-
-	  initDragAndDrop();
-
-
-	  try {
-		Field field = Tree.class.getDeclaredField("indentSpacing");
-		field.setAccessible(true);
-		field.set(tree, 24);
-	  } catch (Exception e) {
-		e.printStackTrace();
-	  }
-
-
     }
-
-    String wt_view;
-
-    private void updateEditT(DwbConstructor c) {
-
-
-	  String incl = "";
-	  if (c instanceof GroupConstructor) {
-		incl = "dwbedit_group_prop";
-	  } else {
-		incl = "dwbedit_leaf_prop";
-	  }
-
-	  if (editVW != null && editVW.getID().equals(incl)) {
-		editVW.setFor(c, handler);
-		return;
-	  }
-
-	  editT.clearChildren();
-
-	  removeIncldByName("edit");
-
-	  wt_view = incl;
-
-	  pushIncld("edit", incl);
-
-    }
-
-    @Override
-    protected void handleInclude(String nm, BaseView vw) {
-	  super.handleInclude(nm, vw);
-
-	  if (!vw.ID.equals(wt_view)) return;
-
-	  try {
-		editVW = (DwbEditI) vw;
-
-		editT.add(vw.getActor()).expand().fill();
-
-		editVW.setFor((DwbConstructor) tree.getSelection().getLastSelected().getObject(), handler);
-
-	  } catch (Exception e) {
-		Gdx.app.error(tag, "", e);
-	  }
-    }
-
-    private void updateSelection() {
-
-	  Gdx.app.debug(tag, "Selection update");
-
-	  leafB.setVisible(true);
-	  groupB.setVisible(true);
-
-	  if (tree.getSelection().isEmpty()) {
-		editT.setVisible(false);
-		return;
-	  } else {
-		editT.setVisible(true);
-	  }
-
-	  DwbConstructor c = (DwbConstructor) tree.getSelection().getLastSelected().getObject();
-
-	  updateEditT(c);
-
-    }
-
-
-    private void initDragAndDrop() {
-
-	  DragAndDrop dd = new DragAndDrop();
-
-	  dd.addSource(new DragAndDrop.Source(tree) {
-		@Override
-		public DragAndDrop.Payload dragStart(InputEvent event, float x, float y, int pointer) {
-
-		    DwbNode n = (DwbNode) tree.getNodeAt(y);
-
-		    if (n == null || tree.getSelection().getLastSelected() != n) return null;
-
-		    DragAndDrop.Payload l = new DragAndDrop.Payload();
-		    l.setObject(n.C());
-		    VisLabel pzda = new VisLabel("LEL");
-		    l.setDragActor(pzda);
-
-		    if (n.C().getParent() != null) n.C().getParent().remove(n);
-		    else {
-			  tree.remove(n);
-			  rootC = null;
-		    }
-
-		    return l;
-		}
-
-		@Override
-		public void dragStop(InputEvent event, float x, float y, int pointer, DragAndDrop.Payload payload, DragAndDrop.Target target) {
-		    super.dragStop(event, x, y, pointer, payload, target);
-		    if (target == null) {
-			  if (payload.getObject() == rootC) {
-				rootC = null;
-				rootUpdated();
-			  }
-			  Gdx.app.debug(tag, "Deleted");
-		    }
-		}
-	  });
-
-	  dd.addTarget(new DragAndDrop.Target(tree) {
-		@Override
-		public boolean drag(DragAndDrop.Source source, DragAndDrop.Payload payload, float x, float y, int pointer) {
-		    return true;
-		}
-
-		@Override
-		public void drop(DragAndDrop.Source source, DragAndDrop.Payload payload, float x, float y, int pointer) {
-
-		    DwbNode n = (DwbNode) tree.getNodeAt(y);
-
-		    addOnDrop((DwbConstructor) payload.getObject(), n);
-
-		}
-	  });
-
-    }
-
 
     @Override
     public void prepareParser(LmlParser p) {
@@ -249,263 +301,8 @@ public class EditDwbView extends BaseWinView implements ActionContainer {
     }
 
     @Override
-    public void closed() {
-	  super.closed();
-	  removeIncldByName("edit");
-	  handler = null;
+    public Actor get() {
+	  return root;
     }
-
-    private void connectRoot() {
-	  tree.clearChildren();
-	  tree.add(rootC.getNode());
-    }
-
-    private void rootUpdated() {
-	  Gdx.app.debug(tag, "Root updated");
-	  if (rootC != null) fullI.setDrawable(rootC.getGdxSnapshot());
-	  else fullI.setDrawable(GdxCompatibleDrawable.from(new EmptyDrawable()));
-	  updateSelection();
-    }
-
-
-    private void add(DwbConstructor c, @Nullable DwbNode parent, @Nullable DwbNode after) {
-
-	  if (rootC == null) {
-
-		tree.add(c.getNode());
-
-		rootC = c;
-		rootUpdated();
-
-		Gdx.app.debug(tag, "Replaced root");
-
-	  } else {
-
-		if (parent == null) {
-
-		    if (rootC instanceof GroupConstructor) {
-			  if (after != null)
-				((GroupConstructor) rootC).insertAfter(after, c);
-			  else
-				((GroupConstructor) rootC).add(c);
-
-			  Gdx.app.debug(tag, "Added to root(group)");
-
-		    } else {
-
-			  GroupConstructor newR = new GroupConstructor();
-
-			  rootC.getNode().remove();
-
-			  newR.add(rootC);
-			  newR.add(c);
-
-			  tree.add(newR.getNode());
-
-			  rootC = newR;
-			  rootUpdated();
-
-			  Gdx.app.debug(tag, "Emplaced root");
-
-		    }
-
-		} else {
-
-		    if (after != null) {
-
-			  ((GroupConstructor) parent.C()).insertAfter(after, c);
-
-		    } else {
-
-			  ((GroupConstructor) parent.C()).add(c);
-
-		    }
-
-		    parent.setExpanded(true);
-
-
-		}
-
-	  }
-
-	  tree.getSelection().set(c.getNode());
-
-    }
-
-    private void addOnDrop(DwbConstructor c, DwbNode n) {
-
-	  if (n == null) {
-		add(c, null, null);
-	  } else {
-		if (n.C() instanceof GroupConstructor) {
-		    add(c, n, null);
-		} else {
-		    add(c, (DwbNode) n.getParent(), n);
-		}
-
-	  }
-
-    }
-
-    private void addOnSel(DwbConstructor c) {
-
-
-	  addOnDrop(c, (DwbNode) tree.getSelection().getLastSelected());
-
-    }
-
-    @LmlAction("leaf_add")
-    public void leaf_add() {
-	  addOnSel(new LeafConstructor());
-    }
-
-    @LmlAction("group_add")
-    public void group_add() {
-	  addOnSel(new GroupConstructor());
-    }
-
-    @LmlAction("save")
-    public void save() {
-	  Gdx.app.debug(tag, "Saving");
-	  handler.save(rootC);
-	  _w.getSystem(UiSystem.class).closeWin();
-    }
-
-    @LmlAction("restore")
-    public void restore() {
-    }
-
-    public static class DwbNode extends Tree.Node {
-
-	  public DwbNode(DwbConstructor c) {
-		super(new DwbTable());
-
-		setObject(c);
-
-		setExpanded(true);
-
-		setIcon(c.getGdxSnapshot());
-		getIcon().setMinWidth(40);
-		getIcon().setMinHeight(40);
-
-	  }
-
-
-	  public <TYPE extends DwbConstructor> TYPE C() {
-		return (TYPE) getObject();
-	  }
-
-
-	  @Override
-	  protected void addToTree(Tree tree) {
-		super.addToTree(tree);
-	  }
-
-
-    }
-
-    private static class DwbTable extends VisTable {
-
-	  public DwbTable() {
-		add("LLELLELE");
-	  }
-    }
-
-    private final class ParserC extends Thread {
-	  @Override
-	  public void run() {
-		DwbConstructor c = handler.prepare(_w);
-		rootC = c;
-		connectRoot();
-		rootUpdated();
-
-		updateSelection();
-	  }
-    }
-
-    public interface ActionHandler {
-
-	  DwbConstructor prepare(World w);
-
-	  void save(DwbConstructor c);
-
-
-    }
-
-    public static class ValDwbHandler implements ActionHandler {
-
-	  int id;
-
-	  World _w;
-
-	  public ValDwbHandler(int id) {
-		this.id = id;
-	  }
-
-
-	  @Override
-	  public DwbConstructor prepare(World w) {
-		this._w = w;
-
-		if (_w.getSystem(ProjValsManager.class).getDrawable(id) instanceof EmptyDrawable) return null;
-
-		if (_w.getSystem(CacheSystem.class).hasGlobAttrib(CacheSystem.RESOURCE.DWB_CONST, id)) {
-		    Gdx.app.debug(tag, "Fetching global from cache");
-		    return _w.getSystem(CacheSystem.class).getGlobAttrib(CacheSystem.RESOURCE.DWB_CONST, id);
-		} else {
-		    Gdx.app.debug(tag, "Parsing from raw sources");
-		    DwbConstructor c = DrawableParser.I().parse(_w.getSystem(ProjValsManager.class).getDwbRawSrc(id));
-		    _w.getSystem(CacheSystem.class).putGlobAttrib(CacheSystem.RESOURCE.DWB_CONST, id, c);
-		}
-
-		return null;
-	  }
-
-	  @Override
-	  public void save(DwbConstructor c) {
-
-		Drawable build = c.construct();
-
-		_w.getSystem(ProjValsManager.class).setDrawable(id, build);
-
-		_w.getSystem(CacheSystem.class).putGlobAttrib(CacheSystem.RESOURCE.DWB_CONST, id, c);
-
-	  }
-    }
-
-    public class EttyDwbHandler implements ActionHandler {
-
-	  int id;
-
-
-	  public EttyDwbHandler(int id) {
-		this.id = id;
-	  }
-
-
-	  World _w;
-
-	  @Override
-	  public DwbConstructor prepare(World w) {
-		this._w = w;
-
-		if (_w.getSystem(CacheSystem.class).hasEttyAttrib(CacheSystem.RESOURCE.DWB_CONST, id)) {
-		    return _w.getSystem(CacheSystem.class).getEttyAttrib(CacheSystem.RESOURCE.DWB_CONST, id);
-		} else {
-		    Gdx.app.debug(tag + " ETD", " Parsing from scratch ");
-		    MObjectC mc = _w.getMapper(MObjectC.class).get(id);
-		    DwbConstructor c = DrawableParser.I().parse(mc.dwbID);
-		}
-
-		return null;
-	  }
-
-	  @Override
-	  public void save(DwbConstructor c) {
-
-	  }
-    }
-
-
 }
 

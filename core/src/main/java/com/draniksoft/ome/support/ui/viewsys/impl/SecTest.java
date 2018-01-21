@@ -11,7 +11,7 @@ public class SecTest extends BaseView {
     Table root;
 
     @Override
-    public Actor getActor() {
+    public Actor get() {
 	  return root;
     }
 

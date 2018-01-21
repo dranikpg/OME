@@ -1,12 +1,13 @@
 package com.draniksoft.ome.editor.base_gfx.drawable.simple;
 
+import com.artemis.World;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.draniksoft.ome.editor.base_gfx.drawable.utils.Drawable;
 import com.draniksoft.ome.utils.FUtills;
 
-public class SimpleDrawable implements Drawable {
+public class SimpleDrawable extends Drawable {
 
     private static final String tag = "SimpleDrawable";
 
@@ -14,7 +15,7 @@ public class SimpleDrawable implements Drawable {
 
     @Override
     public void draw(Batch b, float x, float y, float w, float h) {
-	  b.draw(r, x, y, w, h);
+	  if (r != null) b.draw(r, x, y, w, h);
     }
 
     public static SimpleDrawable parse(String s) {
@@ -30,11 +31,19 @@ public class SimpleDrawable implements Drawable {
     }
 
     public Drawable copy() {
-	  return null;
+	  SimpleDrawable n = new SimpleDrawable();
+	  n.r = r;
+	  return n;
+    }
+
+
+    @Override
+    public void init(World _w) {
+
     }
 
     @Override
-    public void destruct() {
+    public void restore(World _w) {
 
     }
 }

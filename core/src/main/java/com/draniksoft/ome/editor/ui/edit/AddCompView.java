@@ -112,7 +112,7 @@ public class AddCompView extends BaseWinView implements ActionContainer {
     }
 
     @Override
-    public Actor getActor() {
+    public Actor get() {
 	  return root;
     }
 

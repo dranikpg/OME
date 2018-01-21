@@ -69,7 +69,7 @@ public class EMButtonStrip extends BaseView {
     }
 
     @Override
-    public Actor getActor() {
+    public Actor get() {
 	  return t;
     }
 

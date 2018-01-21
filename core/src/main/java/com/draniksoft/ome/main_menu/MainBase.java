@@ -45,7 +45,7 @@ public class MainBase extends Game {
 
         if (engine == null || forceNew) {
 
-            Gdx.app.debug(tag, "Redirecting request::open to engine build");
+		Gdx.app.debug(tag, "Redirecting request::open to engine construct");
 
             buildEngine();
 
