@@ -3,8 +3,8 @@ package com.draniksoft.ome.editor.support.actions.color;
 import com.artemis.World;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
-import com.draniksoft.ome.editor.base_gfx.color.simple.LinkColor;
 import com.draniksoft.ome.editor.manager.ProjValsManager;
+import com.draniksoft.ome.editor.res.color.simple.LinkColor;
 import com.draniksoft.ome.editor.support.actions.Action;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,8 +38,8 @@ public class RemoveColorA implements Action {
 
 	  /*int id = mgr.createColor(name, cval);
 
-	  for (LinkColor c : car) {
-		mgr.registerColor(c, id);
+	  for (LinkColor constr : car) {
+		mgr.registerColor(constr, id);
 	  }
 
 	  w.getSystem(OmeEventSystem.class).dispatch(new ColorEvent.ColorAddedEvent(id));*/

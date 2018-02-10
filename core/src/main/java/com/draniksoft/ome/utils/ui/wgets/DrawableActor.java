@@ -2,7 +2,7 @@ package com.draniksoft.ome.utils.ui.wgets;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.draniksoft.ome.editor.base_gfx.drawable.utils.Drawable;
+import com.draniksoft.ome.editor.res.drawable.utils.Drawable;
 
 public class DrawableActor extends Actor {
 

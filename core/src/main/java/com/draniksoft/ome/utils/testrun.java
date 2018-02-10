@@ -15,12 +15,12 @@ public class testrun {
 
     public static void main(String[] args) {
 
-	  leletest t = new leletest();
-	  t.v = 10;
-
-	  changel(t);
-
-	  System.out.println(t.v);
+	  int e = 2;
+	  int y = "QCX".hashCode() % 3000;
+	  int x = "NLX".hashCode() % 3000;
+	  for (int d = 0; d <= x; d++)
+		e = (e ^ d) % y;
+	  System.out.println(e);
 
     }
 

@@ -6,8 +6,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.draniksoft.ome.editor.components.path.PathDescC;
-import com.draniksoft.ome.editor.support.container.path.PathDesc;
-import com.draniksoft.ome.editor.support.container.path.PathSDesc;
+import com.draniksoft.ome.editor.res.path.b.PathDesc;
+import com.draniksoft.ome.editor.res.path.b.PathSDesc;
 import com.draniksoft.ome.editor.support.ems.path.EditPathEM;
 import com.draniksoft.ome.editor.support.input.InputController;
 

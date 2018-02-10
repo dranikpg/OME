@@ -5,11 +5,12 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
-import com.draniksoft.ome.editor.res_mgmnt.constructor.GroupResConstructor;
-import com.draniksoft.ome.editor.res_mgmnt.constructor.ResConstructor;
-import com.draniksoft.ome.editor.res_mgmnt.ui_br.NodeDeliverer;
+import com.draniksoft.ome.editor.res.res_mgmnt_base.constructor.GroupResConstructor;
+import com.draniksoft.ome.editor.res.res_mgmnt_base.constructor.ResConstructor;
+import com.draniksoft.ome.editor.res.res_mgmnt_base.ui_br.NodeDeliverer;
 import com.draniksoft.ome.support.ui.viewsys.BaseView;
 import com.draniksoft.ome.ui_addons.resource_ui.ResTreeNode;
+import com.draniksoft.ome.utils.struct.Pair;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTree;
@@ -83,7 +84,7 @@ public class ResourceTree extends BaseView {
 		    super.dragStop(event, x, y, pointer, payload, target);
 		    if (target == null) {
 			  Gdx.app.debug(tag, "Object dropped out of zone");
-			  if (_ll != null) _ll.ddend(true);
+			  if (_ll != null) _ll.ddend((ResConstructor) payload.getObject(), true);
 		    }
 		}
 	  });
@@ -108,18 +109,15 @@ public class ResourceTree extends BaseView {
 			  tree.add(cc.getNode(getNodeD()));
 			  if (_ll != null) _ll.newRoot(cc);
 		    } else {
-			  if (n.c() instanceof GroupResConstructor) {
-				((GroupResConstructor) n.c()).add(cc, n.c(), getNodeD());
-			  } else {
-				n.c().getParent().add(cc, n.c(), getNodeD());
-			  }
+			  Pair<ResConstructor, GroupResConstructor> nextG = n.c().findParentPrefix(true);
+			  if (nextG == null) return;
+			  nextG.V().add(cc, nextG.K(), getNodeD());
 		    }
-
 
 		    tree.getSelection().set(cc.getNode(getNodeD()));
 		    cc.getNode(null).setExpanded(true);
 
-		    if (_ll != null) _ll.ddend(false);
+		    if (_ll != null) _ll.ddend(cc, false);
 
 
 		}
@@ -129,7 +127,6 @@ public class ResourceTree extends BaseView {
 
 
     private NodeDeliverer getNodeD() {
-
 	  if (_ll != null) {
 		return _ll.getNoded();
 	  } else {
@@ -139,9 +136,7 @@ public class ResourceTree extends BaseView {
     }
 
     public void addOnSelection(ResConstructor c) {
-
 	  ResTreeNode sel = (ResTreeNode) tree.getSelection().getLastSelected();
-
 	  if (sel == null) {
 		Gdx.app.debug(tag, "Add op on null v");
 		rootChanged(c);
@@ -149,18 +144,11 @@ public class ResourceTree extends BaseView {
 		return;
 	  }
 
-	  if (sel.c() instanceof GroupResConstructor) {
-		Gdx.app.debug(tag, "Add op in group");
-		((GroupResConstructor) sel.c()).add(c, getNodeD());
-	  } else {
-		if (sel.c().getParent() != null) {
-		    Gdx.app.debug(tag, "Add op after child");
-		    sel.c().getParent().add(c, sel.c(), getNodeD());
-		}
-	  }
+	  Pair<ResConstructor, GroupResConstructor> nextG = sel.c().findParentPrefix(true);
+	  if (nextG == null) return;
+	  nextG.V().add(c, nextG.K(), getNodeD());
 
 	  tree.getSelection().set(c.getNode(getNodeD()));
-
     }
 
     //
@@ -179,7 +167,6 @@ public class ResourceTree extends BaseView {
 	  tree.addListener(new ChangeListener() {
 		@Override
 		public void changed(ChangeEvent event, Actor actor) {
-
 
 		    if (_ll == null) return;
 
@@ -212,7 +199,7 @@ public class ResourceTree extends BaseView {
 
 	  void newRoot(ResConstructor ct);
 
-	  void ddend(boolean removed);
+	  void ddend(ResConstructor c, boolean removed);
 
 	  NodeDeliverer getNoded();
 

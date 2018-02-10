@@ -4,20 +4,17 @@ import com.artemis.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.draniksoft.ome.editor.base_gfx.drawable.constr.DrawableGroupConstructor;
-import com.draniksoft.ome.editor.base_gfx.drawable.constr.DrawableLeafContructor;
-import com.draniksoft.ome.editor.base_gfx.drawable.simple.EmptyDrawable;
-import com.draniksoft.ome.editor.base_gfx.drawable.utils.Drawable;
 import com.draniksoft.ome.editor.manager.ProjValsManager;
-import com.draniksoft.ome.editor.res_mgmnt.constructor.GroupResConstructor;
-import com.draniksoft.ome.editor.res_mgmnt.constructor.LeafConstructor;
-import com.draniksoft.ome.editor.res_mgmnt.constructor.ResConstructor;
-import com.draniksoft.ome.editor.res_mgmnt.t.ResSubT;
-import com.draniksoft.ome.editor.res_mgmnt.t.ResTypes;
-import com.draniksoft.ome.editor.res_mgmnt.ui_br.NodeDeliverer;
-import com.draniksoft.ome.editor.support.caching.RESOURCE;
-import com.draniksoft.ome.editor.support.caching.STORAGE_TYPE;
-import com.draniksoft.ome.editor.systems.support.CacheSystem;
+import com.draniksoft.ome.editor.res.drawable.constr.DrawableGroupConstructor;
+import com.draniksoft.ome.editor.res.drawable.constr.DrawableLeafContructor;
+import com.draniksoft.ome.editor.res.drawable.simple.EmptyDrawable;
+import com.draniksoft.ome.editor.res.drawable.utils.Drawable;
+import com.draniksoft.ome.editor.res.res_mgmnt_base.constructor.GroupResConstructor;
+import com.draniksoft.ome.editor.res.res_mgmnt_base.constructor.LeafConstructor;
+import com.draniksoft.ome.editor.res.res_mgmnt_base.constructor.ResConstructor;
+import com.draniksoft.ome.editor.res.res_mgmnt_base.types.ResSubT;
+import com.draniksoft.ome.editor.res.res_mgmnt_base.types.ResTypes;
+import com.draniksoft.ome.editor.res.res_mgmnt_base.ui_br.NodeDeliverer;
 import com.draniksoft.ome.editor.ui.edit.dwb_typevw.DwbEditI;
 import com.draniksoft.ome.editor.ui.supp.ResourceTree;
 import com.draniksoft.ome.support.ui.viewsys.BaseView;
@@ -57,8 +54,6 @@ public class EditDwbView extends BaseWinView implements ActionContainer {
     public void ifor(Handler h) {
 	  this.h = h;
 	  rootC = h.get(_w);
-
-
 	  if (tree != null) {
 		tree.clearTree();
 		tree.rootChanged(rootC);
@@ -113,7 +108,15 @@ public class EditDwbView extends BaseWinView implements ActionContainer {
 		}
 
 		@Override
-		public void ddend(boolean removed) {
+		public void ddend(ResConstructor c, boolean removed) {
+
+		    if (removed) {
+			  if (c.getParent() != null) {
+				c.getParent().remove(c, getNoded());
+			  } else if (c == rootC) {
+				newRoot(null);
+			  }
+		    }
 
 		}
 
@@ -149,7 +152,7 @@ public class EditDwbView extends BaseWinView implements ActionContainer {
 		}
 	  };
 
-	  sb.setItems(ResSubT.fetchAll(ResTypes.DRAWABLE, ct instanceof GroupResConstructor));
+	  sb.setItems(ResSubT.fetchAll(ResTypes.DRAWABLE, ct.group()));
 
 	  t.add("::");
 	  t.add(sb);
@@ -202,6 +205,7 @@ public class EditDwbView extends BaseWinView implements ActionContainer {
 	  super.closed();
 	  treeT.clearChildren();
 	  editT.clearChildren();
+	  tree = null;
 	  removeIncldByName("edit");
     }
 
@@ -248,11 +252,14 @@ public class EditDwbView extends BaseWinView implements ActionContainer {
 	  @Override
 	  public ResConstructor<Drawable> get(World w) {
 
-		if (w.getSystem(CacheSystem.class).has(RESOURCE.DRAWABLE_CONSTR, STORAGE_TYPE.PROJ_VAL, id)) {
+		Gdx.app.debug(tag, "Constructor lookup for " + id);
 
-		    Gdx.app.debug(tag, "Fetching cached");
-		    return w.getSystem(CacheSystem.class).get(ResConstructor.class, RESOURCE.DRAWABLE_CONSTR, STORAGE_TYPE.PROJ_VAL, id);
-
+		ProjValsManager m = w.getSystem(ProjValsManager.class);
+		if (m.get(ResTypes.DRAWABLE, id).ctr != null) {
+		    Gdx.app.debug(tag, "Found chached constructor");
+		    ResConstructor<Drawable> c = m.get(ResTypes.DRAWABLE, id).ctr;
+		    c.extendData();
+		    return c;
 		}
 		return null;
 	  }
@@ -260,17 +267,18 @@ public class EditDwbView extends BaseWinView implements ActionContainer {
 	  @Override
 	  public void save(ResConstructor<Drawable> root, World w) {
 
-		Gdx.app.debug(tag, "Saving");
+		Gdx.app.debug(tag, "Saving " + id);
 
 		Drawable rb;
 
 		if (root == null) rb = new EmptyDrawable();
 		else rb = root.build();
 
-		w.getSystem(ProjValsManager.class).setDrawable(id, rb);
+		if (root != null) root.shrinkData();
 
-		if (root != null)
-		    w.getSystem(CacheSystem.class).put(RESOURCE.DRAWABLE_CONSTR, STORAGE_TYPE.PROJ_VAL, id, root);
+		w.getSystem(ProjValsManager.class).update(ResTypes.DRAWABLE, rb, id);
+		if (root != null) w.getSystem(ProjValsManager.class).updateConstructor(ResTypes.DRAWABLE, root, id);
+
 
 	  }
     }

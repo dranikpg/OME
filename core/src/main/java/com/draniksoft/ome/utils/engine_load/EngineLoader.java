@@ -196,53 +196,72 @@ public class EngineLoader {
 
         SpriteBatch b;
 
-        @Override
-        public byte run() {
+	  int base = 2;
 
-            cc++;
-            if (cc == 1) {
+	  void buildVPS() {
+		OrthographicCamera gameC = new OrthographicCamera(1280, 960);
+		gameC.setToOrtho(false);
+		c.register("game_cam", gameC);
+		OrthographicCamera uiCam = new OrthographicCamera(1280, 960);
+		uiCam.setToOrtho(false);
+		c.register("ui_cam", uiCam);
 
-                OrthographicCamera gameC = new OrthographicCamera(1280, 960);
-                gameC.setToOrtho(false);
-                c.register("game_cam", gameC);
-                OrthographicCamera uiCam = new OrthographicCamera(1280, 960);
-                uiCam.setToOrtho(false);
-                c.register("ui_cam", uiCam);
+		gameVP = new ScreenViewport(gameC);
+		uiVP = new ScreenViewport(uiCam);
 
-                gameVP = new ScreenViewport(gameC);
-                uiVP = new ScreenViewport(uiCam);
+		gameVP.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		uiVP.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-                gameVP.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-                uiVP.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		c.register("ui_vp", uiVP);
+		c.register("game_vp", gameVP);
+	  }
 
-                c.register("ui_vp", uiVP);
-                c.register("game_vp", gameVP);
+	  void buildRender() {
+
+		b = new SpriteBatch();
+
+		c.register(b);
+
+		ShapeRenderer r = new ShapeRenderer();
+
+		GUtils.sr = r;
+		c.register(r);
+
+	  }
+
+	  void buildRenderCache() {
+		SpriteCache ca = new SpriteCache(10000, false);
+		c.register(ca);
+	  }
+
+	  @Override
+	  public byte run() {
+
+		cc++;
+		if (cc == base) {
+
+		    GUtils.fetchMaxTexSize();
+
+		} else if (cc == base + 1) {
+
+		    buildVPS();
 
 
-            } else if (cc == 2) {
+		} else if (cc == base + 2) {
 
-                b = new SpriteBatch();
+		    buildRender();
 
-                c.register(b);
+		} else if (cc == base + 3) {
 
-                ShapeRenderer r = new ShapeRenderer();
+		    buildRenderCache();
 
-                GUtils.sr = r;
-                c.register(r);
-
-            } else if (cc == 3) {
-
-                SpriteCache ca = new SpriteCache(10000, false);
-
-                c.register(ca);
-
-            } else if (cc == 4) {
+		} else if (cc == base + 4) {
 
                 Stage uiS = new Stage(uiVP, b);
 
                 c.register("top_stage", uiS);
 
-            } else if (cc >= 5) {
+		} else if (cc >= base + 5) {
 
                 Gdx.app.debug(tag, "Dependency B :: GL_GFX finished passes");
 
@@ -252,6 +271,8 @@ public class EngineLoader {
 
             return IGLRunnable.RUNNING;
         }
+
+
     }
 
     private static class WorldConfigBdrBuilder implements IRunnable {

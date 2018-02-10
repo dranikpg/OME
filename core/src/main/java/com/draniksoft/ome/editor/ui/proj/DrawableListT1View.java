@@ -8,16 +8,17 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntMap;
-import com.draniksoft.ome.editor.base_gfx.drawable.utils.GdxCompatibleDrawable;
-import com.draniksoft.ome.editor.base_gfx.drawable.utils.RootDrawable;
 import com.draniksoft.ome.editor.manager.ProjValsManager;
+import com.draniksoft.ome.editor.res.drawable.utils.Drawable;
+import com.draniksoft.ome.editor.res.drawable.utils.GdxCompatibleDrawable;
+import com.draniksoft.ome.editor.res.pv_res_wrapper.PVResWrapper;
+import com.draniksoft.ome.editor.res.res_mgmnt_base.types.ResTypes;
 import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
-import com.draniksoft.ome.editor.support.event.projectVals.DrawableEvent;
+import com.draniksoft.ome.editor.support.event.projectVals.ProjectValEvent;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.editor.ui.edit.EditDwbView;
 import com.draniksoft.ome.support.ui.util.WindowAgent;
 import com.draniksoft.ome.support.ui.viewsys.BaseWinView;
-import com.draniksoft.ome.utils.struct.MtPair;
 import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.parser.LmlParser;
@@ -66,15 +67,17 @@ public class DrawableListT1View extends BaseWinView implements ActionContainer {
 
 
     @Subscribe
-    public void dwbEvent(DrawableEvent e) {
+    public void dwbEvent(ProjectValEvent e) {
 
-	  if (e instanceof DrawableEvent.DrawableAddedE) {
+	  if (e.t != ResTypes.DRAWABLE) return;
+
+	  if (e instanceof ProjectValEvent.Create) {
 
 		a.add(e.id);
 
 		selid = e.id;
 
-	  } else if (e instanceof DrawableEvent.DrawableRemovedE) {
+	  } else if (e instanceof ProjectValEvent.Delete) {
 
 		a.removeValue(e.id, false);
 
@@ -90,7 +93,7 @@ public class DrawableListT1View extends BaseWinView implements ActionContainer {
 
     public void refresh() {
 
-	  Iterator<IntMap.Entry<MtPair<RootDrawable, String>>> it = m.getDrawableItAll();
+	  Iterator<IntMap.Entry<PVResWrapper>> it = m.getIT(ResTypes.DRAWABLE);
 
 	  while (it.hasNext()) {
 		a.add(it.next().key);
@@ -124,7 +127,7 @@ public class DrawableListT1View extends BaseWinView implements ActionContainer {
 		editB.setVisible(false);
 		removeB.setVisible(false);
 	  } else {
-		nameF.setText(m.getDrawableName(id));
+		nameF.setText(m.get(ResTypes.DRAWABLE, id).getName());
 		editB.setVisible(true);
 		removeB.setVisible(true);
 	  }
@@ -170,7 +173,7 @@ public class DrawableListT1View extends BaseWinView implements ActionContainer {
 		public boolean keyDown(InputEvent event, int keycode) {
 
 		    if (selid >= 0 && keycode == Input.Keys.ENTER) {
-			  m.setDrawableName(selid, nameF.getText());
+			  m.get(ResTypes.DRAWABLE, selid).setName(nameF.getText());
 		    }
 
 		    return super.keyDown(event, keycode);
@@ -221,9 +224,9 @@ public class DrawableListT1View extends BaseWinView implements ActionContainer {
 	  public void create(int id) {
 		this.id = id;
 
-		name = new VisLabel(m.getDrawableName(id));
+		name = new VisLabel(m.get(ResTypes.DRAWABLE, id).getName());
 
-		img = new VisImage(GdxCompatibleDrawable.from(m.getRawDrawable(id)));
+		img = new VisImage(GdxCompatibleDrawable.from((Drawable) m.get(ResTypes.DRAWABLE, id).res.self()));
 
 		add(img).minSize(dwbSize).padRight(pad).padLeft(pad);
 		add(name).expandX();
@@ -239,9 +242,9 @@ public class DrawableListT1View extends BaseWinView implements ActionContainer {
 
 	  public void update() {
 
-		name.setText(m.getDrawableName(id));
+		name.setText(m.get(ResTypes.DRAWABLE, id).getName());
 
-		img.setDrawable(GdxCompatibleDrawable.from(m.getRawDrawable(id)));
+		img.setDrawable(GdxCompatibleDrawable.from((Drawable) m.get(ResTypes.DRAWABLE, id).res.self()));
 
 	  }
 
@@ -251,7 +254,7 @@ public class DrawableListT1View extends BaseWinView implements ActionContainer {
 
 	  public boolean matches(String filter) {
 
-		return m.getDrawableName(id).contains(filter);
+		return m.get(ResTypes.DRAWABLE, id).getName().contains(filter);
 	  }
 
     }
@@ -320,11 +323,10 @@ public class DrawableListT1View extends BaseWinView implements ActionContainer {
     @LmlAction("add_dwb")
     public void add_dwb() {
 
-	  int i = _w.getSystem(ProjValsManager.class).createNewDrawable(nameF.getText());
+	  int i = _w.getSystem(ProjValsManager.class).create(ResTypes.DRAWABLE);
+	  m.setName(ResTypes.DRAWABLE, i, nameF.getText());
 
-	  a.add(i);
-	  a.itemsChanged();
-
+	  a.itemsDataChanged();
 
 	  lw.getScrollPane().setScrollPercentY(1);
 

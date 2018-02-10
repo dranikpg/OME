@@ -14,7 +14,7 @@ public class PositionSystem extends BaseEntitySystem {
 
     private static final String tag = "PositionSystem";
     /**
-     * Creates an entity system that uses the specified aspect as a matcher
+     * Creates an entity system that uses the specified aspect self a matcher
      * against entities.
      */
 

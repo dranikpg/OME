@@ -21,6 +21,7 @@ public class CacheSystem extends BaseSystem {
 	  sMap = new IntMap<IntMap<Object>>();
 	  sSet = new IntMap<IntSet>();
 
+
     }
 
     @Override
@@ -28,16 +29,16 @@ public class CacheSystem extends BaseSystem {
 
     }
 
-    public boolean has(RESOURCE r, STORAGE_TYPE t, int id) {
-	  return t.has(r, id, world);
+    public boolean has(RESOURCE r, STORAGE_TYPE t, int... id) {
+	  return t.has(r, world, id);
     }
 
-    public <T> void put(RESOURCE r, STORAGE_TYPE t, int id, T val) {
-	  t.put(r, id, val, world);
+    public <T> void put(RESOURCE r, STORAGE_TYPE t, T val, int... id) {
+	  t.put(r, val, world, id);
     }
 
-    public <T> T get(Class<T> c, RESOURCE r, STORAGE_TYPE t, int id) {
-	  return t.get(r, id, world);
+    public <T> T get(Class<T> c, RESOURCE r, STORAGE_TYPE t, int... id) {
+	  return t.get(r, world, id);
     }
 
     public void _mapPut(RESOURCE r, int id, Object o) {

@@ -38,7 +38,6 @@ public class ConsoleSys extends BaseSystem {
     @Override
     protected void processSystem() {
 
-
         console.draw();
 
 

@@ -27,9 +27,7 @@ import java.nio.IntBuffer;
 public class GUtils {
 
     public static int FRAME = 0;
-
     public static int LAST_FRAME = -1;
-
     public static int FRAME_LIMIT = (int) 1e9;
 
     public static void frame() {
@@ -40,7 +38,7 @@ public class GUtils {
 	  }
     }
 
-    public static int maxTSize = 16000;
+    public static int MAX_TEX_SIZE = 16000;
 
     public static ShapeRenderer sr;
 
@@ -74,12 +72,27 @@ public class GUtils {
 
     }
 
+    //
+
 
     public static int fetchMaxTexSize() {
         IntBuffer intBuffer = BufferUtils.newIntBuffer(16);
         Gdx.gl20.glGetIntegerv(GL20.GL_MAX_TEXTURE_SIZE, intBuffer);
         return  intBuffer.get();
     }
+
+    public static void initGLData() {
+
+	  String tag = "GUTILS :: GL_DATA_FETCH ";
+
+	  MAX_TEX_SIZE = fetchMaxTexSize() / 2;
+
+	  Gdx.app.debug(tag, " Tex max size " + MAX_TEX_SIZE);
+
+    }
+
+
+    //
 
 
     public static TextureRegion[][] splitTITR(Texture t, int h, int w) {
@@ -123,12 +136,6 @@ public class GUtils {
 
         data[0] = dst;
         data[1] = a;
-
-    }
-
-
-    void tmp() {
-
 
     }
 

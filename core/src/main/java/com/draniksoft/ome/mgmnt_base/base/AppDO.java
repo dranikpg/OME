@@ -17,7 +17,6 @@ Class for keeping track of other managers, loading and disposing them
 public class AppDO extends AppDataManager {
 
     public static final String tag = "AppDO";
-
     public static final AppDO I = new AppDO();
 
     volatile Preferences prefs;
@@ -102,9 +101,8 @@ public class AppDO extends AppDataManager {
         @Override
         public byte run() {
 
-            GUtils.maxTSize = GUtils.fetchMaxTexSize();
-
-            glR = true;
+		GUtils.initGLData();
+		glR = true;
 
             return IGLRunnable.READY;
         }

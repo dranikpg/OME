@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.draniksoft.ome.editor.components.path.PathRenderC;
 import com.draniksoft.ome.editor.components.path.PathRunTimeC;
-import com.draniksoft.ome.editor.support.container.path.PathRTDesc;
+import com.draniksoft.ome.editor.res.path.b.PathRTDesc;
 import com.kotcrab.vis.ui.VisUI;
 
 public class PathRenderSys extends IteratingSystem {

@@ -3,8 +3,9 @@ package com.draniksoft.ome.editor.ui.proj;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.draniksoft.ome.editor.manager.ProjValsManager;
+import com.draniksoft.ome.editor.res.res_mgmnt_base.types.ResTypes;
 import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
-import com.draniksoft.ome.editor.support.event.projectVals.ColorEvent;
+import com.draniksoft.ome.editor.support.event.projectVals.ProjectValEvent;
 import com.draniksoft.ome.support.ui.viewsys.BaseWinView;
 import com.draniksoft.ome.ui_addons.ColoredCirlceWget;
 import com.github.czyzby.lml.annotation.LmlActor;
@@ -49,7 +50,7 @@ public class ColorListT1View extends BaseWinView {
 
 	  public void update() {
 
-		name.setText(_w.getSystem(ProjValsManager.class).getColorName(id));
+		name.setText(_w.getSystem(ProjValsManager.class).getName(ResTypes.COLOR, id));
 
 	  }
 
@@ -97,14 +98,9 @@ public class ColorListT1View extends BaseWinView {
     }
 
     @Subscribe
-    public void colorEV(ColorEvent ce) {
-	  if (ce instanceof ColorEvent.ColorAddedEvent) {
-
-	  } else if (ce instanceof ColorEvent.ColorRemovedEvent) {
-
-	  } else {
-		a.itemsDataChanged();
-	  }
+    public void colorEV(ProjectValEvent ce) {
+	  if (ce.t != ResTypes.COLOR) return;
+	  a.itemsDataChanged();
     }
 
     @Override
@@ -126,7 +122,7 @@ public class ColorListT1View extends BaseWinView {
     private void fullDataUpdate() {
 	  a.clear();
 	  Array<Integer> ia = new Array<Integer>();
-	  for (int i : _w.getSystem(ProjValsManager.class).getColorKeys().toArray()) ia.add(i);
+	  for (int i : _w.getSystem(ProjValsManager.class).getKeys(ResTypes.COLOR).toArray()) ia.add(i);
 	  a.addAll(ia);
     }
 

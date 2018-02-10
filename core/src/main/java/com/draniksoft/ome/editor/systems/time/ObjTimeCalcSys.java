@@ -15,8 +15,8 @@ import com.draniksoft.ome.editor.components.state.InactiveC;
 import com.draniksoft.ome.editor.components.state.TInactiveC;
 import com.draniksoft.ome.editor.components.tps.MObjectC;
 import com.draniksoft.ome.editor.manager.TimeMgr;
-import com.draniksoft.ome.editor.support.container.path.PathDesc;
-import com.draniksoft.ome.editor.support.container.path.PathRTDesc;
+import com.draniksoft.ome.editor.res.path.b.PathDesc;
+import com.draniksoft.ome.editor.res.path.b.PathRTDesc;
 import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.workflow.ModeChangeE;
 import com.draniksoft.ome.editor.systems.pos.PositionSystem;
@@ -157,40 +157,30 @@ public class ObjTimeCalcSys extends SpreadProcessingSystem {
         Online Entity processing
      */
 
-    PathRunTimeC rtc;
 
+    PathRunTimeC rtc;
     /*
         Determine the given pos for T
      */
-
     private void timeCalcPath(int _e) {
         rtc = pRM.get(_e);
         if (rtc.idx == -1) return;
-
         PathRTDesc d = rtc.p.get(rtc.idx);
-
         if (d.st > _T) return;
-
         int len = Dint.diff(d.et, d.st);
-
         float p1 = (Dint.diff(_T, d.st) * 1f / len);
         float mfract = _TSTEP * 1f / len;
         float p2 = mfract * _RP;
         float p = p1 + p2;
-
         int pI = Math.min((int) (d.ar.size * p), d.ar.size - 1);
-
         Vector2 v = d.ar.get(pI);
-
         if (pI + 1 < d.ar.size) {
             tmpV.set(v);
         } else {
             tmpV.set(v);
         }
-
         world.getSystem(PositionSystem.class).setByCenterPos(_e, (int) tmpV.x, (int) tmpV.y);
     }
-
 
     /*
         Preparation of online entity processing
@@ -207,7 +197,6 @@ public class ObjTimeCalcSys extends SpreadProcessingSystem {
             }
         }
         return -1;
-
     }
     /*
         Basic entity path processing

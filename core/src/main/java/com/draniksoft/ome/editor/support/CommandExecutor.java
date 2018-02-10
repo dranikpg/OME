@@ -13,14 +13,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.draniksoft.ome.editor.base_gfx.drawable.utils.RootDrawable;
 import com.draniksoft.ome.editor.esc_utils.OmeStrategy;
 import com.draniksoft.ome.editor.load.MapLoadBundle;
 import com.draniksoft.ome.editor.manager.FontManager;
 import com.draniksoft.ome.editor.manager.MapMgr;
-import com.draniksoft.ome.editor.manager.ProjValsManager;
 import com.draniksoft.ome.editor.manager.TimeMgr;
 import com.draniksoft.ome.editor.manager.drawable.SimpleAssMgr;
 import com.draniksoft.ome.editor.support.actions.Action;
@@ -51,11 +48,9 @@ import com.draniksoft.ome.support.configs.ConfigDao;
 import com.draniksoft.ome.support.ui.viewsys.BaseView;
 import com.draniksoft.ome.utils.Const;
 import com.draniksoft.ome.utils.Env;
-import com.draniksoft.ome.utils.FUtills;
 import com.draniksoft.ome.utils.cam.Target;
 import com.draniksoft.ome.utils.dao.AssetDDao;
 import com.draniksoft.ome.utils.dao.FontDao;
-import com.draniksoft.ome.utils.struct.MtPair;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -84,6 +79,12 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
     public void resize(int xp, int yp){
 
         console.setSizePercent(xp, yp);
+
+    }
+
+    public void pos(int xp, int yp) {
+
+	  console.setPositionPercent(xp, yp);
 
     }
 
@@ -493,61 +494,6 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
     public void log_av_fnt() {
 
     }
-
-    /*
-     * DRAWABLE UTILS
-     */
-
-
-    public void log_dwb() {
-        Iterator<IntMap.Entry<MtPair<RootDrawable, String>>> it = world.getSystem(ProjValsManager.class).getDrawableItAll();
-        IntMap.Entry<MtPair<RootDrawable, String>> e;
-        while (it.hasNext()) {
-            e = it.next();
-            console.log(e.key + " -> " + e.value.V() + " " + e.value.K().toString());
-        }
-    }
-
-    public void add_dwb(String name, String t) {
-        ProjValsManager m = world.getSystem(ProjValsManager.class);
-        int id = m.createNewDrawable(name);
-        m.setDrawable(id, FUtills.fetchDrawable(t));
-    }
-
-    /**
-     * Color UTILS
-     */
-
-    /*public void log_cl() {
-        ObjectMap.Entries<Integer, MtPair<LinkColor, String>> i = world.getSystem(ProjValsManager.class).getColorData();
-
-        ObjectMap.Entry<Integer, MtPair<LinkColor, String>> e;
-
-        while (i.hasNext()) {
-            e = i.next();
-            console.log(e.key + " - " + e.value.V() + " -> " +
-                    "[#" + e.value.K().toIntBits() + "]" + e.value.K().toIntBits() + "[]");
-        }
-
-    }
-
-    public void log_cl(int id) {
-        Color c = world.getSystem(ProjValsManager.class).getColor(id);
-
-        console.log(world.getSystem(ProjValsManager.class).getColorName(id) + " -> " +
-                "[#" + c.toIntBits() + "]" + c.toIntBits() + "[]");
-
-    }
-
-    public void set_cl(int id, int bits) {
-        world.getSystem(ProjValsManager.class).changeColor(id, new Color(bits));
-    }
-
-    public void add_cl(String name) {
-        int id = world.getSystem(ProjValsManager.class).createColor(name, Color.MAGENTA);
-        log_cl(id);
-
-    }*/
 
     /**
      *
