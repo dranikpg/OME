@@ -6,9 +6,10 @@ import com.artemis.annotations.Wire;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.draniksoft.ome.editor.components.path.PathRenderC;
 import com.draniksoft.ome.editor.components.path.PathRunTimeC;
-import com.draniksoft.ome.editor.res.path.b.PathRTDesc;
+import com.draniksoft.ome.editor.struct.path.runtime.Path;
 import com.kotcrab.vis.ui.VisUI;
 
 public class PathRenderSys extends IteratingSystem {
@@ -38,23 +39,17 @@ public class PathRenderSys extends IteratingSystem {
 
     @Override
     protected void process(int e) {
-
 	  PathRunTimeC c = rcM.get(e);
 
 	  r.set(ShapeRenderer.ShapeType.Filled);
 
-	  for (PathRTDesc d : c.p) {
-
-		if (d == null || !d.rendering || d.ar.size < 2) continue;
-
-		for (int i = 1; i < d.ar.size; i++) {
-
-		    r.circle(d.ar.get(i - 1).x, d.ar.get(i - 1).y, 5);
-		    r.rectLine(d.ar.get(i - 1), d.ar.get(i), 10);
-
+	  for (Path p : c.ar) {
+		for (Vector2 pt : p.pts) {
+		    r.circle(pt.x, pt.y, 5, 10);
 		}
 
 	  }
+
     }
 
     @Override

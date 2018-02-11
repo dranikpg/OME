@@ -31,6 +31,8 @@ public class SelectIC implements InputController {
     public void init(World w) {
         this.w = w;
 
+	  Gdx.app.debug(tag, "Init");
+
         gameVP = w.getInjector().getRegistered("game_vp");
         uiVP = w.getInjector().getRegistered("ui_vp");
 
@@ -61,6 +63,8 @@ public class SelectIC implements InputController {
         tV = gameVP.unproject(tV);
 
 	  int e = ps.getTouch((int) tV.x, (int) tV.y);
+
+	  Gdx.app.debug(tag, "New selection");
 
         SelectionChangeE ev = new SelectionChangeE();
         ev.n = e;

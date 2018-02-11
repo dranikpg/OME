@@ -5,7 +5,6 @@ import com.artemis.BaseEntitySystem;
 import com.artemis.ComponentMapper;
 import com.artemis.annotations.Wire;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteCache;
 import com.badlogic.gdx.math.Vector3;
 import com.draniksoft.ome.editor.components.gfx.TexRegC;
@@ -29,8 +28,6 @@ public class MapRenderSys extends BaseEntitySystem {
     @Wire(name = "game_cam")
     OrthographicCamera cam;
 
-    @Wire
-    SpriteBatch batch;
 
     @Wire
     SpriteCache cache;

@@ -4,6 +4,7 @@ import com.artemis.World;
 import com.draniksoft.ome.editor.systems.gfx_support.CameraSys;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.editor.systems.support.InputSys;
+import com.draniksoft.ome.editor.systems.support.flows.EditorSystem;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class SimpleEditMode implements EditMode {
@@ -16,11 +17,16 @@ public abstract class SimpleEditMode implements EditMode {
         on_attached();
     }
 
+    @Override
+    public void detached() {
+	  on_detached();
+    }
+
     protected abstract void on_attached();
 
+    protected abstract void on_detached();
+
     protected void defalteEnv() {
-
-
 	  _w.getSystem(CameraSys.class).createBK();
 	  _w.getSystem(UiSystem.class).createBK();
 	  _w.getSystem(InputSys.class).createDefBK();
@@ -28,13 +34,14 @@ public abstract class SimpleEditMode implements EditMode {
     }
 
     protected void returnEnv() {
-
-
 	  _w.getSystem(CameraSys.class).inflateBK();
 	  _w.getSystem(UiSystem.class).inflateBK();
 	  _w.getSystem(InputSys.class).restoreBK();
 
     }
 
+    protected void destroySelf() {
+	  _w.getSystem(EditorSystem.class).detachEditMode();
+    }
 
 }

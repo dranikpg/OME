@@ -197,7 +197,7 @@ public class EditorSystem extends BaseSystem {
 
     public void attachNewEditMode(EditModeDesc m) {
 
-        Gdx.app.debug(tag, "Construct requested");
+	  Gdx.app.debug(tag, "Construct requested " + m.getName());
 
         if (m == null) {
             Gdx.app.debug(tag, "New desc is null");

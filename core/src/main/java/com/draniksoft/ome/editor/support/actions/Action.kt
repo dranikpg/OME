@@ -16,7 +16,7 @@ interface Action {
     //
     val isUndoable: Boolean
 
-    // A cleaner cleans the story, hence it'time_s supposed to be an action like loading a map
+    // A cleaner cleans the story, hence it's supposed to be an action like loading a map
     val isCleaner: Boolean
 
     val simpleConcl: String

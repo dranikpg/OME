@@ -1,6 +1,7 @@
 package com.draniksoft.ome.editor.manager;
 
 import com.artemis.BaseSystem;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.IntArray;
@@ -48,14 +49,18 @@ public class ProjValsManager extends BaseSystem implements LoadSaveManager {
 	  return data.get(t.ordinal()).get(id);
     }
 
-    // create new managed value
     public int create(ResTypes t) {
+	  return create(t, true);
+    }
+
+    // create new managed value
+    public int create(ResTypes t, boolean event) {
 	  int id = incLimit(t.ordinal());
 	  PVResWrapper wp = new UserPVResWrapper();
 	  wp.setName(id + "");
 	  wp.res = t.createRoot();
 	  data.get(t.ordinal()).put(id, wp);
-	  if (ET) world.getSystem(OmeEventSystem.class).dispatch(new ProjectValEvent.Create(t, id));
+	  if (event) world.getSystem(OmeEventSystem.class).dispatch(new ProjectValEvent.Create(t, id));
 	  return id;
     }
 
@@ -67,8 +72,12 @@ public class ProjValsManager extends BaseSystem implements LoadSaveManager {
 	  lk.ifor(data.get(t.ordinal()).get(id).res, id);
     }
 
-    // update managed val data
     public void update(ResTypes t, Resource r, int id) {
+	  update(t, r, id, true);
+    }
+
+    // update managed val data
+    public void update(ResTypes t, Resource r, int id, boolean event) {
 	  data.get(t.ordinal()).get(id).res.set(r);
     }
 
@@ -76,14 +85,33 @@ public class ProjValsManager extends BaseSystem implements LoadSaveManager {
 	  data.get(t.ordinal()).get(id).ctr = ct;
     }
 
-    // delete managed val
     public void delete(ResTypes t, int id) {
+	  delete(t, id, true);
+    }
+
+    // delete managed val
+    public void delete(ResTypes t, int id, boolean event) {
 	  throw new GdxRuntimeException("Unsupported operation :: delete");
     }
 
     // clone managed val, returns id
     public int clone(ResTypes t, int id) {
 	  throw new GdxRuntimeException("Unsupported operation :: clone");
+    }
+
+    // Main tings helper
+
+    // Creates new resource and setts name, but dispatches only one create event after name setting
+    public int createWName_OneEvent(ResTypes t, String name) {
+	  int id = create(t, false);
+	  setName(t, id, name, false);
+	  world.getSystem(OmeEventSystem.class).dispatch(new ProjectValEvent.Create(t, id));
+	  return id;
+    }
+
+    // TODO
+    public void updateWAction(ResTypes t, int id, Resource r, ResConstructor c) {
+	  throw new GdxRuntimeException("TODO !!");
     }
 
     //
@@ -93,8 +121,13 @@ public class ProjValsManager extends BaseSystem implements LoadSaveManager {
     }
 
     public void setName(ResTypes t, int id, String nw) {
+	  setName(t, id, nw, true);
+    }
+
+    public void setName(ResTypes t, int id, String nw, boolean event) {
 	  data.get(t.ordinal()).get(id).setName(nw);
-	  if (ET) world.getSystem(OmeEventSystem.class).dispatch(new ProjectValEvent.Rename(t, id));
+	  Gdx.app.debug(tag, data.get(t.ordinal()).get(id).getName());
+	  if (event) world.getSystem(OmeEventSystem.class).dispatch(new ProjectValEvent.Rename(t, id));
     }
 
     public boolean isRenameAllowed(ResTypes t, int id) {
@@ -102,12 +135,12 @@ public class ProjValsManager extends BaseSystem implements LoadSaveManager {
     }
 
 
+    //
+
+
     public Iterator<IntMap.Entry<PVResWrapper>> getIT(ResTypes t) {
 	  return data.get(t.ordinal()).iterator();
     }
-
-
-    //
 
     public IntArray getKeys(ResTypes t) {
 	  return data.get(t.ordinal()).keys().toArray();

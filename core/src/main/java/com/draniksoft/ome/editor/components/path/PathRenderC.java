@@ -6,6 +6,5 @@ import com.artemis.annotations.Transient;
 @Transient
 public class PathRenderC extends Component {
 
-    boolean renderCached;
 
 }

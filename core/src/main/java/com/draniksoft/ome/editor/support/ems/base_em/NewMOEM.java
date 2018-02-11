@@ -59,18 +59,16 @@ public class NewMOEM extends SimpleEditMode {
     }
 
     @Override
-    public void update() {
-
-    }
-
-    @Override
-    public void detached() {
-
+    protected void on_detached() {
 	  _w.getSystem(InputSys.class).clearMainIC();
 	  returnEnv();
 
     }
 
+    @Override
+    public void update() {
+
+    }
 
 
     public void createLoc(Vector2 tmp) {

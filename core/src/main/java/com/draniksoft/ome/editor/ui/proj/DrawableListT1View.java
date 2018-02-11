@@ -72,21 +72,19 @@ public class DrawableListT1View extends BaseWinView implements ActionContainer {
 	  if (e.t != ResTypes.DRAWABLE) return;
 
 	  if (e instanceof ProjectValEvent.Create) {
-
 		a.add(e.id);
-
 		selid = e.id;
 
 	  } else if (e instanceof ProjectValEvent.Delete) {
-
 		a.removeValue(e.id, false);
-
 		selid = -1;
 
+	  } else if (e instanceof ProjectValEvent.Rename) {
+		a.itemsDataChanged();
 	  }
 
-	  a.itemsChanged();
 
+	  a.itemsChanged();
 	  a.getSelectionManager().select(selid);
 	  updateSelection(selid);
     }
@@ -242,6 +240,8 @@ public class DrawableListT1View extends BaseWinView implements ActionContainer {
 
 	  public void update() {
 
+		Gdx.app.debug(tag, "UPDATING VIEW " + m.get(ResTypes.DRAWABLE, id).getName());
+
 		name.setText(m.get(ResTypes.DRAWABLE, id).getName());
 
 		img.setDrawable(GdxCompatibleDrawable.from((Drawable) m.get(ResTypes.DRAWABLE, id).res.self()));
@@ -323,9 +323,7 @@ public class DrawableListT1View extends BaseWinView implements ActionContainer {
     @LmlAction("add_dwb")
     public void add_dwb() {
 
-	  int i = _w.getSystem(ProjValsManager.class).create(ResTypes.DRAWABLE);
-	  m.setName(ResTypes.DRAWABLE, i, nameF.getText());
-
+	  _w.getSystem(ProjValsManager.class).createWName_OneEvent(ResTypes.DRAWABLE, nameF.getText());
 	  a.itemsDataChanged();
 
 	  lw.getScrollPane().setScrollPercentY(1);

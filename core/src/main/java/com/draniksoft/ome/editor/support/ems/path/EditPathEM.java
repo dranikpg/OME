@@ -1,162 +1,166 @@
 package com.draniksoft.ome.editor.support.ems.path;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 import com.draniksoft.ome.editor.components.path.PathDescC;
 import com.draniksoft.ome.editor.components.path.PathRunTimeC;
-import com.draniksoft.ome.editor.res.path.b.PathDesc;
-import com.draniksoft.ome.editor.res.path.b.PathRTDesc;
-import com.draniksoft.ome.editor.res.path.b.PathSDesc;
-import com.draniksoft.ome.editor.support.actions.path.CommitPathAddA;
-import com.draniksoft.ome.editor.support.actions.path.CommitPathChangeA;
+import com.draniksoft.ome.editor.struct.path.runtime.Path;
+import com.draniksoft.ome.editor.struct.path.srz.PathSzr;
+import com.draniksoft.ome.editor.struct.path.transform.PathTransformer;
+import com.draniksoft.ome.editor.support.actions.path.emsupp.AddPathEMSPA;
+import com.draniksoft.ome.editor.support.actions.path.emsupp.EditPathEMSPA;
+import com.draniksoft.ome.editor.support.actions.path.emsupp.PathEMSupportiveAction;
 import com.draniksoft.ome.editor.support.container.EM_desc.EditModeDesc;
 import com.draniksoft.ome.editor.support.ems.core.SimpleEditMode;
-import com.draniksoft.ome.editor.support.event.entityy.EntityDataChangeE;
+import com.draniksoft.ome.editor.support.event.__base.EventListener;
 import com.draniksoft.ome.editor.support.input.back.StebIC;
-import com.draniksoft.ome.editor.support.input.path.PathEditIC;
-import com.draniksoft.ome.editor.support.render.path.PathEditR;
+import com.draniksoft.ome.editor.support.input.path.EditPathIC;
+import com.draniksoft.ome.editor.support.render.core.OverlayPlaces;
+import com.draniksoft.ome.editor.support.render.path.EditPathRender;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
-import com.draniksoft.ome.editor.systems.pos.PositionSystem;
 import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.InputSys;
 import com.draniksoft.ome.editor.systems.support.flows.EditorSystem;
-import com.draniksoft.ome.editor.systems.time.ObjTimeCalcSys;
-import com.draniksoft.ome.mgmnt_base.base.AppDO;
-import com.draniksoft.ome.utils.struct.Points;
-import net.mostlyoriginal.api.event.common.Subscribe;
+import net.mostlyoriginal.api.event.common.Event;
 
-public class EditPathEM extends SimpleEditMode {
+public class EditPathEM extends SimpleEditMode implements EventListener {
 
     private static final String tag = "EditPathEM";
 
+    public enum ACTION {
+	  SAVE, EXIT, DISCARD, NEW_PATH, EDIT_SEL,
+    }
+
+    private EditPathIC ic;
+    private EditPathRender rd;
+
+    private int selection = -1;
+    private boolean editing;
+
+
+    private PathDescC descC;
+    private PathRunTimeC rtC;
+
+    PathEMSupportiveAction act;
+
+    PathTransformer t;
+
     int _e;
-
-    PathEditR r;
-    PathEditIC ic;
-
-    PathRunTimeC rtC;
-    PathDescC dC;
-
-    int curIDX = -1;
-    boolean newM = false;
-
-    int dragIDX = -1;
-
-    boolean revert = false;
 
     @Override
     protected void on_attached() {
+	  Gdx.app.debug(tag, "Attachin");
 
 	  _e = _w.getSystem(EditorSystem.class).sel;
-	  rtC = _w.getMapper(PathRunTimeC.class).get(_e);
-	  dC = _w.getMapper(PathDescC.class).get(_e);
 
-	  if (dC.ar == null) dC.ar = new Array<PathSDesc>();
-	  if (rtC.p == null) rtC.p = new Array<PathRTDesc>();
-
-	  setUpRIC();
-    }
-
-    private void setUpRIC() {
-	  r = new PathEditR();
-	  ic = new PathEditIC();
-
-	  r._e = _e;
-	  ic._e = _e;
-
-	  r.em = this;
+	  ic = new EditPathIC();
 	  ic.em = this;
 
-	  _w.getSystem(OverlayRenderSys.class).addRdr(r);
+	  rd = new EditPathRender();
+	  rd.em = this;
 
-	  _w.getSystem(InputSys.class).setMainIC(ic);
+	  t = new PathTransformer();
 
 	  defalteEnv();
+	  _w.getSystem(OverlayRenderSys.class).removeRdrByPlaceBK(new int[]{}, new int[]{OverlayPlaces.PATH});
+	  _w.getSystem(OverlayRenderSys.class).addRdr(rd);
 
 	  _w.getSystem(InputSys.class).setDefIC(new StebIC());
+	  _w.getSystem(InputSys.class).setMainIC(ic);
 
-	  _w.getSystem(UiSystem.class).openWin("edit_path_em");
+	  _w.getSystem(UiSystem.class).closeWin();
+
+	  descC = _w.getMapper(PathDescC.class).get(_e);
+	  rtC = _w.getMapper(PathRunTimeC.class).get(_e);
 
     }
 
-    private void removeRIC() {
-	  _w.getSystem(OverlayRenderSys.class).removeRdr(r);
-
-	  returnEnv();
+    public void setSelection(int id) {
+	  if (editing) return;
+	  this.selection = id;
+	  rd.updateSelection();
+	  ic.updateSelection();
     }
 
-    public void recompute(boolean pv) {
-	  if (curIDX > -1) {
-		float f = 1f;
-		if (pv) {
-		    f = AppDO.I.C().getConfVal_I("path_preview_factor") / 5f;
-		}
-		_w.getSystem(ObjTimeCalcSys.class).processEntityPath(_e, curIDX, f);
-	  }
+    public void deselect() {
+	  setSelection(-1);
     }
 
-    public void recompute() {
-	  recompute(true);
+    public int getSelection() {
+	  return selection;
     }
 
-    public void recompute(int id) {
-	  if (id > -1) {
-		_w.getSystem(ObjTimeCalcSys.class).processEntityPath(_e, id);
-	  }
+    public boolean editing() {
+	  return editing;
     }
 
-    public void commit() {
-	  if (curIDX < 0) return;
-	  recompute(false);
-	  if (newM) {
-		CommitPathAddA a = new CommitPathAddA();
-		a.ar = getdC().ar;
-		a._e = _e;
-		a.d = getPathDesc();
-		if (revert) a.undo(_w);
-		else _w.getSystem(ActionSystem.class).exec(a);
+    // action should be already preprocessed
+    private void edit(int id) {
+	  if (id != selection) setSelection(id);
+	  editing = true;
+	  t.init(descC.ar.get(selection).pts);
+	  Gdx.app.debug(tag, "Editing on " + id);
+	  updateMode();
+    }
+
+
+    private void edit() {
+	  if (selection < 0) return;
+	  EditPathEMSPA a = new EditPathEMSPA();
+	  a.ifor(_e);
+	  a.i = selection;
+	  a.prepocess(_w, descC, rtC);
+	  act = a;
+	  edit(selection);
+    }
+
+
+    private void createNew() {
+	  AddPathEMSPA a = new AddPathEMSPA();
+	  a.ifor(_e);
+	  a.prepocess(_w, descC, rtC);
+	  act = a;
+	  edit(descC.ar.size - 1);
+    }
+
+    private void stopEdit(boolean save) {
+	  if (!editing) return;
+	  if (save) {
+		_w.getSystem(ActionSystem.class).exec(act.self());
 	  } else {
-		CommitPathChangeA a = new CommitPathChangeA();
-		a.dsc = getPathDesc();
-		a._e = _e;
-		a.orig = getOrig();
-		if (revert) a.undo(_w);
-		else _w.getSystem(ActionSystem.class).exec(a);
+		act.discard(_w, descC, rtC);
 	  }
-
-	  revert = false;
-
+	  act = null;
+	  editing = false;
+	  updateMode();
     }
 
-    public void newPath(int idx, boolean cpyFirst) {
-
-	  Gdx.app.debug(tag, "New path");
-
-	  clearOldSel();
-	  curIDX = idx;
-	  newM = true;
-
-	  if (idx < dC.ar.size) {
-		rtC.p.insert(idx, null);
-		dC.ar.insert(idx, new PathSDesc());
-	  } else {
-		rtC.p.add(null);
-		dC.ar.add(new PathSDesc());
-	  }
-
-	  if (cpyFirst && idx > 0) {
-		PathDesc prev = dC.ar.get(idx - 1);
-		dC.ar.get(idx).ar.add(prev.ar.get(prev.ar.size - 1));
-	  } else if (cpyFirst) {
-		Vector2 p = _w.getSystem(PositionSystem.class).getCenterV(_e);
-		dC.ar.get(idx).ar.add(p);
-	  }
-
-	  notifySel();
-
+    public void updateEditing() {
+	  if (!editing || selection < 0) return;
+	  t.calc(rtC.ar.get(selection).pts, rtC.ar.get(selection).tb);
     }
+
+    public void handle(ACTION a) {
+	  Gdx.app.debug(tag, "Handling " + a.name());
+	  if (a == ACTION.EXIT) {
+		if (editing) handle(ACTION.DISCARD);
+		destroySelf();
+	  } else if (a == ACTION.DISCARD) {
+		stopEdit(false);
+	  } else if (a == ACTION.SAVE) {
+		stopEdit(true);
+	  } else if (a == ACTION.NEW_PATH) {
+		createNew();
+	  } else if (a == ACTION.EDIT_SEL) {
+		edit();
+	  }
+    }
+
+    @Override
+    public void event(Event e) {
+	  // TODO
+    }
+
 
     @Override
     public void update() {
@@ -164,118 +168,39 @@ public class EditPathEM extends SimpleEditMode {
     }
 
     @Override
-    public void detached() {
-	  removeRIC();
+    protected void on_detached() {
+	  returnEnv();
+	  _w.getSystem(OverlayRenderSys.class).restoreBK();
+	  _w.getSystem(OverlayRenderSys.class).removeRdr(rd);
+
+	  _w.getSystem(InputSys.class).clearMainIC();
     }
 
-
-    public void newPath(boolean cpyFirst) {
-	  newPath(dC.ar.size, cpyFirst);
+    @Override
+    public int ID() {
+	  return EditModeDesc.IDS.pathEdit;
     }
 
-    public void newPath() {
-	  newPath(true);
-    }
-
-    public void setDragIDX(int dragIDX) {
-	  this.dragIDX = dragIDX;
-    }
-
-    public int getDragIDX() {
-	  return dragIDX;
-    }
-
-    public void removeIdx(int idx) {
-	  dC.ar.removeIndex(idx);
-	  rtC.p.removeIndex(idx);
-	  if (idx == curIDX) setSel(-1);
-    }
-
-    Points orig;
-    Vector2 nexS;
-
-    private void notifySel() {
-	  r.newSel();
-	  ic.newSel();
-	  if (curIDX > -1) {
-		orig = new Points(getPathDesc().ar);
-		if (dC.ar.size > curIDX + 1 && dC.ar.get(curIDX + 1).alignToPrev) {
-		    nexS = new Vector2(dC.ar.get(curIDX + 1).ar.get(0));
-		} else {
-		    nexS = null;
-		}
-	  }
-    }
-
-    public Points getOrig() {
-	  return orig;
-    }
-
-    public void revertOrig() {
-	  if (curIDX < 0) return;
-	  if (newM) {
-		removeIdx(curIDX);
-	  } else {
-		getPathDesc().ar = orig;
-		recompute();
-	  }
-    }
-
-    public void setRevert(boolean revert) {
-	  this.revert = revert;
-    }
-
-    private void clearOldSel() {
-	  commit();
-    }
-
-    public void setSel(int i) {
-	  Gdx.app.debug(tag, "New sel");
-	  clearOldSel();
-	  curIDX = i;
-	  newM = false;
-	  notifySel();
-    }
-
-
-    public PathDescC getdC() {
-	  return dC;
+    public PathDescC getDescC() {
+	  return descC;
     }
 
     public PathRunTimeC getRtC() {
 	  return rtC;
     }
 
-
-    public int getCurIDX() {
-	  return curIDX;
+    public Path getSelp() {
+	  if (selection < 0) return null;
+	  return rtC.ar.get(selection);
     }
 
-    public boolean isNewM() {
-	  return newM;
+    public PathSzr getSelSrz() {
+	  if (selection < 0) return null;
+	  return descC.ar.get(selection);
     }
 
-    public PathSDesc getPathDesc() {
-	  if (curIDX == -1) return null;
-	  return dC.ar.get(curIDX);
-    }
-
-    public void selfDestroy() {
-	  _w.getSystem(EditorSystem.class).detachEditMode();
-    }
-
-    @Subscribe
-    public void pathCChange(EntityDataChangeE.PathCountChangeE ev) {
-	  setSel(-1);
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-	  Gdx.app.debug(tag, "Finalized");
-    }
-
-    @Override
-    public int ID() {
-	  return EditModeDesc.IDS.pathEdit;
+    private void updateMode() {
+	  ic.updateMode();
+	  rd.updateMode();
     }
 }

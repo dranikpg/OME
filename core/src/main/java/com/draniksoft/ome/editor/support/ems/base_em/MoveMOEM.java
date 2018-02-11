@@ -82,6 +82,7 @@ public class MoveMOEM extends SimpleEditMode {
 
     }
 
+
     @Override
     public void update() {
 
@@ -122,10 +123,10 @@ public class MoveMOEM extends SimpleEditMode {
 
     }
 
-    @Override
-    public void detached() {
 
-        if (easyQ) return;
+    @Override
+    protected void on_detached() {
+	  if (easyQ) return;
 
 
 	  returnEnv();
@@ -135,9 +136,7 @@ public class MoveMOEM extends SimpleEditMode {
 	  _w.getSystem(OverlayRenderSys.class).removeRdr(r);
 	  _w.getSystem(OverlayRenderSys.class).restoreBK();
 
-
     }
-
 
 
     @Override

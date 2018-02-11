@@ -14,7 +14,7 @@ public abstract class ActionDesc {
         public static final short ACTION_DELETE = 2;
         public static final short ACTION_RESET = 3;
 
-	  // starting at 700+
+	  // is available for creation at the editor view
 	  public static final short ACTION_EDITVW_CREATE = 5;
 
     }

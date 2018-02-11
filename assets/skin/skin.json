@@ -9,9 +9,6 @@
     med: {
       file: futa_25.fnt
     }
-    default-font: {
-      file: futa_25.fnt
-    }
   }
   com.badlogic.gdx.graphics.Color: {
     black: {

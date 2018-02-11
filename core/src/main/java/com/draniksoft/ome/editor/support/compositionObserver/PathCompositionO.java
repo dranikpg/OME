@@ -6,15 +6,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.IntMap;
 import com.draniksoft.ome.editor.components.path.PathDescC;
 import com.draniksoft.ome.editor.components.path.PathRenderC;
-import com.draniksoft.ome.editor.support.actions.path.CreatePathCA;
+import com.draniksoft.ome.editor.support.actions.path.CreatePathComponentAction;
 import com.draniksoft.ome.editor.support.compositionObserver.abstr.SimpleCompositionObserver;
 import com.draniksoft.ome.editor.support.container.CO_actiondesc.ActionDesc;
 import com.draniksoft.ome.editor.support.container.EM_desc.EditModeDesc;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.flows.EditorSystem;
-import com.draniksoft.ome.editor.systems.time.ObjTimeCalcSys;
 import com.draniksoft.ome.support.ui.util.CompObViewIds;
-import com.draniksoft.ome.utils.struct.ResponseListener;
 
 import static com.draniksoft.ome.editor.support.compositionObserver.PathCompositionO.ActIDs.*;
 
@@ -28,10 +26,7 @@ public class PathCompositionO extends SimpleCompositionObserver {
 
 	  public static final int EDIT_M = 11;
 
-	  public static final int RECALC = 21;
-	  public static final int RECALC_IDX = 22;
 
-	  public static final int RECALC_ALL = 30;
     }
 
     IntMap<ActionDesc> desc;
@@ -105,39 +100,19 @@ public class PathCompositionO extends SimpleCompositionObserver {
     public void execA(int id, int _e, boolean aT, Object... os) {
 	  switch (id) {
 		case CREATE:
-
 		    Gdx.app.debug(tag, "Creating path C");
-
-		    CreatePathCA a = new CreatePathCA();
-		    a._e = _e;
-		    if (aT) {
-			  _w.getSystem(ActionSystem.class).exec(a);
-		    } else {
-			  a.invoke(_w);
-		    }
+		    CreatePathComponentAction a = new CreatePathComponentAction();
+		    a.e = _e;
+		    if (aT) _w.getSystem(ActionSystem.class).exec(a);
+		    else a.invoke(_w);
 		    break;
 		case EDIT_M:
+
 		    break;
-		case RECALC:
-		    recalcEtty(_e);
-		    break;
-		case RECALC_IDX:
-		    recalcEtty(_e, (Integer) os[0]);
-		    break;
+
 	  }
     }
 
-    private void recalcEtty(int e, int p) {
-	  _w.getSystem(ObjTimeCalcSys.class).processEntityPath(e, p);
-    }
-
-    private void recalcEtty(int e) {
-	  _w.getSystem(ObjTimeCalcSys.class).processEntityPathC(new ResponseListener() {
-		@Override
-		public void onResponse(short code) {
-		}
-	  }, e);
-    }
 
     @Override
     public String getName() {

@@ -199,6 +199,7 @@ public class EngineLoader {
 	  int base = 2;
 
 	  void buildVPS() {
+
 		OrthographicCamera gameC = new OrthographicCamera(1280, 960);
 		gameC.setToOrtho(false);
 		c.register("game_cam", gameC);
@@ -230,9 +231,10 @@ public class EngineLoader {
 	  }
 
 	  void buildRenderCache() {
-		SpriteCache ca = new SpriteCache(10000, false);
+		SpriteCache ca = new SpriteCache(1000, false);
 		c.register(ca);
 	  }
+
 
 	  @Override
 	  public byte run() {
@@ -253,20 +255,24 @@ public class EngineLoader {
 
 		} else if (cc == base + 3) {
 
-		    buildRenderCache();
+		    //
 
 		} else if (cc == base + 4) {
 
-                Stage uiS = new Stage(uiVP, b);
+		    buildRenderCache();
 
-                c.register("top_stage", uiS);
+		} else if (cc == base + 5) {
 
-		} else if (cc >= base + 5) {
+		    Stage uiS = new Stage(uiVP, b);
 
-                Gdx.app.debug(tag, "Dependency B :: GL_GFX finished passes");
+		    c.register("top_stage", uiS);
 
-                return IGLRunnable.READY;
-            }
+		} else if (cc >= base + 6) {
+
+		    Gdx.app.debug(tag, "Dependency B :: GL_GFX finished passes");
+
+		    return IGLRunnable.READY;
+		}
 
 
             return IGLRunnable.RUNNING;

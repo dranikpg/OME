@@ -28,7 +28,7 @@ public class CameraSys extends BaseSystem implements InputProcessor {
     InputMultiplexer multiplexer;
 
     float oneZoomU = 0.1f;
-    float dragS = 0.01f;
+    float dragS = 0.1f;
 
     Vector2 stv;
     boolean ignore = false;

@@ -16,7 +16,6 @@ import com.draniksoft.ome.editor.load.LoadSaveManager;
 import com.draniksoft.ome.editor.load.ProjectLoader;
 import com.draniksoft.ome.editor.load.ProjectSaver;
 import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
-import com.draniksoft.ome.editor.systems.time.ObjTimeCalcSys;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.utils.Env;
@@ -114,7 +113,7 @@ EntitySrzMgr extends Manager implements LoadSaveManager {
 	  IntBag b = world.getAspectSubscriptionManager().get(Aspect.all(PathDescC.class)).getEntities();
 
 	  for (int i = 0; i < b.size(); i++) {
-		world.getSystem(ObjTimeCalcSys.class).processEntityPathC(b.get(i));
+		//world.getSystem(ObjTimeCalcSys.class).processEntityPathC(b.get(i));
 	  }
 
     }
