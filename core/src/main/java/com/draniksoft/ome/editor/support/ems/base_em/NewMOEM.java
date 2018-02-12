@@ -61,6 +61,7 @@ public class NewMOEM extends SimpleEditMode {
     @Override
     protected void on_detached() {
 	  _w.getSystem(InputSys.class).clearMainIC();
+	  _w.getSystem(OverlayRenderSys.class).removeRdr(newRdr);
 	  returnEnv();
 
     }

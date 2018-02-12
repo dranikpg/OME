@@ -8,6 +8,8 @@ import com.draniksoft.ome.editor.components.path.PathRunTimeC;
 import com.draniksoft.ome.editor.struct.path.runtime.Path;
 import com.draniksoft.ome.editor.struct.path.srz.PathSzr;
 import com.draniksoft.ome.editor.support.actions.Action;
+import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
+import com.draniksoft.ome.editor.support.event.entityy.CompositionChangeE;
 import org.jetbrains.annotations.NotNull;
 
 public class CreatePathComponentAction implements Action {
@@ -23,6 +25,8 @@ public class CreatePathComponentAction implements Action {
 	  PathRunTimeC rtc = w.getMapper(PathRunTimeC.class).create(e);
 	  c.ar = new Array<PathSzr>();
 	  rtc.ar = new Array<Path>();
+
+	  w.getSystem(OmeEventSystem.class).dispatch(new CompositionChangeE());
     }
 
     @Override
@@ -30,6 +34,8 @@ public class CreatePathComponentAction implements Action {
 	  Gdx.app.debug(tag, "Removing");
 	  w.getMapper(PathDescC.class).remove(e);
 	  w.getMapper(PathRunTimeC.class).remove(e);
+
+	  w.getSystem(OmeEventSystem.class).dispatch(new CompositionChangeE(e));
     }
 
     @Override

@@ -9,13 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.draniksoft.ome.editor.support.compositionObserver.abstr.CompositionObserver;
-import com.draniksoft.ome.editor.support.event.entityy.SelectionChangeE;
-import com.draniksoft.ome.editor.systems.support.flows.EditorSystem;
-import com.draniksoft.ome.mgmnt_base.base.AppDO;
-import com.draniksoft.ome.utils.FUtills;
 import com.draniksoft.ome.utils.cam.Target;
-import net.mostlyoriginal.api.event.common.Subscribe;
 
 public class CameraSys extends BaseSystem implements InputProcessor {
 
@@ -103,10 +97,6 @@ public class CameraSys extends BaseSystem implements InputProcessor {
 
         stv.set(screenX, screenY);
 
-	  if (t != null && t.dieOnDrag) {
-		Gdx.app.debug(tag, "Target died on drag");
-		t = null;
-	  }
 
         return false;
     }
@@ -154,22 +144,6 @@ public class CameraSys extends BaseSystem implements InputProcessor {
         camera.zoom = MathUtils.clamp(camera.zoom, 0.2f, 10);
 
         return false;
-    }
-
-    @Subscribe
-    public void selChange(SelectionChangeE e) {
-
-	  if (e.n < 0) {
-		world.getSystem(CameraSys.class).setTarget(null);
-	  } else {
-		if (AppDO.I.C().getConfVal_B(FUtills.ConfingN.focusOnMapObjSel)) {
-		    if (world.getSystem(EditorSystem.class).getComOb(CompositionObserver.IDs.MO_CO).matches(e.n)) {
-			  Target.EntityPosWINCALCTarget t = new Target.EntityPosWINCALCTarget(world);
-			  t._e = e.n;
-			  world.getSystem(CameraSys.class).setTarget(t);
-		    }
-		}
-	  }
     }
 
 

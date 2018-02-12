@@ -67,12 +67,14 @@ public abstract class BaseView {
     /*
     	Should be called when a widget wants to notify the parent that its preferred site changed and it requests a new layout
      */
-    public void invalidateParent() {
-	  if (parent != null) parent.invalidateReq(this);
+    public boolean invalidateParent() {
+	  if (parent != null) return false;
+	  return parent.invalidateReq(this);
     }
 
-    public void invalidateReq(BaseView vw) {
-
+    // true - request accepted
+    private boolean invalidateReq(BaseView vw) {
+	  return false;
     }
 
     //

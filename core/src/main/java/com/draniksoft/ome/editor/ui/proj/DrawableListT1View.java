@@ -289,14 +289,12 @@ public class DrawableListT1View extends BaseWinView implements ActionContainer {
 	  @Override
 	  protected void selectView(DrawableView view) {
 		view.setSelected(true);
-		Gdx.app.debug(tag, "View selected");
 
 	  }
 
 	  @Override
 	  protected void deselectView(DrawableView view) {
 		view.setSelected(false);
-		Gdx.app.debug(tag, "View deselected");
 
 	  }
 

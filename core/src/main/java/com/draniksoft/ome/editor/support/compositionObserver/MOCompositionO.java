@@ -89,6 +89,8 @@ public class MOCompositionO extends SimpleCompositionObserver {
     private void focusOnSel() {
 	  Target.EntityPosTarget t = new Target.EntityPosTarget();
 	  t._e = _selE;
+	  t.dieOnDrag = false;
+	  t.alpha *= 2;
 	  t.ps = _w.getSystem(PositionSystem.class);
 	  _w.getSystem(CameraSys.class).setTarget(t);
     }

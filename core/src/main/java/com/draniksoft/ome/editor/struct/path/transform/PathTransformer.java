@@ -44,7 +44,7 @@ public class PathTransformer {
 		return;
 	  }
 
-	  long st = System.currentTimeMillis();
+	  long st = System.nanoTime();
 
 	  touches.insert(0, touches.first());
 	  touches.add(touches.peek());
@@ -86,7 +86,7 @@ public class PathTransformer {
 	  touches.removeIndex(touches.size - 1);
 
 	  Gdx.app.debug(tag, "Constructed " + k + " points");
-	  Gdx.app.debug(tag, "Took " + (System.currentTimeMillis() - st));
+	  Gdx.app.debug(tag, "Took " + (System.nanoTime() - st) / 1000000f);
 
     }
 

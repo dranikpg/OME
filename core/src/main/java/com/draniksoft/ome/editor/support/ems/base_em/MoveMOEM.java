@@ -3,9 +3,11 @@ package com.draniksoft.ome.editor.support.ems.base_em;
 import com.badlogic.gdx.Gdx;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
 import com.draniksoft.ome.editor.support.actions.mapO.MoveMOA;
+import com.draniksoft.ome.editor.support.compositionObserver.MOCompositionO;
 import com.draniksoft.ome.editor.support.container.EM_desc.EditModeDesc;
 import com.draniksoft.ome.editor.support.ems.core.SimpleEditMode;
 import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
+import com.draniksoft.ome.editor.support.input.back.StebIC;
 import com.draniksoft.ome.editor.support.input.base_mo.MoveMOIC;
 import com.draniksoft.ome.editor.support.render.base_mo.MoveMORenderer;
 import com.draniksoft.ome.editor.support.render.core.OverlayPlaces;
@@ -59,6 +61,7 @@ public class MoveMOEM extends SimpleEditMode {
 
 	  _w.getSystem(OverlayRenderSys.class).addRdr(r);
 	  _w.getSystem(InputSys.class).setMainIC(ic);
+	  _w.getSystem(InputSys.class).setDefIC(new StebIC());
 
 	  _w.getSystem(OmeEventSystem.class).registerEvents(this);
 
@@ -112,6 +115,8 @@ public class MoveMOEM extends SimpleEditMode {
 	  _w.getSystem(ActionSystem.class).exec(a);
 	  _w.getSystem(EditorSystem.class).detachEditMode();
 
+	  _w.getSystem(EditorSystem.class).getComOb(MOCompositionO.IDs.MO_CO).execA(MOCompositionO.ActionCodes.FOCUS_SEL, e, false);
+
     }
 
     private void selfDestroy() {
@@ -127,7 +132,6 @@ public class MoveMOEM extends SimpleEditMode {
     @Override
     protected void on_detached() {
 	  if (easyQ) return;
-
 
 	  returnEnv();
 

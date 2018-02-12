@@ -11,6 +11,6 @@ public class CompositionChangeE implements Event {
         this.e = e;
     }
 
-    public int e;
+    public int e = -1;
 
 }

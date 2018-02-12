@@ -59,6 +59,7 @@ public abstract class BaseWinView extends BaseView {
 	  scrollY = d.scrollY;
     }
 
+
     public void init(WinControllerOverlay c) {
 	  c.setMenuHide(hideM);
 	  c.setMenuReplace(replaceB);
@@ -69,9 +70,10 @@ public abstract class BaseWinView extends BaseView {
     }
 
     @Override
-    public void invalidateParent() {
+    public boolean invalidateParent() {
 	  super.invalidateParent();
 	  if (WINMODE) recalc();
+	  return true;
     }
 
     public void recalc() {
