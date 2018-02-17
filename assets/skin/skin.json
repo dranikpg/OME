@@ -250,6 +250,10 @@
     }
   }
   com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
+    default: {
+      up: w
+      down: shd_grey
+    }
     sel: {
       up: grey
       down: shd_grey
@@ -450,6 +454,7 @@
       selection: primary
       background: btml_primary_dark
       cursor: ed_primary_dark
+      disabledBackground: btml_shd_grey
     }
     big: {
       font: big

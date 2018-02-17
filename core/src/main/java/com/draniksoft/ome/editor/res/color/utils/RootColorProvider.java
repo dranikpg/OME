@@ -9,7 +9,6 @@ public class RootColorProvider extends ColorProvider implements RootResource<Col
     public ColorProvider p;
     Color c;
 
-
     @Override
     public void get(Color c) {
 	  if (p != null) {

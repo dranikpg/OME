@@ -3,7 +3,6 @@ package com.draniksoft.ome.editor.support.ems.base_em;
 import com.badlogic.gdx.Gdx;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
 import com.draniksoft.ome.editor.support.actions.mapO.MoveMOA;
-import com.draniksoft.ome.editor.support.compositionObserver.MOCompositionO;
 import com.draniksoft.ome.editor.support.container.EM_desc.EditModeDesc;
 import com.draniksoft.ome.editor.support.ems.core.SimpleEditMode;
 import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
@@ -115,7 +114,7 @@ public class MoveMOEM extends SimpleEditMode {
 	  _w.getSystem(ActionSystem.class).exec(a);
 	  _w.getSystem(EditorSystem.class).detachEditMode();
 
-	  _w.getSystem(EditorSystem.class).getComOb(MOCompositionO.IDs.MO_CO).execA(MOCompositionO.ActionCodes.FOCUS_SEL, e, false);
+	  //_w.getSystem(EditorSystem.class).getComOb(MOCompositionO.IDs.MO_CO).execA(MOCompositionO.ActionCodes.FOCUS_SEL, e, false);
 
     }
 

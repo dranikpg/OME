@@ -1,15 +1,12 @@
 package com.draniksoft.ome.editor.systems.time;
 
 import com.artemis.Aspect;
-import com.artemis.ComponentMapper;
-import com.artemis.EntitySubscription;
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
+import com.draniksoft.ome.editor.components.srz.MapDimensC;
 import com.draniksoft.ome.editor.components.state.InactiveC;
-import com.draniksoft.ome.editor.components.state.TInactiveC;
-import com.draniksoft.ome.editor.components.tps.MObjectC;
 import com.draniksoft.ome.editor.manager.TimeMgr;
 import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.workflow.ModeChangeE;
@@ -24,29 +21,14 @@ public class ObjTimeCalcSys extends SpreadProcessingSystem {
 
 
     public ObjTimeCalcSys() {
-	  super(Aspect.all(MObjectC.class, PosSizeC.class).exclude(InactiveC.class), 1 / 20f);
-        tmpV = new Vector2();
+	  super(Aspect.all(MapDimensC.class, PosSizeC.class).exclude(InactiveC.class), 1 / 20f);
+	  tmpV = new Vector2();
     }
 
     Vector2 tmpV;
-    ComponentMapper<TInactiveC> tiM;
 
     @Override
     protected void initialize() {
-        getSubscription().addSubscriptionListener(new EntitySubscription.SubscriptionListener() {
-            @Override
-            public void inserted(IntBag entities) {
-            }
-            @Override
-            public void removed(IntBag es) {
-                for (int i = 0; i < es.size(); i++) {
-                    if (tiM.has(es.get(i))) {
-                        tiM.remove(es.get(i));
-                    }
-                }
-            }
-        });
-
         setEnabled(false);
 	  world.getSystem(OmeEventSystem.class).registerEvents(this);
     }

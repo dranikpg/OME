@@ -7,9 +7,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
-import com.draniksoft.ome.editor.support.compositionObserver.LabelCompositionObserver;
-import com.draniksoft.ome.editor.support.compositionObserver.MOCompositionO;
-import com.draniksoft.ome.editor.support.compositionObserver.PathCompositionO;
+import com.draniksoft.ome.editor.support.compositionObserver.*;
 import com.draniksoft.ome.editor.support.compositionObserver.abstr.CompositionObserver;
 import com.draniksoft.ome.editor.support.container.EM_desc.BiLangEMDs;
 import com.draniksoft.ome.editor.support.container.EM_desc.EditModeDesc;
@@ -293,9 +291,13 @@ public class EditorSystem extends BaseSystem {
 
     private void initComObs() {
 
-        addComOb(CompositionObserver.IDs.MO_CO, new MOCompositionO());
+	  addComOb(CompositionObserver.IDs.POSITION, new PositionCO());
 
-	  addComOb(CompositionObserver.IDs.PATH_CO, new PathCompositionO());
+	  addComOb(CompositionObserver.IDs.DRAWABLE, new DrawableCO());
+
+	  addComOb(CompositionObserver.IDs.MapObject, new MapObjectCO());
+
+	  addComOb(CompositionObserver.IDs.PATH, new PathCompositionO());
 
         addComOb(CompositionObserver.IDs.LABEL, new LabelCompositionObserver());
 

@@ -37,6 +37,10 @@ public class AnimatedDrawable extends GroupDrawable {
     }
 
 
+    @Override
+    public Drawable[] getChildren() {
+	  return a.getKeyFrames();
+    }
 
     @Override
     public void update(Array<Drawable> ar) {

@@ -297,7 +297,7 @@ public class EngineLoader {
 
             cb.with(new FontManager());
 
-		cb.with(new ProjValsManager());
+		cb.with(new ResourceManager());
 
             cb.with(new EntitySrzMgr());
 

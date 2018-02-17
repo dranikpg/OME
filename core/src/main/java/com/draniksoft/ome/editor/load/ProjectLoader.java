@@ -9,7 +9,8 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.JsonValue;
 import com.draniksoft.ome.editor.components.gfx.DrawableC;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
-import com.draniksoft.ome.editor.components.tps.MObjectC;
+import com.draniksoft.ome.editor.components.srz.DrawableSrcC;
+import com.draniksoft.ome.editor.components.srz.MapDimensC;
 import com.draniksoft.ome.editor.manager.EntitySrzMgr;
 import com.draniksoft.ome.editor.manager.MapMgr;
 import com.draniksoft.ome.editor.manager.ProjectMgr;
@@ -19,7 +20,10 @@ import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.support.load.interfaces.IGLRunnable;
 import com.draniksoft.ome.support.load.interfaces.IRunnable;
+import com.draniksoft.ome.support.pipemsg.MsgBaseCodes;
+import com.draniksoft.ome.support.pipemsg.MsgDirection;
 import com.draniksoft.ome.utils.FUtills;
+import com.draniksoft.ome.utils.GUtils;
 import com.draniksoft.ome.utils.respone.ResponseCode;
 import com.draniksoft.ome.utils.struct.ResponseListener;
 
@@ -130,19 +134,21 @@ public class ProjectLoader {
 
 	  IntBag ettyS;
 
-	  ComponentMapper<MObjectC> moM;
+	  ComponentMapper<MapDimensC> moM;
 	  ComponentMapper<DrawableC> dwc;
 	  ComponentMapper<PosSizeC> psM;
+	  ComponentMapper<DrawableSrcC> dwbSCM;
 
 	  int i = 0;
 
 	  public GfxC() {
 
-		ettyS = w.getAspectSubscriptionManager().get(Aspect.all(MObjectC.class)).getEntities();
+		ettyS = w.getAspectSubscriptionManager().get(Aspect.all(MapDimensC.class)).getEntities();
 
-		moM = w.getMapper(MObjectC.class);
+		moM = w.getMapper(MapDimensC.class);
 		dwc = w.getMapper(DrawableC.class);
 		psM = w.getMapper(PosSizeC.class);
+		dwbSCM = w.getMapper(DrawableSrcC.class);
 
 	  }
 
@@ -156,10 +162,16 @@ public class ProjectLoader {
 
 		int e = ettyS.get(i);
 
-		MObjectC mc = moM.get(e);
+		MapDimensC mc = moM.get(e);
+
 
 		DrawableC dwC = dwc.create(e);
-		dwC.d = FUtills.fetchDrawable(mc.dwbID);
+		DrawableSrcC dwbSC = dwbSCM.get(e);
+
+		dwbSC.c = GUtils.fetchIt();
+
+		dwC.d = dwbSC.c.build();
+		dwC.d.msg(MsgBaseCodes.INIT, MsgDirection.DOWN, new byte[]{});
 
 		PosSizeC psc = psM.create(e);
 		psc.x = mc.x;

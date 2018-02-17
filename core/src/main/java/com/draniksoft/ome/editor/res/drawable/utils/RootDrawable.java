@@ -1,6 +1,5 @@
 package com.draniksoft.ome.editor.res.drawable.utils;
 
-import com.artemis.World;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.draniksoft.ome.editor.res.res_mgmnt_base.res_ifaces.Resource;
 import com.draniksoft.ome.editor.res.res_mgmnt_base.res_ifaces.RootResource;
@@ -24,15 +23,6 @@ public class RootDrawable extends Drawable implements RootResource<Drawable> {
 	  return null;
     }
 
-    @Override
-    public void init(World _w) {
-
-    }
-
-    @Override
-    public void restore(World _w) {
-
-    }
 
 
     @Override

@@ -4,7 +4,6 @@ import com.artemis.BaseSystem;
 import com.artemis.annotations.Wire;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntArray;
@@ -17,9 +16,6 @@ import net.mostlyoriginal.api.event.common.Subscribe;
 public class OverlayRenderSys extends BaseSystem {
 
     private final static String tag = "OverlayRenderSys";
-
-    @Wire
-    SpriteBatch b;
 
     @Wire
     ShapeRenderer r;

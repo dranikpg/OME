@@ -9,7 +9,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
 import com.draniksoft.ome.editor.support.render.core.OverlayRendererI;
 import com.draniksoft.ome.editor.systems.pos.PositionSystem;
-import com.draniksoft.ome.utils.struct.Pair;
 import com.kotcrab.vis.ui.VisUI;
 
 public class SelectionRenderer implements OverlayRendererI {
@@ -20,7 +19,6 @@ public class SelectionRenderer implements OverlayRendererI {
     ComponentMapper<PosSizeC> cM;
 
     PositionSystem pS;
-    Pair<Integer, Integer> center;
 
     @Override
     public void render(SpriteBatch b, OrthographicCamera c) {

@@ -58,7 +58,7 @@ public class DrawableGroupConstructor extends GroupResConstructor<Drawable> {
     }
 
     @Override
-    public void typeUpdate() {
+    public void updateType() {
 
 	  Array<Drawable> snaps = new Array<Drawable>(getAr().size);
 	  for (ResConstructor<Drawable> ch : getAr()) snaps.add(ch.getSnapshot());

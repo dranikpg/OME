@@ -2,14 +2,15 @@ package com.draniksoft.ome.editor.manager;
 
 import com.artemis.Archetype;
 import com.artemis.ArchetypeBuilder;
-import com.artemis.EntityTransmuter;
 import com.artemis.Manager;
 import com.badlogic.gdx.utils.IntMap;
 import com.draniksoft.ome.editor.components.gfx.DrawableC;
 import com.draniksoft.ome.editor.components.gfx.TexRegC;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
-import com.draniksoft.ome.editor.components.tps.MObjectC;
+import com.draniksoft.ome.editor.components.srz.DrawableSrcC;
+import com.draniksoft.ome.editor.components.srz.MapDimensC;
 import com.draniksoft.ome.editor.components.tps.MapC;
+import com.draniksoft.ome.editor.components.tps.MapObjectC;
 
 public class ArchTransmuterMgr extends Manager{
 
@@ -17,14 +18,11 @@ public class ArchTransmuterMgr extends Manager{
 
         public static final int MAP_C = 1;
         public static final int BASE_MO = 10;
-        public static final int BASE_LOCATION = 20;
-        public static final int TIMED_LOCATION = 21;
 
 
     }
 
     volatile IntMap<Archetype> types;
-    IntMap<EntityTransmuter> tmuters;
 
     public ArchTransmuterMgr(){
 
@@ -34,7 +32,6 @@ public class ArchTransmuterMgr extends Manager{
     protected void initialize() {
         types  = new IntMap<Archetype>();
 
-        tmuters = new IntMap<EntityTransmuter>();
 
         buildBaseArchTypes();
     }
@@ -45,16 +42,10 @@ public class ArchTransmuterMgr extends Manager{
                 .add(MapC.class).add(PosSizeC.class).build(world));
 
 	  types.put(Codes.BASE_MO, new ArchetypeBuilder()
-		    .add(PosSizeC.class).add(DrawableC.class).add(MObjectC.class)
-                .build(world));
-
-	  types.put(Codes.BASE_LOCATION, new ArchetypeBuilder()
-		    .add(PosSizeC.class).add(DrawableC.class)
-                .build(world));
-
-	  types.put(Codes.TIMED_LOCATION, new ArchetypeBuilder()
-		    .add(PosSizeC.class).add(DrawableC.class)
+		    .add(PosSizeC.class, MapDimensC.class).add(DrawableC.class, DrawableSrcC.class).
+				add(MapObjectC.class)
 		    .build(world));
+
 
     }
 

@@ -6,21 +6,28 @@ import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.JsonValue;
 import com.draniksoft.ome.editor.support.container.CO_actiondesc.ActionDesc;
 import com.draniksoft.ome.editor.support.container.CO_actiondesc.BiLangActionDEsc;
-
+/*
+    Multi purpose class for managing various tings
+ */
 
 public abstract class CompositionObserver {
 
     private final static String tag = "CompositionObserver";
 
     public static class IDs {
-        public static final short MO_CO = 1;
 
-	  public static final short PATH_CO = 2;
+	  public static final short POSITION = 1;
 
-	  public static final short LABEL = 3;
+	  public static final short DRAWABLE = 2;
+
+	  public static final short MapObject = 5;
+
+	  public static final short PATH = 10;
+
+	  public static final short LABEL = 20;
     }
 
-
+    // head of someting ?
     public boolean HEAD = false;
 
     public int ID;

@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntMap;
-import com.draniksoft.ome.editor.manager.ProjValsManager;
+import com.draniksoft.ome.editor.manager.ResourceManager;
 import com.draniksoft.ome.editor.res.drawable.utils.Drawable;
 import com.draniksoft.ome.editor.res.drawable.utils.GdxCompatibleDrawable;
 import com.draniksoft.ome.editor.res.pv_res_wrapper.PVResWrapper;
@@ -55,7 +55,7 @@ public class DrawableListT1View extends BaseWinView implements ActionContainer {
     ListView<Integer> lw;
     LWAdapter a;
 
-    ProjValsManager m;
+    ResourceManager m;
 
     boolean newS = true;
 
@@ -198,7 +198,7 @@ public class DrawableListT1View extends BaseWinView implements ActionContainer {
     @Override
     public void preinit() {
 
-	  m = _w.getSystem(ProjValsManager.class);
+	  m = _w.getSystem(ResourceManager.class);
 	  _w.getSystem(OmeEventSystem.class).registerEvents(this);
 
 
@@ -321,7 +321,7 @@ public class DrawableListT1View extends BaseWinView implements ActionContainer {
     @LmlAction("add_dwb")
     public void add_dwb() {
 
-	  _w.getSystem(ProjValsManager.class).createWName_OneEvent(ResTypes.DRAWABLE, nameF.getText());
+	  _w.getSystem(ResourceManager.class).createWName_OneEvent(ResTypes.DRAWABLE, nameF.getText());
 	  a.itemsDataChanged();
 
 	  lw.getScrollPane().setScrollPercentY(1);

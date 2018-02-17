@@ -8,7 +8,7 @@ public abstract class ActionDesc {
 
     public abstract String getDesc();
 
-    public static class BaseCodes {
+    public static final class BaseCodes {
 
         public static final short ACTION_CREATE = 1;
         public static final short ACTION_DELETE = 2;

@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.draniksoft.ome.editor.components.gfx.DrawableC;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
 import com.draniksoft.ome.editor.components.state.InactiveC;
-import com.draniksoft.ome.editor.components.state.TInactiveC;
 
 public class ObjRSys extends IteratingSystem {
 
@@ -18,7 +17,7 @@ public class ObjRSys extends IteratingSystem {
 
     public ObjRSys() {
         super(Aspect.all(PosSizeC.class, DrawableC.class)
-                .exclude(InactiveC.class, TInactiveC.class));
+                .exclude(InactiveC.class));
     }
 
     ComponentMapper<PosSizeC> posM;
@@ -35,11 +34,8 @@ public class ObjRSys extends IteratingSystem {
 
     @Override
     protected void begin() {
-
         b.setProjectionMatrix(cam.combined);
-
         b.begin();
-
     }
 
     PosSizeC ttc;

@@ -5,9 +5,12 @@ import com.badlogic.gdx.utils.Array;
 public interface GroupResource<TYPE> {
 
     /*
-    	Methods for constructors to copy data without type fetching
+
+    	getChildren -> replace with iterator in quite some time to avoid mem copy
+
      */
 
+    TYPE[] getChildren();
 
     void update(Array<TYPE> ar);
 

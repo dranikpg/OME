@@ -11,6 +11,11 @@ public class AnimatedColorP extends GroupColorProvider {
     }
 
     @Override
+    public ColorProvider[] getChildren() {
+	  return new ColorProvider[0];
+    }
+
+    @Override
     public void update(Array<ColorProvider> ar) {
 
     }

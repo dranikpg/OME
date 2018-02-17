@@ -2,23 +2,27 @@ package com.draniksoft.ome.editor.res.res_mgmnt_base.constructor;
 
 import com.draniksoft.ome.editor.res.res_mgmnt_base.types.ResSubT;
 import com.draniksoft.ome.editor.res.res_mgmnt_base.ui_br.NodeDeliverer;
+import com.draniksoft.ome.support.pipemsg.MsgBaseCodes;
+import com.draniksoft.ome.support.pipemsg.MsgNode;
 import com.draniksoft.ome.ui_addons.resource_ui.ResTreeNode;
 import com.draniksoft.ome.utils.struct.Pair;
 
-public abstract class ResConstructor<TYPE> {
+public abstract class ResConstructor<TYPE> implements MsgNode {
 
-    GroupResConstructor<TYPE> parent;
+    public static class MsgIDs {
+	  public static final byte UPDATE_TYPE = 5;
+    }
 
-    //
-    ResTreeNode<TYPE> node;
-
+    // dabl pointer trap, use event flow for parent settin
+    transient GroupResConstructor<TYPE> parent;
+    transient ResTreeNode<TYPE> node;
     // Node reconstruction required
-    boolean nodeRRQ = false;
+    transient boolean nodeRRQ = false;
 
     // type
     ResSubT tt = ResSubT.NULL;
 
-    protected int T = -1;
+    protected boolean LIVE_MODE = false;
 
     /*
 		Node utils
@@ -42,7 +46,7 @@ public abstract class ResConstructor<TYPE> {
     public void setType(ResSubT nt) {
 	  if (tt == nt) return;
 	  this.tt = nt;
-	  typeUpdate();
+	  updateType();
     }
 
     public ResSubT type() {
@@ -56,15 +60,24 @@ public abstract class ResConstructor<TYPE> {
     public abstract int group();
 
     /*
-		Life cycle
+		Util methods for msg sytem
+
      */
 
-    public void shrinkData() {
+    protected void shrinkData() {
 	  node = null;
+	  LIVE_MODE = false;
+    }
+
+    protected void extendData() {
+	  LIVE_MODE = true;
+    }
+
+    public void updateType() {
 
     }
 
-    public void extendData() {
+    public void updateSources() {
 
     }
 
@@ -96,6 +109,32 @@ public abstract class ResConstructor<TYPE> {
     }
 
     /*
+    	MSG
+     */
+
+    @Override
+    public void msg(byte msg, byte dir, byte[] data) {
+	  byte _dir = fetchDir(dir);
+    }
+
+    private byte fetchDir(byte dir) {
+	  return dir;
+    }
+
+    private boolean defMsgHandle(byte msg, byte[] data) {
+	  switch (msg) {
+		case MsgBaseCodes.INIT:
+		    extendData();
+		    return true;
+		case MsgBaseCodes.DEINIT:
+		    shrinkData();
+		    return true;
+	  }
+	  return false;
+
+    }
+
+    /*
 
      */
 
@@ -105,20 +144,7 @@ public abstract class ResConstructor<TYPE> {
     // return new copy
     public abstract TYPE build();
 
-    /*
-     	Called after array or property change, should update its snapshot;
-     */
-
-    public abstract void updateSources();
-
-    public abstract void typeUpdate();
-
-
-
-    /*
-   	Child operations are performed automatically in groupConstructors
-    
-     */
+    public abstract ResConstructor<TYPE> copy();
 
 
 

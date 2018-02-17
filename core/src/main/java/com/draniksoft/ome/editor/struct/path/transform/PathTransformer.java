@@ -8,7 +8,7 @@ import com.draniksoft.ome.editor.struct.path.runtime.TranslationTable;
 import com.draniksoft.ome.utils.struct.Points;
 
 /*
-	TODO update and add functionality instead of full recalculation
+	TODO update and add functionality instead of full recalculation, some time later #bigtopic
  */
 
 /*

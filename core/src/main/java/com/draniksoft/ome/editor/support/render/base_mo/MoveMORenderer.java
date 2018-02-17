@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
-import com.draniksoft.ome.editor.components.tps.MObjectC;
+import com.draniksoft.ome.editor.components.srz.MapDimensC;
 import com.draniksoft.ome.editor.support.ems.base_em.MoveMOEM;
 import com.draniksoft.ome.editor.support.render.core.OverlayPlaces;
 import com.draniksoft.ome.editor.support.render.core.OverlayRendererI;
@@ -21,7 +21,7 @@ public class MoveMORenderer implements OverlayRendererI {
     MoveMOEM em;
 
     PosSizeC _c;
-    MObjectC mc;
+    MapDimensC mc;
 
     Color oldC;
 
@@ -74,7 +74,7 @@ public class MoveMORenderer implements OverlayRendererI {
     @Override
     public void added(World _w) {
 	  _c = _w.getMapper(PosSizeC.class).get(e);
-	  mc = _w.getMapper(MObjectC.class).get(e);
+	  mc = _w.getMapper(MapDimensC.class).get(e);
 
 
 	  oldC = new Color(VisUI.getSkin().getColor("primary"));

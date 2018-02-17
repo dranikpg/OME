@@ -1,0 +1,8 @@
+<visTable id=root>
+
+    <button id=btn
+        minwidth=50
+        minheight=50/>
+
+
+</visTable>

@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.BufferUtils;
+import com.draniksoft.ome.editor.res.drawable.constr.DrawableLeafContructor;
 import com.draniksoft.ome.main_menu.MainBase;
 
 import javax.swing.*;
@@ -66,7 +67,6 @@ public class GUtils {
         configuration.setWindowIcon("libgdx128.png", "libgdx64.png", "libgdx32.png", "libgdx16.png");
 
         configuration.setBackBufferConfig(8, 8, 8, 8, 16, 8, 2);
-
 
 	  return configuration;
 
@@ -203,6 +203,18 @@ public class GUtils {
         JFileChooser ch = new JFileChooser();
 
         return ch;
+    }
+
+
+    public static DrawableLeafContructor fetchIt() {
+        DrawableLeafContructor lfC = new DrawableLeafContructor();
+        lfC.setFor(FUtills.fetchAtlasR("i_casB@mapTile@100"));
+        return lfC;
+    }
+
+    public static void tmp() {
+
+
     }
 
 

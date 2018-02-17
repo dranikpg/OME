@@ -4,7 +4,7 @@ import com.artemis.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.draniksoft.ome.editor.manager.ProjValsManager;
+import com.draniksoft.ome.editor.manager.ResourceManager;
 import com.draniksoft.ome.editor.res.drawable.constr.DrawableGroupConstructor;
 import com.draniksoft.ome.editor.res.drawable.constr.DrawableLeafContructor;
 import com.draniksoft.ome.editor.res.drawable.simple.EmptyDrawable;
@@ -17,6 +17,8 @@ import com.draniksoft.ome.editor.res.res_mgmnt_base.types.ResTypes;
 import com.draniksoft.ome.editor.res.res_mgmnt_base.ui_br.NodeDeliverer;
 import com.draniksoft.ome.editor.ui.edit.dwb_typevw.DwbEditI;
 import com.draniksoft.ome.editor.ui.supp.ResourceTree;
+import com.draniksoft.ome.support.pipemsg.MsgBaseCodes;
+import com.draniksoft.ome.support.pipemsg.MsgDirection;
 import com.draniksoft.ome.support.ui.viewsys.BaseView;
 import com.draniksoft.ome.support.ui.viewsys.BaseWinView;
 import com.draniksoft.ome.ui_addons.resource_ui.ResTreeNode;
@@ -254,11 +256,11 @@ public class EditDwbView extends BaseWinView implements ActionContainer {
 
 		Gdx.app.debug(tag, "Constructor lookup for " + id);
 
-		ProjValsManager m = w.getSystem(ProjValsManager.class);
+		ResourceManager m = w.getSystem(ResourceManager.class);
 		if (m.get(ResTypes.DRAWABLE, id).ctr != null) {
 		    Gdx.app.debug(tag, "Found chached constructor");
 		    ResConstructor<Drawable> c = m.get(ResTypes.DRAWABLE, id).ctr;
-		    c.extendData();
+		    c.msg(MsgBaseCodes.INIT, MsgDirection.DOWN, null);
 		    return c;
 		}
 		return null;
@@ -274,10 +276,10 @@ public class EditDwbView extends BaseWinView implements ActionContainer {
 		if (root == null) rb = new EmptyDrawable();
 		else rb = root.build();
 
-		if (root != null) root.shrinkData();
+		if (root != null) root.msg(MsgBaseCodes.DEINIT, MsgDirection.DOWN, null);
 
-		w.getSystem(ProjValsManager.class).update(ResTypes.DRAWABLE, rb, id);
-		if (root != null) w.getSystem(ProjValsManager.class).updateConstructor(ResTypes.DRAWABLE, root, id);
+		w.getSystem(ResourceManager.class).update(ResTypes.DRAWABLE, rb, id);
+		if (root != null) w.getSystem(ResourceManager.class).updateConstructor(ResTypes.DRAWABLE, root, id);
 
 
 	  }

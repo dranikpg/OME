@@ -22,9 +22,9 @@ import com.draniksoft.ome.support.load.IntelligentLoader;
 
 import java.util.Iterator;
 
-public class ProjValsManager extends BaseSystem implements LoadSaveManager {
+public class ResourceManager extends BaseSystem implements LoadSaveManager {
 
-    private static String tag = "ProjValsManager";
+    private static String tag = "ResourceManager";
 
     @Override
     protected void initialize() {
@@ -35,6 +35,8 @@ public class ProjValsManager extends BaseSystem implements LoadSaveManager {
 	  prepocData();
 	  prepocLimits();
 	  prepocManaged();
+
+
     }
 
     static boolean ET = true;
@@ -109,7 +111,7 @@ public class ProjValsManager extends BaseSystem implements LoadSaveManager {
 	  return id;
     }
 
-    // TODO
+    // TODO when the need arises
     public void updateWAction(ResTypes t, int id, Resource r, ResConstructor c) {
 	  throw new GdxRuntimeException("TODO !!");
     }

@@ -1,5 +1,6 @@
 package com.draniksoft.ome.editor.res.res_mgmnt_base.constructor;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.draniksoft.ome.editor.res.res_mgmnt_base.types.ResSubGroups;
 import com.draniksoft.ome.editor.res.res_mgmnt_base.ui_br.NodeDeliverer;
@@ -7,6 +8,8 @@ import com.draniksoft.ome.ui_addons.resource_ui.ResTreeNode;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class GroupResConstructor<TYPE> extends ResConstructor<TYPE> {
+
+    private static String tag = "GroupResConstructor";
 
     Array<ResConstructor<TYPE>> ar;
 
@@ -22,15 +25,6 @@ public abstract class GroupResConstructor<TYPE> extends ResConstructor<TYPE> {
 	  return true;
     }
 
-    //
-
-    @Override
-    public void shrinkData() {
-	  super.shrinkData();
-	  for (ResConstructor c : ar) {
-		c.shrinkData();
-	  }
-    }
 
     //
 
@@ -50,8 +44,7 @@ public abstract class GroupResConstructor<TYPE> extends ResConstructor<TYPE> {
 
 	  if (order) reorder(del);
 
-
-	  updateSources();
+	  if (LIVE_MODE) updateSources();
     }
 
     public void remove(ResConstructor<TYPE> ct, @Nullable NodeDeliverer<TYPE> del) {
@@ -64,8 +57,7 @@ public abstract class GroupResConstructor<TYPE> extends ResConstructor<TYPE> {
 
 	  if (order) reorder(del);
 
-
-	  updateSources();
+	  if (LIVE_MODE) updateSources();
     }
 
     public void add(ResConstructor<TYPE> ct, ResConstructor<TYPE> after, @Nullable NodeDeliverer<TYPE> del) {
@@ -156,8 +148,25 @@ public abstract class GroupResConstructor<TYPE> extends ResConstructor<TYPE> {
 
     //
 
-
     public Array<ResConstructor<TYPE>> getAr() {
 	  return ar;
     }
+
+    @Override
+    public ResConstructor<TYPE> copy() {
+	  GroupResConstructor<TYPE> ct;
+	  try {
+		ct = this.getClass().getConstructor().newInstance();
+	  } catch (Exception e) {
+		Gdx.app.error(tag, "", e);
+		return null;
+	  }
+	  for (ResConstructor<TYPE> rt : getAr()) {
+		ct.add(rt.copy(), null);
+	  }
+	  ct.tt = this.tt;
+	  ct.updateType();
+	  return ct;
+    }
+
 }

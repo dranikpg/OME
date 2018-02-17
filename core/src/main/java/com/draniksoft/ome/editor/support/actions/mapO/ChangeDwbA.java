@@ -3,7 +3,6 @@ package com.draniksoft.ome.editor.support.actions.mapO;
 import com.artemis.World;
 import com.badlogic.gdx.Gdx;
 import com.draniksoft.ome.editor.components.gfx.DrawableC;
-import com.draniksoft.ome.editor.components.tps.MObjectC;
 import com.draniksoft.ome.editor.res.drawable.utils.Drawable;
 import com.draniksoft.ome.editor.support.actions.Action;
 import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
@@ -34,9 +33,9 @@ public class ChangeDwbA implements Action {
 		Gdx.app.error(tag, "DWB IS NULL");
 	  }
 
-        MObjectC c = w.getMapper(MObjectC.class).get(_e);
-        old = c.dwbID;
-        c.dwbID = d;
+	  //MapDimensC c = w.getMapper(MapDimensC.class).get(_e);
+	  //old = c.dwbID;
+	  //c.dwbID = d;
 
         DrawableC dc = w.getMapper(DrawableC.class).get(_e);
 	  dc.d = dwb;

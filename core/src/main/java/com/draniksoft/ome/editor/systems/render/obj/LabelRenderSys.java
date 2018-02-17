@@ -9,14 +9,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.draniksoft.ome.editor.components.label.LabelC;
 import com.draniksoft.ome.editor.components.label.LabelRTC;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
-import com.draniksoft.ome.editor.components.tps.MObjectC;
+import com.draniksoft.ome.editor.components.srz.MapDimensC;
 
 public class LabelRenderSys extends IteratingSystem {
 
     private static final String tag = "LabelRenderSys";
 
     public LabelRenderSys() {
-	  super(Aspect.all(PosSizeC.class, MObjectC.class, LabelC.class, LabelRTC.class));
+	  super(Aspect.all(PosSizeC.class, MapDimensC.class, LabelC.class, LabelRTC.class));
     }
 
     @Wire

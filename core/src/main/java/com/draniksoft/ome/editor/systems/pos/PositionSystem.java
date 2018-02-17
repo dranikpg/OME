@@ -6,7 +6,7 @@ import com.artemis.ComponentMapper;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
-import com.draniksoft.ome.editor.components.tps.MObjectC;
+import com.draniksoft.ome.editor.components.srz.MapDimensC;
 import com.draniksoft.ome.editor.components.tps.MapC;
 import com.draniksoft.ome.utils.struct.Pair;
 
@@ -19,7 +19,7 @@ public class PositionSystem extends BaseEntitySystem {
      */
 
     ComponentMapper<PosSizeC> m;
-    ComponentMapper<MObjectC> mM;
+    ComponentMapper<MapDimensC> mM;
 
     public PositionSystem() {
 	  super(Aspect.all(PosSizeC.class).exclude(MapC.class));
@@ -94,9 +94,9 @@ public class PositionSystem extends BaseEntitySystem {
 
     public void save(int e) {
 	  PosSizeC c = m.get(e);
-	  MObjectC m = mM.get(e);
-	  m.x = c.x;
-	  m.y = c.y;
+	  MapDimensC m = mM.get(e);
+	  m.x = c.x + c.w / 2;
+	  m.y = c.y + c.h / 2;
 	  m.w = c.w;
 	  m.h = c.h;
     }
@@ -107,9 +107,9 @@ public class PositionSystem extends BaseEntitySystem {
      */
     public void resetPos(int e) {
 	  PosSizeC c = m.get(e);
-	  MObjectC m = mM.get(e);
-	  c.x = m.x;
-	  c.y = m.y;
+	  MapDimensC m = mM.get(e);
+	  c.x = m.x - m.w / 2;
+	  c.y = m.y - m.h / 2;
 	  c.w = m.w;
 	  c.h = m.h;
     }

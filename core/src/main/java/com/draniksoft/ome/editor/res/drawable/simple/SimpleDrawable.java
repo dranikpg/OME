@@ -1,6 +1,5 @@
 package com.draniksoft.ome.editor.res.drawable.simple;
 
-import com.artemis.World;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -36,14 +35,4 @@ public class SimpleDrawable extends Drawable {
 	  return n;
     }
 
-
-    @Override
-    public void init(World _w) {
-
-    }
-
-    @Override
-    public void restore(World _w) {
-
-    }
 }

@@ -11,11 +11,10 @@ import com.artemis.utils.IntBag;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.JsonValue;
 import com.draniksoft.ome.editor.components.path.PathDescC;
-import com.draniksoft.ome.editor.components.tps.MObjectC;
+import com.draniksoft.ome.editor.components.srz.MapDimensC;
 import com.draniksoft.ome.editor.load.LoadSaveManager;
 import com.draniksoft.ome.editor.load.ProjectLoader;
 import com.draniksoft.ome.editor.load.ProjectSaver;
-import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.utils.Env;
@@ -120,12 +119,11 @@ EntitySrzMgr extends Manager implements LoadSaveManager {
 
     @Override
     protected void initialize() {
-	  world.getSystem(OmeEventSystem.class).registerEvents(this);
     }
 
     public EntitySubscription getEtty() {
 
-        return world.getAspectSubscriptionManager().get(Aspect.all(MObjectC.class));
+	  return world.getAspectSubscriptionManager().get(Aspect.all(MapDimensC.class));
     }
 
 

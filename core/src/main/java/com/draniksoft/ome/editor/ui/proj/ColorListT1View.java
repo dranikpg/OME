@@ -2,7 +2,7 @@ package com.draniksoft.ome.editor.ui.proj;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
-import com.draniksoft.ome.editor.manager.ProjValsManager;
+import com.draniksoft.ome.editor.manager.ResourceManager;
 import com.draniksoft.ome.editor.res.res_mgmnt_base.types.ResTypes;
 import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.projectVals.ProjectValEvent;
@@ -50,7 +50,7 @@ public class ColorListT1View extends BaseWinView {
 
 	  public void update() {
 
-		name.setText(_w.getSystem(ProjValsManager.class).getName(ResTypes.COLOR, id));
+		name.setText(_w.getSystem(ResourceManager.class).getName(ResTypes.COLOR, id));
 
 	  }
 
@@ -122,7 +122,7 @@ public class ColorListT1View extends BaseWinView {
     private void fullDataUpdate() {
 	  a.clear();
 	  Array<Integer> ia = new Array<Integer>();
-	  for (int i : _w.getSystem(ProjValsManager.class).getKeys(ResTypes.COLOR).toArray()) ia.add(i);
+	  for (int i : _w.getSystem(ResourceManager.class).getKeys(ResTypes.COLOR).toArray()) ia.add(i);
 	  a.addAll(ia);
     }
 

@@ -15,9 +15,9 @@
     "lml": "insp/_insp_mw.lml",
     "class": "§editor.ui.insp.InspView"
   },
-  "base_mo_insp": {
-    "lml": "insp/base_mo.lml",
-    "class": "§editor.ui.insp.BaseMOInspView"
+  "dwb_insp": {
+    "lml": "insp/dwb.lml",
+    "class": "§editor.ui.insp.DrawableView"
   },
   "path_insp": {
     "lml": "insp/path.lml",
