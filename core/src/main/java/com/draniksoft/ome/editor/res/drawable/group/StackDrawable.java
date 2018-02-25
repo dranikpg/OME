@@ -27,7 +27,8 @@ public class StackDrawable extends GroupDrawable implements GroupResource<Drawab
 
     @Override
     public Drawable[] getChildren() {
-	  return ar.toArray();
+	  Drawable[] da = ar.toArray(Drawable.class);
+	  return da;
     }
 
     @Override

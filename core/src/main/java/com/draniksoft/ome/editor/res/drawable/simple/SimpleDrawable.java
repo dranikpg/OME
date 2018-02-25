@@ -12,6 +12,13 @@ public class SimpleDrawable extends Drawable {
 
     public TextureRegion r;
 
+    public SimpleDrawable(TextureRegion r) {
+	  this.r = r;
+    }
+
+    public SimpleDrawable() {
+    }
+
     @Override
     public void draw(Batch b, float x, float y, float w, float h) {
 	  if (r != null) b.draw(r, x, y, w, h);

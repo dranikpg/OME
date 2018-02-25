@@ -15,8 +15,8 @@ public class DrawableGroupConstructor extends GroupResConstructor<Drawable> {
 
     private static String tag = "DrawableGroupConstructor";
 
-    LinkedDrawable sp;
-    GroupDrawable dwb;
+    transient LinkedDrawable sp;
+    transient GroupDrawable dwb;
 
     public DrawableGroupConstructor() {
 	  sp = new LinkedDrawable();
@@ -77,6 +77,19 @@ public class DrawableGroupConstructor extends GroupResConstructor<Drawable> {
 
     }
 
+    @Override
+    protected void extendData() {
+	  super.extendData();
+	  updateSources();
+    }
 
+    @Override
+    protected void shrinkData() {
+	  super.shrinkData();
+    }
 
+    @Override
+    protected void init() {
+	  super.init();
+    }
 }

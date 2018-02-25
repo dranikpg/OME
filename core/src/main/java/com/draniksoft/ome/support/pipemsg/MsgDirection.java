@@ -2,6 +2,9 @@ package com.draniksoft.ome.support.pipemsg;
 
 public class MsgDirection {
 
+    // util var
+    public static final byte UNDEFINED = -2;
+
     public static final byte END = -1;
 
     public static final byte UP = 1;

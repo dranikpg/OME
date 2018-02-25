@@ -63,7 +63,6 @@ public class CreateNewMOA implements Action {
 
 	  DrawableLeafContructor ct = new DrawableLeafContructor();
 	  Gdx.app.debug(tag, "Buildin dwb " + dwbID.substring(2));
-	  ct.updateSources();
 	  ct.setFor(FUtills.fetchAtlasR(dwbID.substring(2)));
 	  dwC.d = ct.build();
 	  dwbSC.c = ct;
@@ -74,11 +73,8 @@ public class CreateNewMOA implements Action {
 
     @Override
     public void undo(World w) {
-
         ESCUtils.removeSelectionBeforeRMV(_e, _w);
-
 	  _w.delete(_e);
-
     }
 
 

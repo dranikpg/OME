@@ -212,10 +212,6 @@ public class GUtils {
         return lfC;
     }
 
-    public static void tmp() {
-
-
-    }
 
 
 

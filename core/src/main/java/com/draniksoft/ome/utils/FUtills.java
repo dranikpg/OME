@@ -4,6 +4,7 @@ package com.draniksoft.ome.utils;
 import com.artemis.World;
 import com.artemis.io.JsonArtemisSerializer;
 import com.artemis.io.KryoArtemisSerializer;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -17,8 +18,11 @@ import com.draniksoft.ome.editor.manager.drawable.SimpleAssMgr;
 import com.draniksoft.ome.editor.res.drawable.simple.EmptyDrawable;
 import com.draniksoft.ome.editor.res.drawable.simple.SimpleDrawable;
 import com.draniksoft.ome.editor.res.drawable.utils.Drawable;
+import com.draniksoft.ome.editor.res.res_mgmnt_base.constructor.ResConstructor;
 import com.draniksoft.ome.main_menu.MainBase;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
+import com.draniksoft.ome.support.pipemsg.MsgBaseCodes;
+import com.draniksoft.ome.support.pipemsg.MsgDirection;
 import com.draniksoft.ome.utils.struct.Points;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
@@ -34,9 +38,8 @@ import static com.draniksoft.ome.utils.FUtills.DrawablePrefix.P_SIMPLE_DW;
  */
 public class FUtills {
 
-    //public static Json json = new Json();
+    public static final short[] NULL_ARRAY = new short[]{};
 
-    private static final String METADATA_SEP = "|$|";
 
     public static JsonReader r = new JsonReader();
 
@@ -47,8 +50,6 @@ public class FUtills {
     public static int createE(World world) {
         return world.create();
     }
-
-
 
     public static class PrefIdx {
 
@@ -62,16 +63,8 @@ public class FUtills {
 
         public static final String tempF = ".__tempF";
 
-
         public static final String iAssF = "i_assets/";
     }
-
-    public static class ConfingN {
-
-	  public static String focusOnMapObjSel = "focus_on_mapobj_sel";
-
-    }
-
 
 
     public static <T> T getVal(Preferences prefs, Class<T> c, String id) {
@@ -314,5 +307,22 @@ public class FUtills {
     public static int JF_OPTION = -5;
     public static File JF_FILE;
 
+    /*
+        Drawable utils
+     */
 
+
+    public static Drawable buildDrawable(ResConstructor<Drawable> c) {
+
+        Gdx.app.debug("--", "Building drawable");
+
+        Drawable d;
+
+        if (c == null) d = new EmptyDrawable();
+        else d = c.build();
+
+        d.msg(MsgBaseCodes.INIT, MsgDirection.DOWN, null);
+
+        return d;
+    }
 }

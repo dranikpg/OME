@@ -4,10 +4,11 @@ import com.artemis.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.draniksoft.ome.editor.components.gfx.DrawableC;
+import com.draniksoft.ome.editor.components.srz.DrawableSrcC;
 import com.draniksoft.ome.editor.manager.ResourceManager;
 import com.draniksoft.ome.editor.res.drawable.constr.DrawableGroupConstructor;
 import com.draniksoft.ome.editor.res.drawable.constr.DrawableLeafContructor;
-import com.draniksoft.ome.editor.res.drawable.simple.EmptyDrawable;
 import com.draniksoft.ome.editor.res.drawable.utils.Drawable;
 import com.draniksoft.ome.editor.res.res_mgmnt_base.constructor.GroupResConstructor;
 import com.draniksoft.ome.editor.res.res_mgmnt_base.constructor.LeafConstructor;
@@ -23,6 +24,7 @@ import com.draniksoft.ome.support.ui.viewsys.BaseView;
 import com.draniksoft.ome.support.ui.viewsys.BaseWinView;
 import com.draniksoft.ome.ui_addons.resource_ui.ResTreeNode;
 import com.draniksoft.ome.ui_addons.resource_ui.dwb.ResDwbNode;
+import com.draniksoft.ome.utils.FUtills;
 import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.parser.LmlParser;
@@ -217,6 +219,7 @@ public class EditDwbView extends BaseWinView implements ActionContainer {
     @LmlAction("leaf_add")
     public void add_leaf() {
 	  DrawableLeafContructor leafC = new DrawableLeafContructor();
+	  leafC.msg(MsgBaseCodes.INIT, MsgDirection.END, null);
 	  leafC.updateSources();
 	  if (tree != null) tree.addOnSelection(leafC);
     }
@@ -224,6 +227,7 @@ public class EditDwbView extends BaseWinView implements ActionContainer {
     @LmlAction("group_add")
     public void add_group() {
 	  DrawableGroupConstructor groupC = new DrawableGroupConstructor();
+	  groupC.msg(MsgBaseCodes.INIT, MsgDirection.END, null);
 	  groupC.updateSources();
 	  if (tree != null) tree.addOnSelection(groupC);
     }
@@ -271,10 +275,7 @@ public class EditDwbView extends BaseWinView implements ActionContainer {
 
 		Gdx.app.debug(tag, "Saving " + id);
 
-		Drawable rb;
-
-		if (root == null) rb = new EmptyDrawable();
-		else rb = root.build();
+		Drawable rb = FUtills.buildDrawable(root);
 
 		if (root != null) root.msg(MsgBaseCodes.DEINIT, MsgDirection.DOWN, null);
 
@@ -285,9 +286,33 @@ public class EditDwbView extends BaseWinView implements ActionContainer {
 	  }
     }
 
+    public static class EntityDwbHandler implements Handler {
+
+	  public EntityDwbHandler(int e) {
+		this.e = e;
+	  }
+
+	  int e;
+
+	  @Override
+	  public ResConstructor<Drawable> get(World w) {
+		DrawableSrcC c = w.getMapper(DrawableSrcC.class).get(e);
+		c.c.msg(MsgBaseCodes.INIT, MsgDirection.DOWN, null);
+		return c.c;
+	  }
+
+	  @Override
+	  public void save(ResConstructor<Drawable> root, World w) {
+		Drawable rb = FUtills.buildDrawable(root);
+
+		root.msg(MsgBaseCodes.DEINIT, MsgDirection.DOWN, null);
+
+		w.getMapper(DrawableC.class).get(e).d = rb;
+		w.getMapper(DrawableSrcC.class).get(e).c = root;
+	  }
+    }
+
     //
-
-
     @Override
     public void preinit() {
 

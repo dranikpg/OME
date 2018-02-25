@@ -6,6 +6,6 @@ package com.draniksoft.ome.support.pipemsg;
  */
 public interface MsgNode {
 
-    void msg(byte msg, byte dir, byte[] data);
+    void msg(byte msg, byte dir, short[] data);
 
 }

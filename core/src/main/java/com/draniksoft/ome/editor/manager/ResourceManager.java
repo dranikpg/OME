@@ -28,6 +28,7 @@ public class ResourceManager extends BaseSystem implements LoadSaveManager {
 
     @Override
     protected void initialize() {
+
 	  data = new IntMap<IntMap<PVResWrapper>>();
 	  limits = new IntMap<Integer>();
 	  managed = new IntMap<IntMap<Array<LinkedResource>>>();
@@ -80,7 +81,7 @@ public class ResourceManager extends BaseSystem implements LoadSaveManager {
 
     // update managed val data
     public void update(ResTypes t, Resource r, int id, boolean event) {
-	  data.get(t.ordinal()).get(id).res.set(r);
+	  data.get(t.ordinal()).get(id).res.update(r);
     }
 
     public void updateConstructor(ResTypes t, ResConstructor ct, int id) {

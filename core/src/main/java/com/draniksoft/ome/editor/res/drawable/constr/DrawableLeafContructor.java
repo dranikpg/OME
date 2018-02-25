@@ -7,15 +7,18 @@ import com.draniksoft.ome.editor.res.drawable.utils.Drawable;
 import com.draniksoft.ome.editor.res.res_mgmnt_base.constructor.LeafConstructor;
 import com.draniksoft.ome.editor.res.res_mgmnt_base.constructor.ResConstructor;
 import com.draniksoft.ome.editor.res.res_mgmnt_base.types.ResSubT;
+import com.draniksoft.ome.utils.FUtills;
 
 public class DrawableLeafContructor extends LeafConstructor<Drawable> {
 
     private static final String tag = "DrawableLeafContructor";
 
-    LinkedDrawable sp;
-    SimpleDrawable d;
+    transient LinkedDrawable sp;
+    transient SimpleDrawable d;
 
-    private TextureRegion rg;
+    private transient TextureRegion rg;
+
+    private String reg = "";
 
     public DrawableLeafContructor() {
 	  sp = new LinkedDrawable();
@@ -28,13 +31,14 @@ public class DrawableLeafContructor extends LeafConstructor<Drawable> {
 
     @Override
     public Drawable build() {
-	  return d.copy();
+	  return new SimpleDrawable(rg);
     }
 
     @Override
     public ResConstructor<Drawable> copy() {
 	  DrawableLeafContructor ct = new DrawableLeafContructor();
 	  ct.rg = rg;
+	  ct.reg = reg;
 	  return ct;
     }
 
@@ -45,14 +49,38 @@ public class DrawableLeafContructor extends LeafConstructor<Drawable> {
 
     @Override
     public void updateType() {
-	  if (d == null) d = new SimpleDrawable();
-	  else d = (SimpleDrawable) d.copy();
+	  d = new SimpleDrawable(rg);
 	  sp.link = d;
+    }
+
+    public void setFor(String s) {
+	  reg = s;
+	  setFor(FUtills.fetchAtlasR(reg));
     }
 
     public void setFor(TextureRegion r) {
 	  rg = r;
-	  d.r = r;
+	  if (LIVE_MODE && d != null) d.r = r;
     }
 
+    @Override
+    protected void init() {
+	  super.init();
+	  if (reg.length() > 0) {
+		rg = FUtills.fetchAtlasR(reg);
+	  }
+    }
+
+    @Override
+    protected void extendData() {
+	  super.extendData();
+	  updateType();
+	  updateSources();
+    }
+
+
+    @Override
+    protected void shrinkData() {
+	  super.shrinkData();
+    }
 }

@@ -219,7 +219,7 @@ public class EngineLoader {
 
 	  void buildRender() {
 
-		b = new SpriteBatch();
+		b = new SpriteBatch(100);
 
 		c.register(b);
 
@@ -227,6 +227,7 @@ public class EngineLoader {
 
 		GUtils.sr = r;
 		c.register(r);
+
 
 	  }
 

@@ -1,16 +1,25 @@
 package com.draniksoft.ome.editor.res.res_mgmnt_base.constructor;
 
+import com.badlogic.gdx.utils.Array;
 import com.draniksoft.ome.editor.res.res_mgmnt_base.types.ResSubT;
 import com.draniksoft.ome.editor.res.res_mgmnt_base.ui_br.NodeDeliverer;
 import com.draniksoft.ome.support.pipemsg.MsgBaseCodes;
+import com.draniksoft.ome.support.pipemsg.MsgDirection;
 import com.draniksoft.ome.support.pipemsg.MsgNode;
 import com.draniksoft.ome.ui_addons.resource_ui.ResTreeNode;
+import com.draniksoft.ome.utils.FUtills;
 import com.draniksoft.ome.utils.struct.Pair;
 
 public abstract class ResConstructor<TYPE> implements MsgNode {
 
-    public static class MsgIDs {
-	  public static final byte UPDATE_TYPE = 5;
+    /*
+    	100 - 110
+     */
+    public static class MSG {
+
+	  public static final byte LIVE_MODE = 102;
+	  public static final byte STORAGE_MODE = 103;
+
     }
 
     // dabl pointer trap, use event flow for parent settin
@@ -46,7 +55,7 @@ public abstract class ResConstructor<TYPE> implements MsgNode {
     public void setType(ResSubT nt) {
 	  if (tt == nt) return;
 	  this.tt = nt;
-	  updateType();
+	  if (LIVE_MODE) updateType();
     }
 
     public ResSubT type() {
@@ -73,13 +82,18 @@ public abstract class ResConstructor<TYPE> implements MsgNode {
 	  LIVE_MODE = true;
     }
 
-    public void updateType() {
+    protected void updateType() {
 
     }
 
-    public void updateSources() {
+    protected void updateSources() {
 
     }
+
+    protected void init() {
+
+    }
+
 
     /*
 	Tree management
@@ -113,26 +127,43 @@ public abstract class ResConstructor<TYPE> implements MsgNode {
      */
 
     @Override
-    public void msg(byte msg, byte dir, byte[] data) {
+    public void msg(byte msg, byte dir, short[] data) {
 	  byte _dir = fetchDir(dir);
+	  defMsgHandle(msg, data);
+
+	  if (dir == MsgDirection.END) return;
+	  else if (dir == MsgDirection.DOWN) {
+
+		if (this instanceof GroupResConstructor) {
+		    Array<ResConstructor> ar = ((GroupResConstructor) this).getAr();
+		    for (ResConstructor ct : ar) {
+			  ct.msg(msg, _dir, data);
+		    }
+		}
+	  }
+
     }
 
     private byte fetchDir(byte dir) {
 	  return dir;
     }
 
-    private boolean defMsgHandle(byte msg, byte[] data) {
+    private boolean defMsgHandle(byte msg, short[] data) {
 	  switch (msg) {
-		case MsgBaseCodes.INIT:
+		case MSG.LIVE_MODE:
 		    extendData();
 		    return true;
-		case MsgBaseCodes.DEINIT:
+		case MSG.STORAGE_MODE:
 		    shrinkData();
+		    return true;
+		case MsgBaseCodes.INIT:
+		    init();
 		    return true;
 	  }
 	  return false;
 
     }
+
 
     /*
 
@@ -145,6 +176,19 @@ public abstract class ResConstructor<TYPE> implements MsgNode {
     public abstract TYPE build();
 
     public abstract ResConstructor<TYPE> copy();
+
+    public static class MsgHelper {
+
+
+	  public static void liveMode(ResConstructor c) {
+		c.msg(MSG.LIVE_MODE, MsgDirection.DOWN, FUtills.NULL_ARRAY);
+	  }
+
+	  public static void storageMode(ResConstructor c) {
+		c.msg(MSG.LIVE_MODE, MsgDirection.DOWN, FUtills.NULL_ARRAY);
+	  }
+
+    }
 
 
 

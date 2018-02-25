@@ -4,7 +4,7 @@ import com.artemis.BaseSystem;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.draniksoft.ome.editor.load.LoadSaveManager;
-import com.draniksoft.ome.utils.dao.AssetDDao;
+import com.draniksoft.ome.support.dao.AssetDDao;
 
 import java.util.Iterator;
 

@@ -78,7 +78,7 @@ public abstract class GroupResConstructor<TYPE> extends ResConstructor<TYPE> {
 
 	  if (order) reorder(del);
 
-	  updateSources();
+	  if (LIVE_MODE) updateSources();
     }
 
     private void reorder(NodeDeliverer<TYPE> del) {
@@ -169,4 +169,11 @@ public abstract class GroupResConstructor<TYPE> extends ResConstructor<TYPE> {
 	  return ct;
     }
 
+    @Override
+    protected void init() {
+	  super.init();
+	  for (ResConstructor<TYPE> rt : getAr()) {
+		rt.setParent(this);
+	  }
+    }
 }
