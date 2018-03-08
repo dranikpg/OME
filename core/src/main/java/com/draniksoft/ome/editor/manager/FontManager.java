@@ -88,12 +88,12 @@ public class FontManager extends BaseSystem implements LoadSaveManager {
     }
 
     @Override
-    public void save(IntelligentLoader l, ProjectSaver s) {
+    public void save(ProjectSaver s) {
 
     }
 
     @Override
-    public void load(IntelligentLoader il, ProjectLoader ld) {
+    public void load(ProjectLoader ld) {
 
     }
 

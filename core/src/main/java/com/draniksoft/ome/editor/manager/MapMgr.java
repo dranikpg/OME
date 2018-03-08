@@ -19,7 +19,6 @@ import com.draniksoft.ome.editor.load.LoadSaveManager;
 import com.draniksoft.ome.editor.load.ProjectLoader;
 import com.draniksoft.ome.editor.load.ProjectSaver;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
-import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.utils.GUtils;
 
 public class MapMgr extends BaseSystem implements LoadSaveManager {
@@ -90,7 +89,7 @@ public class MapMgr extends BaseSystem implements LoadSaveManager {
     }
 
     @Override
-    public void save(IntelligentLoader l, ProjectSaver s) {
+    public void save(ProjectSaver s) {
 
         Gdx.app.debug(tag, "Writing pixmap");
 
@@ -105,7 +104,7 @@ public class MapMgr extends BaseSystem implements LoadSaveManager {
     }
 
     @Override
-    public void load(IntelligentLoader il, ProjectLoader ld) {
+    public void load(ProjectLoader ld) {
 
 	  IntBag aff = world.getAspectSubscriptionManager().get(Aspect.all(MapC.class)).getEntities();
 

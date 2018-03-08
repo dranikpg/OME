@@ -32,11 +32,13 @@ public class GUtils {
     public static int FRAME_LIMIT = (int) 1e9;
 
     public static void frame() {
-	  LAST_FRAME = FRAME;
+	  //LAST_FRAME = FRAME;
 	  FRAME++;
+	  /* Frame overflow ?? probably not
 	  if (FRAME > FRAME_LIMIT) {
 		FRAME = 0;
 	  }
+	  */
     }
 
     public static int MAX_TEX_SIZE = 16000;

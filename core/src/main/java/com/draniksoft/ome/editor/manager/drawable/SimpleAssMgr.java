@@ -86,7 +86,7 @@ public class SimpleAssMgr extends AssManager {
     }
 
     @Override
-    public void save(IntelligentLoader l, ProjectSaver s) {
+    public void save(ProjectSaver s) {
 
 	  JsonValue ri = s.getIndexV();
 
@@ -105,7 +105,7 @@ public class SimpleAssMgr extends AssManager {
     }
 
     @Override
-    public void load(IntelligentLoader il, ProjectLoader ld) {
+    public void load(ProjectLoader ld) {
 	  JsonValue ri = ld.getIndexV();
 	  final Set<String> ls = new HashSet<String>();
 	  for (JsonValue vi : ri.get("assets")) {

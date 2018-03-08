@@ -16,7 +16,13 @@ import com.draniksoft.ome.editor.manager.MapMgr;
 import com.draniksoft.ome.editor.manager.ProjectMgr;
 import com.draniksoft.ome.editor.manager.TimeMgr;
 import com.draniksoft.ome.editor.manager.drawable.SimpleAssMgr;
+import com.draniksoft.ome.editor.systems.file_mgmnt.ExecutionSystem;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
+import com.draniksoft.ome.support.execution_base.ExecutionProvider;
+import com.draniksoft.ome.support.execution_base.sync.SyncTask;
+import com.draniksoft.ome.support.execution_base.ut.CblT;
+import com.draniksoft.ome.support.execution_base.ut.StepLoader;
+import com.draniksoft.ome.support.execution_base.ut.SyncCblt;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.support.load.interfaces.IGLRunnable;
 import com.draniksoft.ome.support.load.interfaces.IRunnable;
@@ -27,20 +33,33 @@ import com.draniksoft.ome.utils.GUtils;
 import com.draniksoft.ome.utils.respone.ResponseCode;
 import com.draniksoft.ome.utils.struct.ResponseListener;
 
-public class ProjectLoader {
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
+
+public class ProjectLoader implements ExecutionProvider {
 
     private static final String tag = "ProjectSaver";
 
-    IntelligentLoader l;
+    StepLoader l;
+    ExecutionProvider provider;
+
+    AssetManager assM;
 
     MapLoadBundle b;
     ResponseListener lst;
 
     volatile JsonValue indexV;
-
-    AssetManager assM;
-
     World w;
+
+    @Override
+    public <T> Future<T> exec(Callable<T> c) {
+	  return provider.exec(c);
+    }
+
+    @Override
+    public void addShd(SyncTask t) {
+	  provider.addShd(t);
+    }
 
     private enum Step {
 	  IDLE,
@@ -61,55 +80,46 @@ public class ProjectLoader {
 	  this.lst = lst;
 	  this.b = b;
 	  if (w == null) notfiyFail();
+	  provider = w.getSystem(ExecutionSystem.class);
+	  assM = w.getInjector().getRegistered(AssetManager.class);
 
 	  s = Step.IDLE;
 
-
-	  l = new IntelligentLoader();
-	  l.setCompletionListener(new ResponseListener() {
+	  l = new StepLoader(provider, assM, new ResponseListener() {
 		@Override
 		public void onResponse(short code) {
-		    if (code != IntelligentLoader.LOAD_FAILED) {
-			  updateLoad();
-		    } else {
-			  notfiyFail();
-		    }
+		    updateLoad();
 		}
 	  });
-	  assM = w.getInjector().getRegistered(AssetManager.class);
+
 	  updateLoad();
 
-
-	  l.setMaxTs(5);
-	  l.setPrefTs(5);
-	  l.start();
     }
 
     private void updateLoad() {
-
 	  s = Step.values()[s.ordinal() + 1];
 
-
+	  l.reset();
 	  Gdx.app.debug(tag, s.toString());
 
 	  if (s == Step.NULL_PTR) {
+		l.dispose();
 		notifyEnd();
 	  } else if (s == Step.DATA_RELEASE) {
-		l.passRunnable(new ReleaseData());
-		//w.getSystem(OmeEventSystem.class).dispatch(new ReleaseDataE());
+		l.exec(CblT.WRAP(new ReleaseData()));
 		updateLoad();
 	  } else if (s == Step.UNZIP) {
 		updateLoad();
 	  } else if (s == Step.INDEX_FETCH) {
-		l.passRunnable(new IndexF());
+		l.exec(CblT.WRAP(new IndexF()));
 	  } else if (s == Step.BASE) {
-		l.passRunnable(new LoadT(w.getSystem(ProjectMgr.class)));
-		l.passRunnable(new LoadT(w.getSystem(MapMgr.class)));
-		l.passRunnable(new LoadT(w.getSystem(SimpleAssMgr.class)));
-		l.passRunnable(new LoadT(w.getSystem(TimeMgr.class)));
-		l.passRunnable(new LoadT(w.getSystem(EntitySrzMgr.class)));
+		l.exec(new LoadT(w.getSystem(ProjectMgr.class)));
+		l.exec(new LoadT(w.getSystem(MapMgr.class)));
+		l.exec(new LoadT(w.getSystem(SimpleAssMgr.class)));
+		l.exec(new LoadT(w.getSystem(TimeMgr.class)));
+		l.exec(new LoadT(w.getSystem(EntitySrzMgr.class)));
 	  } else if (s == Step.GFX_PAIR) {
-		l.passGLRunnable(new GfxC());
+		l.addShd(SyncCblt.WRAP(new GfxC()));
 	  }
 
     }
@@ -171,7 +181,7 @@ public class ProjectLoader {
 		dwbSC.c = GUtils.fetchIt();
 
 		dwC.d = dwbSC.c.build();
-		dwC.d.msg(MsgBaseCodes.INIT, MsgDirection.DOWN, new byte[]{});
+		dwC.d.msg(MsgBaseCodes.INIT, MsgDirection.DOWN, FUtills.NULL_ARRAY);
 
 		PosSizeC psc = psM.create(e);
 		psc.x = mc.x;
@@ -185,26 +195,18 @@ public class ProjectLoader {
 	  }
     }
 
-    private class LoadT implements IRunnable {
+    private class LoadT implements Callable {
 
 	  public LoadT(LoadSaveManager mgr) {
 		this.mgr = mgr;
 	  }
-
 	  LoadSaveManager mgr;
-
-
 	  @Override
-	  public void run(IntelligentLoader l) {
-
-		mgr.load(l, ProjectLoader.this);
-
+	  public Object call() throws Exception {
+		mgr.load(ProjectLoader.this);
+		return null;
 	  }
 
-	  @Override
-	  public byte getState() {
-		return IRunnable.RUNNING;
-	  }
     }
 
     private class IndexF implements IRunnable {
@@ -239,13 +241,7 @@ public class ProjectLoader {
     }
 
     public void dispose() {
-	  l.terminate();
-    }
 
-
-    public void update() {
-	  l.update();
-	  assM.update();
     }
 
 }

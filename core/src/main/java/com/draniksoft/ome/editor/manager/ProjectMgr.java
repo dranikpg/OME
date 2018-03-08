@@ -5,7 +5,6 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.draniksoft.ome.editor.load.LoadSaveManager;
 import com.draniksoft.ome.editor.load.ProjectLoader;
 import com.draniksoft.ome.editor.load.ProjectSaver;
-import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.utils.JsonUtils;
 
 public class ProjectMgr extends Manager implements LoadSaveManager {
@@ -15,8 +14,8 @@ public class ProjectMgr extends Manager implements LoadSaveManager {
     String pName = "";
 
     @Override
-    public void save(IntelligentLoader l, ProjectSaver s) {
-        JsonValue jv = s.getIndexV().get("proj");
+    public void save(ProjectSaver s) {
+	  JsonValue jv = s.getIndexV().get("proj");
 	  JsonValue n = JsonUtils.createStringV(pName);
 	  if (jv == null) {
             jv = new JsonValue(JsonValue.ValueType.object);
@@ -27,7 +26,7 @@ public class ProjectMgr extends Manager implements LoadSaveManager {
     }
 
     @Override
-    public void load(IntelligentLoader il, ProjectLoader ld) {
+    public void load(ProjectLoader ld) {
 	  JsonValue root = ld.getIndexV().get("proj");
 	  pName = root.getString("name");
     }

@@ -31,6 +31,7 @@ import com.draniksoft.ome.editor.support.input.back.SelectIC;
 import com.draniksoft.ome.editor.support.input.back.TimedSelectIC;
 import com.draniksoft.ome.editor.support.input.base_mo.NewMOIC;
 import com.draniksoft.ome.editor.support.render.core.OverlayRendererI;
+import com.draniksoft.ome.editor.systems.file_mgmnt.ExecutionSystem;
 import com.draniksoft.ome.editor.systems.file_mgmnt.ProjectLoadSystem;
 import com.draniksoft.ome.editor.systems.gfx_support.CameraSys;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
@@ -47,6 +48,7 @@ import com.draniksoft.ome.mgmnt_base.impl.ConfigManager;
 import com.draniksoft.ome.support.configs.ConfigDao;
 import com.draniksoft.ome.support.dao.AssetDDao;
 import com.draniksoft.ome.support.dao.FontDao;
+import com.draniksoft.ome.support.execution_base.sync.SyncTask;
 import com.draniksoft.ome.support.ui.viewsys.BaseView;
 import com.draniksoft.ome.utils.Const;
 import com.draniksoft.ome.utils.Env;
@@ -178,6 +180,21 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     public void set_cf(String id, String b) {
         AppDO.I.C().setConfVal(id, b);
+    }
+
+    /*
+        Execution utils
+     */
+
+    public void log_shd() {
+        ExecutionSystem s = world.getSystem(ExecutionSystem.class);
+        console.log("Total " + s.getShdTaskACount());
+        Iterator<SyncTask> it = s.getShdTasks();
+        SyncTask t;
+        while (it.hasNext()) {
+            t = it.next();
+            console.log(t.getClass().getSimpleName() + " (~" + t.getFQ() + ";+" + t.getPhase() + ")");
+        }
     }
 
 

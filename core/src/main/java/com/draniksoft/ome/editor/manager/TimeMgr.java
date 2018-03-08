@@ -7,7 +7,6 @@ import com.draniksoft.ome.editor.load.ProjectLoader;
 import com.draniksoft.ome.editor.load.ProjectSaver;
 import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.workflow.ModeChangeE;
-import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.utils.ESCUtils;
 import dint.Dint;
 import net.mostlyoriginal.api.event.common.Subscribe;
@@ -132,12 +131,12 @@ public class TimeMgr extends BaseSystem implements LoadSaveManager {
     }
 
     @Override
-    public void save(IntelligentLoader l, ProjectSaver s) {
+    public void save(ProjectSaver s) {
 
     }
 
     @Override
-    public void load(IntelligentLoader il, ProjectLoader ld) {
+    public void load(ProjectLoader ld) {
 
     }
 

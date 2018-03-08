@@ -179,7 +179,7 @@ public class ProjectSaver {
         @Override
         public void run(IntelligentLoader l) {
 
-            mgr.save(l, ProjectSaver.this);
+		mgr.save(ProjectSaver.this);
 
         }
 

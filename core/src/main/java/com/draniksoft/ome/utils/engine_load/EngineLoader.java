@@ -18,7 +18,7 @@ import com.draniksoft.ome.editor.load.MapLoadBundle;
 import com.draniksoft.ome.editor.manager.*;
 import com.draniksoft.ome.editor.manager.drawable.SimpleAssMgr;
 import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
-import com.draniksoft.ome.editor.systems.file_mgmnt.AssetLScheduleSys;
+import com.draniksoft.ome.editor.systems.file_mgmnt.ExecutionSystem;
 import com.draniksoft.ome.editor.systems.file_mgmnt.ProjectLoadSystem;
 import com.draniksoft.ome.editor.systems.gfx_support.CameraSys;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
@@ -48,6 +48,8 @@ import com.draniksoft.ome.utils.GUtils;
 import com.draniksoft.ome.utils.struct.ResponseListener;
 
 import java.util.Iterator;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class EngineLoader {
 
@@ -154,16 +156,15 @@ public class EngineLoader {
 
         @Override
         public void run(IntelligentLoader l) {
-
             InputMultiplexer mx = new InputMultiplexer();
             assm = new AssetManager();
-
             c.register(mx);
             c.register(assm);
-
             c.register(new MapLoadBundle());
-
             c.register("engine_l", l);
+
+		ExecutorService s = Executors.newSingleThreadExecutor();
+		c.register("exs", s);
 
             Gdx.app.debug(tag, "Dependency B :: Logic ready");
         }
@@ -365,7 +366,7 @@ public class EngineLoader {
 
             // Afterwards
 
-            cb.with(new AssetLScheduleSys());
+		cb.with(new ExecutionSystem());
 
             cb.with(new WorkflowSys());
 

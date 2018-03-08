@@ -39,10 +39,7 @@ class ProjectLoadSystem : BaseSystem() {
     }
 
     override fun processSystem() {
-
         if (state == STATE_SAVING) saver.update()
-        if (state == STATE_LOADING) loader.update()
-
     }
 
     private fun prepareLoad() {

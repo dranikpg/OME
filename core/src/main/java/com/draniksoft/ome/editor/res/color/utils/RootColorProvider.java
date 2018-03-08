@@ -32,9 +32,16 @@ public class RootColorProvider extends ColorProvider implements RootResource<Col
     }
 
     @Override
-    public void set(Resource<ColorProvider> r) {
+    public void update(Resource<ColorProvider> r) {
 
     }
+
+    @Override
+    public void destruct() {
+
+    }
+
+
 
     @Override
     public ColorProvider copy() {

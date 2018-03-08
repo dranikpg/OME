@@ -16,7 +16,6 @@ import com.draniksoft.ome.editor.load.LoadSaveManager;
 import com.draniksoft.ome.editor.load.ProjectLoader;
 import com.draniksoft.ome.editor.load.ProjectSaver;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
-import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.utils.Env;
 import com.draniksoft.ome.utils.FUtills;
 import com.draniksoft.ome.utils.JsonUtils;
@@ -30,7 +29,7 @@ EntitySrzMgr extends Manager implements LoadSaveManager {
 
 
     @Override
-    public void save(IntelligentLoader l, ProjectSaver s) {
+    public void save(ProjectSaver s) {
 
         try {
 
@@ -73,7 +72,7 @@ EntitySrzMgr extends Manager implements LoadSaveManager {
     }
 
     @Override
-    public void load(IntelligentLoader il, ProjectLoader ld) {
+    public void load(ProjectLoader ld) {
 
 	  try {
 

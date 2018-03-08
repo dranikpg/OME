@@ -18,7 +18,6 @@ import com.draniksoft.ome.editor.res.res_mgmnt_base.res_ifaces.Resource;
 import com.draniksoft.ome.editor.res.res_mgmnt_base.types.ResTypes;
 import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.projectVals.ProjectValEvent;
-import com.draniksoft.ome.support.load.IntelligentLoader;
 
 import java.util.Iterator;
 
@@ -189,12 +188,12 @@ public class ResourceManager extends BaseSystem implements LoadSaveManager {
     }
 
     @Override
-    public void save(IntelligentLoader l, ProjectSaver s) {
+    public void save(ProjectSaver s) {
 
     }
 
     @Override
-    public void load(IntelligentLoader il, ProjectLoader ld) {
+    public void load(ProjectLoader ld) {
 
     }
 
