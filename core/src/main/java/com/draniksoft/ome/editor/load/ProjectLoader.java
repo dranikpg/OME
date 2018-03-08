@@ -16,7 +16,7 @@ import com.draniksoft.ome.editor.manager.MapMgr;
 import com.draniksoft.ome.editor.manager.ProjectMgr;
 import com.draniksoft.ome.editor.manager.TimeMgr;
 import com.draniksoft.ome.editor.manager.drawable.SimpleAssMgr;
-import com.draniksoft.ome.editor.systems.file_mgmnt.ExecutionSystem;
+import com.draniksoft.ome.editor.systems.support.ExecutionSystem;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.support.execution_base.ExecutionProvider;
 import com.draniksoft.ome.support.execution_base.sync.SyncTask;
@@ -38,7 +38,7 @@ import java.util.concurrent.Future;
 
 public class ProjectLoader implements ExecutionProvider {
 
-    private static final String tag = "ProjectSaver";
+    private static final String tag = "ProjectLoader";
 
     StepLoader l;
     ExecutionProvider provider;
@@ -212,7 +212,7 @@ public class ProjectLoader implements ExecutionProvider {
     private class IndexF implements IRunnable {
 	  @Override
 	  public void run(IntelligentLoader l) {
-		indexV = FUtills.r.parse(Gdx.files.absolute(AppDO.I.F().getTmpDir().getAbsolutePath() + "/index.json"));
+		indexV = FUtills.r.parse(Gdx.files.absolute(AppDO.I.F().getTmpDir().path() + "/index.json"));
 		Gdx.app.debug(tag, "Parsed JSON");
 	  }
 

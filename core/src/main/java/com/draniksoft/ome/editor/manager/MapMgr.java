@@ -99,7 +99,7 @@ public class MapMgr extends BaseSystem implements LoadSaveManager {
 
         Pixmap m = t.getTextureData().consumePixmap();
 
-        PixmapIO.writePNG(new FileHandle(AppDO.I.F().getTmpDir().getAbsolutePath() + "/data/m.png"), m);
+	  PixmapIO.writePNG(new FileHandle(AppDO.I.F().getTmpDir().path() + "/data/m.png"), m);
 
     }
 
@@ -112,7 +112,7 @@ public class MapMgr extends BaseSystem implements LoadSaveManager {
 		world.deleteColor(e);
 	  }*/
 
-	  loadMap(AppDO.I.F().getTmpDir().getAbsolutePath() + "/data/m.png");
+	  loadMap(AppDO.I.F().getTmpDir().path() + "/data/m.png");
 
 
     }

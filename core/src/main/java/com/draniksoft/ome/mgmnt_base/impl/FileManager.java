@@ -2,8 +2,8 @@ package com.draniksoft.ome.mgmnt_base.impl;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.draniksoft.ome.editor.extensions.stg.ExtensionDao;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.mgmnt_base.base.AppDataManager;
 import com.draniksoft.ome.support.dao.AssetDDao;
@@ -19,20 +19,19 @@ public class FileManager extends AppDataManager {
     private static String tag = "FileManager";
 
     String dir;
+    FileHandle homeDirFH;
 
-    File hdirF;
-    FileHandle hdirFH;
-
-    File tdir;
+    FileHandle tmpDirFH;
+    FileHandle extDirFH;
 
     ObjectMap<String, AssetDDao> localAssetDs;
     ObjectMap<String, FontDao> localFontDs;
 
+    ObjectMap<String, ExtensionDao> daos;
+
     @Override
     protected void startupLoad(IntelligentLoader l) {
-
 	  dir = AppDO.I.getPrefs().getString(FUtills.PrefIdx.localFolder, "NULL");
-
 	  if (dir == null) {
 		l.getLoadLogO().submitCrit("c_err_no_local_dir_n", "c_err_no_local_dir_d");
 	  }
@@ -41,128 +40,71 @@ public class FileManager extends AppDataManager {
 
 	  checkHomeDir();
 
-	  checkTempFolder();
+	  checkSubDirs();
 
-	  indexLocalDs();
-
-	  Gdx.app.debug(tag, "Indexed " + localAssetDs.size + " local daos");
-
-
+	  indexLocalExt();
     }
 
-    private void indexLocalDs() {
-
-	  localAssetDs = new ObjectMap<String, AssetDDao>();
-	  localFontDs = new ObjectMap<String, FontDao>();
-
-	  for (File f : hdirF.listFiles()) {
-
-		if (new File(f.getAbsolutePath() + "/f.atlas").exists()) {
-
-		    indexAss(f);
-
-		} else if (new File(f.getAbsolutePath() + "/f.tff").exists()) {
-
-		    indexTtf(f);
-
+    private void indexLocalExt() {
+	  daos = new ObjectMap<String, ExtensionDao>();
+	  for (FileHandle f : extDirFH.list()) {
+		if (f.child("index.json").exists()) {
+		    ExtensionDao d = new ExtensionDao();
+		    try {
+			  d.load(FUtills.r.parse(f.child("index.json").read()));
+			  d.URI = FUtills.pathToUri("extensions/" + f.name(), FUtills.STORE_L_LOC);
+			  daos.put(d.ID, d);
+		    } catch (Exception e) {
+			  e.printStackTrace();
+		    }
 		}
-
 	  }
 
+	  Gdx.app.debug(tag, "Collected ");
     }
 
-    private void indexTtf(File f) {
-
-	  JsonValue v = FUtills.r.parse(new FileHandle(new File(f.getAbsolutePath() + "/f.json")));
-
-	  if (!v.has("ID")) return;
-
-	  FontDao d = new FontDao();
-
-	  d.id = v.getString("ID");
-
-	  d.uri = FUtills.pathToUri(f.getAbsolutePath(), FUtills.STORE_L_LOC);
-
-	  localFontDs.put(d.id, d);
-
-    }
-
-    private void indexAss(File f) {
-
-	  JsonValue v = FUtills.r.parse(new FileHandle(new File(f.getAbsolutePath() + "/f.json")));
-
-	  if (!v.has("ID")) return;
-
-	  AssetDDao d = new AssetDDao();
-
-	  d.id = v.getString("ID");
-
-	  d.uri = FUtills.pathToUri(f.getAbsolutePath(), FUtills.STORE_L_LOC);
-
-	  localAssetDs.put(d.id, d);
-
-
-    }
-
-    public boolean hasLocalFont(String id) {
-	  return localFontDs.containsKey(id);
-    }
-
-    public boolean hasLocalAss(String id) {
-	  return localAssetDs.containsKey(id);
-    }
-
-    public AssetDDao getLocalAss(String id) {
-	  if (localAssetDs.containsKey(id)) {
-		return localAssetDs.get(id);
-	  }
-	  return null;
-    }
-
-    public FontDao getFontDao(String id) {
-	  if (localFontDs.containsKey(id)) {
-		return localFontDs.get(id);
-	  }
-	  return null;
-    }
 
     public Iterator<FontDao> getFontD() {
-	  return localFontDs.values().iterator();
+	  return new ObjectMap<String, FontDao>().values().iterator();
     }
 
     public Iterator<AssetDDao> getLocalAssD() {
-	  return localAssetDs.values().iterator();
+	  return new ObjectMap<String, AssetDDao>().values().iterator();
+    }
+
+    public ObjectMap<String, ExtensionDao> getDaos() {
+	  return daos;
     }
 
     private void checkHomeDir() {
-
-	  hdirF = new File(dir);
-
-	  if (!hdirF.exists()) {
+	  File homeDir = new File(dir);
+	  if (!homeDir.exists()) {
 		Gdx.app.error(tag, "Creating non existing home folder");
-		hdirF.mkdirs();
+		homeDir.mkdirs();
 	  }
-
-	  hdirFH = new FileHandle(hdirF);
+	  homeDirFH = new FileHandle(homeDir);
     }
 
-    private void checkTempFolder() {
+    private void checkSubDirs() {
 
-	  tdir = new File(hdirF.getAbsolutePath() + "/" + FUtills.LocalFdrNames.tempF);
-	  if (!tdir.exists()) {
-            Gdx.app.debug(tag, "Creating home folder :: tmp dir ");
-            tdir.mkdirs();
-        }
+	  tmpDirFH = homeDirFH.child(FUtills.LocalFdrNames.tempF);
+	  if (!tmpDirFH.exists()) tmpDirFH.mkdirs();
 
+	  extDirFH = homeDirFH.child("extensions");
+	  if (!extDirFH.exists()) extDirFH.mkdirs();
 
     }
 
-    public File getTmpDir() {
-        return tdir;
+    public FileHandle getTmpDir() {
+	  return tmpDirFH;
     }
 
-    public File getHomeDir() {
-	  return hdirF;
+    public FileHandle getHomeDir() {
+	  return homeDirFH;
+    }
+
+    public FileHandle getExtDir() {
+	  return extDirFH;
     }
 
     @Override

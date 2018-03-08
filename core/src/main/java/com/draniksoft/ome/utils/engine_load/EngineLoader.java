@@ -18,7 +18,6 @@ import com.draniksoft.ome.editor.load.MapLoadBundle;
 import com.draniksoft.ome.editor.manager.*;
 import com.draniksoft.ome.editor.manager.drawable.SimpleAssMgr;
 import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
-import com.draniksoft.ome.editor.systems.file_mgmnt.ExecutionSystem;
 import com.draniksoft.ome.editor.systems.file_mgmnt.ProjectLoadSystem;
 import com.draniksoft.ome.editor.systems.gfx_support.CameraSys;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
@@ -31,8 +30,8 @@ import com.draniksoft.ome.editor.systems.render.obj.LabelRenderSys;
 import com.draniksoft.ome.editor.systems.render.obj.ObjRSys;
 import com.draniksoft.ome.editor.systems.render.obj.PathRenderSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
-import com.draniksoft.ome.editor.systems.support.CacheSystem;
 import com.draniksoft.ome.editor.systems.support.ConsoleSys;
+import com.draniksoft.ome.editor.systems.support.ExecutionSystem;
 import com.draniksoft.ome.editor.systems.support.InputSys;
 import com.draniksoft.ome.editor.systems.support.flows.EditorSystem;
 import com.draniksoft.ome.editor.systems.support.flows.ShowSystem;
@@ -158,12 +157,14 @@ public class EngineLoader {
         public void run(IntelligentLoader l) {
             InputMultiplexer mx = new InputMultiplexer();
             assm = new AssetManager();
+
             c.register(mx);
             c.register(assm);
             c.register(new MapLoadBundle());
             c.register("engine_l", l);
 
 		ExecutorService s = Executors.newSingleThreadExecutor();
+
 		c.register("exs", s);
 
             Gdx.app.debug(tag, "Dependency B :: Logic ready");
@@ -233,7 +234,7 @@ public class EngineLoader {
 	  }
 
 	  void buildRenderCache() {
-		SpriteCache ca = new SpriteCache(1000, false);
+		SpriteCache ca = new SpriteCache(200, false);
 		c.register(ca);
 	  }
 
@@ -369,8 +370,6 @@ public class EngineLoader {
 		cb.with(new ExecutionSystem());
 
             cb.with(new WorkflowSys());
-
-		cb.with(new CacheSystem());
 
 		cb.with(new OmeEventSystem());
 

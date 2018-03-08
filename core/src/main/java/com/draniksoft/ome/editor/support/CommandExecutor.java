@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.draniksoft.ome.editor.esc_utils.OmeStrategy;
+import com.draniksoft.ome.editor.extensions.stg.ExtensionDao;
 import com.draniksoft.ome.editor.load.MapLoadBundle;
 import com.draniksoft.ome.editor.manager.FontManager;
 import com.draniksoft.ome.editor.manager.MapMgr;
@@ -31,15 +32,14 @@ import com.draniksoft.ome.editor.support.input.back.SelectIC;
 import com.draniksoft.ome.editor.support.input.back.TimedSelectIC;
 import com.draniksoft.ome.editor.support.input.base_mo.NewMOIC;
 import com.draniksoft.ome.editor.support.render.core.OverlayRendererI;
-import com.draniksoft.ome.editor.systems.file_mgmnt.ExecutionSystem;
 import com.draniksoft.ome.editor.systems.file_mgmnt.ProjectLoadSystem;
 import com.draniksoft.ome.editor.systems.gfx_support.CameraSys;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.editor.systems.pos.PositionSystem;
 import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
-import com.draniksoft.ome.editor.systems.support.CacheSystem;
 import com.draniksoft.ome.editor.systems.support.ConsoleSys;
+import com.draniksoft.ome.editor.systems.support.ExecutionSystem;
 import com.draniksoft.ome.editor.systems.support.InputSys;
 import com.draniksoft.ome.editor.systems.support.flows.EditorSystem;
 import com.draniksoft.ome.editor.systems.support.flows.WorkflowSys;
@@ -148,7 +148,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
     }
 
     public void log_mem() {
-	  console.log("MB: " + world.getSystem(CacheSystem.class).getRuntimeRamUsg());
+
     }
 
     /*
@@ -237,6 +237,38 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
         }
 
     }
+
+    /*
+        Extension utils
+     */
+
+    public void log_ext() {
+
+    }
+
+    private void logExtDao(ExtensionDao d) {
+        console.log("   " + d.ID + "  (" + d.name.get() + ")");
+    }
+
+    public void log_av_ext() {
+
+        console.log("Internal:");
+
+        console.log("Local:");
+
+        for (ExtensionDao d : AppDO.I.F().getDaos().values().iterator()) {
+            logExtDao(d);
+        }
+
+        console.log("Map:");
+
+    }
+
+    public void log_av_ext(String id) {
+
+    }
+
+
 
     /**
      * Editor Renderer utils

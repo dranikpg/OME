@@ -63,6 +63,7 @@ public class FUtills {
 
         public static final String tempF = ".__tempF";
 
+
         public static final String iAssF = "i_assets/";
     }
 
@@ -85,14 +86,14 @@ public class FUtills {
      * For MAP assets it DOES NOT RETURN THE FULL PATH
      */
     public static String uriToPath(String u) {
-
         int us = uriStoreLocation(u);
         if (us == STORE_L_MAP) {
-            return AppDO.I.F().getTmpDir().getAbsolutePath() + "/" + u.substring(6);
-        } else if (us == STORE_L_INT) {
-            return LocalFdrNames.iAssF + u.substring(6);
-        }
-
+		return AppDO.I.F().getTmpDir().path() + "/" + u.substring(6);
+	  } else if (us == STORE_L_INT) {
+		return LocalFdrNames.iAssF + u.substring(6);
+	  } else if (us == STORE_L_LOC) {
+		return AppDO.I.F().getHomeDir().path() + "/" + u.substring(6);
+	  }
         return u.substring(6);
 
     }

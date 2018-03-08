@@ -1,4 +1,4 @@
-package com.draniksoft.ome.editor.systems.file_mgmnt;
+package com.draniksoft.ome.editor.systems.support;
 
 import com.artemis.BaseSystem;
 import com.artemis.annotations.Wire;

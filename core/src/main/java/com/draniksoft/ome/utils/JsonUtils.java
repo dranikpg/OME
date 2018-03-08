@@ -1,6 +1,10 @@
 package com.draniksoft.ome.utils;
 
 import com.badlogic.gdx.utils.JsonValue;
+import com.draniksoft.ome.utils.lang.BiLangText;
+import com.draniksoft.ome.utils.lang.I18NText;
+import com.draniksoft.ome.utils.lang.PlainText;
+import com.draniksoft.ome.utils.lang.Text;
 
 public class JsonUtils {
 
@@ -60,6 +64,27 @@ public class JsonUtils {
 	  }
 
         return null;
+    }
+
+    public static Text parseText(JsonValue v) {
+	  return parseText(v, true);
+    }
+
+    public static Text parseText(JsonValue v, boolean emptyError) {
+	  if (v == null) return new PlainText(emptyError ? "*ERROR*" : "");
+	  if (v.type() == JsonValue.ValueType.stringValue) {
+		String s = v.asString();
+		if (s.startsWith(":@")) {
+		    return new I18NText(s.substring(2));
+		} else {
+		    return new PlainText(s);
+		}
+	  } else if (v.hasChild("en") && v.hasChild("ru")) {
+		return new BiLangText(
+			  v.getString("en"),
+			  v.getString("ru"));
+	  }
+	  return new PlainText(emptyError ? "*ERROR*" : "");
     }
 
 }

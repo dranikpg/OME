@@ -143,7 +143,7 @@ public class ProjectSaver {
 
 		Gdx.app.debug(tag, js);
 
-            FileHandle h = Gdx.files.absolute(AppDO.I.F().getTmpDir().getAbsolutePath() + "/index.json");
+		FileHandle h = Gdx.files.absolute(AppDO.I.F().getTmpDir().path() + "/index.json");
 		if (!h.exists()) try {
 		    h.file().createNewFile();
 		} catch (Exception e) {
@@ -200,7 +200,7 @@ public class ProjectSaver {
 
             r = new JsonReader();
 
-            File indexF = new File(AppDO.I.F().getTmpDir().getAbsolutePath() + "/index.json");
+		File indexF = new File(AppDO.I.F().getTmpDir().path() + "/index.json");
 
             if (!indexF.exists()) {
                 Gdx.app.debug(tag, "Creating missing index.json file");

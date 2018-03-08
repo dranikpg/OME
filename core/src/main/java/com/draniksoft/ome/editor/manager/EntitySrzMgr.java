@@ -53,7 +53,7 @@ EntitySrzMgr extends Manager implements LoadSaveManager {
 		s.getIndexV().addChild(indexI);
 
             OutputStream st;
-		File tF = new File(AppDO.I.F().getTmpDir().getAbsolutePath() + "/etty.data");
+		File tF = new File(AppDO.I.F().getTmpDir().path() + "/etty.data");
 		if (!tF.exists()) tF.createNewFile();
 		Gdx.app.debug(tag, "Opened bytestream to " + "$TMP_DIR/etty.data");
 		st = new FileOutputStream(tF);
@@ -88,7 +88,7 @@ EntitySrzMgr extends Manager implements LoadSaveManager {
 		    FUtills.registerBSrz((KryoArtemisSerializer) manager.getSerializer());
 		}
 
-		final InputStream is = new FileInputStream(new File(AppDO.I.F().getTmpDir().getAbsolutePath() + "/etty.data"));
+		final InputStream is = new FileInputStream(new File(AppDO.I.F().getTmpDir().path() + "/etty.data"));
 
 		manager.load(is, SaveFileFormat.class);
 
