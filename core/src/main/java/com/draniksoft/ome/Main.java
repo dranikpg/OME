@@ -4,6 +4,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.draniksoft.ome.support.load.load_screen.LoadingScreen;
+import com.draniksoft.ome.utils.GUtils;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms.
  *  Main Application manager until Editor/Presenter win is opened
@@ -26,7 +27,9 @@ public class Main extends Game {
 
     }
 
-
-
-
+    @Override
+    public void render() {
+        GUtils.frame();
+        super.render();
+    }
 }

@@ -112,9 +112,9 @@ public class ExtensionManager extends BaseSystem {
     	Dont forget to fire some events after loading
      */
 
-    public void loadExtensions(Array<String> IDs, ExecutionProvider provider) {
-	  for (String id : IDs) {
-		loadExtension(id, provider);
+    public void loadExtensions(Array<ExtensionDao> Ds, ExecutionProvider provider) {
+	  for (ExtensionDao d : Ds) {
+		loadExtensionDao(d, provider);
 	  }
     }
 
@@ -132,27 +132,34 @@ public class ExtensionManager extends BaseSystem {
     private boolean loadExtension(String ID, ExecutionProvider provider) {
 	  ExtensionDao d = findDao(ID);
 	  if (d == null) return false;
-	  if (extensions.containsKey(ID) && !extensions.get(ID).loadable()) {
-		Gdx.app.debug(tag, "Already loaded " + ID);
+	  return loadExtensionDao(d, provider);
+
+    }
+
+    private boolean loadExtensionDao(ExtensionDao dao, ExecutionProvider provider) {
+	  if (extensions.containsKey(dao.ID) && !extensions.get(dao.ID).loadable()) {
+		Gdx.app.debug(tag, "Already loaded " + dao.ID);
 		return false;
 	  }
-	  if (!extensions.containsKey(ID)) {
-		createExtension(ID);
+	  if (!extensions.containsKey(dao.ID)) {
+		createExtension(dao.ID);
 	  }
-	  Extension ext = extensions.get(ID);
-	  ext.load(provider, d, world);
+	  Extension ext = extensions.get(dao.ID);
+	  ext.load(provider, dao, world);
 	  return true;
     }
 
 
     private void parseInternals() {
-	  FileHandle h = Gdx.files.local("extensions");
+	  FileHandle h = Gdx.files.internal("assets/extensions");
+
 	  for (FileHandle f : h.list()) {
 		if (f.child("index.json").exists()) {
 		    ExtensionDao d = new ExtensionDao();
 		    try {
 			  d.load(FUtills.r.parse(f.child("index.json").read()));
 			  d.URI = FUtills.pathToUri("extensions/" + f.name(), FUtills.STORE_L_INT);
+
 			  internalDaos.put(d.ID, d);
 		    } catch (Exception e) {
 			  e.printStackTrace();

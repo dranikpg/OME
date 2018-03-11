@@ -14,9 +14,8 @@ import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.file_b.ResourceLoadedEvent;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.support.dao.AssetDDao;
-import com.draniksoft.ome.support.load.IntelligentLoader;
-import com.draniksoft.ome.support.load.interfaces.IGLRunnable;
-import com.draniksoft.ome.support.load.interfaces.IRunnable;
+import com.draniksoft.ome.support.execution_base.ExecutionProvider;
+import com.draniksoft.ome.support.execution_base.sync.SimpleSyncTask;
 import com.draniksoft.ome.utils.FUtills;
 import com.draniksoft.ome.utils.JsonUtils;
 import com.draniksoft.ome.utils.struct.Pair;
@@ -24,6 +23,11 @@ import com.draniksoft.ome.utils.struct.Pair;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.Callable;
+
+/*
+	PLZ KILL MEe
+ */
 
 public class SimpleAssMgr extends AssManager {
 
@@ -33,7 +37,7 @@ public class SimpleAssMgr extends AssManager {
     AssetManager assM;
 
     @Wire(name = "engine_l")
-    IntelligentLoader l;
+    ExecutionProvider l;
 
     volatile ObjectMap<String, TextureAtlas> atlasM;
     volatile ObjectMap<String, AssetDDao> loadedDaoM;
@@ -47,7 +51,8 @@ public class SimpleAssMgr extends AssManager {
     @Override
     protected void initialize() {
 
-	  l.passRunnable(new Parser());
+	  l.exec(new Parser());
+
 
     }
 
@@ -181,11 +186,12 @@ public class SimpleAssMgr extends AssManager {
 	  assM.load(p, TextureAtlas.class);
     }
 
-    private class LoadBlocker implements IGLRunnable {
+    private class LoadBlocker extends SimpleSyncTask {
 
 	  private boolean selfM = true;
 
 	  public LoadBlocker(boolean runAss) {
+		super(2);
 		this.selfM = runAss;
 	  }
 
@@ -194,40 +200,38 @@ public class SimpleAssMgr extends AssManager {
 	  }
 
 	  @Override
-	  public byte run() {
+	  public void run() {
 		if (selfM) processSystem();
 
 		if (loadW.size > 0) {
-		    return IGLRunnable.RUNNING;
+		    return;
 		}
-		return IGLRunnable.READY;
+
+		active = false;
 	  }
 
     }
 
-    private class Parser implements IRunnable {
-	  @Override
-	  public void run(IntelligentLoader l) {
+    private class Parser implements Callable<Void> {
 
+
+	  @Override
+	  public Void call() throws Exception {
 		atlasM = new ObjectMap<String, TextureAtlas>();
 		loadedDaoM = new ObjectMap<String, AssetDDao>();
 		avDaoM = new ObjectMap<String, AssetDDao>();
 		redirect = new ObjectMap<String, String>();
 		loadW = new DelayedRemovalArray<Pair<String, AssetDDao>>();
 
-		Gdx.app.debug(tag, "Internal inited");
+		Gdx.app.debug(tag, "Internals inited");
 
 		parseInternal();
 
 		updateLocal();
 
-		l.passGLRunnable(new LoadBlocker());
+		l.addShd(new LoadBlocker());
 
-	  }
-
-	  @Override
-	  public byte getState() {
-		return IRunnable.RUNNING;
+		return null;
 	  }
     }
 
@@ -263,7 +267,7 @@ public class SimpleAssMgr extends AssManager {
 
 		AssetDDao d = new AssetDDao();
 		d.id = id;
-		d.uri = FUtills.pathToUri(id, FUtills.STORE_L_INT);
+		d.uri = FUtills.pathToUri("i_assets/" + id, FUtills.STORE_L_INT);
 		d.sysmz = smz;
 
 		if (rd != null) {

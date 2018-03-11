@@ -75,6 +75,12 @@ public class MainBase extends Game {
     }
 
     @Override
+    public void render() {
+        GUtils.frame();
+        super.render();
+    }
+
+    @Override
     public void dispose() {
 
         final IntelligentLoader l = new IntelligentLoader();

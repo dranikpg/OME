@@ -2,10 +2,8 @@ package com.draniksoft.ome.editor.esc_utils;
 
 import com.artemis.BaseSystem;
 import com.artemis.InvocationStrategy;
-import com.artemis.annotations.Wire;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.profiling.GLProfiler;
-import com.draniksoft.ome.support.load.IntelligentLoader;
 
 import java.util.HashMap;
 
@@ -17,8 +15,6 @@ public class OmeStrategy extends InvocationStrategy {
     GLProfiler pf;
 
 
-    @Wire(name = "engine_l")
-    IntelligentLoader l;
 
     HashMap<Integer, Integer> glCapM;
     HashMap<Class, Integer> sysT;

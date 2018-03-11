@@ -3,7 +3,9 @@ package com.draniksoft.ome.mgmnt_base.base;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.support.load.interfaces.IRunnable;
 
-public abstract class AppDataManager implements IRunnable {
+import java.util.concurrent.Callable;
+
+public abstract class AppDataManager implements IRunnable, Callable<Void> {
 
     protected static byte NULL_PTR = 100;
     public static byte STARTUP_LOAD = 101;
@@ -37,6 +39,24 @@ public abstract class AppDataManager implements IRunnable {
 
         }
 
+    }
+
+    @Override
+    public Void call() throws Exception {
+        if (state == STARTUP_LOAD) {
+
+            startupLoad(null);
+
+        } else if (state == ENGINE_LOAD) {
+
+            engineLoad(null);
+
+        } else if (state == TERMINATE_RUN) {
+
+            terminateLoad();
+
+        }
+        return null;
     }
 
     @Override

@@ -73,6 +73,7 @@ public class StepLoader implements ExecutionProvider {
     }
 
     public void reset() {
+	  // arrays are clean anyway
 	  paused = false;
     }
 

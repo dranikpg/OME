@@ -17,13 +17,13 @@ import com.draniksoft.ome.editor.support.event.entityy.CompositionChangeE;
 import com.draniksoft.ome.editor.support.event.entityy.SelectionChangeE;
 import com.draniksoft.ome.editor.support.event.workflow.EditModeChangeE;
 import com.draniksoft.ome.editor.support.event.workflow.ModeChangeE;
-import com.draniksoft.ome.support.load.IntelligentLoader;
-import com.draniksoft.ome.support.load.interfaces.IRunnable;
+import com.draniksoft.ome.support.execution_base.ExecutionProvider;
 import com.draniksoft.ome.utils.ESCUtils;
 import net.mostlyoriginal.api.event.common.Subscribe;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
+import java.util.concurrent.Callable;
 
 public class EditorSystem extends BaseSystem {
 
@@ -40,37 +40,28 @@ public class EditorSystem extends BaseSystem {
     IntMap<CompositionObserver> comObs;
 
     @Wire(name = "engine_l")
-    IntelligentLoader l;
+    ExecutionProvider l;
 
 
     @Override
     protected void initialize() {
 
-
-        l.passRunnable(new Loader());
+        l.exec(new Loader());
 
     }
 
-    private class Loader implements IRunnable {
+    private class Loader implements Callable<Void> {
         @Override
-        public void run(IntelligentLoader l) {
-
+        public Void call() {
             emDesc = new IntMap<EditModeDesc>();
             initBaseEms();
-
             comObs = new IntMap<CompositionObserver>();
             initComObs();
-
             steamComObsData();
-
             for (CompositionObserver p : comObs.values()) {
                 p.init(world);
             }
-        }
-
-        @Override
-        public byte getState() {
-            return RUNNING;
+            return null;
         }
     }
 

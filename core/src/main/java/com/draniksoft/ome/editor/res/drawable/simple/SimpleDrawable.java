@@ -1,5 +1,6 @@
 package com.draniksoft.ome.editor.res.drawable.simple;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -25,15 +26,12 @@ public class SimpleDrawable extends Drawable {
     }
 
     public static SimpleDrawable parse(String s) {
+	  Gdx.app.error(tag, "LOOKS LIKE OLD CODE !! ");
 	  TextureAtlas.AtlasRegion r = FUtills.fetchAtlasR(s);
 	  if (r == null) return null;
 	  SimpleDrawable d = new SimpleDrawable();
 	  d.r = r;
 	  return d;
-    }
-
-    public static String serialize(SimpleDrawable d) {
-	  return null;
     }
 
     public Drawable copy() {

@@ -40,13 +40,15 @@ import com.draniksoft.ome.editor.systems.time.ObjTimeCalcSys;
 import com.draniksoft.ome.main_menu.MainBase;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.mgmnt_base.base.AppDataManager;
+import com.draniksoft.ome.support.execution_base.sync.SimpleSyncTask;
+import com.draniksoft.ome.support.execution_base.ut.StepLoader;
 import com.draniksoft.ome.support.load.IntelligentLoader;
-import com.draniksoft.ome.support.load.interfaces.IGLRunnable;
-import com.draniksoft.ome.support.load.interfaces.IRunnable;
 import com.draniksoft.ome.utils.GUtils;
+import com.draniksoft.ome.utils.respone.ResponseCode;
 import com.draniksoft.ome.utils.struct.ResponseListener;
 
 import java.util.Iterator;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -66,6 +68,9 @@ public class EngineLoader {
         l = null;
         cS = null;
         L = null;
+
+	  execService = null;
+
     }
 
     public enum LoadS {
@@ -74,28 +79,32 @@ public class EngineLoader {
 
     static LoadS cS = LoadS.CONFIF_B_B;
 
-    static IntelligentLoader l;
+    static StepLoader l;
+    static EngineLoadExecService execService;
+    static ExecutorService nativeExeSerive = Executors.newFixedThreadPool(3);
 
     static volatile AssetManager assm;
+
 
     public static void startLoad() {
 
         clearStatics();
 
         cS = LoadS.SNULL_PTR;
-        l = new IntelligentLoader();
-        l.setCompletionListener(new ResponseListener() {
-            @Override
+
+	  execService = new EngineLoadExecService(nativeExeSerive);
+
+	  l = new StepLoader(execService);
+	  l.setListener(new ResponseListener() {
+		@Override
             public void onResponse(short code) {
-                if (code == IntelligentLoader.LOAD_SUCCESS) {
-                    updateLoad();
+		    if (code == ResponseCode.SUCCESSFUL) {
+			  updateLoad();
                 }
             }
         });
 
-        updateLoad();
-
-        l.start();
+	  updateLoad();
 
         Gdx.app.debug(tag, "Started Engine Load");
     }
@@ -103,95 +112,78 @@ public class EngineLoader {
     private static void updateLoad() {
 
         cS = LoadS.values()[cS.ordinal() + 1];
+	  Gdx.app.debug(tag, cS.name());
 
-        Gdx.app.debug(tag, cS.name());
+	  l.reset();
 
         if (cS == LoadS.CONFIF_B_B) {
-            l.passRunnable(new WorldConfigBdrBuilder());
-        } else if (cS == LoadS.CONFIG_B) {
-            l.passRunnable(new ConfigBuilder());
-        } else if (cS == LoadS.DEPENDENCY_B) {
-            l.passRunnable(new DependencyB());
-            l.passGLRunnable(new GfxDependencyB());
+		l.exec(new WorldConfigBdrBuilder());
+	  } else if (cS == LoadS.CONFIG_B) {
+		l.exec(new ConfigBuilder());
+	  } else if (cS == LoadS.DEPENDENCY_B) {
+		l.exec(new DependencyB());
+		l.addShd(new GfxDependencyB());
 	  } else if (cS == LoadS.WORLD_B) {
-		l.passRunnable(new WorldBuild());
+		l.exec(new WorldBuild());
 	  } else if (cS == LoadS.MGR_NTF) {
 		Iterator<AppDataManager> i = AppDO.I.getMgrI();
 		AppDataManager m;
 		while (i.hasNext()) {
 		    m = i.next();
 		    m.setLoadState(AppDataManager.ENGINE_LOAD);
-		    l.passRunnable(m);
+		    l.exec(m);
 		}
 	  } else if (cS == LoadS.NULL_PTR) {
 		Gdx.app.debug(tag, "Passed states");
 		L.onResponse((short) IntelligentLoader.LOAD_SUCCESS);
-		l.terminate();
+		execService.dispose();
 	  }
 
     }
 
     public static void update() {
-
-        if (l != null) l.update();
-
-        if (assm != null) assm.update();
+	  if (execService != null) execService.update();
     }
 
-    private static class WorldBuild implements IRunnable {
+    private static class WorldBuild implements Callable<Object> {
 
-        @Override
-        public void run(IntelligentLoader l) {
-            MainBase.engine = new com.artemis.World(c);
-        }
-
-        @Override
-        public byte getState() {
-            return IRunnable.RUNNING;
-        }
+	  @Override
+	  public Object call() throws Exception {
+		MainBase.engine = new com.artemis.World(c);
+		return null;
+	  }
     }
 
-    private static class DependencyB implements IRunnable {
+    private static class DependencyB implements Callable<Void> {
 
-        @Override
-        public void run(IntelligentLoader l) {
-            InputMultiplexer mx = new InputMultiplexer();
-            assm = new AssetManager();
+	  @Override
+	  public Void call() throws Exception {
+		InputMultiplexer mx = new InputMultiplexer();
+		assm = new AssetManager();
 
-            c.register(mx);
-            c.register(assm);
-            c.register(new MapLoadBundle());
-            c.register("engine_l", l);
+		c.register(mx);
+		c.register(assm);
+		c.register(new MapLoadBundle());
+		c.register("engine_l", l);
 
-		ExecutorService s = Executors.newSingleThreadExecutor();
+		c.register("exs", nativeExeSerive);
 
-		c.register("exs", s);
-
-            Gdx.app.debug(tag, "Dependency B :: Logic ready");
-        }
-
-        @Override
-        public byte getState() {
-            return IRunnable.RUNNING;
-        }
+		Gdx.app.debug(tag, "Dependency B :: Logic ready");
+		return null;
+	  }
     }
 
-    private static class ConfigBuilder implements IRunnable {
-        @Override
-        public void run(IntelligentLoader l) {
+    private static class ConfigBuilder implements Callable<Void> {
 
-            c = cb.build();
-
-        }
-
-        @Override
-        public byte getState() {
-            return IRunnable.RUNNING;
-        }
+	  @Override
+	  public Void call() throws Exception {
+		c = cb.build();
+		return null;
+	  }
     }
 
-    private static class GfxDependencyB implements IGLRunnable {
-        int cc = 0;
+    private static class GfxDependencyB extends SimpleSyncTask {
+	  int cc = 0;
 
         Viewport gameVP;
         Viewport uiVP;
@@ -199,6 +191,10 @@ public class EngineLoader {
         SpriteBatch b;
 
 	  int base = 2;
+
+	  public GfxDependencyB() {
+		super(1);
+	  }
 
 	  void buildVPS() {
 
@@ -240,8 +236,7 @@ public class EngineLoader {
 
 
 	  @Override
-	  public byte run() {
-
+	  public void run() {
 		cc++;
 		if (cc == base) {
 
@@ -274,125 +269,74 @@ public class EngineLoader {
 
 		    Gdx.app.debug(tag, "Dependency B :: GL_GFX finished passes");
 
-		    return IGLRunnable.READY;
+		    active = false;
 		}
 
-
-            return IGLRunnable.RUNNING;
         }
 
 
     }
 
-    private static class WorldConfigBdrBuilder implements IRunnable {
+    private static class WorldConfigBdrBuilder implements Callable<Void> {
 
-        @Override
-        public void run(IntelligentLoader l) {
-            cb = new WorldConfigurationBuilder();
 
+	  @Override
+	  public Void call() throws Exception {
+
+		Gdx.app.debug(tag, "World config build");
+
+		cb = new WorldConfigurationBuilder();
 		// BASIC MANAGER
 
 		// USELESS ? not yet
 		cb.with(new ProjectMgr());
-
-            cb.with(new MapMgr());
-
+		cb.with(new MapMgr());
 		// old bollocks
 		cb.with(new SimpleAssMgr());
-
 		// old bollocks
 		cb.with(new FontManager());
-
 		cb.with(new ResourceManager());
-
-            cb.with(new EntitySrzMgr());
-
-            cb.with(new TimeMgr());
-
+		cb.with(new EntitySrzMgr());
+		cb.with(new TimeMgr());
 		// NEW PART
-
 		cb.with(new ExtensionManager());
-
 		cb.with(new TextureRManager());
-
-            // SUPPORT SYSTEMS
-
-            cb.with(new EditorSystem());
-
+		// SUPPORT SYSTEMS
+		cb.with(new EditorSystem());
 		cb.with(new ShowSystem());
-
-            cb.with(new InputSys());
-
+		cb.with(new InputSys());
 		cb.with(new ProjectLoadSystem());
-
 		cb.with(new WorldSerializationManager());
-
-            //
-
-
+		//
 		cb.with(new ObjTimeCalcSys());
-
-            cb.with(new ActionSystem());
-
-
-            // PHYS POS SYS
-
+		cb.with(new ActionSystem());
+		// PHYS POS SYS
 		cb.with(new PositionSystem());
-
-            cb.with(new CameraSys());
-
-
-            // RENDER PART
-
-            cb.with(new BaseRenderSys());
-
-            //
-
-            cb.with(new MapRenderSys());
-            cb.with(new MapRDebugSys());
-
-            //
-
+		cb.with(new CameraSys());
+		// RENDER PART
+		cb.with(new BaseRenderSys());
+		//
+		cb.with(new MapRenderSys());
+		cb.with(new MapRDebugSys());
+		//
 		cb.with(new PathRenderSys());
-
-            cb.with(new ObjRSys());
-
-            cb.with(new LabelRenderSys());
-
-
-            //
-
-
+		cb.with(new ObjRSys());
+		cb.with(new LabelRenderSys());
+		//
 		cb.with(new OverlayRenderSys());
-
-
-            //
-
-
-            cb.with(new UiSystem());
-
-            cb.with(new ConsoleSys());
-
-
-            // Afterwards
-
+		//
+		cb.with(new UiSystem());
+		cb.with(new ConsoleSys());
+		// Afterwards
 		cb.with(new ExecutionSystem());
-
-            cb.with(new WorkflowSys());
-
+		cb.with(new WorkflowSys());
 		cb.with(new OmeEventSystem());
-
 		cb.with(new ArchTransmuterMgr());
 
 
 		cb.register(new OmeStrategy());
-
-        }
-
-        @Override
-        public byte getState() {
-            return IRunnable.RUNNING;
-        }
+		return null;
+	  }
     }
 
 

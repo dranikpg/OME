@@ -31,9 +31,13 @@ public class GUtils {
     public static int LAST_FRAME = -1;
     public static int FRAME_LIMIT = (int) 1e9;
 
+    /*
+        # fired by Main
+     */
     public static void frame() {
-	  //LAST_FRAME = FRAME;
-	  FRAME++;
+        //LAST_FRAME = FRAME;
+        FRAME++;
+
 	  /* Frame overflow ?? probably not
 	  if (FRAME > FRAME_LIMIT) {
 		FRAME = 0;

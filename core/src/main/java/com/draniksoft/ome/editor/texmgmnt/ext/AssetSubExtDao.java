@@ -1,6 +1,5 @@
 package com.draniksoft.ome.editor.texmgmnt.ext;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.JsonValue;
 import com.draniksoft.ome.editor.extensions.Extension;
 import com.draniksoft.ome.editor.extensions.sub.SubExtensionDao;
@@ -18,7 +17,5 @@ public class AssetSubExtDao extends SubExtensionDao {
 
     @Override
     public void parse(JsonValue jval) {
-	  String msg = jval.getString("msg");
-	  Gdx.app.debug(tag, "MSG " + msg);
     }
 }

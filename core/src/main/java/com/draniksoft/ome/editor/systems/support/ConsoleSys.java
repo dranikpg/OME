@@ -7,8 +7,8 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.draniksoft.ome.editor.support.CommandExecutor;
 import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.base_gfx.ResizeEvent;
-import com.draniksoft.ome.support.load.IntelligentLoader;
-import com.draniksoft.ome.support.load.interfaces.IGLRunnable;
+import com.draniksoft.ome.support.execution_base.ExecutionProvider;
+import com.draniksoft.ome.support.execution_base.sync.SimpleSyncTask;
 import com.strongjoshua.console.GUIConsole;
 import net.mostlyoriginal.api.event.common.Subscribe;
 
@@ -23,13 +23,13 @@ public class ConsoleSys extends BaseSystem {
 
 
     @Wire(name = "engine_l")
-    IntelligentLoader l;
+    ExecutionProvider l;
 
 
     @Override
     protected void initialize() {
 
-        l.passGLRunnable(new Gfx_ldr());
+	  l.addShd(new Gfx_ldr());
 
 	  world.getSystem(OmeEventSystem.class).registerEvents(this);
 
@@ -51,11 +51,15 @@ public class ConsoleSys extends BaseSystem {
 
     }
 
-    private class Gfx_ldr implements IGLRunnable {
+    private class Gfx_ldr extends SimpleSyncTask {
+
+	  public Gfx_ldr() {
+		super(1);
+	  }
 
         @Override
-        public byte run() {
-            console = new GUIConsole();
+	  public void run() {
+		console = new GUIConsole();
 
             console.setCommandExecutor(new CommandExecutor(world));
             console.log("See the github wiki for more details");
@@ -64,7 +68,7 @@ public class ConsoleSys extends BaseSystem {
 
 		mxp.addProcessor(2, console.getInputProcessor());
 
-            return IGLRunnable.READY;
-        }
+		active = false;
+	  }
     }
 }

@@ -487,9 +487,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
 
     public void log_avass() {
-
         Iterator<AssetDDao> i = world.getSystem(SimpleAssMgr.class).getAviabDaoI();
-
         AssetDDao d;
         while (i.hasNext()) {
             d = i.next();

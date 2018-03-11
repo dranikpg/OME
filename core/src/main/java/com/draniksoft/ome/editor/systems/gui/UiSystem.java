@@ -13,13 +13,14 @@ import com.draniksoft.ome.editor.ui.insp.InspView;
 import com.draniksoft.ome.editor.ui.menu.BottomMenu;
 import com.draniksoft.ome.editor.ui.menu.EditorWin;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
-import com.draniksoft.ome.support.load.IntelligentLoader;
-import com.draniksoft.ome.support.load.interfaces.IRunnable;
+import com.draniksoft.ome.support.execution_base.ExecutionProvider;
 import com.draniksoft.ome.support.ui.util.WindowAgent;
 import com.draniksoft.ome.support.ui.viewsys.BaseWinView;
 import com.draniksoft.ome.utils.struct.ResponseListener;
 import com.draniksoft.ome.utils.ui.editorMenu.MenuWinController;
 import net.mostlyoriginal.api.event.common.Subscribe;
+
+import java.util.concurrent.Callable;
 
 public class UiSystem extends BaseSystem {
     private static String tag = "UiSystem";
@@ -35,7 +36,7 @@ public class UiSystem extends BaseSystem {
     @Wire
     InputMultiplexer multiplexer;
     @Wire(name = "engine_l")
-    IntelligentLoader engineL;
+    ExecutionProvider engineL;
     @Wire(name = "ui_vp")
     Viewport vp;
 
@@ -48,8 +49,8 @@ public class UiSystem extends BaseSystem {
 
     @Override
     protected void initialize() {
-        engineL.passRunnable(new Loader());
-        multiplexer.addProcessor(0, uiStage);
+	  engineL.exec(new Loader());
+	  multiplexer.addProcessor(0, uiStage);
 
         AppDO.I.LML().parseView(new ResponseListener() {
             @Override
@@ -117,10 +118,10 @@ public class UiSystem extends BaseSystem {
     }
 
 
-    private class Loader implements IRunnable {
+    private class Loader implements Callable<Void> {
 
-        @Override
-        public void run(IntelligentLoader l) {
+        /*@Override
+	  public void run(IntelligentLoader l) {
 
 
 
@@ -130,6 +131,13 @@ public class UiSystem extends BaseSystem {
         public byte getState() {
             return IRunnable.RUNNING;
         }
+        */
+
+	  @Override
+	  public Void call() throws Exception {
+		Gdx.app.debug(tag, "I am dooin stupid tings right now");
+		return null;
+	  }
     }
 
 

@@ -26,13 +26,13 @@ import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.file_b.ResourceLoadedEvent;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.support.dao.FontDao;
-import com.draniksoft.ome.support.load.IntelligentLoader;
-import com.draniksoft.ome.support.load.interfaces.IGLRunnable;
-import com.draniksoft.ome.support.load.interfaces.IRunnable;
+import com.draniksoft.ome.support.execution_base.ExecutionProvider;
+import com.draniksoft.ome.support.execution_base.sync.SimpleSyncTask;
 import com.draniksoft.ome.utils.FUtills;
 import com.draniksoft.ome.utils.struct.Pair;
 
 import java.util.Iterator;
+import java.util.concurrent.Callable;
 
 public class FontManager extends BaseSystem implements LoadSaveManager {
 
@@ -48,13 +48,13 @@ public class FontManager extends BaseSystem implements LoadSaveManager {
     volatile AssetManager assM;
 
     @Wire(name = "engine_l")
-    IntelligentLoader ll;
+    ExecutionProvider ll;
 
 
     @Override
     protected void initialize() {
 
-	  ll.passRunnable(new Parser());
+	  ll.exec(new Parser());
 
     }
 
@@ -97,10 +97,10 @@ public class FontManager extends BaseSystem implements LoadSaveManager {
 
     }
 
-    private class Parser implements IRunnable {
+    private class Parser implements Callable<Object> {
 
 	  @Override
-	  public void run(IntelligentLoader l) {
+	  public Object call() throws Exception {
 		fonts = new ObjectMap<String, BitmapFont>();
 		loaded = new ObjectMap<String, FontDao>();
 		aviab = new ObjectMap<String, FontDao>();
@@ -115,28 +115,23 @@ public class FontManager extends BaseSystem implements LoadSaveManager {
 
 		Gdx.app.debug(tag, "Inited with av::size " + aviab.size);
 
-		ll.passGLRunnable(new LoadBlocker());
-	  }
-
-	  @Override
-	  public byte getState() {
-		return IRunnable.RUNNING;
+		ll.addShd(new LoadBlocker());
+		return null;
 	  }
     }
 
-    private class LoadBlocker implements IGLRunnable {
+    private class LoadBlocker extends SimpleSyncTask {
+
+	  public LoadBlocker() {
+		super(5);
+	  }
 
 	  @Override
-	  public byte run() {
-
+	  public void run() {
 		processSystem();
-
 		if (loadQQ.size == 0) {
-		    return IGLRunnable.READY;
-		} else {
-		    return IGLRunnable.RUNNING;
+		    active = false;
 		}
-
 	  }
     }
 
@@ -169,7 +164,7 @@ public class FontManager extends BaseSystem implements LoadSaveManager {
 		FontDao d = new FontDao();
 
 		d.id = v.getString("ID");
-		d.uri = FUtills.pathToUri(d.id, FUtills.STORE_L_INT);
+		d.uri = FUtills.pathToUri("i_assets/" + d.id, FUtills.STORE_L_INT);
 		d.sysmz = v.has("sysmz") && v.getBoolean("sysmz");
 
 		aviab.put(d.id, d);
