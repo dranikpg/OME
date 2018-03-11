@@ -4,6 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.draniksoft.ome.support.execution_base.ExecutionProvider;
+import com.draniksoft.ome.support.execution_base.assetcls.AssetGroupCollectionHelper;
+import com.draniksoft.ome.support.execution_base.assetcls.DividedAssetCollector;
+import com.draniksoft.ome.support.execution_base.assetcls.MessedAssetCollector;
+import com.draniksoft.ome.support.execution_base.assetcls.StupidAssetCollector;
 import com.draniksoft.ome.support.execution_base.sync.SimpleSyncTask;
 import com.draniksoft.ome.support.execution_base.sync.SyncTask;
 import com.draniksoft.ome.utils.respone.ResponseCode;
@@ -13,7 +17,9 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
 public class StepLoader implements ExecutionProvider {
+
     private static final String tag = "StepLoader";
+
     ExecutionProvider p;
     ResponseListener l;
 
@@ -24,9 +30,20 @@ public class StepLoader implements ExecutionProvider {
 
     StepLoaderTask stepTask;
 
+    AssetGroupCollectionHelper assetHelper;
+
+
     volatile boolean paused = true;
 
-    public StepLoader(ExecutionProvider p, AssetManager mgr, ResponseListener l) {
+    public StepLoader(ExecutionProvider p) {
+	  this(p, null);
+    }
+
+    public StepLoader(ExecutionProvider p, ResponseListener l) {
+	  this(p, p.getAssets(), AssetGroupCollectionHelper.CollectionStrategy.DIVIED, l);
+    }
+
+    public StepLoader(ExecutionProvider p, AssetManager mgr, short assetStratey, ResponseListener l) {
 	  this.p = p;
 	  this.l = l;
 	  this.mgr = mgr;
@@ -35,7 +52,20 @@ public class StepLoader implements ExecutionProvider {
 	  futures = new DelayedRemovalArray<Future>();
 	  tasks = new DelayedRemovalArray<SyncTask>();
 
+	  switch (assetStratey) {
+		case AssetGroupCollectionHelper.CollectionStrategy.DIVIED:
+		    assetHelper = new DividedAssetCollector(mgr);
+		    break;
+		case AssetGroupCollectionHelper.CollectionStrategy.MESSED:
+		    assetHelper = new MessedAssetCollector(mgr);
+		    break;
+		case AssetGroupCollectionHelper.CollectionStrategy.STUPID:
+		    assetHelper = new StupidAssetCollector(mgr);
+		    break;
+	  }
+
 	  p.addShd(stepTask);
+	  p.addShd(assetHelper.asTask());
     }
 
     public void start() {
@@ -47,7 +77,9 @@ public class StepLoader implements ExecutionProvider {
     }
 
     public void dispose() {
+	  Gdx.app.debug(tag, "Disposing");
 	  stepTask.terminate();
+	  assetHelper.terminate();
     }
 
     @Override
@@ -63,6 +95,26 @@ public class StepLoader implements ExecutionProvider {
 	  p.addShd(t);
     }
 
+    @Override
+    public AssetManager getAssets() {
+	  return p.getAssets();
+    }
+
+    /*
+    	Does not use the super to system to keep track itself
+     */
+    @Override
+    public void awaitAsset(String path, ResponseListener l) {
+	  assetHelper.register(path, l);
+	  if (l != null && !assetHelper.supportsSingleResponse()) {
+		l.onResponse(ResponseCode.UNSUPPORTED);
+	  }
+    }
+
+
+    public void setListener(ResponseListener l) {
+	  this.l = l;
+    }
 
     private class StepLoaderTask extends SimpleSyncTask {
 	  public StepLoaderTask() {
@@ -93,12 +145,14 @@ public class StepLoader implements ExecutionProvider {
 		}
 		tasks.end();
 
-		if (mgr.getQueuedAssets() != 0) return;
+		if (!assetHelper.isReady()) return;
 
 		paused = true;
-		l.onResponse(ResponseCode.SUCCESSFUL);
 
 		Gdx.app.debug(tag, "Step");
+
+		if (l != null) l.onResponse(ResponseCode.SUCCESSFUL);
+
 	  }
     }
 

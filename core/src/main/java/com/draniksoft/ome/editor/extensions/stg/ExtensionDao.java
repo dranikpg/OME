@@ -11,13 +11,17 @@ public class ExtensionDao {
 
     private static final String tag = "ExtensionDao";
 
-    ExtensionDaoState state = ExtensionDaoState.AVAILABLE;
+    public ExtensionDao() {
+	  daos = new ObjectSet<SubExtensionDao>();
+    }
+
+    public ExtensionDaoState state = ExtensionDaoState.AVAILABLE;
 
     public String ID;
     public String URI;
 
-    boolean smz = false;     // is it a system side extension
-    boolean stpLoad = false; // should I load it on startup
+    public boolean smz = false;     // is it a system side extension
+    public boolean stpLoad = false; // should I load it on startup
     //
 
     public Text name;
@@ -26,21 +30,31 @@ public class ExtensionDao {
 
     public ObjectSet<SubExtensionDao> daos;
 
+    public void applicated() {
+	  state = ExtensionDaoState.APPLICATED;
+    }
+
+    public void unloaded() {
+	  state = ExtensionDaoState.AVAILABLE;
+    }
+
     // Parse
     public void load(JsonValue jroot) throws Exception {
+
+	  ID = jroot.getString("id");
+
 	  name = JsonUtils.parseText(jroot.get("name"));
 	  desc = JsonUtils.parseText(jroot.get("desc"), false);
+
 	  smz = jroot.has("smz") && jroot.getBoolean("smz");
 	  stpLoad = jroot.has("stpload") && jroot.getBoolean("stpload");
-	  JsonValue components = jroot.get("c");
-	  if (components != null) {
-		for (JsonValue jval : components) {
-		    if (SubExtensionDao.MAP.containsKey(jval.name)) {
-			  SubExtensionDao d = SubExtensionDao.MAP.get(jval.name).newInstance();
-			  Gdx.app.debug(tag, "Building " + d.getClass().getSimpleName());
-			  d.parse(jval);
-			  daos.add(d);
-		    }
+
+	  for (JsonValue jval : jroot) {
+		if (SubExtensionDao.MAP.containsKey(jval.name)) {
+		    SubExtensionDao d = SubExtensionDao.MAP.get(jval.name).newInstance();
+		    Gdx.app.debug(tag, "Building " + d.getClass().getSimpleName());
+		    d.parse(jval);
+		    daos.add(d);
 		}
 	  }
     }

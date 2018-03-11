@@ -290,21 +290,30 @@ public class EngineLoader {
         public void run(IntelligentLoader l) {
             cb = new WorldConfigurationBuilder();
 
-            // OTHER MANAGER
+		// BASIC MANAGER
 
-            cb.with(new ProjectMgr());
+		// USELESS ? not yet
+		cb.with(new ProjectMgr());
 
             cb.with(new MapMgr());
 
+		// old bollocks
 		cb.with(new SimpleAssMgr());
 
-            cb.with(new FontManager());
+		// old bollocks
+		cb.with(new FontManager());
 
 		cb.with(new ResourceManager());
 
             cb.with(new EntitySrzMgr());
 
             cb.with(new TimeMgr());
+
+		// NEW PART
+
+		cb.with(new ExtensionManager());
+
+		cb.with(new TextureRManager());
 
             // SUPPORT SYSTEMS
 

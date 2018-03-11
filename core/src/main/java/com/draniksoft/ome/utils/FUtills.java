@@ -326,4 +326,18 @@ public class FUtills {
 
         return d;
     }
+
+    public static void copyAtlasRegion(TextureAtlas.AtlasRegion src, TextureAtlas.AtlasRegion dst) {
+	  dst.index = src.index;
+	  dst.name = src.name;
+	  dst.offsetX = src.offsetX;
+	  dst.offsetY = src.offsetY;
+	  dst.packedWidth = src.packedWidth;
+	  dst.packedHeight = src.packedHeight;
+	  dst.originalWidth = src.originalWidth;
+	  dst.originalHeight = src.originalHeight;
+	  dst.rotate = src.rotate;
+	  dst.splits = src.splits;
+	  dst.setRegion(src);
+    }
 }

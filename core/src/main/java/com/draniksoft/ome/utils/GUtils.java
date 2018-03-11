@@ -81,10 +81,10 @@ public class GUtils {
         IntBuffer intBuffer = BufferUtils.newIntBuffer(16);
         Gdx.gl20.glGetIntegerv(GL20.GL_MAX_TEXTURE_SIZE, intBuffer);
         return  intBuffer.get();
+
     }
 
     public static void initGLData() {
-
 	  String tag = "GUTILS :: GL_DATA_FETCH ";
 
 	  MAX_TEX_SIZE = fetchMaxTexSize() / 2;

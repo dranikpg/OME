@@ -9,4 +9,7 @@ public enum ExtensionType {
 
     /* For exporting/modifying them */
     VIRTUAL,
+
+
+    UNRESOLVED
 }

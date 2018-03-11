@@ -9,14 +9,16 @@ import com.artemis.utils.IntBag;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.draniksoft.ome.editor.esc_utils.OmeStrategy;
+import com.draniksoft.ome.editor.extensions.Extension;
 import com.draniksoft.ome.editor.extensions.stg.ExtensionDao;
 import com.draniksoft.ome.editor.load.MapLoadBundle;
+import com.draniksoft.ome.editor.manager.ExtensionManager;
 import com.draniksoft.ome.editor.manager.FontManager;
 import com.draniksoft.ome.editor.manager.MapMgr;
 import com.draniksoft.ome.editor.manager.TimeMgr;
@@ -43,6 +45,8 @@ import com.draniksoft.ome.editor.systems.support.ExecutionSystem;
 import com.draniksoft.ome.editor.systems.support.InputSys;
 import com.draniksoft.ome.editor.systems.support.flows.EditorSystem;
 import com.draniksoft.ome.editor.systems.support.flows.WorkflowSys;
+import com.draniksoft.ome.editor.texmgmnt.acess.TextureRAccesor;
+import com.draniksoft.ome.editor.texmgmnt.ext.AssetSubExtension;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.mgmnt_base.impl.ConfigManager;
 import com.draniksoft.ome.support.configs.ConfigDao;
@@ -243,32 +247,53 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
      */
 
     public void log_ext() {
-
-    }
-
-    private void logExtDao(ExtensionDao d) {
-        console.log("   " + d.ID + "  (" + d.name.get() + ")");
-    }
-
-    public void log_av_ext() {
-
-        console.log("Internal:");
-
-        console.log("Local:");
-
-        for (ExtensionDao d : AppDO.I.F().getDaos().values().iterator()) {
-            logExtDao(d);
+        for (Iterator<Extension> it = world.getSystem(ExtensionManager.class).getAll(); it.hasNext(); ) {
+            Extension e = it.next();
+            console.log(e.ID + " (" + e.t.name() + "-" + e.s.toString() + ")");
         }
+    }
 
-        console.log("Map:");
+    public void log_ext(String id) {
+        Extension e = world.getSystem(ExtensionManager.class).getExtensions().get(id);
+        if (id == null) {
+            console.log("NOT FOUND");
+            return;
+        }
+        console.log(e.ID + "  (" + e.dao.name.get() + ")");
+        console.log(e.t.name() + "-" + e.s.toString());
+        console.log(e.map.toString());
+    }
+    public void log_av_ext() {
+        try {
+            for (Iterator<ExtensionDao> it = world.getSystem(ExtensionManager.class).getAllDaos(); it.hasNext(); ) {
+                ExtensionDao d = it.next();
+                console.log(d.ID + "   (" + d.URI + ")  " + d.state.name());
+            }
+        } catch (Exception e) {
+            Gdx.app.error("CE", "", e);
+        }
+    }
 
+    public void load_ext(String id) {
+        try {
+            world.getSystem(ExtensionManager.class).loadExtension(id);
+        } catch (Exception e) {
+            Gdx.app.error("CE", "", e);
+        }
     }
 
     public void log_av_ext(String id) {
+        ExtensionDao d = world.getSystem(ExtensionManager.class).findDao(id);
+        if (d == null) {
+            console.log("NULL");
+            return;
+        }
+
+        console.log(d.ID + " ~ " + d.name.get());
+        console.log(d.state.name());
+        console.log(d.daos.toString());
 
     }
-
-
 
     /**
      * Editor Renderer utils
@@ -450,6 +475,16 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
      * AssetDManager utils
      */
 
+    public void log_mgr_stat() {
+        AssetManager mgr = world.getInjector().getRegistered(AssetManager.class);
+        console.log(mgr.getDiagnostics());
+    }
+
+    public void log_mgr_loaded(String path) {
+        AssetManager mgr = world.getInjector().getRegistered(AssetManager.class);
+        console.log("Loaded " + mgr.isLoaded(path));
+    }
+
 
     public void log_avass() {
 
@@ -482,17 +517,24 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
     }
 
     public void log_asspc(String id) {
-
-        Array<TextureAtlas.AtlasRegion> rs = world.getSystem(SimpleAssMgr.class).getAtlas(id).getRegions();
-
-
-        for (TextureAtlas.AtlasRegion r : rs) {
-
-            console.log("name= " + r.name + "; ~ID = " + r.index);
-
+        AssetSubExtension as = world.getSystem(ExtensionManager.class).getSub(id, AssetSubExtension.class);
+        if (as == null) {
+            console.log("AssetSubExt not found");
+            return;
         }
 
-
+        TextureRAccesor ac;
+        for (Iterator<TextureRAccesor> it = as.getAll(); it.hasNext(); ) {
+            ac = it.next();
+            String out = "";
+            if (ac.atlasR.index == -1) {
+                out += ac.atlasR.name;
+            } else {
+                out += ac.atlasR.name + "@ " + ac.atlasR.index;
+            }
+            out += " ~ usg:" + ac.usages;
+            console.log(out);
+        }
     }
 
 

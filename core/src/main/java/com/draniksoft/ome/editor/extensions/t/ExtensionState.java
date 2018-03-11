@@ -5,10 +5,12 @@ package com.draniksoft.ome.editor.extensions.t;
  */
 public enum ExtensionState {
 
+    NONE,
+
     LOADING,
 
     WORKING,
 
-    UNRESOLVED
+    UNLOADING
 
 }

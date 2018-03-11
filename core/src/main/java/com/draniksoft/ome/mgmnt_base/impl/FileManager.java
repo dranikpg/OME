@@ -59,8 +59,7 @@ public class FileManager extends AppDataManager {
 		    }
 		}
 	  }
-
-	  Gdx.app.debug(tag, "Collected ");
+	  Gdx.app.debug(tag, "Collected " + daos.size + " extensions");
     }
 
 

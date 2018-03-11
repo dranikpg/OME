@@ -2,12 +2,15 @@ package com.draniksoft.ome.editor.systems.support;
 
 import com.artemis.BaseSystem;
 import com.artemis.annotations.Wire;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.draniksoft.ome.support.execution_base.ExecutionProvider;
+import com.draniksoft.ome.support.execution_base.assetcls.DividedAssetCollector;
 import com.draniksoft.ome.support.execution_base.sync.SimpleSyncTask;
 import com.draniksoft.ome.support.execution_base.sync.SyncTask;
 import com.draniksoft.ome.utils.GUtils;
+import com.draniksoft.ome.utils.struct.ResponseListener;
 
 import java.util.Iterator;
 import java.util.concurrent.Callable;
@@ -24,6 +27,8 @@ public class ExecutionSystem extends BaseSystem implements ExecutionProvider {
     @Wire(name = "exs")
     ExecutorService s;
 
+    DividedAssetCollector assetCollector;
+
     /*
  	Logic stuff
      */
@@ -33,6 +38,7 @@ public class ExecutionSystem extends BaseSystem implements ExecutionProvider {
     @Override
     protected void initialize() {
 	  tasks = new DelayedRemovalArray<SyncTask>(false, 16);
+	  assetCollector = new DividedAssetCollector(mgr);
 	  prepareBaseTasks();
     }
 
@@ -52,11 +58,8 @@ public class ExecutionSystem extends BaseSystem implements ExecutionProvider {
  	Schedule
      */
     public void addShd(SyncTask t) {
+	  Gdx.app.debug(tag, "Shd request " + t.getClass().getSimpleName());
 	  tasks.add(t);
-    }
-
-    public void removeShedTask(SyncTask t) {
-	  tasks.removeValue(t, true);
     }
 
     /*
@@ -64,8 +67,24 @@ public class ExecutionSystem extends BaseSystem implements ExecutionProvider {
      */
 
     public <T> Future<T> exec(Callable<T> c) {
+	  Gdx.app.debug(tag, "Async request " + c.getClass().getSimpleName());
 	  return s.submit(c);
     }
+
+    /*
+    	Assets
+     */
+
+    @Override
+    public AssetManager getAssets() {
+	  return mgr;
+    }
+
+    @Override
+    public void awaitAsset(String path, ResponseListener l) {
+	  assetCollector.register(path, l);
+    }
+
 
 
     /*
@@ -86,20 +105,30 @@ public class ExecutionSystem extends BaseSystem implements ExecutionProvider {
      */
 
     private void prepareBaseTasks() {
-	  tasks.add(new AssMgrLoadShd(mgr));
+
+	  tasks.add(new AssMgrLoadShd(mgr, 5, 1));
+	  tasks.add(new DividedAssetCollector(mgr, 5, 2));
+
     }
 
     private class AssMgrLoadShd extends SimpleSyncTask {
 	  AssetManager mgr;
 
 	  protected AssMgrLoadShd(AssetManager mgr) {
-		super(5);
+		this(mgr, 5, 0);
+	  }
+
+	  protected AssMgrLoadShd(AssetManager mgr, int fq, int ph) {
+		super(fq, ph);
 		this.mgr = mgr;
 	  }
 
 	  @Override
 	  public void run() {
-		if (mgr.getQueuedAssets() != 0) mgr.update();
+		if (mgr.getQueuedAssets() != 0) {
+		    System.out.println("mgrpct " + mgr.getProgress());
+		    mgr.update();
+		}
 	  }
     }
 

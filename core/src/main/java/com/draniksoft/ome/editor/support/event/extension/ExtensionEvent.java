@@ -1,8 +1,9 @@
 package com.draniksoft.ome.editor.support.event.extension;
 
 import com.draniksoft.ome.editor.extensions.Extension;
+import net.mostlyoriginal.api.event.common.Event;
 
-public class ExtensionEvent {
+public class ExtensionEvent implements Event {
 
     Extension e;
 

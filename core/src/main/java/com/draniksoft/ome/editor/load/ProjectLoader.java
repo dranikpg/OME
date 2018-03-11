@@ -19,6 +19,7 @@ import com.draniksoft.ome.editor.manager.drawable.SimpleAssMgr;
 import com.draniksoft.ome.editor.systems.support.ExecutionSystem;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.support.execution_base.ExecutionProvider;
+import com.draniksoft.ome.support.execution_base.assetcls.AssetGroupCollectionHelper;
 import com.draniksoft.ome.support.execution_base.sync.SyncTask;
 import com.draniksoft.ome.support.execution_base.ut.CblT;
 import com.draniksoft.ome.support.execution_base.ut.StepLoader;
@@ -61,6 +62,16 @@ public class ProjectLoader implements ExecutionProvider {
 	  provider.addShd(t);
     }
 
+    @Override
+    public AssetManager getAssets() {
+	  return assM;
+    }
+
+    @Override
+    public void awaitAsset(String path, ResponseListener l) {
+	  this.l.awaitAsset(path, l);
+    }
+
     private enum Step {
 	  IDLE,
 	  DATA_RELEASE,
@@ -85,7 +96,7 @@ public class ProjectLoader implements ExecutionProvider {
 
 	  s = Step.IDLE;
 
-	  l = new StepLoader(provider, assM, new ResponseListener() {
+	  l = new StepLoader(provider, assM, AssetGroupCollectionHelper.CollectionStrategy.STUPID, new ResponseListener() {
 		@Override
 		public void onResponse(short code) {
 		    updateLoad();
