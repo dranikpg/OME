@@ -1,13 +1,18 @@
 package com.draniksoft.ome.editor.manager;
 
 import com.artemis.BaseSystem;
+import com.artemis.annotations.Wire;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.draniksoft.ome.editor.extensions.Extension;
+import com.draniksoft.ome.editor.extensions.map.MapExtensionDao;
 import com.draniksoft.ome.editor.extensions.stg.ExtensionDao;
 import com.draniksoft.ome.editor.extensions.sub.SubExtension;
+import com.draniksoft.ome.editor.load.LoadSaveManager;
+import com.draniksoft.ome.editor.load.ProjectLoader;
+import com.draniksoft.ome.editor.load.ProjectSaver;
 import com.draniksoft.ome.editor.systems.support.ExecutionSystem;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.support.execution_base.ExecutionProvider;
@@ -18,7 +23,7 @@ import com.draniksoft.ome.utils.struct.ResponseListener;
 
 import java.util.Iterator;
 
-public class ExtensionManager extends BaseSystem {
+public class ExtensionManager extends BaseSystem implements LoadSaveManager {
     private static final String tag = "ExtensionManager";
 
     ObjectMap<String, ExtensionDao> mapDaos;
@@ -26,13 +31,18 @@ public class ExtensionManager extends BaseSystem {
 
     ObjectMap<String, Extension> extensions;
 
+    Extension mapExtension;
+
+    @Wire(name = "engine_l")
+    ExecutionProvider stpL;
+
     @Override
     protected void initialize() {
 	  mapDaos = new ObjectMap<String, ExtensionDao>();
 	  internalDaos = new ObjectMap<String, ExtensionDao>();
 
 	  extensions = new ObjectMap<String, Extension>();
-	  parseInternals();
+	  parseInternalDaos();
     }
 
     @Override
@@ -63,7 +73,12 @@ public class ExtensionManager extends BaseSystem {
     }
 
     public Extension getExt(String id) {
+	  if (id == null || id == "") return mapExtension;
 	  return extensions.get(id);
+    }
+
+    public Extension mapExt() {
+	  return mapExtension;
     }
 
     public ExtensionDao findDao(String id) {
@@ -90,32 +105,29 @@ public class ExtensionManager extends BaseSystem {
 		return false;
 	  }
 
-	  final StepLoader l = new StepLoader(world.getSystem(ExecutionSystem.class));
+	  ExtensionDao d = findDao(ID);
+	  if (d == null) return false;
+	  return loadExtensionWParent(d, world.getSystem(ExecutionSystem.class));
+    }
+
+
+    public boolean loadExtensionWParent(final ExtensionDao d, ExecutionProvider parentExec) {
+
+	  final StepLoader l = new StepLoader(parentExec);
 	  l.setListener(new ResponseListener() {
 		@Override
 		public void onResponse(short code) {
-		    Gdx.app.debug(tag, "Extension loaded " + ID);
+		    Gdx.app.debug(tag, "Extension loaded " + d.ID);
 		    l.dispose();
 
-		    Extension ext = extensions.get(ID);
+		    Extension ext = extensions.get(d.ID);
 		    ext.endLoad();
 
 		}
 	  });
 
 	  l.reset();
-	  return loadExtension(ID, l);
-    }
-
-    /*
-    	Method for sequences to use as everything goes trough their provider
-    	Dont forget to fire some events after loading
-     */
-
-    public void loadExtensions(Array<ExtensionDao> Ds, ExecutionProvider provider) {
-	  for (ExtensionDao d : Ds) {
-		loadExtensionDao(d, provider);
-	  }
+	  return loadExtension(d, l);
     }
 
     /*
@@ -128,15 +140,7 @@ public class ExtensionManager extends BaseSystem {
 	  return ext;
     }
 
-
-    private boolean loadExtension(String ID, ExecutionProvider provider) {
-	  ExtensionDao d = findDao(ID);
-	  if (d == null) return false;
-	  return loadExtensionDao(d, provider);
-
-    }
-
-    private boolean loadExtensionDao(ExtensionDao dao, ExecutionProvider provider) {
+    private boolean loadExtension(ExtensionDao dao, ExecutionProvider provider) {
 	  if (extensions.containsKey(dao.ID) && !extensions.get(dao.ID).loadable()) {
 		Gdx.app.debug(tag, "Already loaded " + dao.ID);
 		return false;
@@ -150,16 +154,86 @@ public class ExtensionManager extends BaseSystem {
     }
 
 
-    private void parseInternals() {
-	  FileHandle h = Gdx.files.internal("assets/extensions");
+    @Override
+    public void save(ProjectSaver s) {
 
+    }
+
+    @Override
+    public void load(ProjectLoader ld) {
+	  parseMapDaos();
+
+	  MapExtensionDao mapDao = fetchMapExtDao();
+
+	  mapExtension = new Extension(null);
+	  mapExtension.load(ld, mapDao, world);
+
+
+    }
+
+    public MapExtensionDao fetchMapExtDao() {
+
+	  MapExtensionDao d = new MapExtensionDao();
+
+	  FileHandle indexFH = Gdx.files.absolute(FUtills.uriToPath(FUtills.STORE_L_MAP, "mapext/index.json"));
+	  if (!indexFH.exists()) return null;
+
+	  String in = indexFH.readString();
+	  JsonValue root = FUtills.r().parse(in);
+
+	  d.URI = FUtills.pathToUri("mapext", FUtills.STORE_L_MAP);
+
+	  try {
+		d.load(root);
+	  } catch (Exception e) {
+		Gdx.app.debug(tag, "Map extension parse ", e);
+	  }
+
+	  Gdx.app.debug(tag, "Map extension dao " + d.daos.toString());
+
+	  return d;
+
+    }
+
+    private void parseMapDaos() {
+
+	  FileHandle fH = Gdx.files.absolute(FUtills.uriToPath(FUtills.STORE_L_MAP, "ext"));
+
+	  if (!fH.exists()) return;
+
+	  for (FileHandle fc : fH.list()) {
+		if (fc.child("index.json").exists()) {
+		    ExtensionDao d = new ExtensionDao();
+
+		    String indexStr = fc.child("index.json").readString();
+		    JsonValue jroot = FUtills.r().parse(indexStr);
+
+		    d.URI = FUtills.pathToUri("ext/" + fc.name(), FUtills.STORE_L_MAP);
+
+		    try {
+			  d.load(jroot);
+		    } catch (Exception e) {
+			  e.printStackTrace();
+		    }
+
+		    mapDaos.put(d.ID, d);
+
+		}
+	  }
+
+    }
+
+    private void parseInternalDaos() {
+	  FileHandle h = Gdx.files.internal("assets/extensions");
 	  for (FileHandle f : h.list()) {
 		if (f.child("index.json").exists()) {
 		    ExtensionDao d = new ExtensionDao();
 		    try {
 			  d.load(FUtills.r.parse(f.child("index.json").read()));
 			  d.URI = FUtills.pathToUri("extensions/" + f.name(), FUtills.STORE_L_INT);
-
+			  if (d.stpLoad) {
+				loadExtensionWParent(d, stpL);
+			  }
 			  internalDaos.put(d.ID, d);
 		    } catch (Exception e) {
 			  e.printStackTrace();
@@ -167,6 +241,5 @@ public class ExtensionManager extends BaseSystem {
 		}
 	  }
 	  Gdx.app.debug(tag, "Found " + internalDaos.size + " internal extensions ");
-
     }
 }

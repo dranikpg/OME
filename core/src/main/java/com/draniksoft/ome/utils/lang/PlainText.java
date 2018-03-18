@@ -1,5 +1,8 @@
 package com.draniksoft.ome.utils.lang;
 
+import com.badlogic.gdx.utils.JsonValue;
+import com.draniksoft.ome.utils.JsonUtils;
+
 public class PlainText implements Text {
     String t;
 
@@ -13,5 +16,10 @@ public class PlainText implements Text {
     @Override
     public String get() {
 	  return t;
+    }
+
+    @Override
+    public JsonValue toJ() {
+	  return JsonUtils.createStringV(t);
     }
 }

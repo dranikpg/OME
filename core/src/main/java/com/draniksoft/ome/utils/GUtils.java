@@ -214,8 +214,8 @@ public class GUtils {
 
     public static DrawableLeafContructor fetchIt() {
         DrawableLeafContructor lfC = new DrawableLeafContructor();
-        lfC.setFor(FUtills.fetchAtlasR("i_casB@mapTile@100"));
-        return lfC;
+	  lfC.setFor(FUtills.getRAC("i_casB@mapTile@100"));
+	  return lfC;
     }
 
 

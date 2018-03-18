@@ -32,8 +32,10 @@ public class StepLoader implements ExecutionProvider {
 
     AssetGroupCollectionHelper assetHelper;
 
-
     volatile boolean paused = true;
+
+    int completiton = 0;
+    int disableCC = -1;
 
     public StepLoader(ExecutionProvider p) {
 	  this(p, null);
@@ -62,10 +64,20 @@ public class StepLoader implements ExecutionProvider {
 		case AssetGroupCollectionHelper.CollectionStrategy.STUPID:
 		    assetHelper = new StupidAssetCollector(mgr);
 		    break;
+		case AssetGroupCollectionHelper.CollectionStrategy.PARENT:
+		    assetHelper = null;
+		    break;
 	  }
 
+	  Gdx.app.debug(tag, "Asset collection " + assetStratey);
+
 	  p.addShd(stepTask);
-	  p.addShd(assetHelper.asTask());
+	  if (assetHelper != null) p.addShd(assetHelper.asTask());
+
+    }
+
+    public void setDisableCC(int disableCC) {
+	  this.disableCC = disableCC;
     }
 
     public void start() {
@@ -80,7 +92,7 @@ public class StepLoader implements ExecutionProvider {
     public void dispose() {
 	  Gdx.app.debug(tag, "Disposing");
 	  stepTask.terminate();
-	  assetHelper.terminate();
+	  if (assetHelper != null) assetHelper.terminate();
     }
 
     @Override
@@ -106,6 +118,11 @@ public class StepLoader implements ExecutionProvider {
      */
     @Override
     public void awaitAsset(String path, ResponseListener l) {
+	  if (assetHelper == null) {
+		p.awaitAsset(path, l);
+		return;
+	  }
+
 	  assetHelper.register(path, l);
 	  if (l != null && !assetHelper.supportsSingleResponse()) {
 		l.onResponse(ResponseCode.UNSUPPORTED);
@@ -153,6 +170,12 @@ public class StepLoader implements ExecutionProvider {
 		Gdx.app.debug(tag, "Step");
 
 		if (l != null) l.onResponse(ResponseCode.SUCCESSFUL);
+
+		completiton++;
+
+		if (completiton == disableCC) {
+		    dispose();
+		}
 
 	  }
     }

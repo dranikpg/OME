@@ -7,29 +7,32 @@ import com.badlogic.gdx.utils.Base64Coder;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.JsonWriter;
-import com.draniksoft.ome.editor.manager.EntitySrzMgr;
 import com.draniksoft.ome.editor.manager.MapMgr;
 import com.draniksoft.ome.editor.manager.ProjectMgr;
+import com.draniksoft.ome.editor.manager.SerializationManager;
 import com.draniksoft.ome.editor.manager.TimeMgr;
-import com.draniksoft.ome.editor.manager.drawable.SimpleAssMgr;
+import com.draniksoft.ome.editor.systems.support.ExecutionSystem;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
-import com.draniksoft.ome.support.load.IntelligentLoader;
-import com.draniksoft.ome.support.load.interfaces.IRunnable;
+import com.draniksoft.ome.support.execution_base.ExecutionProvider;
+import com.draniksoft.ome.support.execution_base.ut.StepLoader;
 import com.draniksoft.ome.utils.Env;
+import com.draniksoft.ome.utils.FUtills;
 import com.draniksoft.ome.utils.respone.ResponseCode;
 import com.draniksoft.ome.utils.struct.ResponseListener;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.concurrent.Callable;
 
 public class ProjectSaver {
 
     private static final String tag = "ProjectSaver";
 
 
+    StepLoader l;
+    ExecutionProvider pvd;
 
-    IntelligentLoader l;
 
     MapLoadBundle b;
     ResponseListener lst;
@@ -59,42 +62,39 @@ public class ProjectSaver {
 
 	  if (w == null) notifyFail();
 
-	  l = new IntelligentLoader();
-	  s = State.IDLE;
-	  l.setCompletionListener(new ResponseListener() {
-            @Override
-            public void onResponse(short code) {
-                if (code != IntelligentLoader.LOAD_FAILED) {
-                    updateState();
-                } else {
-                    notifyFail();
-                }
-            }
-        });
-
+	  l = new StepLoader(w.getSystem(ExecutionSystem.class),
+		    new ResponseListener() {
+			  @Override
+			  public void onResponse(short code) {
+				if (code != ResponseCode.FAILED) {
+				    updateState();
+				} else {
+				    notifyFail();
+				}
+			  }
+		    });
 
         updateState();
-
-        l.start();
-
     }
 
     private void updateState() {
         s = State.values()[s.ordinal() + 1];
 
-        Gdx.app.debug(tag, s.toString());
+	  l.reset();
+
+
+	  Gdx.app.debug(tag, s.toString());
 
         if (s == State.INDEX_JSON) {
-            l.passRunnable(new JsonL());
-        } else if (s == State.MGR_RUN) {
-            l.passRunnable(new SaveT(w.getSystem(ProjectMgr.class)));
-            l.passRunnable(new SaveT(w.getSystem(MapMgr.class)));
-		l.passRunnable(new SaveT(w.getSystem(SimpleAssMgr.class)));
-		l.passRunnable(new SaveT(w.getSystem(TimeMgr.class)));
-            l.passRunnable(new SaveT(w.getSystem(EntitySrzMgr.class)));
-        } else if (s == State.JSON_FLUSH) {
-            l.passRunnable(new JsonFlusher());
-        }
+		l.exec(new JsonL());
+	  } else if (s == State.MGR_RUN) {
+		l.exec(new SaveT(w.getSystem(ProjectMgr.class)));
+		l.exec(new SaveT(w.getSystem(MapMgr.class)));
+		l.exec(new SaveT(w.getSystem(TimeMgr.class)));
+		l.exec(new SaveT(w.getSystem(SerializationManager.class)));
+	  } else if (s == State.JSON_FLUSH) {
+		l.exec(new JsonFlusher());
+	  }
         if (s == State.END_PTR) {
             notifyEnd();
         }
@@ -120,14 +120,12 @@ public class ProjectSaver {
     }
 
     public void update() {
-        l.update();
     }
 
-    private class JsonFlusher implements IRunnable {
+    private class JsonFlusher implements Callable<Void> {
 
-        @Override
-        public void run(IntelligentLoader l) {
-
+	  @Override
+	  public Void call() throws Exception {
 		Gdx.app.debug(tag, "Flushing indexed JSON");
 
 		String js = "";
@@ -157,16 +155,11 @@ public class ProjectSaver {
 		} catch (Exception e) {
 		    Gdx.app.error(tag, "", e);
 		}
-
-        }
-
-        @Override
-        public byte getState() {
-            return IRunnable.RUNNING;
-        }
+		return null;
+	  }
     }
 
-    private class SaveT implements IRunnable {
+    private class SaveT implements Callable<Void> {
 
 
         public SaveT(LoadSaveManager mgr) {
@@ -175,50 +168,38 @@ public class ProjectSaver {
 
         LoadSaveManager mgr;
 
-
-        @Override
-        public void run(IntelligentLoader l) {
+	  @Override
+	  public Void call() throws Exception {
 
 		mgr.save(ProjectSaver.this);
-
-        }
-
-        @Override
-        public byte getState() {
-            return IRunnable.RUNNING;
-        }
+		return null;
+	  }
     }
 
-    private class JsonL implements IRunnable {
+    private class JsonL implements Callable<Void> {
 
         JsonReader r;
 
-        @Override
-        public void run(IntelligentLoader l) {
+	  @Override
+	  public Void call() throws Exception {
+		Gdx.app.debug(tag, "Json index saver");
 
-            Gdx.app.debug(tag, "Json index saver");
-
-            r = new JsonReader();
+		r = FUtills.r;
 
 		File indexF = new File(AppDO.I.F().getTmpDir().path() + "/index.json");
 
-            if (!indexF.exists()) {
-                Gdx.app.debug(tag, "Creating missing index.json file");
-                try {
-                    indexF.createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+		if (!indexF.exists()) {
+		    Gdx.app.debug(tag, "Creating missing index.json file");
+		    try {
+			  indexF.createNewFile();
+		    } catch (IOException e) {
+			  e.printStackTrace();
+		    }
+		}
 
-            indexV = new JsonValue(JsonValue.ValueType.object);
-
-        }
-
-        @Override
-        public byte getState() {
-            return IRunnable.RUNNING;
-        }
+		indexV = new JsonValue(JsonValue.ValueType.object);
+		return null;
+	  }
     }
 
     public MapLoadBundle getB() {
@@ -227,10 +208,8 @@ public class ProjectSaver {
 
 
     public void dispose() {
-
-        l.terminate();
-
-        l = null;
+	  l.dispose();
+	  l = null;
         indexV = null;
     }
 }

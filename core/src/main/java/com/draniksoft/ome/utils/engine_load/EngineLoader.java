@@ -16,7 +16,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.draniksoft.ome.editor.esc_utils.OmeStrategy;
 import com.draniksoft.ome.editor.load.MapLoadBundle;
 import com.draniksoft.ome.editor.manager.*;
-import com.draniksoft.ome.editor.manager.drawable.SimpleAssMgr;
 import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.systems.file_mgmnt.ProjectLoadSystem;
 import com.draniksoft.ome.editor.systems.gfx_support.CameraSys;
@@ -83,7 +82,7 @@ public class EngineLoader {
     static EngineLoadExecService execService;
     static ExecutorService nativeExeSerive = Executors.newFixedThreadPool(3);
 
-    static volatile AssetManager assm;
+    static volatile AssetManager assm = new AssetManager();
 
 
     public static void startLoad() {
@@ -159,7 +158,6 @@ public class EngineLoader {
 	  @Override
 	  public Void call() throws Exception {
 		InputMultiplexer mx = new InputMultiplexer();
-		assm = new AssetManager();
 
 		c.register(mx);
 		c.register(assm);
@@ -292,11 +290,9 @@ public class EngineLoader {
 		cb.with(new ProjectMgr());
 		cb.with(new MapMgr());
 		// old bollocks
-		cb.with(new SimpleAssMgr());
-		// old bollocks
 		cb.with(new FontManager());
 		cb.with(new ResourceManager());
-		cb.with(new EntitySrzMgr());
+		cb.with(new SerializationManager());
 		cb.with(new TimeMgr());
 		// NEW PART
 		cb.with(new ExtensionManager());

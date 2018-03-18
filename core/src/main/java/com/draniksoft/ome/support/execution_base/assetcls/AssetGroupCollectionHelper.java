@@ -10,7 +10,7 @@ public interface AssetGroupCollectionHelper {
 	  public static final short MESSED = 2;
 	  public static final short STUPID = 3;
 
-	  public static final short PARENT = 5;
+	  public static final short PARENT = 4;
 
     }
 

@@ -11,11 +11,7 @@ import com.draniksoft.ome.editor.components.gfx.DrawableC;
 import com.draniksoft.ome.editor.components.pos.PosSizeC;
 import com.draniksoft.ome.editor.components.srz.DrawableSrcC;
 import com.draniksoft.ome.editor.components.srz.MapDimensC;
-import com.draniksoft.ome.editor.manager.EntitySrzMgr;
-import com.draniksoft.ome.editor.manager.MapMgr;
-import com.draniksoft.ome.editor.manager.ProjectMgr;
-import com.draniksoft.ome.editor.manager.TimeMgr;
-import com.draniksoft.ome.editor.manager.drawable.SimpleAssMgr;
+import com.draniksoft.ome.editor.res.drawable.utils.RootDrawable;
 import com.draniksoft.ome.editor.systems.support.ExecutionSystem;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.support.execution_base.ExecutionProvider;
@@ -27,8 +23,6 @@ import com.draniksoft.ome.support.execution_base.ut.SyncCblt;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.support.load.interfaces.IGLRunnable;
 import com.draniksoft.ome.support.load.interfaces.IRunnable;
-import com.draniksoft.ome.support.pipemsg.MsgBaseCodes;
-import com.draniksoft.ome.support.pipemsg.MsgDirection;
 import com.draniksoft.ome.utils.FUtills;
 import com.draniksoft.ome.utils.GUtils;
 import com.draniksoft.ome.utils.respone.ResponseCode;
@@ -117,37 +111,31 @@ public class ProjectLoader implements ExecutionProvider {
 		l.dispose();
 		notifyEnd();
 	  } else if (s == Step.DATA_RELEASE) {
-		l.exec(CblT.WRAP(new ReleaseData()));
+		l.exec(new ReleaseData());
 		updateLoad();
 	  } else if (s == Step.UNZIP) {
 		updateLoad();
 	  } else if (s == Step.INDEX_FETCH) {
 		l.exec(CblT.WRAP(new IndexF()));
 	  } else if (s == Step.BASE) {
-		l.exec(new LoadT(w.getSystem(ProjectMgr.class)));
-		l.exec(new LoadT(w.getSystem(MapMgr.class)));
-		l.exec(new LoadT(w.getSystem(SimpleAssMgr.class)));
-		l.exec(new LoadT(w.getSystem(TimeMgr.class)));
-		l.exec(new LoadT(w.getSystem(EntitySrzMgr.class)));
+		for (Class c : LoadSaveManager.MANAGER) {
+		    l.exec(new LoadT((LoadSaveManager) w.getSystem(c)));
+		}
 	  } else if (s == Step.GFX_PAIR) {
 		l.addShd(SyncCblt.WRAP(new GfxC()));
 	  }
 
     }
 
-    private class ReleaseData implements IRunnable {
+    private class ReleaseData implements Callable<Void> {
+
 	  @Override
-	  public void run(IntelligentLoader l) {
+	  public Void call() throws Exception {
 		IntBag e = w.getAspectSubscriptionManager().get(Aspect.all()).getEntities();
 		for (int i = 0; i < e.size(); i++) {
 		    w.delete(e.get(i));
 		}
-
-	  }
-
-	  @Override
-	  public byte getState() {
-		return IRunnable.RUNNING;
+		return null;
 	  }
     }
 
@@ -191,8 +179,7 @@ public class ProjectLoader implements ExecutionProvider {
 
 		dwbSC.c = GUtils.fetchIt();
 
-		dwC.d = dwbSC.c.build();
-		dwC.d.msg(MsgBaseCodes.INIT, MsgDirection.DOWN, FUtills.NULL_ARRAY);
+		dwC.d = RootDrawable.forEntityLoad(dwbSC.c);
 
 		PosSizeC psc = psM.create(e);
 		psc.x = mc.x;
@@ -254,5 +241,10 @@ public class ProjectLoader implements ExecutionProvider {
     public void dispose() {
 
     }
+
+    /*
+    	Getter
+     */
+
 
 }

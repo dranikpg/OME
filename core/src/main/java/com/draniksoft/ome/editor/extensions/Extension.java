@@ -2,13 +2,18 @@ package com.draniksoft.ome.editor.extensions;
 
 import com.artemis.World;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.draniksoft.ome.editor.extensions.export.ExtensionExporter;
 import com.draniksoft.ome.editor.extensions.stg.ExtensionDao;
 import com.draniksoft.ome.editor.extensions.sub.SubExtension;
 import com.draniksoft.ome.editor.extensions.sub.SubExtensionDao;
 import com.draniksoft.ome.editor.extensions.t.ExtensionState;
 import com.draniksoft.ome.editor.extensions.t.ExtensionType;
+import com.draniksoft.ome.editor.extensions.t.ReducedExtensionType;
 import com.draniksoft.ome.support.execution_base.ExecutionProvider;
+import com.draniksoft.ome.utils.FUtills;
 
 public class Extension {
 
@@ -41,7 +46,7 @@ public class Extension {
 
 	  Gdx.app.debug(tag, "Loading " + ID);
 
-	  t = dao.smz ? ExtensionType.SYSTEM : ExtensionType.BASIC;
+	  t = dao.t.getT();
 	  s = ExtensionState.LOADING;
 
 	  for (SubExtensionDao sbd : dao.daos.iterator()) {
@@ -60,6 +65,26 @@ public class Extension {
     public void endLoad() {
 	  s = ExtensionState.WORKING;
 	  Gdx.app.debug(tag, "Loaded " + ID);
+    }
+
+    public void unload(ExecutionProvider p) {
+
+    }
+
+    public void save(ExtensionExporter exp) {
+
+	  Gdx.app.debug(tag, "Saving extension " + ID);
+
+	  dao.t = ReducedExtensionType.to(t);
+	  for (SubExtension ext : map.values()) {
+		ext.export(exp);
+	  }
+	  dao.save(exp.mainIndex());
+
+	  String jsonOut = exp.mainIndex().prettyPrint(JsonWriter.OutputType.json, 2);
+	  FileHandle h = Gdx.files.absolute(FUtills.uriToPath(dao.URI + "/index.json"));
+	  h.writeString(jsonOut, true);
+
     }
 
     /*

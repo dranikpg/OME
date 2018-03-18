@@ -1,12 +1,12 @@
 package com.draniksoft.ome.editor.res.drawable.constr;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.draniksoft.ome.editor.res.drawable.simple.LinkedDrawable;
 import com.draniksoft.ome.editor.res.drawable.simple.SimpleDrawable;
 import com.draniksoft.ome.editor.res.drawable.utils.Drawable;
 import com.draniksoft.ome.editor.res.res_mgmnt_base.constructor.LeafConstructor;
 import com.draniksoft.ome.editor.res.res_mgmnt_base.constructor.ResConstructor;
 import com.draniksoft.ome.editor.res.res_mgmnt_base.types.ResSubT;
+import com.draniksoft.ome.editor.texmgmnt.acess.TextureRAccesor;
 import com.draniksoft.ome.utils.FUtills;
 
 public class DrawableLeafContructor extends LeafConstructor<Drawable> {
@@ -16,7 +16,7 @@ public class DrawableLeafContructor extends LeafConstructor<Drawable> {
     transient LinkedDrawable sp;
     transient SimpleDrawable d;
 
-    private transient TextureRegion rg;
+    private transient TextureRAccesor rg;
 
     private String reg = "";
 
@@ -55,10 +55,10 @@ public class DrawableLeafContructor extends LeafConstructor<Drawable> {
 
     public void setFor(String s) {
 	  reg = s;
-	  setFor(FUtills.fetchAtlasR(reg));
+	  setFor(FUtills.getRAC(reg));
     }
 
-    public void setFor(TextureRegion r) {
+    public void setFor(TextureRAccesor r) {
 	  rg = r;
 	  if (LIVE_MODE && d != null) d.r = r;
     }
@@ -67,7 +67,7 @@ public class DrawableLeafContructor extends LeafConstructor<Drawable> {
     protected void init() {
 	  super.init();
 	  if (reg.length() > 0) {
-		rg = FUtills.fetchAtlasR(reg);
+		rg = FUtills.getRAC(reg);
 	  }
     }
 

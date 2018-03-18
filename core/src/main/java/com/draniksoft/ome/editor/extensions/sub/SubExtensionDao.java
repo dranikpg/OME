@@ -3,6 +3,7 @@ package com.draniksoft.ome.editor.extensions.sub;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.draniksoft.ome.editor.extensions.Extension;
+import com.draniksoft.ome.editor.struct.text_ext_test.TheTextExtDao;
 import com.draniksoft.ome.editor.texmgmnt.ext.AssetSubExtDao;
 
 public abstract class SubExtensionDao {
@@ -11,6 +12,7 @@ public abstract class SubExtensionDao {
 
     static {
 	  MAP.put("assets", AssetSubExtDao.class);
+	  MAP.put("text", TheTextExtDao.class);
 
 	  System.out.println("SubExtDaoMap \n " + MAP.toString());
     }
@@ -24,4 +26,6 @@ public abstract class SubExtensionDao {
 
     public abstract void parse(JsonValue jval);
 
+
+    public abstract void export(JsonValue jroot);
 }

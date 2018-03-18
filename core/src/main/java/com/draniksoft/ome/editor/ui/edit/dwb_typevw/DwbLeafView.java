@@ -55,7 +55,7 @@ public class DwbLeafView extends BaseView implements DwbEditI {
 		    if (i == null) return;
 		    if (c == null) return;
 
-		    c.setFor(i.getR());
+		    //c.setFor(i.getR());
 
 		}
 	  });

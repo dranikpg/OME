@@ -4,8 +4,14 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class TextureRAccesor {
+
+    private static final String tag = "TextureRAccessor";
+
     public TextureAtlas.AtlasRegion atlasR;
     public TextureRegion accelR;
+
+    public TextureRAccesor redirect;
+
     public int usages = 0;
 
     public TextureRAccesor(TextureAtlas.AtlasRegion atlasR) {
@@ -13,18 +19,25 @@ public class TextureRAccesor {
 	  this.accelR = new TextureRegion(atlasR);
     }
 
+    public TextureAtlas.AtlasRegion atl() {
+	  if (redirect != null) return redirect.atl();
+	  return atlasR;
+    }
+
+    public TextureRegion acl() {
+	  if (redirect != null) return redirect.acl();
+	  return accelR;
+    }
 
     public void updateOn(TextureRAccesor ac) {
 	  this.atlasR = ac.atlasR;
 	  this.accelR = ac.accelR;
     }
 
-    public TextureRegion registerUsage() {
-	  usages++;
-	  return accelR;
-    }
 
-    public void unregisterUsage() {
-	  usages--;
+    @Override
+    public String toString() {
+	  if (redirect != null) return "RD -> " + redirect.toString();
+	  return atlasR.name + "-u(" + usages + ")";
     }
 }

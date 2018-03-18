@@ -10,10 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.Selection;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.draniksoft.ome.editor.manager.drawable.SimpleAssMgr;
 import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.file_b.ResourceLoadedEvent;
-import com.draniksoft.ome.support.dao.AssetDDao;
 import com.draniksoft.ome.support.ui.viewsys.BaseView;
 import com.draniksoft.ome.utils.struct.ResponseListener;
 import com.github.czyzby.lml.annotation.LmlActor;
@@ -23,8 +21,6 @@ import com.kotcrab.vis.ui.widget.CollapsibleWidget;
 import com.kotcrab.vis.ui.widget.Separator;
 import com.kotcrab.vis.ui.widget.VisImage;
 import com.kotcrab.vis.ui.widget.VisTable;
-
-import java.util.Iterator;
 
 public class AssetListView extends BaseView {
 
@@ -67,10 +63,10 @@ public class AssetListView extends BaseView {
     public void postinit() {
 	  _w.getSystem(OmeEventSystem.class).registerEvents(this);
 
-	  Iterator<AssetDDao> it = _w.getSystem(SimpleAssMgr.class).getLoadedDaoI();
+	  /*Iterator<AssetDDao> it = _w.getSystem(SimpleAssMgr.class).getLoadedDaoI();
 	  while (it.hasNext()) {
 		buildGroup(it.next().id);
-	  }
+	  }*/
 
     }
 
@@ -130,13 +126,13 @@ public class AssetListView extends BaseView {
 
 	  Array<AssetImg> ar = new Array<AssetImg>();
 
-	  for (TextureAtlas.AtlasRegion r : _w.getSystem(SimpleAssMgr.class).getAtlas(id).getRegions()) {
+	  /*for (TextureAtlas.AtlasRegion r : _w.getSystem(SimpleAssMgr.class).getAtlas(id).getRegions()) {
 		AssetImg img = new AssetImg();
 		img.setFor(r);
 
 		contentT.add(img).minSize(50f);
 		ar.add(img);
-	  }
+	  }*/
 
 	  fullt.add(titleT).padBottom(5);
 	  fullt.row();

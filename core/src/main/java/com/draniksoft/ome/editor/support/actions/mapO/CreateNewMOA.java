@@ -62,8 +62,8 @@ public class CreateNewMOA implements Action {
 	  DrawableSrcC dwbSC = _w.getMapper(DrawableSrcC.class).get(_e);
 
 	  DrawableLeafContructor ct = new DrawableLeafContructor();
-	  Gdx.app.debug(tag, "Buildin dwb " + dwbID.substring(2));
-	  ct.setFor(FUtills.fetchAtlasR(dwbID.substring(2)));
+	  Gdx.app.debug(tag, "Buildin dwb " + dwbID);
+	  ct.setFor(FUtills.getRAC(dwbID.substring(2)));
 	  dwC.d = ct.build();
 	  dwbSC.c = ct;
 

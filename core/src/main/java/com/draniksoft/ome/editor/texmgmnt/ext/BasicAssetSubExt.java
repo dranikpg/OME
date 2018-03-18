@@ -4,6 +4,7 @@ import com.artemis.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.draniksoft.ome.editor.extensions.export.ExtensionExporter;
 import com.draniksoft.ome.editor.texmgmnt.acess.TextureRAccesor;
 import com.draniksoft.ome.support.execution_base.ExecutionProvider;
 import com.draniksoft.ome.utils.FUtills;
@@ -27,7 +28,8 @@ public class BasicAssetSubExt extends AssetSubExtension {
 
     @Override
     public TextureRAccesor get(String uri) {
-	  return null;
+	  Gdx.app.debug(tag, "req " + uri);
+	  return map.get(uri);
     }
 
     @Override
@@ -55,6 +57,11 @@ public class BasicAssetSubExt extends AssetSubExtension {
 	  });
     }
 
+    @Override
+    public void export(ExtensionExporter exporter) {
+
+    }
+
     private class LoadCallable implements Callable<Void> {
 
 	  @Override
@@ -79,6 +86,9 @@ public class BasicAssetSubExt extends AssetSubExtension {
 		    }
 
 		}
+
+
+		Gdx.app.debug(tag, map.toString());
 
 		return null;
 	  }

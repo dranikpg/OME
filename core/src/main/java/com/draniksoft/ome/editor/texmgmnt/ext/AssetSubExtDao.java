@@ -18,4 +18,9 @@ public class AssetSubExtDao extends SubExtensionDao {
     @Override
     public void parse(JsonValue jval) {
     }
+
+    @Override
+    public void export(JsonValue jroot) {
+
+    }
 }

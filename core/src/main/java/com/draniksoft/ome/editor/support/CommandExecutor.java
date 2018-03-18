@@ -16,13 +16,14 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.draniksoft.ome.editor.esc_utils.OmeStrategy;
 import com.draniksoft.ome.editor.extensions.Extension;
+import com.draniksoft.ome.editor.extensions.export.ExtensionExporter;
 import com.draniksoft.ome.editor.extensions.stg.ExtensionDao;
 import com.draniksoft.ome.editor.load.MapLoadBundle;
 import com.draniksoft.ome.editor.manager.ExtensionManager;
 import com.draniksoft.ome.editor.manager.FontManager;
 import com.draniksoft.ome.editor.manager.MapMgr;
 import com.draniksoft.ome.editor.manager.TimeMgr;
-import com.draniksoft.ome.editor.manager.drawable.SimpleAssMgr;
+import com.draniksoft.ome.editor.struct.text_ext_test.TheTextSubExt;
 import com.draniksoft.ome.editor.support.actions.Action;
 import com.draniksoft.ome.editor.support.actions.mapO.ChangeDwbA;
 import com.draniksoft.ome.editor.support.compositionObserver.abstr.CompositionObserver;
@@ -50,13 +51,14 @@ import com.draniksoft.ome.editor.texmgmnt.ext.AssetSubExtension;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.mgmnt_base.impl.ConfigManager;
 import com.draniksoft.ome.support.configs.ConfigDao;
-import com.draniksoft.ome.support.dao.AssetDDao;
 import com.draniksoft.ome.support.dao.FontDao;
 import com.draniksoft.ome.support.execution_base.sync.SyncTask;
+import com.draniksoft.ome.support.execution_base.ut.StepLoader;
 import com.draniksoft.ome.support.ui.viewsys.BaseView;
 import com.draniksoft.ome.utils.Const;
 import com.draniksoft.ome.utils.Env;
 import com.draniksoft.ome.utils.cam.Target;
+import com.draniksoft.ome.utils.struct.ResponseListener;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -253,9 +255,16 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
         }
     }
 
+    public void log_map_ext() {
+        try {
+            log_ext(null);
+        } catch (Exception e) {
+            Gdx.app.error("", "", e);
+        }
+    }
     public void log_ext(String id) {
-        Extension e = world.getSystem(ExtensionManager.class).getExtensions().get(id);
-        if (id == null) {
+        Extension e = world.getSystem(ExtensionManager.class).getExt(id);
+        if (e == null) {
             console.log("NOT FOUND");
             return;
         }
@@ -288,11 +297,61 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
             console.log("NULL");
             return;
         }
-
         console.log(d.ID + " ~ " + d.name.get());
         console.log(d.state.name());
         console.log(d.daos.toString());
+    }
 
+    public void export_ext() {
+        export_ext(null);
+    }
+
+    public void export_ext(String id) {
+
+        Extension e = world.getSystem(ExtensionManager.class).getExt(id);
+
+        StepLoader l = new StepLoader(world.getSystem(ExecutionSystem.class),
+                new ResponseListener() {
+                    @Override
+                    public void onResponse(short code) {
+                        console.log("exported");
+                    }
+                });
+
+        ExtensionExporter exp = new ExtensionExporter(e, null);
+        exp.setProvider(l);
+
+        l.setDisableCC(1);
+
+        l.reset();
+        l.exec(exp);
+
+    }
+
+    /*
+        Text test base
+     */
+
+    public void log_text() {
+        log_text(null);
+    }
+
+    public void log_text(String id) {
+        Extension ext = world.getSystem(ExtensionManager.class).getExt(id);
+        TheTextSubExt e = ext.getSub(TheTextSubExt.class);
+        if (e == null) return;
+        console.log(e.t.toString());
+    }
+
+    public void set_text(String text) {
+        set_text(text, null);
+    }
+
+    public void set_text(String text, String id) {
+        Extension ext = world.getSystem(ExtensionManager.class).getExt(id);
+        TheTextSubExt e = ext.getSub(TheTextSubExt.class);
+        if (e == null) return;
+        e.t.text = text;
     }
 
     /**
@@ -486,33 +545,6 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
     }
 
 
-    public void log_avass() {
-        Iterator<AssetDDao> i = world.getSystem(SimpleAssMgr.class).getAviabDaoI();
-        AssetDDao d;
-        while (i.hasNext()) {
-            d = i.next();
-            console.log(d.id + "  [" + d.uri + "]");
-        }
-
-    }
-
-    public void log_ass() {
-
-
-        try {
-
-            Iterator<AssetDDao> i = world.getSystem(SimpleAssMgr.class).getLoadedDaoI();
-
-            AssetDDao d;
-            while (i.hasNext()) {
-                d = i.next();
-                console.log(d.id + " [" + d.uri + "]");
-            }
-        } catch (Exception e) {
-            Gdx.app.error("", "", e);
-        }
-
-    }
 
     public void log_asspc(String id) {
         AssetSubExtension as = world.getSystem(ExtensionManager.class).getSub(id, AssetSubExtension.class);
@@ -535,32 +567,6 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
         }
     }
 
-
-    public void log_assrds() {
-
-        Iterator<ObjectMap.Entry<String, String>> m = world.getSystem(SimpleAssMgr.class).getRedirectsI();
-
-        ObjectMap.Entry<String, String> e;
-
-        while (m.hasNext()) {
-            e = m.next();
-            console.log(e.key + " = " + e.value);
-
-        }
-
-    }
-
-    public void load_ass(String id) {
-
-        AssetDDao d = world.getSystem(SimpleAssMgr.class).getAviabDao(id);
-
-        if (d != null) {
-
-            world.getSystem(SimpleAssMgr.class).loadDao(d);
-
-        }
-
-    }
 
 
     /*

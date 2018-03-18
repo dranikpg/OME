@@ -2,18 +2,17 @@ package com.draniksoft.ome.editor.res.drawable.simple;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.draniksoft.ome.editor.res.drawable.utils.Drawable;
+import com.draniksoft.ome.editor.texmgmnt.acess.TextureRAccesor;
 import com.draniksoft.ome.utils.FUtills;
 
 public class SimpleDrawable extends Drawable {
 
     private static final String tag = "SimpleDrawable";
 
-    public TextureRegion r;
+    public TextureRAccesor r;
 
-    public SimpleDrawable(TextureRegion r) {
+    public SimpleDrawable(TextureRAccesor r) {
 	  this.r = r;
     }
 
@@ -22,15 +21,12 @@ public class SimpleDrawable extends Drawable {
 
     @Override
     public void draw(Batch b, float x, float y, float w, float h) {
-	  if (r != null) b.draw(r, x, y, w, h);
+	  if (r != null) b.draw(r.atl(), x, y, w, h);
     }
 
     public static SimpleDrawable parse(String s) {
 	  Gdx.app.error(tag, "LOOKS LIKE OLD CODE !! ");
-	  TextureAtlas.AtlasRegion r = FUtills.fetchAtlasR(s);
-	  if (r == null) return null;
 	  SimpleDrawable d = new SimpleDrawable();
-	  d.r = r;
 	  return d;
     }
 
@@ -40,4 +36,8 @@ public class SimpleDrawable extends Drawable {
 	  return n;
     }
 
+    @Override
+    protected void _updateUsage(short sum, short delta) {
+	  if (r != null) FUtills.updateUsage(r, delta);
+    }
 }

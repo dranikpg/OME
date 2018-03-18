@@ -41,6 +41,12 @@ public class JsonUtils {
 
     }
 
+    public static JsonValue createBoolV(boolean b) {
+	  JsonValue v = new JsonValue(JsonValue.ValueType.booleanValue);
+	  v.set(b);
+	  return v;
+    }
+
     public static <T> T getVal(Class<T> c, JsonValue v) {
         if (c == Boolean.class) {
             return (T) new Boolean(v.asBoolean());

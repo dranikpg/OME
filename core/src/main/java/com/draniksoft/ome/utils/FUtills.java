@@ -6,6 +6,7 @@ import com.artemis.io.JsonArtemisSerializer;
 import com.artemis.io.KryoArtemisSerializer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -14,11 +15,12 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
-import com.draniksoft.ome.editor.manager.drawable.SimpleAssMgr;
+import com.draniksoft.ome.editor.manager.TextureRManager;
 import com.draniksoft.ome.editor.res.drawable.simple.EmptyDrawable;
 import com.draniksoft.ome.editor.res.drawable.simple.SimpleDrawable;
 import com.draniksoft.ome.editor.res.drawable.utils.Drawable;
 import com.draniksoft.ome.editor.res.res_mgmnt_base.constructor.ResConstructor;
+import com.draniksoft.ome.editor.texmgmnt.acess.TextureRAccesor;
 import com.draniksoft.ome.main_menu.MainBase;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.support.pipemsg.MsgBaseCodes;
@@ -43,6 +45,10 @@ public class FUtills {
 
     public static JsonReader r = new JsonReader();
 
+    public static synchronized JsonReader r() {
+        return r;
+    }
+
     public static final int STORE_L_INT = 1;
     public static final int STORE_L_LOC = 2;
     public static final int STORE_L_MAP = 3;
@@ -61,7 +67,7 @@ public class FUtills {
 
     public static class LocalFdrNames {
 
-        public static final String tempF = ".__tempF";
+        public static final String tempF = ".temp";
 
     }
 
@@ -84,16 +90,18 @@ public class FUtills {
      * For MAP assets it DOES NOT RETURN THE FULL PATH
      */
     public static String uriToPath(String u) {
-        int us = uriStoreLocation(u);
-        if (us == STORE_L_MAP) {
-		return AppDO.I.F().getTmpDir().path() + "/" + u.substring(6);
-	  } else if (us == STORE_L_INT) {
-            return u.substring(6);
-        } else if (us == STORE_L_LOC) {
-		return AppDO.I.F().getHomeDir().path() + "/" + u.substring(6);
-	  }
-        return u.substring(6);
+        return uriToPath(uriStoreLocation(u), u.substring(6));
+    }
 
+    public static String uriToPath(int us, String sub) {
+        if (us == STORE_L_MAP) {
+            return AppDO.I.F().getTmpDir().path() + "/" + sub;
+        } else if (us == STORE_L_INT) {
+            return sub;
+        } else if (us == STORE_L_LOC) {
+            return AppDO.I.F().getHomeDir().path() + "/" + sub;
+        }
+        return sub;
     }
 
     public static String uriToSimpleP(String u) {
@@ -126,6 +134,22 @@ public class FUtills {
 
     }
 
+    public static FileHandle uriToFile(String u) {
+        int us = uriStoreLocation(u);
+        return uriToFile(us, u.substring(6));
+    }
+
+    public static FileHandle uriToFile(int us, String u) {
+        if (us == STORE_L_INT) {
+            return Gdx.files.internal(u);
+        } else if (us == STORE_L_MAP) {
+            return Gdx.files.absolute(uriToPath(us, u));
+        } else if (us == STORE_L_LOC) {
+            return Gdx.files.absolute(uriToPath(us, u));
+        }
+        return null;
+    }
+
 
     /**
      * Drawable part
@@ -151,10 +175,12 @@ public class FUtills {
         return patch;
     }
 
-    public static TextureAtlas.AtlasRegion fetchAtlasR(String id) {
+    public static TextureRAccesor getRAC(String uri) {
+        return MainBase.engine.getSystem(TextureRManager.class).get(uri);
+    }
 
-	  return MainBase.engine.getSystem(SimpleAssMgr.class).getRegion(id);
-
+    public static void updateUsage(TextureRAccesor ac, int dlt) {
+        MainBase.engine.getSystem(TextureRManager.class).updateUsage(ac, dlt);
     }
 
 
@@ -192,6 +218,7 @@ public class FUtills {
     public static void registerJSrz(final JsonArtemisSerializer serializer) {
 
         serializer.register(Points.class, new Json.Serializer() {
+
             @Override
             public void write(Json json, Object object, Class knownType) {
                 Points p = (Points) object;
