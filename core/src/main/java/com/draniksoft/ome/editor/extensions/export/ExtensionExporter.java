@@ -17,12 +17,12 @@ public class ExtensionExporter implements Callable<Void> {
     ExportStrategy stg;
 
     FileHandle fileRoot;
-
     ExecutionProvider provider;
 
     public ExtensionExporter(Extension ext, ExportStrategy stg) {
 	  this.ext = ext;
 	  fileRoot = FUtills.uriToFile(ext.dao.URI);
+	  if (!fileRoot.exists()) fileRoot.mkdirs();
     }
 
     @Override

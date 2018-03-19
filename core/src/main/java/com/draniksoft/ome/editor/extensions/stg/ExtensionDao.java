@@ -1,6 +1,7 @@
 package com.draniksoft.ome.editor.extensions.stg;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.draniksoft.ome.editor.extensions.sub.SubExtensionDao;
@@ -17,6 +18,8 @@ public class ExtensionDao {
     }
 
     public ExtensionDaoState state = ExtensionDaoState.AVAILABLE;
+
+    public Array<String> req;
 
     public String ID;
     public String URI;
@@ -71,6 +74,12 @@ public class ExtensionDao {
 
 	  editAllowed = jroot.has("edit") && jroot.getBoolean("edit");
 
+	  req = new Array<String>();
+	  if (jroot.hasChild("req")) {
+		JsonValue reqar = jroot.get("req");
+		req.addAll(reqar.asStringArray());
+	  }
+
     }
 
     /*
@@ -100,6 +109,10 @@ public class ExtensionDao {
 
 	  if (editAllowed)
 		jroot.addChild("edit", JsonUtils.createBoolV(editAllowed));
+
+	  if (req.size > 0) {
+		jroot.addChild("req", JsonUtils.createStringArrV(req));
+	  }
 
         /*
 	  	Tings with smz and stpload are usually not exported

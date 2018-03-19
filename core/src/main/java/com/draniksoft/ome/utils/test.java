@@ -1,8 +1,11 @@
 package com.draniksoft.ome.utils;
 
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
+import com.draniksoft.ome.utils.struct.CompoundIterator;
 import com.draniksoft.ome.utils.struct.MtPair;
 
+import java.util.Iterator;
 import java.util.Scanner;
 
 public class test {
@@ -39,8 +42,25 @@ public class test {
 
     }
 
+    public static void test3() {
+	  Array<Integer> a1 = new Array<Integer>();
+	  Array<Integer> a2 = new Array<Integer>();
+	  Array<Integer> a3 = new Array<Integer>();
+
+
+	  a1.addAll(1, 2);
+	  a2.addAll();
+	  a3.addAll(5, 6);
+
+	  Iterator<Integer> i = new CompoundIterator<Integer>(a1.iterator(), a2.iterator(), a3.iterator());
+	  while (i.hasNext()) {
+		System.out.print(" " + i.next());
+	  }
+
+    }
+
     public static void main(String[] arts) {
-	  test2();
+	  test3();
     }
 
 }

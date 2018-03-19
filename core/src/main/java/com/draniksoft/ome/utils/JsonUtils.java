@@ -1,5 +1,6 @@
 package com.draniksoft.ome.utils;
 
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.draniksoft.ome.utils.lang.BiLangText;
 import com.draniksoft.ome.utils.lang.I18NText;
@@ -35,9 +36,21 @@ public class JsonUtils {
 
     public static JsonValue createStringV(String n, String val) {
 
-        JsonValue v = createStringV(val);
-        v.setName(n);
-        return v;
+	  JsonValue v = createStringV(val);
+	  v.setName(n);
+	  return v;
+
+    }
+
+    public static JsonValue createStringArrV(Array<String> ar) {
+
+	  JsonValue v = new JsonValue(JsonValue.ValueType.array);
+
+	  for (String s : ar) {
+		v.addChild(JsonUtils.createStringV(s));
+	  }
+
+	  return v;
 
     }
 

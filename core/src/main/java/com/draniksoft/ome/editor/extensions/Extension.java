@@ -21,8 +21,11 @@ public class Extension {
 
     public Extension(String ID) {
 	  this.ID = ID;
+	  t = ExtensionType.UNRESOLVED;
 	  map = new ObjectMap<Class, SubExtension>();
     }
+
+    protected World w;
 
     public final String ID;
 
@@ -42,6 +45,7 @@ public class Extension {
     }
 
     public void load(ExecutionProvider provider, ExtensionDao dao, World w) {
+	  this.w = w;
 	  this.dao = dao;
 
 	  Gdx.app.debug(tag, "Loading " + ID);

@@ -2,8 +2,8 @@ package com.draniksoft.ome.utils.struct;
 
 public class Pair<K, V> {
 
-    private final K e0;
-    private final V e1;
+    protected final K e0;
+    protected final V e1;
 
     public static <K, V> Pair<K, V> P(K element0, V element1) {
 	  return new Pair<K, V>(element0, element1);

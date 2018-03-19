@@ -285,7 +285,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     public void load_ext(String id) {
         try {
-            world.getSystem(ExtensionManager.class).loadExtension(id);
+            world.getSystem(ExtensionManager.class).loadExtensions(id);
         } catch (Exception e) {
             Gdx.app.error("CE", "", e);
         }
@@ -300,6 +300,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
         console.log(d.ID + " ~ " + d.name.get());
         console.log(d.state.name());
         console.log(d.daos.toString());
+        console.log(d.req.toString());
     }
 
     public void export_ext() {

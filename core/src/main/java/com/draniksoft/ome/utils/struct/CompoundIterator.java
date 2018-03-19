@@ -16,9 +16,17 @@ public class CompoundIterator<T> implements Iterator<T> {
 	  if (its[p].hasNext()) {
 		return true;
 	  } else {
-		if (p >= its.length) return false;
 		return hasNext(p + 1);
 	  }
+    }
+
+    public T next(int pp) {
+
+	  if (pp >= its.length) return null;
+	  if (!its[pp].hasNext()) return next(pp + 1);
+	  T var = its[pp].next();
+
+	  return var;
     }
 
     @Override
@@ -28,10 +36,7 @@ public class CompoundIterator<T> implements Iterator<T> {
 
     @Override
     public T next() {
-	  if (pos >= its.length) return null;
-	  if (!its[pos].hasNext()) pos++;
-	  T var = its[pos].next();
-	  return var;
+	  return next(pos);
     }
 
     @Override
