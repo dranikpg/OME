@@ -1,6 +1,5 @@
 package com.draniksoft.ome.editor.struct.text_ext_test;
 
-import com.artemis.World;
 import com.badlogic.gdx.Gdx;
 import com.draniksoft.ome.editor.extensions.export.ExtensionExporter;
 import com.draniksoft.ome.editor.extensions.sub.SubExtension;
@@ -17,7 +16,7 @@ public class TheTextSubExt extends SubExtension {
     public TheText t;
 
     @Override
-    public void load(ExecutionProvider p, World w) {
+    public void load(ExecutionProvider p) {
 
 	  Gdx.app.debug(tag, "Loading");
 

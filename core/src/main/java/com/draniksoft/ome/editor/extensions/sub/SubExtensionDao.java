@@ -4,7 +4,7 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.draniksoft.ome.editor.extensions.Extension;
 import com.draniksoft.ome.editor.struct.text_ext_test.TheTextExtDao;
-import com.draniksoft.ome.editor.texmgmnt.ext.AssetSubExtDao;
+import com.draniksoft.ome.editor.texmgmnt.ext.b.AssetSubExtDao;
 
 public abstract class SubExtensionDao {
 

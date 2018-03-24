@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.draniksoft.ome.editor.extensions.export.ExtensionExporter;
 import com.draniksoft.ome.editor.extensions.stg.ExtensionDao;
-import com.draniksoft.ome.editor.extensions.sub.DefaultSubExtension;
+import com.draniksoft.ome.editor.extensions.sub.DefaultSubExtensionFktory;
 import com.draniksoft.ome.editor.extensions.sub.SubExtension;
 import com.draniksoft.ome.editor.extensions.sub.SubExtensionDao;
 import com.draniksoft.ome.editor.extensions.t.ExtensionState;
@@ -63,14 +63,18 @@ public class Extension implements ReferenceTracker {
     	Components
      */
 
+    public boolean hasSub(Class c) {
+	  return map.containsKey(c);
+    }
+
     public <T extends SubExtension> T getSub(Class c) {
 	  SubExtension e = map.get(c);
 	  if (e != null) return (T) e;
 
 	  if (isAdditive()) {
-		if (DefaultSubExtension.MAP.containsKey(c)) {
+		if (DefaultSubExtensionFktory.MAP.containsKey(c)) {
 		    try {
-			  map.put(c, DefaultSubExtension.MAP.get(c).getConstructor().newInstance());
+			  map.put(c, DefaultSubExtensionFktory.MAP.get(c).getConstructor().newInstance());
 			  return getSub(c);
 		    } catch (Exception exc) {
 			  Gdx.app.error(tag, "", exc);
@@ -79,6 +83,10 @@ public class Extension implements ReferenceTracker {
 		}
 	  }
 	  return null;
+    }
+
+    public void inject(Class c, SubExtension e) {
+	  map.put(c, e);
     }
 
     /*
@@ -105,7 +113,7 @@ public class Extension implements ReferenceTracker {
 
 	  for (SubExtension sext : map.values().iterator()) {
 		sext.extension = this;
-		sext.load(provider, w);
+		sext.load(provider);
 	  }
 
     }

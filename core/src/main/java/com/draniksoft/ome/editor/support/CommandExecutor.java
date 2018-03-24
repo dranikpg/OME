@@ -47,7 +47,7 @@ import com.draniksoft.ome.editor.systems.support.InputSys;
 import com.draniksoft.ome.editor.systems.support.flows.EditorSystem;
 import com.draniksoft.ome.editor.systems.support.flows.WorkflowSys;
 import com.draniksoft.ome.editor.texmgmnt.acess.TextureRAccesor;
-import com.draniksoft.ome.editor.texmgmnt.ext.AssetSubExtension;
+import com.draniksoft.ome.editor.texmgmnt.ext.b.AssetSubExtension;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.mgmnt_base.impl.ConfigManager;
 import com.draniksoft.ome.support.configs.ConfigDao;

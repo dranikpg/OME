@@ -2,7 +2,7 @@ package com.draniksoft.ome.editor.texmgmnt.acess;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.draniksoft.ome.editor.texmgmnt.ext.AssetSubExtension;
+import com.draniksoft.ome.editor.texmgmnt.ext.b.AssetSubExtension;
 
 public class TextureRAccesor {
 
@@ -31,11 +31,6 @@ public class TextureRAccesor {
     public TextureRegion acl() {
 	  if (redirect != null) return redirect.acl();
 	  return accelR;
-    }
-
-    public void updateOn(TextureRAccesor ac) {
-	  this.atlasR = ac.atlasR;
-	  this.accelR = ac.accelR;
     }
 
 

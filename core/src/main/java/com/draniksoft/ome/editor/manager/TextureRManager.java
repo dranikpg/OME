@@ -1,8 +1,10 @@
 package com.draniksoft.ome.editor.manager;
 
 import com.artemis.Manager;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.draniksoft.ome.editor.texmgmnt.acess.TextureRAccesor;
-import com.draniksoft.ome.editor.texmgmnt.ext.AssetSubExtension;
+import com.draniksoft.ome.editor.texmgmnt.ext.b.AssetSubExtension;
 import com.draniksoft.ome.utils.SUtils;
 import com.draniksoft.ome.utils.struct.MtPair;
 
@@ -58,15 +60,21 @@ public class TextureRManager extends Manager {
 
     public void redirectTo(TextureRAccesor ac1, TextureRAccesor ac2) {
 	  ac1.redirect = ac2.redirect;
-	  updateReference(ac2, ac1.references);
+	  updateReference(ac2, ac1.references + 1); // one as the first one refers to the second
 	  updateUsage(ac2, ac1.usages);
     }
 
     public void removeRd(TextureRAccesor ac) {
 	  if (ac.redirect == null) return;
 	  updateUsage(ac.redirect, -ac.usages);
-	  updateReference(ac.redirect, -ac.references);
+	  updateReference(ac.redirect, -ac.references - 1); // remove the one from the redirect
 	  ac.redirect = null;
+    }
+
+    public void refreshAC(TextureRAccesor ac, TextureAtlas.AtlasRegion r) {
+	  ac.atlasR = r;
+	  ac.accelR = new TextureRegion(r);
+	  removeRd(ac);
     }
 
 

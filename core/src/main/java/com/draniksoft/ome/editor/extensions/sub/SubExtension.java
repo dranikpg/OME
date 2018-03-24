@@ -1,6 +1,5 @@
 package com.draniksoft.ome.editor.extensions.sub;
 
-import com.artemis.World;
 import com.draniksoft.ome.editor.extensions.Extension;
 import com.draniksoft.ome.editor.extensions.export.ExtensionExporter;
 import com.draniksoft.ome.editor.support.track.ReferenceTracker;
@@ -14,7 +13,7 @@ public abstract class SubExtension implements ReferenceTracker {
     	Loading
      */
 
-    public abstract void load(ExecutionProvider p, World w);
+    public abstract void load(ExecutionProvider p);
 
     /*
     	Exporting

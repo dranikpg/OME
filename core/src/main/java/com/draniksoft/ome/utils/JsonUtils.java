@@ -7,6 +7,9 @@ import com.draniksoft.ome.utils.lang.BiLangText;
 import com.draniksoft.ome.utils.lang.I18NText;
 import com.draniksoft.ome.utils.lang.PlainText;
 import com.draniksoft.ome.utils.lang.Text;
+import com.draniksoft.ome.utils.stringmatch.AllMatcher;
+import com.draniksoft.ome.utils.stringmatch.Matcher;
+import com.draniksoft.ome.utils.stringmatch.StartsWithMatcher;
 
 public class JsonUtils {
 
@@ -117,6 +120,18 @@ public class JsonUtils {
 			  v.getString("ru"));
 	  }
 	  return new PlainText(emptyError ? "*ERROR*" : "");
+    }
+
+    public static Matcher parseMatcher(JsonValue v) {
+	  if (!v.hasChild("type")) return new AllMatcher();
+	  String t = v.getString("type");
+	  if (t.equals("stsw")) {
+		StartsWithMatcher m = new StartsWithMatcher();
+		m.load(v);
+		return m;
+	  } else {
+		return new AllMatcher();
+	  }
     }
 
 }

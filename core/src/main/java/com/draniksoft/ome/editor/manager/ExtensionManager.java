@@ -252,7 +252,7 @@ public class ExtensionManager extends BaseSystem implements LoadSaveManager {
 		    ExtensionDao d = new ExtensionDao();
 		    try {
 			  d.load(FUtills.r().parse(f.child("index.json").read()));
-			  d.URI = FUtills.pathToUri("extensions/" + f.name(), FUtills.STORE_L_INT);
+			  d.URI = FUtills.pathToUri("assets/extensions/" + f.name(), FUtills.STORE_L_INT);
 			  if (d.stpLoad) {
 				toL.add(d.ID);
 			  }
