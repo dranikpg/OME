@@ -3,9 +3,10 @@ package com.draniksoft.ome.editor.extensions.sub;
 import com.artemis.World;
 import com.draniksoft.ome.editor.extensions.Extension;
 import com.draniksoft.ome.editor.extensions.export.ExtensionExporter;
+import com.draniksoft.ome.editor.support.track.ReferenceTracker;
 import com.draniksoft.ome.support.execution_base.ExecutionProvider;
 
-public abstract class SubExtension {
+public abstract class SubExtension implements ReferenceTracker {
 
     public Extension extension;
 
@@ -29,18 +30,29 @@ public abstract class SubExtension {
     	Usage tracking
      */
 
-    int usages = 0;
+    private int references = 0;
 
-    public void increaseUsage() {
-	  usages++;
+    @Override
+    public int references() {
+	  return references;
     }
 
-    public void decreaseUsage() {
-	  usages--;
-    }
+    @Override
+    public int reference(int delta) {
+	  if (delta == 0) return 0;
 
-    public boolean hasUsages() {
-	  return usages > 0;
-    }
+	  int oldref = references;
+	  references += delta;
 
+	  if (oldref == 0 && references > 0) {
+		extension.reference(1);
+		return 1;
+	  }
+	  if (references == 0 && oldref > 0) {
+		extension.reference(-1);
+		return -1;
+	  }
+
+	  return 0;
+    }
 }

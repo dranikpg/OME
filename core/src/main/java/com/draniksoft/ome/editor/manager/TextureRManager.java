@@ -1,7 +1,6 @@
 package com.draniksoft.ome.editor.manager;
 
 import com.artemis.Manager;
-import com.badlogic.gdx.Gdx;
 import com.draniksoft.ome.editor.texmgmnt.acess.TextureRAccesor;
 import com.draniksoft.ome.editor.texmgmnt.ext.AssetSubExtension;
 import com.draniksoft.ome.utils.SUtils;
@@ -34,11 +33,40 @@ public class TextureRManager extends Manager {
 	  return ext.get(tpP.V());
     }
 
+    /*
+    	TextureRAccessor operations
+     */
+
     public void updateUsage(TextureRAccesor ac, int dlt) {
 	  ac.usages += dlt;
-	  if (ac.usages < 0) {
-		Gdx.app.error(tag, "NEGATIVE USAGE AMOUNT " + ac.toString());
+	  if (ac.redirect != null) updateUsage(ac.redirect, dlt);
+    }
+
+    public void updateReference(TextureRAccesor ac, int dlt) {
+	  if (dlt == 0) return;
+	  int odl = ac.references;
+	  ac.references += dlt;
+
+	  if (odl == 0 && ac.references > 0) {
+		ac.ext.reference(1);
+	  } else if (ac.references == 0 && odl > 0) {
+		ac.ext.reference(-1);
 	  }
+
+	  if (ac.redirect != null) updateReference(ac.redirect, dlt);
+    }
+
+    public void redirectTo(TextureRAccesor ac1, TextureRAccesor ac2) {
+	  ac1.redirect = ac2.redirect;
+	  updateReference(ac2, ac1.references);
+	  updateUsage(ac2, ac1.usages);
+    }
+
+    public void removeRd(TextureRAccesor ac) {
+	  if (ac.redirect == null) return;
+	  updateUsage(ac.redirect, -ac.usages);
+	  updateReference(ac.redirect, -ac.references);
+	  ac.redirect = null;
     }
 
 

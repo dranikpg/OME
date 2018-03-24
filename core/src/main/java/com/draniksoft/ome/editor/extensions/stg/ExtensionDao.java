@@ -1,7 +1,6 @@
 package com.draniksoft.ome.editor.extensions.stg;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.draniksoft.ome.editor.extensions.sub.SubExtensionDao;
@@ -19,7 +18,7 @@ public class ExtensionDao {
 
     public ExtensionDaoState state = ExtensionDaoState.AVAILABLE;
 
-    public Array<String> req;
+    public ObjectSet<String> req;
 
     public String ID;
     public String URI;
@@ -38,17 +37,10 @@ public class ExtensionDao {
 
     public ObjectSet<SubExtensionDao> daos;
 
-    public void applicated() {
-	  state = ExtensionDaoState.APPLICATED;
-    }
-
-    public void unloaded() {
-	  state = ExtensionDaoState.AVAILABLE;
-    }
-
     /*
     	Load
      */
+
     public void load(JsonValue jroot) throws Exception {
 
 	  parseEssentials(jroot);
@@ -61,10 +53,13 @@ public class ExtensionDao {
 		    daos.add(d);
 		}
 	  }
+
     }
 
     public void parseEssentials(JsonValue jroot) {
 	  ID = jroot.getString("id");
+
+	  ID.intern();
 
 	  name = JsonUtils.parseText(jroot.get("name"));
 	  desc = JsonUtils.parseText(jroot.get("desc"), false);
@@ -74,7 +69,7 @@ public class ExtensionDao {
 
 	  editAllowed = jroot.has("edit") && jroot.getBoolean("edit");
 
-	  req = new Array<String>();
+	  req = new ObjectSet<String>();
 	  if (jroot.hasChild("req")) {
 		JsonValue reqar = jroot.get("req");
 		req.addAll(reqar.asStringArray());
@@ -88,11 +83,11 @@ public class ExtensionDao {
 
     public void save(JsonValue jroot) {
 
-	  writeEssentials(jroot);
-
 	  for (SubExtensionDao d : daos) {
 		d.export(jroot);
 	  }
+
+	  writeEssentials(jroot);
 
     }
 

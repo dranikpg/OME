@@ -43,18 +43,12 @@ public class ObjRSys extends IteratingSystem {
 
     @Override
     protected void process(int e) {
-
         ttc = posM.get(e);
         tdc = drwM.get(e);
-
         if (tdc.d == null) return;
-
         if (cam.frustum.boundsInFrustum(ttc.x, ttc.y, 0, ttc.w, ttc.h, 0)) {
-
             tdc.d.draw(b, ttc.x, ttc.y, ttc.w, ttc.h);
-
         }
-
     }
 
     @Override

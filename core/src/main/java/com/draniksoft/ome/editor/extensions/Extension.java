@@ -7,45 +7,89 @@ import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.draniksoft.ome.editor.extensions.export.ExtensionExporter;
 import com.draniksoft.ome.editor.extensions.stg.ExtensionDao;
+import com.draniksoft.ome.editor.extensions.sub.DefaultSubExtension;
 import com.draniksoft.ome.editor.extensions.sub.SubExtension;
 import com.draniksoft.ome.editor.extensions.sub.SubExtensionDao;
 import com.draniksoft.ome.editor.extensions.t.ExtensionState;
 import com.draniksoft.ome.editor.extensions.t.ExtensionType;
 import com.draniksoft.ome.editor.extensions.t.ReducedExtensionType;
+import com.draniksoft.ome.editor.support.track.ReferenceTracker;
 import com.draniksoft.ome.support.execution_base.ExecutionProvider;
 import com.draniksoft.ome.utils.FUtills;
 
-public class Extension {
+public class Extension implements ReferenceTracker {
 
     private static final String tag = "Extension";
 
-    public Extension(String ID) {
+    public Extension(String ID, ExtensionType t, ExtensionState s) {
 	  this.ID = ID;
-	  t = ExtensionType.UNRESOLVED;
+	  this.t = t;
+	  this.s = s;
 	  map = new ObjectMap<Class, SubExtension>();
     }
 
-    protected World w;
+    public Extension(String ID) {
+	  this(ID, ExtensionType.UNRESOLVED, ExtensionState.WORKING);
+    }
 
+    /*
+		  References
+	   */
+
+    public World w;
+
+    /*
+
+    */
     public final String ID;
+    public ExtensionDao dao;
+
+    /*
+    	States
+     */
 
     public ExtensionType t;
     public ExtensionState s = ExtensionState.NONE;
 
-    public ExtensionDao dao;
+    /*
+    	Other
+     */
 
     public ObjectMap<Class, SubExtension> map;
+    int references = 0;
+
 
     /*
-    	Basic load
+    	Components
+     */
+
+    public <T extends SubExtension> T getSub(Class c) {
+	  SubExtension e = map.get(c);
+	  if (e != null) return (T) e;
+
+	  if (isAdditive()) {
+		if (DefaultSubExtension.MAP.containsKey(c)) {
+		    try {
+			  map.put(c, DefaultSubExtension.MAP.get(c).getConstructor().newInstance());
+			  return getSub(c);
+		    } catch (Exception exc) {
+			  Gdx.app.error(tag, "", exc);
+			  return null;
+		    }
+		}
+	  }
+	  return null;
+    }
+
+    /*
+    	Basic load & unload
      */
 
     public boolean loadable() {
 	  return s == ExtensionState.NONE || t == ExtensionType.UNRESOLVED;
     }
 
-    public void load(ExecutionProvider provider, ExtensionDao dao, World w) {
-	  this.w = w;
+    public void load(ExecutionProvider provider, ExtensionDao dao) {
 	  this.dao = dao;
 
 	  Gdx.app.debug(tag, "Loading " + ID);
@@ -71,10 +115,6 @@ public class Extension {
 	  Gdx.app.debug(tag, "Loaded " + ID);
     }
 
-    public void unload(ExecutionProvider p) {
-
-    }
-
     public void save(ExtensionExporter exp) {
 
 	  Gdx.app.debug(tag, "Saving extension " + ID);
@@ -92,27 +132,29 @@ public class Extension {
     }
 
     /*
-    	Basic other types
+    	reference
      */
 
-    public void asUnresolved() {
-	  t = ExtensionType.UNRESOLVED;
-	  s = ExtensionState.WORKING;
+
+    @Override
+    public int references() {
+	  return references;
     }
 
-    public void asVirtual() {
-	  t = ExtensionType.VIRTUAL;
-	  s = ExtensionState.WORKING;
+    @Override
+    public int reference(int delta) {
+	  references += delta;
+	  return 0;
     }
 
     /*
-    	Ut
+    	Helper
      */
 
-    public <T extends SubExtension> T getSub(Class<T> c) {
-	  return (T) map.get(c);
+    //
+    public boolean isAdditive() {
+	  return t == ExtensionType.UNRESOLVED || s == ExtensionState.LOADING;
     }
-
 
 
 

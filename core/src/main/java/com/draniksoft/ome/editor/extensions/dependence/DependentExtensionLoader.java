@@ -6,6 +6,8 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.draniksoft.ome.editor.extensions.Extension;
 import com.draniksoft.ome.editor.extensions.stg.ExtensionDao;
+import com.draniksoft.ome.editor.extensions.t.ExtensionState;
+import com.draniksoft.ome.editor.extensions.t.ExtensionType;
 import com.draniksoft.ome.editor.manager.ExtensionManager;
 import com.draniksoft.ome.support.execution_base.ExecutionProvider;
 import com.draniksoft.ome.support.execution_base.ut.StepLoader;
@@ -80,11 +82,17 @@ public class DependentExtensionLoader implements Callable<Object> {
     private void inspectReq(String req) {
 	  if (map.containsKey(req)) return;
 	  if (mgr.hasExtension(req)) return;
+
 	  ExtensionDao d = mgr.findDao(req);
-	  mgr.createExtension(req);
 	  added.add(req);
 	  map.put(req, new DaoNode(d));
-	  if (d == null) return;
+
+	  if (d == null) {
+		mgr.createExtension(req, ExtensionType.UNRESOLVED, ExtensionState.WORKING);
+		return;
+	  } else {
+		mgr.createExtension(req, d.t.getT(), ExtensionState.LOADING);
+	  }
 
 	  for (String s : d.req) {
 		inspectReq(s);
