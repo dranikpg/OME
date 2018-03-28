@@ -2,10 +2,10 @@ package com.draniksoft.ome.support.pipemsg;
 
 /*
 	UP-DOWN tree messaging system for ui, resources, resource managers and co
-	Replaces customized methods.
+	Replaces customized method invocation chains.
  */
 public interface MsgNode {
 
-    void msg(byte msg, byte dir, short[] data);
+    void msg(short msg, byte dir, Object data);
 
 }

@@ -9,7 +9,7 @@ import com.draniksoft.ome.support.execution_base.ExecutionProvider;
 import com.draniksoft.ome.support.execution_base.assetcls.DividedAssetCollector;
 import com.draniksoft.ome.support.execution_base.sync.SimpleSyncTask;
 import com.draniksoft.ome.support.execution_base.sync.SyncTask;
-import com.draniksoft.ome.utils.GUtils;
+import com.draniksoft.ome.utils.FM;
 import com.draniksoft.ome.utils.struct.ResponseListener;
 
 import java.util.Iterator;
@@ -46,7 +46,7 @@ public class ExecutionSystem extends BaseSystem implements ExecutionProvider {
     protected void processSystem() {
 	  tasks.begin();
 	  for (SyncTask t : tasks) {
-		if ((GUtils.FRAME - t.getPhase()) % t.getFQ() == 0) {
+		if ((FM.FRAME - t.getPhase()) % t.getFQ() == 0) {
 		    if (t.active()) t.run();
 		    else tasks.removeValue(t, true);
 		}

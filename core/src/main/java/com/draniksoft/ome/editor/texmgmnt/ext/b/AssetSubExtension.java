@@ -1,8 +1,10 @@
 package com.draniksoft.ome.editor.texmgmnt.ext.b;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.draniksoft.ome.editor.extensions.sub.SubExtension;
+import com.draniksoft.ome.editor.manager.TextureRManager;
 import com.draniksoft.ome.editor.texmgmnt.acess.TextureRAccesor;
 
 import java.util.Iterator;
@@ -39,6 +41,32 @@ public abstract class AssetSubExtension extends SubExtension {
             Gdx.app.debug(tag, "Picked up unresolved stuff");
         }
         prev = null;
+    }
+
+    protected void indexFromAtlas(TextureAtlas atlas) {
+
+	  TextureRManager texm = extension.w.getSystem(TextureRManager.class);
+
+	  for (TextureAtlas.AtlasRegion r : atlas.getRegions()) {
+		String id = "";
+
+		if (r.index == -1) {
+		    id = r.name;
+		} else {
+		    id = r.name + "@" + r.index;
+
+		}
+		if (map.containsKey(id)) {
+		    texm.refreshAC(map.get(id), r);
+		} else {
+		    TextureRAccesor a = new TextureRAccesor(r);
+		    a.resolved = true;
+		    a.ext = this;
+		    map.put(id, a);
+		}
+
+	  }
+
     }
 
 }

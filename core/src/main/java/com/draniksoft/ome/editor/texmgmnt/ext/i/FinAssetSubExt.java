@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.draniksoft.ome.editor.extensions.export.ExtensionExporter;
-import com.draniksoft.ome.editor.manager.TextureRManager;
 import com.draniksoft.ome.editor.texmgmnt.acess.TextureRAccesor;
 import com.draniksoft.ome.editor.texmgmnt.ext.b.AssetSubExtension;
 import com.draniksoft.ome.support.execution_base.ExecutionProvider;
@@ -73,25 +72,7 @@ public class FinAssetSubExt extends AssetSubExtension {
 
 		    indexPrev();
 
-		    TextureRManager texm = extension.w.getSystem(TextureRManager.class);
-
-		    for (TextureAtlas.AtlasRegion r : atlas.getRegions()) {
-			  String id = "";
-
-			  if (r.index == -1) {
-				id = r.name;
-			  } else {
-				id = r.name + "@" + r.index;
-
-			  }
-			  if (map.containsKey(id)) {
-				texm.refreshAC(map.get(id), r);
-			  } else {
-				TextureRAccesor a = new TextureRAccesor(r);
-				map.put(id, a);
-			  }
-
-		    }
+		    indexFromAtlas(atlas);
 
 		    Gdx.app.debug(tag, "Fetched " + map.size + " texAC");
 

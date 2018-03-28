@@ -3,7 +3,7 @@ package com.draniksoft.ome.editor.ui.proj;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.draniksoft.ome.editor.manager.ResourceManager;
-import com.draniksoft.ome.editor.res.res_mgmnt_base.types.ResTypes;
+import com.draniksoft.ome.editor.res.impl.types.ResTypes;
 import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.projectVals.ProjectValEvent;
 import com.draniksoft.ome.support.ui.viewsys.BaseWinView;

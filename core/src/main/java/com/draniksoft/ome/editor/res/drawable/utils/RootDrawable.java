@@ -2,9 +2,9 @@ package com.draniksoft.ome.editor.res.drawable.utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.draniksoft.ome.editor.res.res_mgmnt_base.constructor.ResConstructor;
-import com.draniksoft.ome.editor.res.res_mgmnt_base.res_ifaces.Resource;
-import com.draniksoft.ome.editor.res.res_mgmnt_base.res_ifaces.RootResource;
+import com.draniksoft.ome.editor.res.impl.constructor.ResConstructor;
+import com.draniksoft.ome.editor.res.impl.res_ifaces.Resource;
+import com.draniksoft.ome.editor.res.impl.res_ifaces.RootResource;
 import com.draniksoft.ome.support.pipemsg.MsgBaseCodes;
 import com.draniksoft.ome.support.pipemsg.MsgDirection;
 import com.draniksoft.ome.utils.FUtills;

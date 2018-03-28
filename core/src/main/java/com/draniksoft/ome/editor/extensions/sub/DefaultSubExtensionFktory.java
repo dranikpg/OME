@@ -9,6 +9,9 @@ public class DefaultSubExtensionFktory {
     /*
     	If component is unresolved and extension is additive -> use following
      */
+
+    // tag:STATIC_MAP
+
     public static ObjectMap<Class, Class<? extends SubExtension>> MAP;
 
     static {

@@ -3,7 +3,6 @@ package com.draniksoft.ome.utils;
 
 import com.artemis.World;
 import com.artemis.io.JsonArtemisSerializer;
-import com.artemis.io.KryoArtemisSerializer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
@@ -11,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
@@ -19,17 +17,13 @@ import com.draniksoft.ome.editor.manager.TextureRManager;
 import com.draniksoft.ome.editor.res.drawable.simple.EmptyDrawable;
 import com.draniksoft.ome.editor.res.drawable.simple.SimpleDrawable;
 import com.draniksoft.ome.editor.res.drawable.utils.Drawable;
-import com.draniksoft.ome.editor.res.res_mgmnt_base.constructor.ResConstructor;
+import com.draniksoft.ome.editor.res.impl.constructor.ResConstructor;
 import com.draniksoft.ome.editor.texmgmnt.acess.TextureRAccesor;
 import com.draniksoft.ome.main_menu.MainBase;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.support.pipemsg.MsgBaseCodes;
 import com.draniksoft.ome.support.pipemsg.MsgDirection;
 import com.draniksoft.ome.utils.struct.Points;
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.Serializer;
-import com.esotericsoftware.kryo.io.Input;
-import com.esotericsoftware.kryo.io.Output;
 
 import java.io.File;
 
@@ -247,75 +241,6 @@ public class FUtills {
             }
         });
 
-    }
-
-
-    public static void registerBSrz(KryoArtemisSerializer serializer) {
-
-        serializer.register(Array.class, new Serializer<Array>() {
-            {
-                setAcceptsNull(true);
-            }
-
-            private Class genericType;
-
-            public void setGenerics(Kryo kryo, Class[] generics) {
-                if (kryo.isFinal(generics[0])) genericType = generics[0];
-            }
-
-            public void write(Kryo kryo, Output output, Array array) {
-                int length = array.size;
-                output.writeInt(length, true);
-                if (length == 0) {
-                    genericType = null;
-                    return;
-                }
-                if (genericType != null) {
-                    Serializer serializer = kryo.getSerializer(genericType);
-                    genericType = null;
-                    for (Object element : array)
-                        kryo.writeObjectOrNull(output, element, serializer);
-                } else {
-                    for (Object element : array)
-                        kryo.writeClassAndObject(output, element);
-                }
-            }
-
-            public Array read(Kryo kryo, Input input, Class<Array> type) {
-                Array array = new Array();
-                kryo.reference(array);
-                int length = input.readInt(true);
-                array.ensureCapacity(length);
-                if (genericType != null) {
-                    Class elementClass = genericType;
-                    Serializer serializer = kryo.getSerializer(genericType);
-                    genericType = null;
-                    for (int i = 0; i < length; i++)
-                        array.add(kryo.readObjectOrNull(input, elementClass, serializer));
-                } else {
-                    for (int i = 0; i < length; i++)
-                        array.add(kryo.readClassAndObject(input));
-                }
-                return array;
-            }
-        });
-
-        serializer.register(Vector2.class, new Serializer() {
-            @Override
-            public void write(Kryo kryo, Output output, Object object) {
-                Vector2 v = (Vector2) object;
-                output.writeFloat(v.x);
-                output.writeFloat(v.y);
-            }
-
-            @Override
-            public Object read(Kryo kryo, Input input, Class type) {
-                Vector2 inst = new Vector2();
-                inst.x = input.readFloat();
-                inst.y = input.readFloat();
-                return inst;
-            }
-        });
     }
 
 

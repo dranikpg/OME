@@ -9,13 +9,13 @@ import com.badlogic.gdx.utils.IntMap;
 import com.draniksoft.ome.editor.load.LoadSaveManager;
 import com.draniksoft.ome.editor.load.ProjectLoader;
 import com.draniksoft.ome.editor.load.ProjectSaver;
+import com.draniksoft.ome.editor.res.impl.constructor.ResConstructor;
+import com.draniksoft.ome.editor.res.impl.res_ifaces.LinkedResource;
+import com.draniksoft.ome.editor.res.impl.res_ifaces.Resource;
+import com.draniksoft.ome.editor.res.impl.types.ResTypes;
 import com.draniksoft.ome.editor.res.pv_res_wrapper.BasePVResWrapper;
 import com.draniksoft.ome.editor.res.pv_res_wrapper.PVResWrapper;
 import com.draniksoft.ome.editor.res.pv_res_wrapper.UserPVResWrapper;
-import com.draniksoft.ome.editor.res.res_mgmnt_base.constructor.ResConstructor;
-import com.draniksoft.ome.editor.res.res_mgmnt_base.res_ifaces.LinkedResource;
-import com.draniksoft.ome.editor.res.res_mgmnt_base.res_ifaces.Resource;
-import com.draniksoft.ome.editor.res.res_mgmnt_base.types.ResTypes;
 import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.projectVals.ProjectValEvent;
 

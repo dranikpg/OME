@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.draniksoft.ome.editor.extensions.export.ExtensionExporter;
-import com.draniksoft.ome.editor.manager.TextureRManager;
 import com.draniksoft.ome.editor.texmgmnt.acess.TextureRAccesor;
 import com.draniksoft.ome.editor.texmgmnt.ext.b.AssetSubExtension;
 import com.draniksoft.ome.support.execution_base.ExecutionProvider;
@@ -96,6 +95,8 @@ public class PixmapAssetSubExt extends AssetSubExtension {
 	  if (processing) return;
 
 	  if (pendingUnload.size == 0 && pendingLoad.size == 0) return;
+
+	  Gdx.app.debug(tag, "Re-packing");
 
 	  ProcessData data = new ProcessData();
 	  data.provider = provider;
@@ -207,25 +208,7 @@ public class PixmapAssetSubExt extends AssetSubExtension {
 	  @Override
 	  public Void call() throws Exception {
 
-		TextureRManager texm = extension.w.getSystem(TextureRManager.class);
-
-		for (TextureAtlas.AtlasRegion r : atlas.getRegions()) {
-		    String id = "";
-
-		    if (r.index == -1) {
-			  id = r.name;
-		    } else {
-			  id = r.name + "@" + r.index;
-
-		    }
-		    if (map.containsKey(id)) {
-			  texm.refreshAC(map.get(id), r);
-		    } else {
-			  TextureRAccesor a = new TextureRAccesor(r);
-			  map.put(id, a);
-		    }
-
-		}
+		indexFromAtlas(atlas);
 
 		data.provider.addShd(new Disposer(data));
 

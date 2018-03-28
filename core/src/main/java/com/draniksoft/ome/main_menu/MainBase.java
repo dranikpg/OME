@@ -8,6 +8,7 @@ import com.draniksoft.ome.editor.base_gfx.screen_base.EditorScreen;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.mgmnt_base.base.AppDataManager;
 import com.draniksoft.ome.support.load.IntelligentLoader;
+import com.draniksoft.ome.utils.FM;
 import com.draniksoft.ome.utils.GUtils;
 import com.draniksoft.ome.utils.struct.ResponseListener;
 
@@ -76,8 +77,8 @@ public class MainBase extends Game {
 
     @Override
     public void render() {
-        GUtils.frame();
-        super.render();
+	  FM.frame();
+	  super.render();
     }
 
     @Override

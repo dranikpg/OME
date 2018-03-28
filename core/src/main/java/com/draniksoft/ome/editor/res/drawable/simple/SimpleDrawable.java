@@ -40,4 +40,9 @@ public class SimpleDrawable extends Drawable {
     protected void _updateUsage(short sum, short delta) {
 	  if (r != null) FUtills.updateUsage(r, delta);
     }
+
+    @Override
+    public void msg(short msg, byte dir, Object data) {
+
+    }
 }

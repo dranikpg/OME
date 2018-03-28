@@ -3,7 +3,7 @@ package com.draniksoft.ome.editor.res.drawable.group;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Array;
 import com.draniksoft.ome.editor.res.drawable.utils.Drawable;
-import com.draniksoft.ome.editor.res.res_mgmnt_base.res_ifaces.GroupResource;
+import com.draniksoft.ome.editor.res.impl.res_ifaces.GroupResource;
 
 public class StackDrawable extends GroupDrawable implements GroupResource<Drawable> {
 

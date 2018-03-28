@@ -35,6 +35,9 @@ dependencies {
 
     compile "com.github.czyzby:gdx-lml-vis:$lmlVersion"
 
+    compile "com.cyphercove.gdx:flexbatch:1.1.1"
+    compile "com.cyphercove.gdx:gdxtokryo:1.1.1"
+
 }
 buildscript {
     ext.kotlin_version = '1.2.0'

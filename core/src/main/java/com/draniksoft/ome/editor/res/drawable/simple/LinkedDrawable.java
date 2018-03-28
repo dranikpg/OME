@@ -2,8 +2,8 @@ package com.draniksoft.ome.editor.res.drawable.simple;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.draniksoft.ome.editor.res.drawable.utils.Drawable;
-import com.draniksoft.ome.editor.res.res_mgmnt_base.res_ifaces.LinkedResource;
-import com.draniksoft.ome.editor.res.res_mgmnt_base.res_ifaces.RootResource;
+import com.draniksoft.ome.editor.res.impl.res_ifaces.LinkedResource;
+import com.draniksoft.ome.editor.res.impl.res_ifaces.RootResource;
 
 public class LinkedDrawable extends Drawable implements LinkedResource<Drawable> {
 
@@ -15,11 +15,6 @@ public class LinkedDrawable extends Drawable implements LinkedResource<Drawable>
 	  if (link != null) link.draw(b, x, y, w, h);
     }
 
-
-    @Override
-    public Drawable copy() {
-	  return null;
-    }
 
     @Override
     public int id() {
@@ -35,5 +30,10 @@ public class LinkedDrawable extends Drawable implements LinkedResource<Drawable>
     public void ifor(RootResource<Drawable> rt, int id) {
 	  link = rt.self();
 	  this.id = id;
+    }
+
+    @Override
+    public void msg(short msg, byte dir, Object data) {
+
     }
 }

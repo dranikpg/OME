@@ -15,6 +15,8 @@ public class TextureRAccesor {
 
     public TextureRAccesor redirect;
 
+    public boolean resolved = false;
+
     public int usages = 0;
     public int references = 0;
 

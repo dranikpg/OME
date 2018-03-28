@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Array;
 import com.draniksoft.ome.editor.res.drawable.simple.EmptyDrawable;
 import com.draniksoft.ome.editor.res.drawable.utils.Drawable;
-import com.draniksoft.ome.utils.GUtils;
+import com.draniksoft.ome.utils.FM;
 
 public class AnimatedDrawable extends GroupDrawable {
 
@@ -29,9 +29,9 @@ public class AnimatedDrawable extends GroupDrawable {
 
     @Override
     public void draw(Batch b, float x, float y, float w, float h) {
-	  if (lf != GUtils.FRAME) {
+	  if (lf != FM.FRAME) {
 		d += Gdx.graphics.getRawDeltaTime();
-		lf = GUtils.FRAME;
+		lf = FM.FRAME;
 	  }
 	  a.getKeyFrame(d).draw(b, x, y, w, h);
     }

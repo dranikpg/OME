@@ -8,6 +8,8 @@ import com.draniksoft.ome.editor.texmgmnt.ext.b.AssetSubExtDao;
 
 public abstract class SubExtensionDao {
 
+    // tag:STATIC_MAP
+
     public static ObjectMap<String, Class<? extends SubExtensionDao>> MAP = new ObjectMap<String, Class<? extends SubExtensionDao>>();
 
     static {

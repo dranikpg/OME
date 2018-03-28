@@ -3,9 +3,9 @@ package com.draniksoft.ome.editor.res.drawable.constr;
 import com.draniksoft.ome.editor.res.drawable.simple.LinkedDrawable;
 import com.draniksoft.ome.editor.res.drawable.simple.SimpleDrawable;
 import com.draniksoft.ome.editor.res.drawable.utils.Drawable;
-import com.draniksoft.ome.editor.res.res_mgmnt_base.constructor.LeafConstructor;
-import com.draniksoft.ome.editor.res.res_mgmnt_base.constructor.ResConstructor;
-import com.draniksoft.ome.editor.res.res_mgmnt_base.types.ResSubT;
+import com.draniksoft.ome.editor.res.impl.constructor.LeafConstructor;
+import com.draniksoft.ome.editor.res.impl.constructor.ResConstructor;
+import com.draniksoft.ome.editor.res.impl.types.ResSubT;
 import com.draniksoft.ome.editor.texmgmnt.acess.TextureRAccesor;
 import com.draniksoft.ome.utils.FUtills;
 
@@ -72,15 +72,15 @@ public class DrawableLeafContructor extends LeafConstructor<Drawable> {
     }
 
     @Override
-    protected void extendData() {
-	  super.extendData();
+    protected void stgMode() {
+	  super.stgMode();
 	  updateType();
 	  updateSources();
     }
 
 
     @Override
-    protected void shrinkData() {
-	  super.shrinkData();
+    protected void liveMode() {
+	  super.liveMode();
     }
 }

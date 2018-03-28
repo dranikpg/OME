@@ -6,7 +6,7 @@ import com.draniksoft.ome.support.execution_base.ExecutionProvider;
 import com.draniksoft.ome.support.execution_base.assetcls.AssetGroupCollectionHelper;
 import com.draniksoft.ome.support.execution_base.assetcls.DividedAssetCollector;
 import com.draniksoft.ome.support.execution_base.sync.SyncTask;
-import com.draniksoft.ome.utils.GUtils;
+import com.draniksoft.ome.utils.FM;
 import com.draniksoft.ome.utils.struct.ResponseListener;
 
 import java.util.concurrent.Callable;
@@ -40,7 +40,7 @@ public class EngineLoadExecService implements ExecutionProvider {
     public void update() {
 	  taskAr.begin();
 	  for (SyncTask t : taskAr) {
-		if ((GUtils.FRAME - t.getPhase()) % t.getFQ() == 0) {
+		if ((FM.FRAME - t.getPhase()) % t.getFQ() == 0) {
 		    if (t.active()) t.run();
 		    else taskAr.removeValue(t, true);
 		}

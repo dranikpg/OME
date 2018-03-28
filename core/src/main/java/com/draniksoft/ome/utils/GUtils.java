@@ -27,24 +27,6 @@ import java.nio.IntBuffer;
 
 public class GUtils {
 
-    public static int FRAME = 0;
-    public static int LAST_FRAME = -1;
-    public static int FRAME_LIMIT = (int) 1e9;
-
-    /*
-        # fired by Main
-     */
-    public static void frame() {
-        //LAST_FRAME = FRAME;
-        FRAME++;
-
-	  /* Frame overflow ?? probably not
-	  if (FRAME > FRAME_LIMIT) {
-		FRAME = 0;
-	  }
-	  */
-    }
-
     public static int MAX_TEX_SIZE = 16000;
 
     public static ShapeRenderer sr;
@@ -142,6 +124,10 @@ public class GUtils {
 
         data[0] = dst;
         data[1] = a;
+
+    }
+
+    private static void tmp() {
 
     }
 

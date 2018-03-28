@@ -8,13 +8,13 @@ import com.artemis.io.SaveFileFormat;
 import com.artemis.managers.WorldSerializationManager;
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.Gdx;
+import com.cyphercove.gdx.gdxtokryo.GdxToKryo;
 import com.draniksoft.ome.editor.components.path.PathDescC;
 import com.draniksoft.ome.editor.components.srz.MapDimensC;
 import com.draniksoft.ome.editor.load.LoadSaveManager;
 import com.draniksoft.ome.editor.load.ProjectLoader;
 import com.draniksoft.ome.editor.load.ProjectSaver;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
-import com.draniksoft.ome.utils.FUtills;
 import com.esotericsoftware.kryo.io.ByteBufferInput;
 import com.esotericsoftware.kryo.io.ByteBufferOutput;
 import com.esotericsoftware.kryo.io.Input;
@@ -40,7 +40,8 @@ public class SerializationManager extends Manager implements LoadSaveManager {
 
 	  //kryoBackend.getKryo().setAutoReset(true);
 
-	  FUtills.registerBSrz(kryoBackend);
+	  GdxToKryo.registerAll(kryoBackend.getKryo());
+
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.draniksoft.ome.ui_addons.resource_ui;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.draniksoft.ome.editor.res.res_mgmnt_base.constructor.ResConstructor;
+import com.draniksoft.ome.editor.res.impl.constructor.ResConstructor;
 import com.kotcrab.vis.ui.widget.VisTree;
 
 public class ResTreeNode<TYPE> extends VisTree.Node {

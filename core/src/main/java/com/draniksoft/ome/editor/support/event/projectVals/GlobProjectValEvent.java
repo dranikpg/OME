@@ -1,6 +1,6 @@
 package com.draniksoft.ome.editor.support.event.projectVals;
 
-import com.draniksoft.ome.editor.res.res_mgmnt_base.types.ResTypes;
+import com.draniksoft.ome.editor.res.impl.types.ResTypes;
 
 public class GlobProjectValEvent {
 

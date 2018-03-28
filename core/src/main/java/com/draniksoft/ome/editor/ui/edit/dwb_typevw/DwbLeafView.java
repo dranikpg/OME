@@ -3,7 +3,7 @@ package com.draniksoft.ome.editor.ui.edit.dwb_typevw;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.draniksoft.ome.editor.res.drawable.constr.DrawableLeafContructor;
 import com.draniksoft.ome.editor.res.drawable.utils.Drawable;
-import com.draniksoft.ome.editor.res.res_mgmnt_base.constructor.ResConstructor;
+import com.draniksoft.ome.editor.res.impl.constructor.ResConstructor;
 import com.draniksoft.ome.editor.ui.edit.EditDwbView;
 import com.draniksoft.ome.editor.ui.proj.AssetListView;
 import com.draniksoft.ome.support.ui.viewsys.BaseView;

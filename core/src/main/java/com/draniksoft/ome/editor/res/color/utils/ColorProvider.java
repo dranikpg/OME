@@ -1,7 +1,7 @@
 package com.draniksoft.ome.editor.res.color.utils;
 
 import com.badlogic.gdx.graphics.Color;
-import com.draniksoft.ome.editor.res.res_mgmnt_base.res_ifaces.Resource;
+import com.draniksoft.ome.editor.res.impl.res_ifaces.Resource;
 
 public abstract class ColorProvider implements Resource<ColorProvider> {
 
