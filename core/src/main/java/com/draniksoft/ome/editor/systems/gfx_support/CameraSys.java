@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.draniksoft.ome.utils.GU;
 import com.draniksoft.ome.utils.cam.Target;
 
 public class CameraSys extends BaseSystem implements InputProcessor {
@@ -45,6 +46,8 @@ public class CameraSys extends BaseSystem implements InputProcessor {
     protected void processSystem() {
 
 	  camera.update();
+
+	  GU.CAM_SCALE = camera.zoom;
 
 	  if (t != null) {
 		lerpToTarget();

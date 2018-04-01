@@ -6,16 +6,14 @@ import com.artemis.io.JsonArtemisSerializer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
-import com.draniksoft.ome.editor.manager.TextureRManager;
+import com.draniksoft.ome.editor.manager.uslac.TextureRManager;
 import com.draniksoft.ome.editor.res.drawable.simple.EmptyDrawable;
-import com.draniksoft.ome.editor.res.drawable.simple.SimpleDrawable;
 import com.draniksoft.ome.editor.res.drawable.utils.Drawable;
 import com.draniksoft.ome.editor.res.impl.constructor.ResConstructor;
 import com.draniksoft.ome.editor.texmgmnt.acess.TextureRAccesor;
@@ -26,8 +24,6 @@ import com.draniksoft.ome.support.pipemsg.MsgDirection;
 import com.draniksoft.ome.utils.struct.Points;
 
 import java.io.File;
-
-import static com.draniksoft.ome.utils.FUtills.DrawablePrefix.P_SIMPLE_DW;
 
 /**
  * File utils class
@@ -154,20 +150,6 @@ public class FUtills {
 	  public static final String P_SIMPLE_DW = "S:";
     }
 
-    private static NinePatch fetchNinePatch(TextureAtlas.AtlasRegion region) {
-        NinePatch patch = null;
-        if (region instanceof TextureAtlas.AtlasRegion) {
-            int[] splits = region.splits;
-            if (splits != null) {
-                patch = new NinePatch(region, splits[0], splits[1], splits[2], splits[3]);
-                int[] pads = region.pads;
-                if (pads != null) patch.setPadding(pads[0], pads[1], pads[2], pads[3]);
-            }
-        }
-        if (patch == null) patch = new NinePatch(region);
-
-        return patch;
-    }
 
     public static TextureRAccesor getRAC(String uri) {
         return MainBase.engine.getSystem(TextureRManager.class).get(uri);
@@ -180,11 +162,7 @@ public class FUtills {
 
 
     public static Drawable fetchDrawable(String data) {
-        if (data.startsWith(DrawablePrefix.P_EMPTY)) {
-            return new EmptyDrawable();
-        } else if (data.startsWith(P_SIMPLE_DW)) {
-            return SimpleDrawable.parse(data.substring(2));
-        }
+
         return null;
     }
 
@@ -270,7 +248,7 @@ public class FUtills {
         Drawable d;
 
         if (c == null) d = new EmptyDrawable();
-        else d = c.build();
+	  else d = c.build(null).self();
 
         d.msg(MsgBaseCodes.INIT, MsgDirection.DOWN, null);
 

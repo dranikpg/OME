@@ -240,7 +240,7 @@ public class LmlUIMgr extends AppDataManager {
 
     private void parseViewData() {
 	  viewM.clear();
-	  JsonValue r = FUtills.r.parse(Gdx.files.internal("_data/ui_views.json"));
+	  JsonValue r = FUtills.r.parse(Gdx.files.internal("data/ui_views.json"));
 	  for (JsonValue v : r) {
 		ViewConfSt st = new ViewConfSt();
 		st.lmlPath = v.has("lml") ? v.getString("lml") : "";

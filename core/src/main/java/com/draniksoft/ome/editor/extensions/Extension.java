@@ -67,7 +67,7 @@ public class Extension implements ReferenceTracker {
 	  return map.containsKey(c);
     }
 
-    public <T extends SubExtension> T getSub(Class c) {
+    public <T extends SubExtension> T getSub(Class<T> c) {
 	  SubExtension e = map.get(c);
 	  if (e != null) return (T) e;
 

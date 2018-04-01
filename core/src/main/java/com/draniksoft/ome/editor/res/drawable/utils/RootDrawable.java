@@ -1,10 +1,12 @@
 package com.draniksoft.ome.editor.res.drawable.utils;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
+import com.cyphercove.gdx.flexbatch.FlexBatch;
 import com.draniksoft.ome.editor.res.impl.constructor.ResConstructor;
 import com.draniksoft.ome.editor.res.impl.res_ifaces.Resource;
 import com.draniksoft.ome.editor.res.impl.res_ifaces.RootResource;
+import com.draniksoft.ome.main_menu.MainBase;
 import com.draniksoft.ome.support.pipemsg.MsgBaseCodes;
 import com.draniksoft.ome.support.pipemsg.MsgDirection;
 import com.draniksoft.ome.utils.FUtills;
@@ -22,16 +24,28 @@ public class RootDrawable extends Drawable implements RootResource<Drawable> {
 
     transient short uses = 0;
 
+
     @Override
-    public void draw(Batch b, float x, float y, float w, float h) {
-	  if (d != null) d.draw(b, x, y, w, h);
+    public void draw(FlexBatch b, int x, int y) {
+
     }
 
     @Override
-    public Drawable copy() {
-	  return null;
+    public void draw(FlexBatch b, int x, int y, int w, int h) {
+
     }
 
+    @Override
+    public boolean contains(Vector2 p) {
+	  return false;
+    }
+
+    @Override
+    public void size(Vector2 v) {
+
+    }
+
+    //
 
     @Override
     public Drawable getSub() {
@@ -66,13 +80,17 @@ public class RootDrawable extends Drawable implements RootResource<Drawable> {
     }
 
     @Override
-    protected byte _handleUsageCycle(byte msg, byte dir, short[] data) {
-        byte ans = super._handleUsageCycle(msg, dir, data);
-        if (ans == MsgDirection.UNDEFINED) return ans;
-        Gdx.app.debug(tag, "Usage update " + data[0]);
-	  uses += data[0];
-	  data[1] = uses;
-	  return ans;
+    protected boolean _handleUsageCycle(short msg, byte dir, Object data) {
+
+	  if (!super._handleUsageCycle(msg, dir, data)) return false;
+
+	  short[
+		    ] data2 = (short[]) data;
+
+	  Gdx.app.debug(tag, "Usage update " + data2[0]);
+	  uses += data2[0];
+	  data2[1] = uses;
+	  return true;
     }
 
 
@@ -85,7 +103,7 @@ public class RootDrawable extends Drawable implements RootResource<Drawable> {
      */
     public static RootDrawable forEntityLoad(ResConstructor<Drawable> cc) {
 	  RootDrawable rdwb = new RootDrawable();
-	  Drawable cdwb = cc.build();
+	  Drawable cdwb = cc.build(MainBase.engine).self();
 	  rdwb.update(cdwb);
 	  rdwb.init();
 	  rdwb.updateUsage((short) 1);
@@ -101,7 +119,13 @@ public class RootDrawable extends Drawable implements RootResource<Drawable> {
 
 
     @Override
-    protected void _msgDown(byte msg, byte sdir, short[] data) {
+    protected void _msgDown(short msg, byte sdir, Object data) {
 	  if (d != null) d.msg(msg, sdir, data);
+    }
+
+
+    @Override
+    public void msg(short msg, byte dir, Object data) {
+
     }
 }

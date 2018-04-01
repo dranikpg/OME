@@ -5,22 +5,22 @@ import com.artemis.ComponentMapper;
 import com.artemis.annotations.Wire;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.draniksoft.ome.editor.components.label.LabelC;
 import com.draniksoft.ome.editor.components.label.LabelRTC;
-import com.draniksoft.ome.editor.components.pos.PosSizeC;
-import com.draniksoft.ome.editor.components.srz.MapDimensC;
+import com.draniksoft.ome.editor.components.pos.PosBoundsC;
+import com.draniksoft.ome.editor.components.pos.PosC;
 
 public class LabelRenderSys extends IteratingSystem {
 
     private static final String tag = "LabelRenderSys";
 
     public LabelRenderSys() {
-	  super(Aspect.all(PosSizeC.class, MapDimensC.class, LabelC.class, LabelRTC.class));
+	  super(Aspect.all(PosBoundsC.class, PosC.class, LabelC.class, LabelRTC.class));
     }
 
-    @Wire
-    SpriteBatch b;
+    @Wire(name = "batch")
+    Batch b;
 
     @Wire(name = "game_cam")
     OrthographicCamera cam;
@@ -33,17 +33,17 @@ public class LabelRenderSys extends IteratingSystem {
     }
 
     ComponentMapper<LabelRTC> rM;
-    ComponentMapper<PosSizeC> pM;
+    ComponentMapper<PosBoundsC> pM;
 
 
     @Override
     protected void process(int _e) {
 
-	  PosSizeC sc = pM.get(_e);
+	  PosBoundsC sc = pM.get(_e);
 	  LabelRTC lc = rM.get(_e);
 
 
-	  lc.c.setPosition(sc.x + sc.w / 2 - lc.w / 2, sc.y - lc.h);
+	  //lc.c.setPosition(sc.x + sc.w / 2 - lc.w / 2, sc.y - lc.h);
 	  lc.c.draw(b);
 	  lc.c.getFont().getData().setScale(1);
 

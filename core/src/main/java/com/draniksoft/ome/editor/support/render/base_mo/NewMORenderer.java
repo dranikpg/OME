@@ -2,12 +2,12 @@ package com.draniksoft.ome.editor.support.render.base_mo;
 
 import com.artemis.World;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.draniksoft.ome.editor.support.render.core.OverlayRendererI;
+import com.cyphercove.gdx.flexbatch.CompliantBatch;
+import com.cyphercove.gdx.flexbatch.batchable.Quad2D;
+import com.draniksoft.ome.editor.support.render.core.SbsRenderer;
 
-public class NewMORenderer implements OverlayRendererI {
+public class NewMORenderer implements SbsRenderer {
 
     private static final String tag = "NewMORenderer";
 
@@ -27,20 +27,18 @@ public class NewMORenderer implements OverlayRendererI {
 
 
     @Override
-    public void render(SpriteBatch b, OrthographicCamera c) {
-
-    }
-
-    @Override
-    public void render(ShapeRenderer r, OrthographicCamera c) {
-
-	  r.circle(x, y, 10, 10);
-
-    }
-
-    @Override
     public void added(World _w) {
 	  this._w = _w;
+    }
+
+    @Override
+    public void draw(CompliantBatch<Quad2D> b, OrthographicCamera cam) {
+
+    }
+
+    @Override
+    public void removed() {
+
     }
 
 
@@ -49,8 +47,4 @@ public class NewMORenderer implements OverlayRendererI {
         return new int[0];
     }
 
-    @Override
-    public int getId() {
-        return IDs.NewMOR;
-    }
 }

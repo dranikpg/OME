@@ -13,13 +13,13 @@ import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.draniksoft.ome.editor.components.gfx.TexRegC;
-import com.draniksoft.ome.editor.components.pos.PosSizeC;
+import com.draniksoft.ome.editor.components.pos.PosBoundsC;
 import com.draniksoft.ome.editor.components.tps.MapC;
 import com.draniksoft.ome.editor.load.LoadSaveManager;
 import com.draniksoft.ome.editor.load.ProjectLoader;
 import com.draniksoft.ome.editor.load.ProjectSaver;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
-import com.draniksoft.ome.utils.GUtils;
+import com.draniksoft.ome.utils.GU;
 
 public class MapMgr extends BaseSystem implements LoadSaveManager {
 
@@ -61,16 +61,16 @@ public class MapMgr extends BaseSystem implements LoadSaveManager {
 
         int s = 500;
 
-        TextureRegion[][] rs = GUtils.splitTITR(t, s, s);
+	  TextureRegion[][] rs = GU.splitTITR(t, s, s);
 
         for (int i = 0; i < rs.length; i++) {
             for (int j = 0; j < rs[i].length; j++) {
 
 		    int e = world.create();
 
-		    PosSizeC sc = world.getMapper(PosSizeC.class).create(e);
-		    sc.w = s;
-                sc.h = s;
+		    PosBoundsC sc = world.getMapper(PosBoundsC.class).create(e);
+		    /*sc.w = s;
+		    sc.h = s;*/
                 sc.x = j * s;
                 sc.y = i * s;
 

@@ -1,7 +1,8 @@
 package com.draniksoft.ome.editor.res.drawable.utils;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
+import com.cyphercove.gdx.flexbatch.FlexBatch;
 import com.draniksoft.ome.editor.res.impl.res_ifaces.Resource;
 import com.draniksoft.ome.support.pipemsg.MsgBaseCodes;
 import com.draniksoft.ome.support.pipemsg.MsgDirection;
@@ -11,16 +12,34 @@ public abstract class Drawable implements Resource<Drawable>, MsgNode {
 
     private static final String tag = "Drawable";
 
-
     Drawable parent;
 
-    public abstract void draw(Batch b, float x, float y, float w, float h);
+    /*
+    	Main iface
+     */
 
+    /* Basic draw */
+    /* x,y - center */
+    public abstract void draw(FlexBatch b, int x, int y);
+
+    /* Draw in specific rect borders without scale */
+    /* x,y - center */
+    /* w,h - size */
+    public abstract void draw(FlexBatch b, int x, int y, int w, int h);
+
+    /* Input contains */
+    public abstract boolean contains(Vector2 p);
+
+    /* Return max bounds size - max HALFwidth and HALFheight, like most distant point from center*/
+    public abstract void size(Vector2 v);
+
+    /*
+    	Resources
+     */
 
     public Drawable self() {
 	  return this;
     }
-
 
     @Override
     public Resource<Drawable> parent() {
@@ -32,92 +51,9 @@ public abstract class Drawable implements Resource<Drawable>, MsgNode {
 	  this.parent = p.self();
     }
 
-
-    @Override
-    public void msg(byte msg, byte dir, short[] data) {
-
-	  Gdx.app.debug(tag, "MSG at " + getClass().getSimpleName() + " :: " + msg);
-
-	  dir = updateDirectionCounter(dir);
-
-	  byte ans;
-
-	  ans = _handleCustomMsg(msg, dir, data);
-	  if (ans != MsgDirection.UNDEFINED) {
-		forwardmsg(msg, ans, data);
-		return;
-	  }
-
-	  ans = _handleInits(msg, dir, data);
-	  if (ans != MsgDirection.UNDEFINED) {
-		forwardmsg(msg, ans, data);
-		return;
-	  }
-
-	  ans = _handleUsageCycle(msg, dir, data);
-	  if (ans != MsgDirection.UNDEFINED) {
-		forwardmsg(msg, ans, data);
-		return;
-	  }
-
-    }
-
-    /*
-    		Base msg handler
-     */
-
-
-    protected byte _handleInits(byte msg, byte dir, short[] data) {
-	  switch (msg) {
-		case MsgBaseCodes.INIT:
-		    _init();
-		    return dir;
-		case MsgBaseCodes.DEINIT:
-		    _deinit();
-		    return dir;
-	  }
-	  return MsgDirection.UNDEFINED;
-    }
-
-    protected byte _handleUsageCycle(byte msg, byte dir, short[] data) {
-
-	  switch (msg) {
-		case MSG.USAGE_CHANGE:
-		    _updateUsage(data[1], data[0]);
-		    return dir;
-	  }
-	  return MsgDirection.UNDEFINED;
-    }
-
-    protected byte _handleCustomMsg(byte msg, byte dir, short[] data) {
-	  return MsgDirection.UNDEFINED;
-    }
-
     /*
 
      */
-
-    protected byte updateDirectionCounter(byte d) {
-	  return d;
-    }
-
-    protected void forwardmsg(byte msg, byte dir, short[] data) {
-	  if (dir == MsgDirection.UP) _msgUp(msg, dir, data);
-	  else if (dir == MsgDirection.DOWN) _msgDown(msg, dir, data);
-    }
-
-    /*
-    	Direction handlers
-     */
-
-    protected void _msgUp(byte msg, byte sdir, short[] data) {
-	  parent.msg(msg, sdir, data);
-    }
-
-    protected void _msgDown(byte msg, byte sdir, short[] data) {
-	  // only existance overwritten
-    }
-
 
 
     /* function extension step */
@@ -133,6 +69,85 @@ public abstract class Drawable implements Resource<Drawable>, MsgNode {
     protected void _updateUsage(short sum, short delta) {
 
     }
+
+    /*
+
+     */
+
+
+    @Override
+    public void msg(short msg, byte dir, Object data) {
+
+	  Gdx.app.debug(tag, "MSG at " + getClass().getSimpleName() + " :: " + msg);
+
+	  if (_handleCustomMsg(msg, dir, data))
+		return;
+
+	  if (_handleInits(msg, dir, data))
+		return;
+
+	  if (_handleUsageCycle(msg, dir, data))
+		return;
+
+    }
+
+    /*
+    		Base msg handler
+     */
+
+
+    protected boolean _handleInits(short msg, byte dir, Object data) {
+	  switch (msg) {
+		case MsgBaseCodes.INIT:
+		    _init();
+		    forwardmsg(msg, dir, data);
+		    return true;
+		case MsgBaseCodes.DEINIT:
+		    _deinit();
+		    forwardmsg(msg, dir, data);
+		    return true;
+	  }
+	  return false;
+    }
+
+    protected boolean _handleUsageCycle(short msg, byte dir, Object data) {
+	  switch (msg) {
+		case MSG.USAGE_CHANGE:
+		    short[] data2 = (short[]) data;
+		    _updateUsage(data2[1], data2[0]);
+		    forwardmsg(msg, dir, data);
+		    return true;
+	  }
+	  return false;
+    }
+
+    protected boolean _handleCustomMsg(short msg, byte dir, Object data) {
+	  return false;
+    }
+
+    /*
+
+     */
+
+
+    protected void forwardmsg(short msg, byte dir, Object data) {
+	  if (dir == MsgDirection.UP) _msgUp(msg, dir, data);
+	  else if (dir == MsgDirection.DOWN) _msgDown(msg, dir, data);
+    }
+
+    /*
+    	Direction handlers
+     */
+
+    protected void _msgUp(short msg, byte sdir, Object data) {
+	  parent.msg(msg, sdir, data);
+    }
+
+    protected void _msgDown(short msg, byte sdir, Object data) {
+	  // only existance overwritten
+    }
+
+
 
 
 }

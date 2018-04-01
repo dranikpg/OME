@@ -13,8 +13,4 @@ public class SimpleColor extends ColorProvider {
     }
 
 
-    @Override
-    public ColorProvider copy() {
-	  return null;
-    }
 }

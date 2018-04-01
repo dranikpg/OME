@@ -10,8 +10,4 @@ public class EmptyColor extends ColorProvider {
 
     }
 
-    @Override
-    public ColorProvider copy() {
-	  return null;
-    }
 }

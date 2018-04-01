@@ -2,7 +2,8 @@ package com.draniksoft.ome.editor.extensions.sub;
 
 import com.badlogic.gdx.utils.ObjectMap;
 import com.draniksoft.ome.editor.texmgmnt.ext.b.AssetSubExtension;
-import com.draniksoft.ome.editor.texmgmnt.ext.i.UnresolvedAssetSubExt;
+import com.draniksoft.ome.editor.texmgmnt.ext.ext.UnresolvedAssetSubExt;
+import com.draniksoft.ome.editor.texmgmnt.ext.gp_ext.AssetGroupSubExt;
 
 public class DefaultSubExtensionFktory {
 
@@ -17,6 +18,8 @@ public class DefaultSubExtensionFktory {
     static {
 
         MAP.put(AssetSubExtension.class, UnresolvedAssetSubExt.class);
+
+        MAP.put(AssetGroupSubExt.class, AssetGroupSubExt.class);
 
     }
 

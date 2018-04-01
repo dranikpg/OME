@@ -11,7 +11,7 @@ public class DrawableActor extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
 
-	  if (d != null) d.draw(batch, getX(), getY(), getHeight(), getHeight());
+	  // if (d != null) d.draw(batch, getX(), getY(), getHeight(), getHeight());
 
     }
 

@@ -11,7 +11,7 @@ public class ResDwbNode extends ResTreeNode<Drawable> {
     public ResDwbNode(ResConstructor<Drawable> ct, Actor a) {
 	  super(ct, a);
 
-	  setIcon(GdxCompatibleDrawable.from(ct.getSnapshot()));
+	  setIcon(GdxCompatibleDrawable.from(ct.getSnapshotLink().self().self()));
 	  getIcon().setMinHeight(50);
 	  getIcon().setMinWidth(50);
 

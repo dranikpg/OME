@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.JsonValue;
 import com.draniksoft.ome.editor.support.container.CO_actiondesc.ActionDesc;
-import com.draniksoft.ome.editor.support.container.CO_actiondesc.BiLangActionDEsc;
+import com.draniksoft.ome.utils.JsonUtils;
 /*
     Multi purpose class for managing various tings
  */
@@ -16,19 +16,15 @@ public abstract class CompositionObserver {
 
     public static class IDs {
 
-	  public static final short POSITION = 1;
+	  public static final short IDENTITY = 1;
 
-	  public static final short DRAWABLE = 2;
+	  public static final short POSITION = 3;
 
-	  public static final short MapObject = 5;
+	  public static final short DRAWABLE = 4;
 
-	  public static final short PATH = 10;
-
-	  public static final short LABEL = 20;
     }
 
-    // head of someting ?
-    public boolean HEAD = false;
+    public int PRIORITY = 1;
 
     public int ID;
 
@@ -42,6 +38,8 @@ public abstract class CompositionObserver {
 
     public abstract boolean matches(int e);
 
+    // Desc
+
     public abstract IntMap<ActionDesc> getDesc();
 
     public abstract boolean isAviab(int ac, int e);
@@ -49,6 +47,8 @@ public abstract class CompositionObserver {
     public abstract boolean isAviab(int ac);
 
     public abstract ActionDesc getDesc(int ac);
+
+    //
 
     public abstract void execA(int id, int _e, boolean aT, Object... os);
 
@@ -63,20 +63,14 @@ public abstract class CompositionObserver {
 
         __ds = new Array<ActionDesc>();
 
-        JsonValue ar = rootv.get("a");
+	  for (JsonValue v : rootv) {
+		ActionDesc d = new ActionDesc();
+		d.code = v.getInt("c");
 
-        for (JsonValue v : ar) {
+		d.name = JsonUtils.parseText(v.get("name"), true);
+		d.desc = JsonUtils.parseText(v.get("desc"), false);
 
-            BiLangActionDEsc d = new BiLangActionDEsc();
-
-            d.code = v.getInt("c");
-            d.name_en = v.getString("name_en");
-		d.name_ru = v.has("name_ru") ? v.getString("name_ru") : d.name_en;
-		d.desc_en = v.getString("desc_en");
-		d.desc_ru = v.has("desc_ru") ? v.getString("desc_ru") : d.desc_en;
-
-            __ds.add(d);
-
+		__ds.add(d);
 	  }
 
     }

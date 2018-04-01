@@ -19,9 +19,4 @@ public class AnimatedColorP extends GroupColorProvider {
     public void update(Array<ColorProvider> ar) {
 
     }
-
-    @Override
-    public ColorProvider copy() {
-	  return null;
-    }
 }

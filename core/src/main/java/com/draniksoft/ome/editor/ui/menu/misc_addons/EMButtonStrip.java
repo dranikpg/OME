@@ -43,7 +43,7 @@ public class EMButtonStrip extends BaseView {
 
 	  while (i.hasNext()) {
 		d = i.next();
-		if (d.aviabT == EditModeDesc.AVAILABLE) {
+		if (d.available) {
 
 		    final VisImageButton btn = new VisImageButton(d.iconID);
 
@@ -61,7 +61,7 @@ public class EMButtonStrip extends BaseView {
 
 			  }
 		    });
-		    new Tooltip.Builder(d.getName()).target(btn).build();
+		    new Tooltip.Builder(d.name.get()).target(btn).build();
 		    local.add(btn).left().expandX().padLeft(20f).fillY().size(s);
 		}
 

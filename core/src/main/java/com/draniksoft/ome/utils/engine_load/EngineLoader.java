@@ -7,22 +7,26 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteCache;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.cyphercove.gdx.flexbatch.CompliantBatch;
+import com.cyphercove.gdx.flexbatch.batchable.Quad2D;
+import com.draniksoft.ome.editor.base_gfx.batchables.STB;
 import com.draniksoft.ome.editor.esc_utils.OmeStrategy;
 import com.draniksoft.ome.editor.load.MapLoadBundle;
 import com.draniksoft.ome.editor.manager.*;
+import com.draniksoft.ome.editor.manager.uslac.TextureRManager;
 import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.systems.file_mgmnt.ProjectLoadSystem;
 import com.draniksoft.ome.editor.systems.gfx_support.CameraSys;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.editor.systems.pos.PositionSystem;
 import com.draniksoft.ome.editor.systems.render.BaseRenderSys;
-import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
+import com.draniksoft.ome.editor.systems.render.editor.SubsidiaryRenderSys;
 import com.draniksoft.ome.editor.systems.render.map.MapRDebugSys;
 import com.draniksoft.ome.editor.systems.render.map.MapRenderSys;
 import com.draniksoft.ome.editor.systems.render.obj.LabelRenderSys;
@@ -42,7 +46,8 @@ import com.draniksoft.ome.mgmnt_base.base.AppDataManager;
 import com.draniksoft.ome.support.execution_base.sync.SimpleSyncTask;
 import com.draniksoft.ome.support.execution_base.ut.StepLoader;
 import com.draniksoft.ome.support.load.IntelligentLoader;
-import com.draniksoft.ome.utils.GUtils;
+import com.draniksoft.ome.utils.FUtills;
+import com.draniksoft.ome.utils.GU;
 import com.draniksoft.ome.utils.respone.ResponseCode;
 import com.draniksoft.ome.utils.struct.ResponseListener;
 
@@ -73,7 +78,7 @@ public class EngineLoader {
     }
 
     public enum LoadS {
-	  SNULL_PTR, CONFIF_B_B, CONFIG_B, DEPENDENCY_B, MGR_NTF, WORLD_B, NULL_PTR
+	  SNULL_PTR, CONFIF_B_B, CONFIG_B, DEPENDENCY_B, MGR_NTF, WORLD_B, UTILS, NULL_PTR
     }
 
     static LoadS cS = LoadS.CONFIF_B_B;
@@ -132,6 +137,10 @@ public class EngineLoader {
 		    m.setLoadState(AppDataManager.ENGINE_LOAD);
 		    l.exec(m);
 		}
+	  } else if (cS == LoadS.UTILS) {
+
+		l.exec(new UtilClb());
+
 	  } else if (cS == LoadS.NULL_PTR) {
 		Gdx.app.debug(tag, "Passed states");
 		L.onResponse((short) IntelligentLoader.LOAD_SUCCESS);
@@ -144,11 +153,29 @@ public class EngineLoader {
 	  if (execService != null) execService.update();
     }
 
+    private static class UtilClb implements Callable<Void> {
+
+	  @Override
+	  public Void call() throws Exception {
+
+		STB.init();
+
+		GU.whiteAC = FUtills.getRAC("i_casB@w");
+
+		return null;
+
+	  }
+    }
+
     private static class WorldBuild implements Callable<Object> {
 
 	  @Override
 	  public Object call() throws Exception {
-		MainBase.engine = new com.artemis.World(c);
+		try {
+		    MainBase.engine = new com.artemis.World(c);
+		} catch (Exception e) {
+		    Gdx.app.error(tag, "", e);
+		}
 		return null;
 	  }
     }
@@ -186,7 +213,7 @@ public class EngineLoader {
         Viewport gameVP;
         Viewport uiVP;
 
-        SpriteBatch b;
+	  Batch b;
 
 	  int base = 2;
 
@@ -214,17 +241,9 @@ public class EngineLoader {
 	  }
 
 	  void buildRender() {
-
-		b = new SpriteBatch(100);
-
-		c.register(b);
-
 		ShapeRenderer r = new ShapeRenderer();
-
-		GUtils.sr = r;
+		GU.sr = r;
 		c.register(r);
-
-
 	  }
 
 	  void buildRenderCache() {
@@ -238,7 +257,7 @@ public class EngineLoader {
 		cc++;
 		if (cc == base) {
 
-		    GUtils.fetchMaxTexSize();
+		    GU.fetchMaxTexSize();
 
 		} else if (cc == base + 1) {
 
@@ -251,7 +270,9 @@ public class EngineLoader {
 
 		} else if (cc == base + 3) {
 
-		    //
+		    CompliantBatch<Quad2D> batch = new CompliantBatch<Quad2D>(Quad2D.class, 10000, true);
+		    b = batch;
+		    c.register("batch", batch);
 
 		} else if (cc == base + 4) {
 
@@ -286,11 +307,12 @@ public class EngineLoader {
 		cb = new WorldConfigurationBuilder();
 		// BASIC MANAGER
 
-		// USELESS ? not yet
+		cb.with(new IdentityManager());
+
+		// USELESS ? not for long
 		cb.with(new ProjectMgr());
 		cb.with(new MapMgr());
 		// old bollocks
-		cb.with(new FontManager());
 		cb.with(new ResourceManager());
 		cb.with(new SerializationManager());
 		cb.with(new TimeMgr());
@@ -319,7 +341,7 @@ public class EngineLoader {
 		cb.with(new ObjRSys());
 		cb.with(new LabelRenderSys());
 		//
-		cb.with(new OverlayRenderSys());
+		cb.with(new SubsidiaryRenderSys());
 		//
 		cb.with(new UiSystem());
 		cb.with(new ConsoleSys());
@@ -327,7 +349,6 @@ public class EngineLoader {
 		cb.with(new ExecutionSystem());
 		cb.with(new WorkflowSys());
 		cb.with(new OmeEventSystem());
-		cb.with(new ArchTransmuterMgr());
 
 
 		cb.register(new OmeStrategy());

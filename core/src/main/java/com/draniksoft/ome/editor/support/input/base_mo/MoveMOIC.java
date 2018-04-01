@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.draniksoft.ome.editor.components.pos.PosSizeC;
+import com.draniksoft.ome.editor.components.pos.PosBoundsC;
 import com.draniksoft.ome.editor.support.ems.base_em.MoveMOEM;
 import com.draniksoft.ome.editor.support.input.InputController;
 import com.draniksoft.ome.editor.systems.pos.PositionSystem;
@@ -24,14 +24,14 @@ public class MoveMOIC implements InputController {
     Vector2 tmp;
     boolean reactOnKill = true;
 
-    PosSizeC c;
+    PosBoundsC c;
 
     @Override
     public void init(World w) {
 	  this.w = w;
 	  tmp = new Vector2();
         vp = w.getInjector().getRegistered("game_vp");
-	  c = w.getMapper(PosSizeC.class).get(e);
+	  c = w.getMapper(PosBoundsC.class).get(e);
     }
 
     @Override

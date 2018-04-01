@@ -14,18 +14,17 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.draniksoft.ome.editor.components.gfx.DrawableC;
 import com.draniksoft.ome.editor.esc_utils.OmeStrategy;
 import com.draniksoft.ome.editor.extensions.Extension;
 import com.draniksoft.ome.editor.extensions.export.ExtensionExporter;
 import com.draniksoft.ome.editor.extensions.stg.ExtensionDao;
 import com.draniksoft.ome.editor.load.MapLoadBundle;
 import com.draniksoft.ome.editor.manager.ExtensionManager;
-import com.draniksoft.ome.editor.manager.FontManager;
 import com.draniksoft.ome.editor.manager.MapMgr;
 import com.draniksoft.ome.editor.manager.TimeMgr;
 import com.draniksoft.ome.editor.struct.text_ext_test.TheTextSubExt;
 import com.draniksoft.ome.editor.support.actions.Action;
-import com.draniksoft.ome.editor.support.actions.mapO.ChangeDwbA;
 import com.draniksoft.ome.editor.support.compositionObserver.abstr.CompositionObserver;
 import com.draniksoft.ome.editor.support.container.CO_actiondesc.ActionDesc;
 import com.draniksoft.ome.editor.support.container.EM_desc.EditModeDesc;
@@ -34,12 +33,12 @@ import com.draniksoft.ome.editor.support.input.InputController;
 import com.draniksoft.ome.editor.support.input.back.SelectIC;
 import com.draniksoft.ome.editor.support.input.back.TimedSelectIC;
 import com.draniksoft.ome.editor.support.input.base_mo.NewMOIC;
-import com.draniksoft.ome.editor.support.render.core.OverlayRendererI;
+import com.draniksoft.ome.editor.support.render.core.SbsRenderer;
 import com.draniksoft.ome.editor.systems.file_mgmnt.ProjectLoadSystem;
 import com.draniksoft.ome.editor.systems.gfx_support.CameraSys;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.editor.systems.pos.PositionSystem;
-import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
+import com.draniksoft.ome.editor.systems.render.editor.SubsidiaryRenderSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.ConsoleSys;
 import com.draniksoft.ome.editor.systems.support.ExecutionSystem;
@@ -48,15 +47,17 @@ import com.draniksoft.ome.editor.systems.support.flows.EditorSystem;
 import com.draniksoft.ome.editor.systems.support.flows.WorkflowSys;
 import com.draniksoft.ome.editor.texmgmnt.acess.TextureRAccesor;
 import com.draniksoft.ome.editor.texmgmnt.ext.b.AssetSubExtension;
+import com.draniksoft.ome.editor.texmgmnt.ext.gp_ext.AssetGroupSubExt;
+import com.draniksoft.ome.editor.texmgmnt.ext.groups.AssetGroup;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.mgmnt_base.impl.ConfigManager;
 import com.draniksoft.ome.support.configs.ConfigDao;
-import com.draniksoft.ome.support.dao.FontDao;
 import com.draniksoft.ome.support.execution_base.sync.SyncTask;
 import com.draniksoft.ome.support.execution_base.ut.StepLoader;
 import com.draniksoft.ome.support.ui.viewsys.BaseView;
 import com.draniksoft.ome.utils.Const;
 import com.draniksoft.ome.utils.Env;
+import com.draniksoft.ome.utils.GU;
 import com.draniksoft.ome.utils.cam.Target;
 import com.draniksoft.ome.utils.struct.ResponseListener;
 
@@ -332,11 +333,12 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
     /*
         Text test base
      */
-
+    @Deprecated
     public void log_text() {
         log_text(null);
     }
 
+    @Deprecated
     public void log_text(String id) {
         Extension ext = world.getSystem(ExtensionManager.class).getExt(id);
         TheTextSubExt e = ext.getSub(TheTextSubExt.class);
@@ -344,15 +346,30 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
         console.log(e.t.toString());
     }
 
+    @Deprecated
     public void set_text(String text) {
         set_text(text, null);
     }
 
+    @Deprecated
     public void set_text(String text, String id) {
         Extension ext = world.getSystem(ExtensionManager.class).getExt(id);
         TheTextSubExt e = ext.getSub(TheTextSubExt.class);
         if (e == null) return;
         e.t.text = text;
+    }
+
+    /*
+        Some res utils
+     */
+
+    public void log_etydwbc(int e) {
+        try {
+            DrawableC c = world.getMapper(DrawableC.class).get(e);
+            console.log(c.ctr.toString());
+        } catch (Exception er) {
+            Gdx.app.error("CE", "", er);
+        }
     }
 
     /**
@@ -363,9 +380,9 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
         StringBuilder b = new StringBuilder();
 
-        for (OverlayRendererI r : world.getSystem(OverlayRenderSys.class).getRs()) {
+        for (SbsRenderer r : world.getSystem(SubsidiaryRenderSys.class).getRs()) {
 
-            b.append(r.getId()).append("; ");
+            b.append(r.getClass().getSimpleName()).append("; \n ");
 
         }
 
@@ -385,7 +402,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
         int[] o = new int[o_s.length];
         for (int i = 0; i < o_s.length; i++) o[i] = Integer.parseInt(o_s[i]);
 
-        world.getSystem(OverlayRenderSys.class).removeRdrByPlaceBK(a, o);
+        world.getSystem(SubsidiaryRenderSys.class).removeRdrByPlaceBK(a, o);
 
     }
 
@@ -401,8 +418,8 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
         EditModeDesc d;
         while (ds.hasNext()) {
             d = ds.next();
-		console.log(d.getName() + " [ " + d.id + " ] " + " (av " + d.aviabT + ")" + " -> " + d.c.getSimpleName());
-	  }
+            console.log(d.name.get() + " [ " + d.id + " ] " + " (av " + d.available + ")" + " -> " + d.c.getSimpleName());
+        }
 
 
     }
@@ -489,7 +506,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
             for (ActionDesc d : o.getDesc().values()) {
 
-                console.log(d.code + " -> " + d.getName() + "  || " + " aviab = " + o.isAviab(d.code));
+                console.log(d.code + " -> " + d.name.get() + "  || " + " aviab = " + o.isAviab(d.code));
 
             }
         } catch (Exception e) {
@@ -512,27 +529,13 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
 
     /**
-     * Entity transform methods
+     * Entity transform methods#
      */
 
-    public void te_sd(int e, String newN) {
 
-        ChangeDwbA a = new ChangeDwbA();
-        a._e = e;
-        a.dwid = newN;
-
-        world.getSystem(ActionSystem.class).exec(a);
-
-    }
-
-
-    public void te_addMoveC(int s, int e, int x, int y, int _e) {
-
-
-    }
 
     /**
-     * AssetDManager utils
+     * AssetManager utils
      */
 
     public void log_mgr_stat() {
@@ -545,6 +548,10 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
         console.log("Loaded " + mgr.isLoaded(path));
     }
 
+
+    /*
+        AssetExt utils
+     */
 
 
     public void log_asspc(String id) {
@@ -569,27 +576,23 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
     }
 
 
+    public void log_assgps(String id) {
 
-    /*
-        Font managment utils
-     */
+        Extension ext = world.getSystem(ExtensionManager.class).getExt(id);
 
-    public void log_fnt() {
+        if (ext == null || !ext.hasSub(AssetGroupSubExt.class)) {
+            console.log("No AssetGroupSubExt");
+            return;
+        }
 
-        Iterator<FontDao> i = world.getSystem(FontManager.class).getLoadedI();
+        AssetGroupSubExt ge = ext.getSub(AssetGroupSubExt.class);
 
-        FontDao d;
-
-        while (i.hasNext()) {
-            d = i.next();
-            console.log(d.id + "  ->  " + d.uri);
+        for (AssetGroup g : ge.getGroups()) {
+            console.log(g.name.get() + " [ " + g.matcher.getClass().getSimpleName() + " ] -> " + g.size());
         }
     }
 
 
-    public void log_av_fnt() {
-
-    }
 
     /**
      *
@@ -668,12 +671,11 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
     }
 
-    public void sczoom(float z){
+    public void camscale() {
 
-        ((OrthographicCamera) world.getInjector().getRegistered("game_cam")).zoom = (z / 100f);
+        console.log("" + GU.CAM_SCALE);
 
     }
-
 
     public void cam_etg(int _e) {
         cam_etg(_e, true);

@@ -166,7 +166,7 @@ public class ExtensionManager extends BaseSystem implements LoadSaveManager {
     }
 
     public Extension getExt(String id) {
-	  if (id == null || id == "") return mapExtension;
+	  if (id == null || id.equals("_")) return mapExtension;
 	  return extensions.get(id);
     }
 

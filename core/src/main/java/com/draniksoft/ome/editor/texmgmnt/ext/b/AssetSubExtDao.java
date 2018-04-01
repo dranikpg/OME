@@ -4,7 +4,7 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.draniksoft.ome.editor.extensions.Extension;
 import com.draniksoft.ome.editor.extensions.sub.SubExtensionDao;
 import com.draniksoft.ome.editor.extensions.t.ExtensionType;
-import com.draniksoft.ome.editor.texmgmnt.ext.i.PixmapAssetSubExt;
+import com.draniksoft.ome.editor.texmgmnt.ext.ext.PixmapAssetSubExt;
 
 public class AssetSubExtDao extends SubExtensionDao {
 

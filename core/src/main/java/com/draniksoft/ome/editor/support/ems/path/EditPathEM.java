@@ -17,7 +17,7 @@ import com.draniksoft.ome.editor.support.input.path.EditPathIC;
 import com.draniksoft.ome.editor.support.render.core.OverlayPlaces;
 import com.draniksoft.ome.editor.support.render.path.EditPathRender;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
-import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
+import com.draniksoft.ome.editor.systems.render.editor.SubsidiaryRenderSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.InputSys;
 import com.draniksoft.ome.editor.systems.support.flows.EditorSystem;
@@ -62,8 +62,8 @@ public class EditPathEM extends SimpleEditMode implements EventListener {
 	  t = new PathTransformer();
 
 	  defalteEnv();
-	  _w.getSystem(OverlayRenderSys.class).removeRdrByPlaceBK(new int[]{}, new int[]{OverlayPlaces.PATH});
-	  _w.getSystem(OverlayRenderSys.class).addRdr(rd);
+	  _w.getSystem(SubsidiaryRenderSys.class).removeRdrByPlaceBK(new int[]{}, new int[]{OverlayPlaces.PATH});
+	  _w.getSystem(SubsidiaryRenderSys.class).addRdr(rd);
 
 	  _w.getSystem(InputSys.class).setDefIC(new StebIC());
 	  _w.getSystem(InputSys.class).setMainIC(ic);
@@ -170,8 +170,8 @@ public class EditPathEM extends SimpleEditMode implements EventListener {
     @Override
     protected void on_detached() {
 	  returnEnv();
-	  _w.getSystem(OverlayRenderSys.class).restoreBK();
-	  _w.getSystem(OverlayRenderSys.class).removeRdr(rd);
+	  _w.getSystem(SubsidiaryRenderSys.class).restoreBK();
+	  _w.getSystem(SubsidiaryRenderSys.class).removeRdr(rd);
 
 	  _w.getSystem(InputSys.class).clearMainIC();
     }

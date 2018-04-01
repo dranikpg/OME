@@ -1,8 +1,8 @@
 package com.draniksoft.ome.editor.support.compositionObserver;
 
 import com.artemis.Aspect;
-import com.draniksoft.ome.editor.components.pos.PosSizeC;
-import com.draniksoft.ome.editor.components.srz.MapDimensC;
+import com.draniksoft.ome.editor.components.pos.PosBoundsC;
+import com.draniksoft.ome.editor.components.pos.PosC;
 import com.draniksoft.ome.editor.support.compositionObserver.abstr.EasierCompositionObserver;
 import com.draniksoft.ome.editor.support.container.EM_desc.EditModeDesc;
 import com.draniksoft.ome.editor.systems.gfx_support.CameraSys;
@@ -36,8 +36,8 @@ public class PositionCO extends EasierCompositionObserver {
 		execA(FOCUS_CAMERA, _selE, false);
 	  }
 
-	  _w.getSystem(EditorSystem.class).getEditModeDesc(EditModeDesc.IDS.moveMO).aviabT =
-		    isSelActive() ? EditModeDesc.AVAILABLE : EditModeDesc.AV_HIDDEN;
+	  _w.getSystem(EditorSystem.class).getEditModeDesc(EditModeDesc.IDS.moveMO).available =
+		    isSelActive();
     }
 
     @Override
@@ -47,7 +47,7 @@ public class PositionCO extends EasierCompositionObserver {
 
     @Override
     protected Aspect.Builder getAspectB() {
-	  return Aspect.all(MapDimensC.class, PosSizeC.class);
+	  return Aspect.all(PosC.class, PosBoundsC.class);
     }
 
     @Override

@@ -5,7 +5,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.draniksoft.ome.editor.load.MapLoadBundle;
-import com.draniksoft.ome.utils.GUtils;
+import com.draniksoft.ome.utils.GU;
 
 
 public class EditorAdapter extends ApplicationAdapter {
@@ -28,7 +28,7 @@ public class EditorAdapter extends ApplicationAdapter {
     public void create() {
 
 
-        GUtils.getWindow().setVisible(true);
+	  GU.getWindow().setVisible(true);
 
 
     }

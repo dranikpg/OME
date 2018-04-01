@@ -9,7 +9,7 @@ import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.mgmnt_base.base.AppDataManager;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.utils.FM;
-import com.draniksoft.ome.utils.GUtils;
+import com.draniksoft.ome.utils.GU;
 import com.draniksoft.ome.utils.struct.ResponseListener;
 
 public class MainBase extends Game {
@@ -34,7 +34,7 @@ public class MainBase extends Game {
 
         setScreen(ms);
 
-        GUtils.getWindow().setSizeLimits(500, 500, 10000, 10000);
+	  GU.getWindow().setSizeLimits(500, 500, 10000, 10000);
 
     }
 

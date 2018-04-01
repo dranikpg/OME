@@ -6,13 +6,10 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.draniksoft.ome.editor.extensions.stg.ExtensionDao;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.mgmnt_base.base.AppDataManager;
-import com.draniksoft.ome.support.dao.AssetDDao;
-import com.draniksoft.ome.support.dao.FontDao;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.utils.FUtills;
 
 import java.io.File;
-import java.util.Iterator;
 
 public class FileManager extends AppDataManager {
 
@@ -23,9 +20,6 @@ public class FileManager extends AppDataManager {
 
     FileHandle tmpDirFH;
     FileHandle extDirFH;
-
-    ObjectMap<String, AssetDDao> localAssetDs;
-    ObjectMap<String, FontDao> localFontDs;
 
     ObjectMap<String, ExtensionDao> daos;
 
@@ -60,15 +54,6 @@ public class FileManager extends AppDataManager {
 		}
 	  }
 	  Gdx.app.debug(tag, "Collected " + daos.size + " extensions");
-    }
-
-
-    public Iterator<FontDao> getFontD() {
-	  return new ObjectMap<String, FontDao>().values().iterator();
-    }
-
-    public Iterator<AssetDDao> getLocalAssD() {
-	  return new ObjectMap<String, AssetDDao>().values().iterator();
     }
 
     public ObjectMap<String, ExtensionDao> getDaos() {

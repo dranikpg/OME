@@ -2,7 +2,6 @@ package com.draniksoft.ome.editor.support.compositionObserver;
 
 import com.artemis.Aspect;
 import com.draniksoft.ome.editor.components.gfx.DrawableC;
-import com.draniksoft.ome.editor.components.srz.DrawableSrcC;
 import com.draniksoft.ome.editor.support.compositionObserver.abstr.EasierCompositionObserver;
 
 
@@ -26,7 +25,7 @@ public class DrawableCO extends EasierCompositionObserver {
 
     @Override
     protected Aspect.Builder getAspectB() {
-	  return Aspect.all(DrawableC.class, DrawableSrcC.class);
+	  return Aspect.all(DrawableC.class);
     }
 
     @Override

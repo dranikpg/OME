@@ -6,7 +6,7 @@ import com.draniksoft.ome.mgmnt_base.impl.*;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.support.load.interfaces.IGLRunnable;
 import com.draniksoft.ome.utils.Const;
-import com.draniksoft.ome.utils.GUtils;
+import com.draniksoft.ome.utils.GU;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -101,7 +101,7 @@ public class AppDO extends AppDataManager {
         @Override
         public byte run() {
 
-		GUtils.initGLData();
+		GU.initGLData();
 		glR = true;
 
             return IGLRunnable.READY;

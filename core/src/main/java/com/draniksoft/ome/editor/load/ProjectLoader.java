@@ -1,17 +1,11 @@
 package com.draniksoft.ome.editor.load;
 
 import com.artemis.Aspect;
-import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.JsonValue;
-import com.draniksoft.ome.editor.components.gfx.DrawableC;
-import com.draniksoft.ome.editor.components.pos.PosSizeC;
-import com.draniksoft.ome.editor.components.srz.DrawableSrcC;
-import com.draniksoft.ome.editor.components.srz.MapDimensC;
-import com.draniksoft.ome.editor.res.drawable.utils.RootDrawable;
 import com.draniksoft.ome.editor.systems.support.ExecutionSystem;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.support.execution_base.ExecutionProvider;
@@ -19,12 +13,9 @@ import com.draniksoft.ome.support.execution_base.assetcls.AssetGroupCollectionHe
 import com.draniksoft.ome.support.execution_base.sync.SyncTask;
 import com.draniksoft.ome.support.execution_base.ut.CblT;
 import com.draniksoft.ome.support.execution_base.ut.StepLoader;
-import com.draniksoft.ome.support.execution_base.ut.SyncCblt;
 import com.draniksoft.ome.support.load.IntelligentLoader;
-import com.draniksoft.ome.support.load.interfaces.IGLRunnable;
 import com.draniksoft.ome.support.load.interfaces.IRunnable;
 import com.draniksoft.ome.utils.FUtills;
-import com.draniksoft.ome.utils.GUtils;
 import com.draniksoft.ome.utils.respone.ResponseCode;
 import com.draniksoft.ome.utils.struct.ResponseListener;
 
@@ -122,7 +113,7 @@ public class ProjectLoader implements ExecutionProvider {
 		    l.exec(new LoadT((LoadSaveManager) w.getSystem(c)));
 		}
 	  } else if (s == Step.GFX_PAIR) {
-		l.addShd(SyncCblt.WRAP(new GfxC()));
+		updateLoad();
 	  }
 
     }
@@ -136,60 +127,6 @@ public class ProjectLoader implements ExecutionProvider {
 		    w.delete(e.get(i));
 		}
 		return null;
-	  }
-    }
-
-    private class GfxC implements IGLRunnable {
-
-	  IntBag ettyS;
-
-	  ComponentMapper<MapDimensC> moM;
-	  ComponentMapper<DrawableC> dwc;
-	  ComponentMapper<PosSizeC> psM;
-	  ComponentMapper<DrawableSrcC> dwbSCM;
-
-	  int i = 0;
-
-	  public GfxC() {
-
-		ettyS = w.getAspectSubscriptionManager().get(Aspect.all(MapDimensC.class)).getEntities();
-
-		moM = w.getMapper(MapDimensC.class);
-		dwc = w.getMapper(DrawableC.class);
-		psM = w.getMapper(PosSizeC.class);
-		dwbSCM = w.getMapper(DrawableSrcC.class);
-
-	  }
-
-	  @Override
-	  public byte run() {
-
-		if (i == ettyS.size()) {
-		    Gdx.app.debug(tag, "Assembled " + i + " ettys");
-		    return IGLRunnable.READY;
-		}
-
-		int e = ettyS.get(i);
-
-		MapDimensC mc = moM.get(e);
-
-
-		DrawableC dwC = dwc.create(e);
-		DrawableSrcC dwbSC = dwbSCM.get(e);
-
-		dwbSC.c = GUtils.fetchIt();
-
-		dwC.d = RootDrawable.forEntityLoad(dwbSC.c);
-
-		PosSizeC psc = psM.create(e);
-		psc.x = mc.x;
-		psc.y = mc.y;
-		psc.w = mc.w;
-		psc.h = mc.h;
-
-		i++;
-
-		return IGLRunnable.RUNNING;
 	  }
     }
 

@@ -10,7 +10,7 @@ import com.artemis.utils.IntBag;
 import com.badlogic.gdx.Gdx;
 import com.cyphercove.gdx.gdxtokryo.GdxToKryo;
 import com.draniksoft.ome.editor.components.path.PathDescC;
-import com.draniksoft.ome.editor.components.srz.MapDimensC;
+import com.draniksoft.ome.editor.components.pos.PosC;
 import com.draniksoft.ome.editor.load.LoadSaveManager;
 import com.draniksoft.ome.editor.load.ProjectLoader;
 import com.draniksoft.ome.editor.load.ProjectSaver;
@@ -151,7 +151,7 @@ public class SerializationManager extends Manager implements LoadSaveManager {
 
     public EntitySubscription getEtty() {
 
-	  return world.getAspectSubscriptionManager().get(Aspect.all(MapDimensC.class));
+	  return world.getAspectSubscriptionManager().get(Aspect.all(PosC.class));
     }
 
 

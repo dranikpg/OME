@@ -148,7 +148,7 @@ public class ConfigManager extends AppDataManager {
     private void loadDaos() {
 
         JsonReader rd = new JsonReader();
-        jv = rd.parse(Gdx.files.internal("_data/configs.json"));
+	  jv = rd.parse(Gdx.files.internal("data/configs.json"));
 
         boolean forceNew = AppDO.I.getPrefs().getBoolean("cfg_reset", false);
 

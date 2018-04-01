@@ -73,7 +73,7 @@ public class AddCompView extends BaseWinView implements ActionContainer {
 
 	  VisTextButton b = new VisTextButton("", "big");
 
-	  b.setText(d.getName());
+	  b.setText(d.name.get());
 
 	  b.addListener(new ChangeListener() {
 		@Override

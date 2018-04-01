@@ -1,12 +1,15 @@
 package com.draniksoft.ome.editor.support.container.CO_actiondesc;
 
-public abstract class ActionDesc {
+import com.draniksoft.ome.utils.lang.Text;
+
+public class ActionDesc {
 
     public int code;
 
-    public abstract String getName();
+    public Text name;
 
-    public abstract String getDesc();
+    public Text desc;
+
 
     public static final class BaseCodes {
 

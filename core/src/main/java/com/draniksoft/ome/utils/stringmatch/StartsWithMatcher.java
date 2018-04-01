@@ -14,9 +14,7 @@ public class StartsWithMatcher implements Matcher {
 
     @Override
     public void load(JsonValue v) {
-	  mtc = v.getString("stsw");
-
-
+	  mtc = v.getString("val");
     }
 
     @Override
@@ -25,7 +23,7 @@ public class StartsWithMatcher implements Matcher {
 
 	  v.addChild("type", JsonUtils.createStringV("stsw"));
 
-	  v.addChild("str", JsonUtils.createStringV(mtc));
+	  v.addChild("val", JsonUtils.createStringV(mtc));
 
 	  return v;
     }

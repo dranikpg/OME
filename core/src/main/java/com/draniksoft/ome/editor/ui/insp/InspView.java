@@ -81,7 +81,7 @@ public class InspView extends BaseWinView implements ActionContainer {
 	  while (i.hasNext()) {
 		c = i.next();
 		if (c.isViewAv(CompObViewIds.VIEW_INSPECTOR)) {
-		    String tag = c.HEAD ? "head" : String.valueOf(c.ID);
+		    String tag = c.PRIORITY > 1 ? "head" : String.valueOf(c.ID);
 		    addIncld(tag, c.getViewID(CompObViewIds.VIEW_INSPECTOR));
 		}
 	  }

@@ -4,9 +4,8 @@ import com.artemis.Aspect;
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
-import com.draniksoft.ome.editor.components.pos.PosSizeC;
-import com.draniksoft.ome.editor.components.srz.MapDimensC;
-import com.draniksoft.ome.editor.components.state.InactiveC;
+import com.draniksoft.ome.editor.components.pos.PosBoundsC;
+import com.draniksoft.ome.editor.components.pos.PosC;
 import com.draniksoft.ome.editor.manager.TimeMgr;
 import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.workflow.ModeChangeE;
@@ -21,7 +20,7 @@ public class ObjTimeCalcSys extends SpreadProcessingSystem {
 
 
     public ObjTimeCalcSys() {
-	  super(Aspect.all(MapDimensC.class, PosSizeC.class).exclude(InactiveC.class), 1 / 20f);
+	  super(Aspect.all(PosC.class, PosBoundsC.class), 1 / 20f);
 	  tmpV = new Vector2();
     }
 

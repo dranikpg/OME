@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteCache;
 import com.badlogic.gdx.math.Vector3;
 import com.draniksoft.ome.editor.components.gfx.TexRegC;
-import com.draniksoft.ome.editor.components.pos.PosSizeC;
+import com.draniksoft.ome.editor.components.pos.PosBoundsC;
 import com.draniksoft.ome.editor.components.tps.MapC;
 import com.draniksoft.ome.editor.support.event.base_gfx.ResizeEvent;
 import net.mostlyoriginal.api.event.common.Subscribe;
@@ -18,12 +18,12 @@ public class MapRenderSys extends BaseEntitySystem {
     public static final String tag = "MapRenderSystem";
 
     public MapRenderSys() {
-        super(Aspect.all(MapC.class, TexRegC.class, PosSizeC.class));
+	  super(Aspect.all(MapC.class, TexRegC.class, PosBoundsC.class));
     }
 
 
     ComponentMapper<TexRegC> dm;
-    ComponentMapper<PosSizeC> ps;
+    ComponentMapper<PosBoundsC> ps;
 
     @Wire(name = "game_cam")
     OrthographicCamera cam;
@@ -66,7 +66,7 @@ public class MapRenderSys extends BaseEntitySystem {
 
     }
 
-    PosSizeC tPSC;
+    PosBoundsC tPSC;
     public void redraw(){
 
         needrd = false;
@@ -80,9 +80,9 @@ public class MapRenderSys extends BaseEntitySystem {
             e = getEntityIds().get(i);
 		tPSC = ps.get(e);
 
-            if (cam.frustum.boundsInFrustum(tPSC.x, tPSC.y, 0, tPSC.w, tPSC.h, 0)) {
+		if (cam.frustum.boundsInFrustum(tPSC.x, tPSC.y, 0, 10, 10, 0)) {
 
-                cache.add(dm.get(e).d,tPSC.x,tPSC.y, tPSC.w,tPSC.h);
+		    cache.add(dm.get(e).d, tPSC.x, tPSC.y, 10, 10);
 
             }
 

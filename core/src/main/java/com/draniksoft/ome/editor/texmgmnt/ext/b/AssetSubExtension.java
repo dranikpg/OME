@@ -4,8 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.draniksoft.ome.editor.extensions.sub.SubExtension;
-import com.draniksoft.ome.editor.manager.TextureRManager;
+import com.draniksoft.ome.editor.manager.uslac.TextureRManager;
 import com.draniksoft.ome.editor.texmgmnt.acess.TextureRAccesor;
+import com.draniksoft.ome.editor.texmgmnt.ext.gp_ext.AssetGroupSubExt;
 
 import java.util.Iterator;
 
@@ -21,8 +22,13 @@ public abstract class AssetSubExtension extends SubExtension {
         map = new ObjectMap<String, TextureRAccesor>();
     }
 
+
     public Iterator<TextureRAccesor> getAll() {
         return map.values().iterator();
+    }
+
+    public Iterator<String> getAllKeys() {
+	  return map.keys().iterator();
     }
 
     public ObjectMap<String, TextureRAccesor> getMap() {
@@ -67,6 +73,12 @@ public abstract class AssetSubExtension extends SubExtension {
 
 	  }
 
+    }
+
+    protected void indexGroups() {
+	  AssetGroupSubExt e = extension.getSub(AssetGroupSubExt.class);
+	  if (e == null) return;
+	  e.requestIndex();
     }
 
 }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.draniksoft.ome.editor.extensions.Extension;
 import com.draniksoft.ome.editor.struct.text_ext_test.TheTextExtDao;
 import com.draniksoft.ome.editor.texmgmnt.ext.b.AssetSubExtDao;
+import com.draniksoft.ome.editor.texmgmnt.ext.gp_ext.AssetGroupSubExtDao;
 
 public abstract class SubExtensionDao {
 
@@ -13,7 +14,11 @@ public abstract class SubExtensionDao {
     public static ObjectMap<String, Class<? extends SubExtensionDao>> MAP = new ObjectMap<String, Class<? extends SubExtensionDao>>();
 
     static {
+
+	  // assets
 	  MAP.put("assets", AssetSubExtDao.class);
+	  MAP.put("asset_group", AssetGroupSubExtDao.class);
+
 	  MAP.put("text", TheTextExtDao.class);
 
 	  System.out.println("SubExtDaoMap \n " + MAP.toString());

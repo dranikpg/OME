@@ -7,14 +7,14 @@ import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.draniksoft.ome.editor.components.pos.PosSizeC;
+import com.draniksoft.ome.editor.components.pos.PosBoundsC;
 import com.draniksoft.ome.editor.components.tps.MapC;
 import com.draniksoft.ome.utils.Env;
 
 public class MapRDebugSys extends IteratingSystem {
 
     public MapRDebugSys() {
-        super(Aspect.all(MapC.class, PosSizeC.class));
+	  super(Aspect.all(MapC.class, PosBoundsC.class));
     }
 
     @Wire(name = "game_cam")
@@ -24,8 +24,7 @@ public class MapRDebugSys extends IteratingSystem {
     ShapeRenderer rdr;
 
 
-
-    ComponentMapper<PosSizeC> psm;
+    ComponentMapper<PosBoundsC> psm;
 
     Color hc = new Color(.8f,.4f,.8f,1);
     Color rdrC = new Color(0.5f,1f,0.5f,1);
@@ -48,22 +47,10 @@ public class MapRDebugSys extends IteratingSystem {
 
     }
 
-    PosSizeC tPSC;
+    PosBoundsC tPSC;
     @Override
     protected void process(int e) {
 
-        tPSC = psm.get(e);
-
-        if (gameCam.frustum.boundsInFrustum(tPSC.x, tPSC.y, 0, tPSC.w, tPSC.h, 0)) {
-
-            rdr.setColor(rdrC);
-            rdr.box(tPSC.x,tPSC.y,0,tPSC.w,tPSC.h,0);
-
-        }else if(hiddedRender){
-
-            rdr.setColor(hc);
-            rdr.box(tPSC.x,tPSC.y,0,tPSC.w,tPSC.h,0);
-        }
 
 
 

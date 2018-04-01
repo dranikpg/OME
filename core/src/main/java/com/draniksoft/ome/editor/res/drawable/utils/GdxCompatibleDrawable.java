@@ -11,7 +11,7 @@ public class GdxCompatibleDrawable implements Drawable {
 
     @Override
     public void draw(Batch batch, float x, float y, float width, float height) {
-	  if (d != null) d.draw(batch, x, y, width, height);
+	  //if (d != null) d.draw(batch, x, y, width, height);
     }
 
     float mw = 0;

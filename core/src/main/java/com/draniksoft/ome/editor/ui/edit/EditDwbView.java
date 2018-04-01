@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.draniksoft.ome.editor.components.gfx.DrawableC;
-import com.draniksoft.ome.editor.components.srz.DrawableSrcC;
 import com.draniksoft.ome.editor.manager.ResourceManager;
 import com.draniksoft.ome.editor.res.drawable.constr.DrawableGroupConstructor;
 import com.draniksoft.ome.editor.res.drawable.constr.DrawableLeafContructor;
@@ -149,14 +148,14 @@ public class EditDwbView extends BaseWinView implements ActionContainer {
 		@Override
 		public void draw(Batch batch, float parentAlpha) {
 		    super.draw(batch, parentAlpha);
-		    if (this.getSelected() != ct.type()) {
-			  ct.setType(getSelected());
+		    if (this.getSelected() != ct.handler().type()) {
+			  ct.type(getSelected());
 			  if (ct == target) updateSel(ct);
 		    }
 		}
 	  };
 
-	  sb.setItems(ResSubT.fetchAll(ResTypes.DRAWABLE, ct.group()));
+	  sb.setItems(ResSubT.fetchAll(ResTypes.DRAWABLE, ct.group(), true));
 
 	  t.add("::");
 	  t.add(sb);
@@ -220,7 +219,7 @@ public class EditDwbView extends BaseWinView implements ActionContainer {
     public void add_leaf() {
 	  DrawableLeafContructor leafC = new DrawableLeafContructor();
 	  leafC.msg(MsgBaseCodes.INIT, MsgDirection.END, null);
-	  leafC.updateSources();
+	  // leafC.updateSources();
 	  if (tree != null) tree.addOnSelection(leafC);
     }
 
@@ -228,7 +227,7 @@ public class EditDwbView extends BaseWinView implements ActionContainer {
     public void add_group() {
 	  DrawableGroupConstructor groupC = new DrawableGroupConstructor();
 	  groupC.msg(MsgBaseCodes.INIT, MsgDirection.END, null);
-	  groupC.updateSources();
+	  //  groupC.updateSources();
 	  if (tree != null) tree.addOnSelection(groupC);
     }
 
@@ -296,9 +295,9 @@ public class EditDwbView extends BaseWinView implements ActionContainer {
 
 	  @Override
 	  public ResConstructor<Drawable> get(World w) {
-		DrawableSrcC c = w.getMapper(DrawableSrcC.class).get(e);
-		c.c.msg(MsgBaseCodes.INIT, MsgDirection.DOWN, null);
-		return c.c;
+		/*DrawableSrcC c = w.getMapper(DrawableSrcC.class).get(e);
+		c.c.msg(MsgBaseCodes.INIT, MsgDirection.DOWN, null);*/
+		return null;
 	  }
 
 	  @Override
@@ -308,7 +307,7 @@ public class EditDwbView extends BaseWinView implements ActionContainer {
 		root.msg(MsgBaseCodes.DEINIT, MsgDirection.DOWN, null);
 
 		w.getMapper(DrawableC.class).get(e).d = rb;
-		w.getMapper(DrawableSrcC.class).get(e).c = root;
+		//w.getMapper(DrawableSrcC.class).get(e).c = root;
 	  }
     }
 

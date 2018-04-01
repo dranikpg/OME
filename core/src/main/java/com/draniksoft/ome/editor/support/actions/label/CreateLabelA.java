@@ -3,7 +3,6 @@ package com.draniksoft.ome.editor.support.actions.label;
 import com.artemis.World;
 import com.draniksoft.ome.editor.components.label.LabelC;
 import com.draniksoft.ome.editor.components.label.LabelRTC;
-import com.draniksoft.ome.editor.manager.FontManager;
 import com.draniksoft.ome.editor.support.actions.Action;
 import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.entityy.CompositionChangeE;
@@ -25,7 +24,7 @@ public class CreateLabelA implements Action {
 
 	  w.getSystem(OmeEventSystem.class).dispatch(new CompositionChangeE(_e));
 
-	  w.getSystem(FontManager.class).rebuildCache(_e);
+	  //  w.getSystem(FontManager.class).rebuildCache(_e);
     }
 
     @Override

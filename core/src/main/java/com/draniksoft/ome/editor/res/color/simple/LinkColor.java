@@ -15,11 +15,4 @@ public class LinkColor extends ColorProvider {
         pv.get(c);
     }
 
-    @Override
-    public ColorProvider copy() {
-	  LinkColor c = new LinkColor();
-	  c.pv = pv;
-	  c.id = id;
-	  return c;
-    }
 }

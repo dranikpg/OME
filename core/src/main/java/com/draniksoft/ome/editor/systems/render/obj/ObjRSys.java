@@ -4,11 +4,15 @@ import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.annotations.Wire;
 import com.artemis.systems.IteratingSystem;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.cyphercove.gdx.flexbatch.CompliantBatch;
+import com.cyphercove.gdx.flexbatch.batchable.Quad2D;
+import com.draniksoft.ome.editor.base_gfx.batchables.STB;
 import com.draniksoft.ome.editor.components.gfx.DrawableC;
-import com.draniksoft.ome.editor.components.pos.PosSizeC;
-import com.draniksoft.ome.editor.components.state.InactiveC;
+import com.draniksoft.ome.editor.components.pos.PosBoundsC;
+import com.draniksoft.ome.editor.components.pos.PosC;
+import com.draniksoft.ome.utils.GU;
 
 public class ObjRSys extends IteratingSystem {
 
@@ -16,16 +20,15 @@ public class ObjRSys extends IteratingSystem {
 
 
     public ObjRSys() {
-        super(Aspect.all(PosSizeC.class, DrawableC.class)
-                .exclude(InactiveC.class));
+        super(Aspect.all(PosC.class, DrawableC.class));
     }
 
-    ComponentMapper<PosSizeC> posM;
+    ComponentMapper<PosBoundsC> posM;
     ComponentMapper<DrawableC> drwM;
 
 
-    @Wire
-    SpriteBatch b;
+    @Wire(name = "batch")
+    CompliantBatch<Quad2D> b;
 
     @Wire(name = "game_cam")
     OrthographicCamera cam;
@@ -36,19 +39,15 @@ public class ObjRSys extends IteratingSystem {
     protected void begin() {
         b.setProjectionMatrix(cam.combined);
         b.begin();
+
+        b.draw(STB.circle(200, 200, (int) (40 * GU.CAM_SCALE(0.4f, 1f)), Color.CHARTREUSE));
+
     }
 
-    PosSizeC ttc;
-    DrawableC tdc;
 
     @Override
     protected void process(int e) {
-        ttc = posM.get(e);
-        tdc = drwM.get(e);
-        if (tdc.d == null) return;
-        if (cam.frustum.boundsInFrustum(ttc.x, ttc.y, 0, ttc.w, ttc.h, 0)) {
-            tdc.d.draw(b, ttc.x, ttc.y, ttc.w, ttc.h);
-        }
+
     }
 
     @Override

@@ -42,11 +42,4 @@ public class RootColorProvider extends ColorProvider implements RootResource<Col
     }
 
 
-
-    @Override
-    public ColorProvider copy() {
-	  return null;
-    }
-
-
 }

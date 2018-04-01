@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.draniksoft.ome.mgmnt_base.base.BaseLoadController;
 import com.draniksoft.ome.support.load.IntelligentLoader;
-import com.draniksoft.ome.utils.GUtils;
+import com.draniksoft.ome.utils.GU;
 import com.draniksoft.ome.utils.struct.ResponseListener;
 import com.kotcrab.vis.ui.VisUI;
 
@@ -97,7 +97,7 @@ public class LoadingScreen implements Screen {
 
     private void openMainWin() {
 
-        GUtils.openEditorWin();
+	  GU.openEditorWin();
 
     }
 

@@ -105,8 +105,8 @@ public class JsonUtils {
 	  return parseText(v, true);
     }
 
-    public static Text parseText(JsonValue v, boolean emptyError) {
-	  if (v == null) return new PlainText(emptyError ? "*ERROR*" : "");
+    public static Text parseText(JsonValue v, boolean emptyMessage) {
+	  if (v == null) return emptyMessage ? new PlainText("*ERROR*") : null;
 	  if (v.type() == JsonValue.ValueType.stringValue) {
 		String s = v.asString();
 		if (s.startsWith(":@")) {
@@ -119,11 +119,13 @@ public class JsonUtils {
 			  v.getString("en"),
 			  v.getString("ru"));
 	  }
-	  return new PlainText(emptyError ? "*ERROR*" : "");
+	  return emptyMessage ? new PlainText("*ERROR*") : null;
     }
 
     public static Matcher parseMatcher(JsonValue v) {
-	  if (!v.hasChild("type")) return new AllMatcher();
+	  if (!v.has("type")) {
+		return new AllMatcher();
+	  }
 	  String t = v.getString("type");
 	  if (t.equals("stsw")) {
 		StartsWithMatcher m = new StartsWithMatcher();

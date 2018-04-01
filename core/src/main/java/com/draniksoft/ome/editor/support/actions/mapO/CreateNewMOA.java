@@ -2,17 +2,12 @@ package com.draniksoft.ome.editor.support.actions.mapO;
 
 import com.artemis.World;
 import com.badlogic.gdx.Gdx;
-import com.draniksoft.ome.editor.components.gfx.DrawableC;
-import com.draniksoft.ome.editor.components.pos.PosSizeC;
-import com.draniksoft.ome.editor.components.srz.DrawableSrcC;
-import com.draniksoft.ome.editor.manager.ArchTransmuterMgr;
-import com.draniksoft.ome.editor.res.drawable.constr.DrawableLeafContructor;
+import com.draniksoft.ome.editor.components.pos.PosBoundsC;
 import com.draniksoft.ome.editor.support.actions.Action;
 import com.draniksoft.ome.editor.support.compositionObserver.PositionCO;
 import com.draniksoft.ome.editor.support.compositionObserver.abstr.CompositionObserver;
 import com.draniksoft.ome.editor.systems.support.flows.EditorSystem;
 import com.draniksoft.ome.utils.ESCUtils;
-import com.draniksoft.ome.utils.FUtills;
 
 public class CreateNewMOA implements Action {
 
@@ -46,29 +41,34 @@ public class CreateNewMOA implements Action {
     @Override
     public void invoke(World _w) {
         this._w = _w;
-        _e = _w.getSystem(ArchTransmuterMgr.class).build(ArchTransmuterMgr.Codes.BASE_MO);
+	  //  _e = _w.getSystem(ArchTransmuterMgr.class).build(ArchTransmuterMgr.Codes.BASE_MO);
 
-        PosSizeC psc = _w.getMapper(PosSizeC.class).get(_e);
-        psc.x = (int) (x - (w / 2));
+	  PosBoundsC psc = _w.getMapper(PosBoundsC.class).get(_e);
+	  psc.x = (int) (x - (w / 2));
         psc.y = (int) (y - (h / 2));
-        psc.h = (int) h;
-        psc.w = (int) w;
+	  // psc.h = (int) h;
+	  //  psc.w = (int) w;
 
 	  _w.getSystem(EditorSystem.class).getComOb(CompositionObserver.IDs.POSITION).execA(PositionCO.ACodes.SYNC_POS, _e, false);
 
         if (!GFX_PRC) return;
 
-        DrawableC dwC = _w.getMapper(DrawableC.class).get(_e);
+        /*DrawableC dwC = _w.getMapper(DrawableC.class).get(_e);
 	  DrawableSrcC dwbSC = _w.getMapper(DrawableSrcC.class).get(_e);
 
 	  DrawableLeafContructor ct = new DrawableLeafContructor();
 	  Gdx.app.debug(tag, "Buildin dwb " + dwbID);
-	  ct.setFor(FUtills.getRAC(dwbID.substring(2)));
-	  dwC.d = ct.build();
+
+	  ct.type(ResSubT.SIMPLE);
+        SimpleDwbTD hd = (SimpleDwbTD) ct.handler();
+
+        hd.setUri(dwbID);
+
+	  dwC.d = ct.build(MainBase.engine).self();
 	  dwbSC.c = ct;
 
-        String tag = "CreateNewMOA";
-        Gdx.app.debug(tag, "Fully created MO with " + dwbID);
+        */
+	  Gdx.app.debug(tag, "Fully created MO with " + dwbID);
     }
 
     @Override
