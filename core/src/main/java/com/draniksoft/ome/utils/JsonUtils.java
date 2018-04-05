@@ -1,5 +1,6 @@
 package com.draniksoft.ome.utils;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectSet;
@@ -12,6 +13,8 @@ import com.draniksoft.ome.utils.stringmatch.Matcher;
 import com.draniksoft.ome.utils.stringmatch.StartsWithMatcher;
 
 public class JsonUtils {
+
+    private static final String tag = "JsonUtils";
 
     public static JsonValue createIntV(int i) {
 
@@ -134,6 +137,24 @@ public class JsonUtils {
 	  } else {
 		return new AllMatcher();
 	  }
+    }
+
+    public static Class parseClass(JsonValue v) {
+	  if (!v.isString()) return null;
+
+	  String s = v.asString();
+
+	  if (s.startsWith("#")) s = "com.draniksoft.ome." + s.substring(1);
+	  else if (s.startsWith(":")) s = "com.draniksoft.ome.editor." + s.substring(1);
+
+	  Class c;
+	  try {
+		c = Class.forName(s);
+	  } catch (ClassNotFoundException e) {
+		Gdx.app.debug("", "Not found " + s);
+		return null;
+	  }
+	  return c;
     }
 
 }

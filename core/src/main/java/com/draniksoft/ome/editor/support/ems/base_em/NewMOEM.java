@@ -7,7 +7,7 @@ import com.draniksoft.ome.editor.support.ems.core.SimpleEditMode;
 import com.draniksoft.ome.editor.support.input.base_mo.NewMOIC;
 import com.draniksoft.ome.editor.support.render.base_mo.NewMORenderer;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
-import com.draniksoft.ome.editor.systems.render.editor.SubsidiaryRenderSys;
+import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.InputSys;
 import com.draniksoft.ome.editor.systems.support.flows.EditorSystem;
@@ -35,7 +35,7 @@ public class NewMOEM extends SimpleEditMode {
 	  ESCUtils.clearSelected(_w);
 
         _w.getSystem(InputSys.class).setMainIC(newLIC);
-	  _w.getSystem(SubsidiaryRenderSys.class).addRdr(newRdr);
+	  _w.getSystem(OverlayRenderSys.class).addRdr(newRdr);
 
 	  _w.getSystem(UiSystem.class).openWin("new_mo_em", new WindowAgent() {
 
@@ -60,7 +60,7 @@ public class NewMOEM extends SimpleEditMode {
     @Override
     protected void on_detached() {
 	  _w.getSystem(InputSys.class).clearMainIC();
-	  _w.getSystem(SubsidiaryRenderSys.class).removeRdr(newRdr);
+	  _w.getSystem(OverlayRenderSys.class).removeRdr(newRdr);
 	  returnEnv();
 
     }

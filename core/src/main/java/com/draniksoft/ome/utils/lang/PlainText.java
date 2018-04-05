@@ -13,6 +13,11 @@ public class PlainText implements Text {
     public PlainText() {
     }
 
+    public static PlainText of(String s) {
+	  return new PlainText(s);
+    }
+
+
     @Override
     public String get() {
 	  return t;

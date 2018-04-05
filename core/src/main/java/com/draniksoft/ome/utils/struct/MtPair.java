@@ -30,6 +30,14 @@ public class MtPair<K, V> {
 	  this.val1 = val1;
     }
 
+    public Pair<K, V> constant() {
+	  return new Pair<K, V>(val0, val1);
+    }
+
+    public MtPair<K, V> copy() {
+	  return new MtPair<K, V>(val0, val1);
+    }
+
     public static <K, V> MtPair<K, V> P(K element0, V element1) {
 	  return new MtPair<K, V>(element0, element1);
     }

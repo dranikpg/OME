@@ -9,14 +9,15 @@ import com.badlogic.gdx.utils.IntArray;
 import com.cyphercove.gdx.flexbatch.CompliantBatch;
 import com.cyphercove.gdx.flexbatch.batchable.Quad2D;
 import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
-import com.draniksoft.ome.editor.support.render.core.SbsRenderer;
+import com.draniksoft.ome.editor.support.render.core.OverlayRenderer;
+import com.draniksoft.ome.editor.support.render.ut.FixedLineOverlayR;
 
 /*
 	Note : Does not perform any rendering
  */
-public class SubsidiaryRenderSys extends BaseSystem {
+public class OverlayRenderSys extends BaseSystem {
 
-    private final static String tag = "SubsidiaryRenderSys";
+    private final static String tag = "OverlayRenderSys";
 
     @Wire(name = "game_cam")
     OrthographicCamera cam;
@@ -24,9 +25,9 @@ public class SubsidiaryRenderSys extends BaseSystem {
     @Wire(name = "batch")
     CompliantBatch<Quad2D> b;
 
-    Array<SbsRenderer> rs;
+    Array<OverlayRenderer> rs;
 
-    public SubsidiaryRenderSys() {
+    public OverlayRenderSys() {
 
     }
 
@@ -34,10 +35,12 @@ public class SubsidiaryRenderSys extends BaseSystem {
     @Override
     protected void initialize() {
 
-	  rs = new Array<SbsRenderer>();
-	  bK = new Array<SbsRenderer>();
+	  rs = new Array<OverlayRenderer>();
+	  bK = new Array<OverlayRenderer>();
 
 	  world.getSystem(OmeEventSystem.class).registerEvents(this);
+
+	  addRdr(new FixedLineOverlayR());
 
     }
 
@@ -46,7 +49,7 @@ public class SubsidiaryRenderSys extends BaseSystem {
 
 	  b.begin();
 
-	  for (SbsRenderer r : rs) {
+	  for (OverlayRenderer r : rs) {
 		r.draw(b, cam);
 	  }
 
@@ -55,23 +58,23 @@ public class SubsidiaryRenderSys extends BaseSystem {
     }
 
 
-    public Array<SbsRenderer> getRs() {
+    public Array<OverlayRenderer> getRs() {
 	  return rs;
     }
 
-    public void addRdr(SbsRenderer r) {
+    public void addRdr(OverlayRenderer r) {
 	  Gdx.app.debug(tag, "Adding " + r.toString());
 	  rs.add(r);
 	  r.added(world);
     }
 
-    public void removeRdr(SbsRenderer r) {
+    public void removeRdr(OverlayRenderer r) {
 	  Gdx.app.debug(tag, "Removing " + r.toString());
 	  rs.removeValue(r, true);
     }
 
 
-    Array<SbsRenderer> bK;
+    Array<OverlayRenderer> bK;
 
     public void removeRdrByPlaceBK(int[] all, int[] one) {
 	  IntArray rmIds = new IntArray();
@@ -117,7 +120,7 @@ public class SubsidiaryRenderSys extends BaseSystem {
 
 	  }
 
-	  Array<SbsRenderer> torem = new Array<SbsRenderer>();
+	  Array<OverlayRenderer> torem = new Array<OverlayRenderer>();
 	  bK.clear();
 	  for (int i = 0; i < rmIds.size; i++) {
 		Gdx.app.debug(tag, "Removing OverlayR :: " + rs.get(rmIds.get(i)).getClass().getSimpleName());
@@ -130,7 +133,7 @@ public class SubsidiaryRenderSys extends BaseSystem {
     }
 
     public void restoreBK() {
-	  for (SbsRenderer i : bK) {
+	  for (OverlayRenderer i : bK) {
 		addRdr(i);
 	  }
 	  bK.clear();

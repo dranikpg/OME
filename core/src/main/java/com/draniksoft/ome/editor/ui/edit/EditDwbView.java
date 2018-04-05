@@ -1,38 +1,7 @@
 package com.draniksoft.ome.editor.ui.edit;
 
-import com.artemis.World;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.draniksoft.ome.editor.components.gfx.DrawableC;
-import com.draniksoft.ome.editor.manager.ResourceManager;
-import com.draniksoft.ome.editor.res.drawable.constr.DrawableGroupConstructor;
-import com.draniksoft.ome.editor.res.drawable.constr.DrawableLeafContructor;
-import com.draniksoft.ome.editor.res.drawable.utils.Drawable;
-import com.draniksoft.ome.editor.res.impl.constructor.GroupResConstructor;
-import com.draniksoft.ome.editor.res.impl.constructor.LeafConstructor;
-import com.draniksoft.ome.editor.res.impl.constructor.ResConstructor;
-import com.draniksoft.ome.editor.res.impl.types.ResSubT;
-import com.draniksoft.ome.editor.res.impl.types.ResTypes;
-import com.draniksoft.ome.editor.res.impl.ui_br.NodeDeliverer;
-import com.draniksoft.ome.editor.ui.edit.dwb_typevw.DwbEditI;
-import com.draniksoft.ome.editor.ui.supp.ResourceTree;
-import com.draniksoft.ome.support.pipemsg.MsgBaseCodes;
-import com.draniksoft.ome.support.pipemsg.MsgDirection;
-import com.draniksoft.ome.support.ui.viewsys.BaseView;
-import com.draniksoft.ome.support.ui.viewsys.BaseWinView;
-import com.draniksoft.ome.ui_addons.resource_ui.ResTreeNode;
-import com.draniksoft.ome.ui_addons.resource_ui.dwb.ResDwbNode;
-import com.draniksoft.ome.utils.FUtills;
-import com.github.czyzby.lml.annotation.LmlAction;
-import com.github.czyzby.lml.annotation.LmlActor;
-import com.github.czyzby.lml.parser.LmlParser;
-import com.github.czyzby.lml.parser.action.ActionContainer;
-import com.kotcrab.vis.ui.widget.VisSelectBox;
-import com.kotcrab.vis.ui.widget.VisTable;
-
-public class EditDwbView extends BaseWinView implements ActionContainer {
-
+public class EditDwbView /* extends BaseWinView implements ActionContainer */ {
+/*
     private static String tag = "EditDwbView";
 
     @LmlActor("root")
@@ -149,7 +118,7 @@ public class EditDwbView extends BaseWinView implements ActionContainer {
 		public void draw(Batch batch, float parentAlpha) {
 		    super.draw(batch, parentAlpha);
 		    if (this.getSelected() != ct.handler().type()) {
-			  ct.type(getSelected());
+			  //ct.type(getSelected());
 			  if (ct == target) updateSel(ct);
 		    }
 		}
@@ -285,6 +254,9 @@ public class EditDwbView extends BaseWinView implements ActionContainer {
 	  }
     }
 
+    */
+	/*
+
     public static class EntityDwbHandler implements Handler {
 
 	  public EntityDwbHandler(int e) {
@@ -295,8 +267,8 @@ public class EditDwbView extends BaseWinView implements ActionContainer {
 
 	  @Override
 	  public ResConstructor<Drawable> get(World w) {
-		/*DrawableSrcC c = w.getMapper(DrawableSrcC.class).get(e);
-		c.c.msg(MsgBaseCodes.INIT, MsgDirection.DOWN, null);*/
+		DrawableSrcC c = w.getMapper(DrawableSrcC.class).get(e);
+		c.c.msg(MsgBaseCodes.INIT, MsgDirection.DOWN, null);
 		return null;
 	  }
 
@@ -338,5 +310,7 @@ public class EditDwbView extends BaseWinView implements ActionContainer {
     public Actor get() {
 	  return root;
     }
+
+    */
 }
 

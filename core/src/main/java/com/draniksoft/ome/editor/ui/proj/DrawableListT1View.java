@@ -1,37 +1,8 @@
 package com.draniksoft.ome.editor.ui.proj;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Container;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.IntMap;
-import com.draniksoft.ome.editor.manager.ResourceManager;
-import com.draniksoft.ome.editor.res.drawable.utils.Drawable;
-import com.draniksoft.ome.editor.res.drawable.utils.GdxCompatibleDrawable;
-import com.draniksoft.ome.editor.res.impl.types.ResTypes;
-import com.draniksoft.ome.editor.res.pv_res_wrapper.PVResWrapper;
-import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
-import com.draniksoft.ome.editor.support.event.projectVals.ProjectValEvent;
-import com.draniksoft.ome.editor.systems.gui.UiSystem;
-import com.draniksoft.ome.editor.ui.edit.EditDwbView;
-import com.draniksoft.ome.support.ui.util.WindowAgent;
-import com.draniksoft.ome.support.ui.viewsys.BaseWinView;
-import com.github.czyzby.lml.annotation.LmlAction;
-import com.github.czyzby.lml.annotation.LmlActor;
-import com.github.czyzby.lml.parser.LmlParser;
-import com.github.czyzby.lml.parser.action.ActionContainer;
-import com.kotcrab.vis.ui.util.adapter.AbstractListAdapter;
-import com.kotcrab.vis.ui.util.adapter.ArrayAdapter;
-import com.kotcrab.vis.ui.widget.*;
-import net.mostlyoriginal.api.event.common.Subscribe;
+public class DrawableListT1View /*extends BaseWinView implements ActionContainer*/ {
 
-import java.util.Iterator;
-
-public class DrawableListT1View extends BaseWinView implements ActionContainer {
-
+    /*
     private static final String tag = "DrawableListT1View";
 
     @LmlActor("root")
@@ -376,4 +347,7 @@ public class DrawableListT1View extends BaseWinView implements ActionContainer {
     public Actor get() {
 	  return root;
     }
+
+
+    */
 }

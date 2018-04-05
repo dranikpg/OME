@@ -24,5 +24,6 @@ public class BaseRenderSys extends BaseSystem {
             Gdx.app.debug("FPS", "LOW FPS ");
         }
 
+
     }
 }

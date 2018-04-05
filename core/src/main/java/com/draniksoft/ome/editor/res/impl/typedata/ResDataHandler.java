@@ -3,7 +3,6 @@ package com.draniksoft.ome.editor.res.impl.typedata;
 import com.artemis.World;
 import com.draniksoft.ome.editor.res.impl.res_ifaces.Resource;
 import com.draniksoft.ome.editor.res.impl.res_ifaces.WeakLinkedResource;
-import com.draniksoft.ome.editor.res.impl.types.ResSubT;
 
 public interface ResDataHandler<TYPE> {
 
@@ -14,11 +13,14 @@ public interface ResDataHandler<TYPE> {
     void initL(WeakLinkedResource<TYPE> link);
 
     // deinit live mode
-    void deinit();
+    void deinitL();
 
-    ResSubT type();
 
     // UNUSED WHEN GROUP
     Resource<TYPE> build(World w);
+
+    // copy
+
+    ResDataHandler<TYPE> copy();
 
 }

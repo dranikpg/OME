@@ -132,5 +132,10 @@ public class ExecutionSystem extends BaseSystem implements ExecutionProvider {
 	  }
     }
 
+    @Override
+    protected void dispose() {
+	  // TODO bad fix for intelligent loader usage in dispose
+	  s.shutdown();
+    }
 }
 

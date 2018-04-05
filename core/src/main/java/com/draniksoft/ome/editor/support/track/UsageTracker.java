@@ -2,8 +2,8 @@ package com.draniksoft.ome.editor.support.track;
 
 public interface UsageTracker {
 
-    int usages();
+    short usages();
 
-    int usage(int delta);
+    short usage(short delta);
 
 }

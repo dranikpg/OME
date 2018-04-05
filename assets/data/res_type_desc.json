@@ -1,0 +1,14 @@
+{
+  "DRAWABLE": [
+    {
+      "name": "Texture Drawable",
+      "c": ":res.drawable.typedata.TextureDwbTD"
+    },
+    {
+      "name": "Colored circle",
+      "c": ":res.drawable.typedata.ColorCclDwbTD"
+    }
+  ],
+  "COLOR": [
+  ]
+}

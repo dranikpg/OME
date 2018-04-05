@@ -32,6 +32,11 @@ public class STB {
 	  return rect(x, y, w, h, Color.WHITE, r);
     }
 
+    public static Batchable rect(float x, float y, float w, float h, Color c) {
+	  return rect((int) x, (int) y, (int) w, (int) h, c, WHITE());
+    }
+
+
     public static Batchable rect(int x, int y, int w, int h, Color c) {
 	  return rect(x, y, w, h, c, WHITE());
     }

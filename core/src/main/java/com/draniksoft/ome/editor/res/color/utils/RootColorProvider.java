@@ -3,6 +3,7 @@ package com.draniksoft.ome.editor.res.color.utils;
 import com.badlogic.gdx.graphics.Color;
 import com.draniksoft.ome.editor.res.impl.res_ifaces.Resource;
 import com.draniksoft.ome.editor.res.impl.res_ifaces.RootResource;
+import com.draniksoft.ome.editor.support.track.UsageTracker;
 
 public class RootColorProvider extends ColorProvider implements RootResource<ColorProvider> {
 
@@ -37,9 +38,8 @@ public class RootColorProvider extends ColorProvider implements RootResource<Col
     }
 
     @Override
-    public void destruct() {
-
+    public UsageTracker usg() {
+	  return null;
     }
-
 
 }

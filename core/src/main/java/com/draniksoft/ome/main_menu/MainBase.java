@@ -84,6 +84,8 @@ public class MainBase extends Game {
     @Override
     public void dispose() {
 
+	  engine.dispose();
+
         final IntelligentLoader l = new IntelligentLoader();
         l.setMaxTs(1);
         l.setPrefTs(1);
@@ -97,7 +99,6 @@ public class MainBase extends Game {
 
         AppDO.I.setLoadState(AppDataManager.TERMINATE_RUN);
         l.passRunnable(AppDO.I);
-
 
         l.start();
 

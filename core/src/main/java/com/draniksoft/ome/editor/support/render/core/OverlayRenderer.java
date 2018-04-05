@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.cyphercove.gdx.flexbatch.CompliantBatch;
 import com.cyphercove.gdx.flexbatch.batchable.Quad2D;
 
-public interface SbsRenderer {
+public interface OverlayRenderer {
 
     void added(World _w);
 

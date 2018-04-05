@@ -1,20 +1,7 @@
 package com.draniksoft.ome.editor.ui.insp;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.draniksoft.ome.editor.components.gfx.DrawableC;
-import com.draniksoft.ome.editor.res.drawable.utils.GdxCompatibleDrawable;
-import com.draniksoft.ome.editor.systems.gui.UiSystem;
-import com.draniksoft.ome.editor.ui.edit.EditDwbView;
-import com.draniksoft.ome.support.ui.util.WindowAgent;
-import com.draniksoft.ome.support.ui.viewsys.BaseWinView;
-import com.github.czyzby.lml.annotation.LmlActor;
-import com.kotcrab.vis.ui.widget.VisImageButton;
-import com.kotcrab.vis.ui.widget.VisTable;
-
-public class DrawableView extends BaseWinView implements InspView.InspectorManagable {
-
+public class DrawableView  /*extends BaseWinView implements InspView.InspectorManagable */ {
+/*
     private static final String tag = "DrawableView";
 
     @LmlActor("root")
@@ -77,5 +64,5 @@ public class DrawableView extends BaseWinView implements InspView.InspectorManag
 	  this.e = e;
 	  DrawableC c = _w.getMapper(DrawableC.class).get(e);
 	  btn.getImage().setDrawable(GdxCompatibleDrawable.from(c.d));
-    }
+    }*/
 }

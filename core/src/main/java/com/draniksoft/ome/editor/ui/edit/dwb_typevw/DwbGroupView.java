@@ -1,16 +1,8 @@
 package com.draniksoft.ome.editor.ui.edit.dwb_typevw;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.draniksoft.ome.editor.res.drawable.utils.Drawable;
-import com.draniksoft.ome.editor.res.impl.constructor.ResConstructor;
-import com.draniksoft.ome.editor.ui.edit.EditDwbView;
-import com.draniksoft.ome.support.ui.viewsys.BaseView;
-import com.github.czyzby.lml.annotation.LmlActor;
-import com.kotcrab.vis.ui.widget.VisTable;
+public class DwbGroupView /*extends BaseView implements DwbEditI */ {
 
-public class DwbGroupView extends BaseView implements DwbEditI {
-
-    private static String tag = "DwbGroupView";
+  /*  private static String tag = "DwbGroupView";
 
     @LmlActor("root")
     VisTable root;
@@ -46,4 +38,6 @@ public class DwbGroupView extends BaseView implements DwbEditI {
     public String getID() {
 	  return ID;
     }
+
+    */
 }

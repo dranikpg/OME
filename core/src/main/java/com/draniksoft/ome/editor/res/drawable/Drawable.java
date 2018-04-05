@@ -1,9 +1,11 @@
-package com.draniksoft.ome.editor.res.drawable.utils;
+package com.draniksoft.ome.editor.res.drawable;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.cyphercove.gdx.flexbatch.FlexBatch;
+import com.draniksoft.ome.editor.res.impl.constructor.ResConstructor;
 import com.draniksoft.ome.editor.res.impl.res_ifaces.Resource;
+import com.draniksoft.ome.main_menu.MainBase;
 import com.draniksoft.ome.support.pipemsg.MsgBaseCodes;
 import com.draniksoft.ome.support.pipemsg.MsgDirection;
 import com.draniksoft.ome.support.pipemsg.MsgNode;
@@ -114,7 +116,7 @@ public abstract class Drawable implements Resource<Drawable>, MsgNode {
 	  switch (msg) {
 		case MSG.USAGE_CHANGE:
 		    short[] data2 = (short[]) data;
-		    _updateUsage(data2[1], data2[0]);
+		    _updateUsage(data2[0], data2[1]);
 		    forwardmsg(msg, dir, data);
 		    return true;
 	  }
@@ -147,6 +149,22 @@ public abstract class Drawable implements Resource<Drawable>, MsgNode {
 	  // only existance overwritten
     }
 
+
+    /*
+    	Static helper
+     */
+
+    public static Drawable buildForEty(ResConstructor<Drawable> ctr) {
+	  Drawable d = ctr.build(MainBase.engine).self();
+	  d.msg(MsgBaseCodes.INIT, MsgDirection.DOWN, null);
+	  d.msg(MSG.USAGE_CHANGE, MsgDirection.DOWN, new short[]{1, 1});
+	  return d;
+    }
+
+    public static void deleteForEty(Drawable d) {
+	  d.msg(MSG.USAGE_CHANGE, MsgDirection.DOWN, new short[]{0, -1});
+	  d.msg(MsgBaseCodes.DEINIT, MsgDirection.DOWN, null);
+    }
 
 
 

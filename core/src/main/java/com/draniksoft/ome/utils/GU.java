@@ -55,7 +55,8 @@ public class GU {
     }
 
     public static int CIRCLE_SEGMENTS(int r) {
-	  return Math.max(12, (int) (3 * (float) Math.cbrt(r)));
+	  return Math.max(8, (int) (10 * (float) Math.cbrt(r)));
+	  // return 4;
     }
 
     public static float CAM_SCALE(float n, float x) {

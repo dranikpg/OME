@@ -12,7 +12,7 @@ import com.draniksoft.ome.editor.support.render.base_mo.MoveMORenderer;
 import com.draniksoft.ome.editor.support.render.core.OverlayPlaces;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.editor.systems.pos.PositionSystem;
-import com.draniksoft.ome.editor.systems.render.editor.SubsidiaryRenderSys;
+import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.InputSys;
 import com.draniksoft.ome.editor.systems.support.flows.EditorSystem;
@@ -54,11 +54,11 @@ public class MoveMOEM extends SimpleEditMode {
 	  r.setEm(this);
 
 
-	  _w.getSystem(SubsidiaryRenderSys.class).removeRdrByPlaceBK(new int[]{}, new int[]{OverlayPlaces.ENTITY_MAIN_BODY});
+	  _w.getSystem(OverlayRenderSys.class).removeRdrByPlaceBK(new int[]{}, new int[]{OverlayPlaces.ENTITY_MAIN_BODY});
 
 	  defalteEnv();
 
-	  _w.getSystem(SubsidiaryRenderSys.class).addRdr(r);
+	  _w.getSystem(OverlayRenderSys.class).addRdr(r);
 	  _w.getSystem(InputSys.class).setMainIC(ic);
 	  _w.getSystem(InputSys.class).setDefIC(new StebIC());
 
@@ -136,8 +136,8 @@ public class MoveMOEM extends SimpleEditMode {
 
 	  _w.getSystem(InputSys.class).clearMainIC();
 
-	  _w.getSystem(SubsidiaryRenderSys.class).removeRdr(r);
-	  _w.getSystem(SubsidiaryRenderSys.class).restoreBK();
+	  _w.getSystem(OverlayRenderSys.class).removeRdr(r);
+	  _w.getSystem(OverlayRenderSys.class).restoreBK();
 
     }
 

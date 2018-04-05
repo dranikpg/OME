@@ -7,7 +7,7 @@ public class GdxCompatibleDrawable implements Drawable {
 
     private static final String tag = "GdxCompatibleDrawable";
 
-    public com.draniksoft.ome.editor.res.drawable.utils.Drawable d;
+    public com.draniksoft.ome.editor.res.drawable.Drawable d;
 
     @Override
     public void draw(Batch batch, float x, float y, float width, float height) {
@@ -77,7 +77,7 @@ public class GdxCompatibleDrawable implements Drawable {
 	  mh = minHeight;
     }
 
-    public static GdxCompatibleDrawable from(com.draniksoft.ome.editor.res.drawable.utils.Drawable d) {
+    public static GdxCompatibleDrawable from(com.draniksoft.ome.editor.res.drawable.Drawable d) {
 	  GdxCompatibleDrawable gd = new GdxCompatibleDrawable();
 	  gd.d = d;
 	  return gd;

@@ -5,9 +5,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.cyphercove.gdx.flexbatch.CompliantBatch;
 import com.cyphercove.gdx.flexbatch.batchable.Quad2D;
-import com.draniksoft.ome.editor.support.render.core.SbsRenderer;
+import com.draniksoft.ome.editor.support.render.core.OverlayRenderer;
 
-public class NewMORenderer implements SbsRenderer {
+public class NewMORenderer implements OverlayRenderer {
 
     private static final String tag = "NewMORenderer";
 

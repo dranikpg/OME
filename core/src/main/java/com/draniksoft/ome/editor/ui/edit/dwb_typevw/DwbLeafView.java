@@ -1,18 +1,7 @@
 package com.draniksoft.ome.editor.ui.edit.dwb_typevw;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.draniksoft.ome.editor.res.drawable.constr.DrawableLeafContructor;
-import com.draniksoft.ome.editor.res.drawable.utils.Drawable;
-import com.draniksoft.ome.editor.res.impl.constructor.ResConstructor;
-import com.draniksoft.ome.editor.ui.edit.EditDwbView;
-import com.draniksoft.ome.editor.ui.proj.AssetListView;
-import com.draniksoft.ome.support.ui.viewsys.BaseView;
-import com.draniksoft.ome.utils.struct.ResponseListener;
-import com.github.czyzby.lml.annotation.LmlActor;
-import com.kotcrab.vis.ui.widget.VisTable;
-
-public class DwbLeafView extends BaseView implements DwbEditI {
-
+public class DwbLeafView/* extends BaseView implements DwbEditI*/ {
+/*
     private static final String tag = "DwbLeafView";
 
     DrawableLeafContructor c;
@@ -76,5 +65,5 @@ public class DwbLeafView extends BaseView implements DwbEditI {
     @Override
     public String getID() {
 	  return ID;
-    }
+    }*/
 }

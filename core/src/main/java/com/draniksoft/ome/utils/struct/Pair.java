@@ -22,11 +22,10 @@ public class Pair<K, V> {
 	  return e1;
     }
 
+
     @Override
     public String toString() {
-
 	  return ((e0 != null) ? e0.toString() : " ") + ";" +
 		    ((e1 != null) ? e1.toString() : " ");
-
     }
 }

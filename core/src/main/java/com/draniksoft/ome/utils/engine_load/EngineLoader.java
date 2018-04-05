@@ -26,7 +26,7 @@ import com.draniksoft.ome.editor.systems.gfx_support.CameraSys;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.editor.systems.pos.PositionSystem;
 import com.draniksoft.ome.editor.systems.render.BaseRenderSys;
-import com.draniksoft.ome.editor.systems.render.editor.SubsidiaryRenderSys;
+import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.render.map.MapRDebugSys;
 import com.draniksoft.ome.editor.systems.render.map.MapRenderSys;
 import com.draniksoft.ome.editor.systems.render.obj.LabelRenderSys;
@@ -74,7 +74,6 @@ public class EngineLoader {
         L = null;
 
 	  execService = null;
-
     }
 
     public enum LoadS {
@@ -341,7 +340,7 @@ public class EngineLoader {
 		cb.with(new ObjRSys());
 		cb.with(new LabelRenderSys());
 		//
-		cb.with(new SubsidiaryRenderSys());
+		cb.with(new OverlayRenderSys());
 		//
 		cb.with(new UiSystem());
 		cb.with(new ConsoleSys());

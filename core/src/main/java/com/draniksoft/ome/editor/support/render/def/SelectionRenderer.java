@@ -4,9 +4,9 @@ import com.artemis.World;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.cyphercove.gdx.flexbatch.CompliantBatch;
 import com.cyphercove.gdx.flexbatch.batchable.Quad2D;
-import com.draniksoft.ome.editor.support.render.core.SbsRenderer;
+import com.draniksoft.ome.editor.support.render.core.OverlayRenderer;
 
-public class SelectionRenderer implements SbsRenderer {
+public class SelectionRenderer implements OverlayRenderer {
 
 
     @Override

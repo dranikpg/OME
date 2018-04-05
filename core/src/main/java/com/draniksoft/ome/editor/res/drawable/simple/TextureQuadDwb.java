@@ -3,7 +3,7 @@ package com.draniksoft.ome.editor.res.drawable.simple;
 import com.badlogic.gdx.math.Vector2;
 import com.cyphercove.gdx.flexbatch.FlexBatch;
 import com.draniksoft.ome.editor.base_gfx.batchables.STB;
-import com.draniksoft.ome.editor.res.drawable.utils.Drawable;
+import com.draniksoft.ome.editor.res.drawable.Drawable;
 import com.draniksoft.ome.editor.texmgmnt.acess.TextureRAccesor;
 import com.draniksoft.ome.utils.GU;
 

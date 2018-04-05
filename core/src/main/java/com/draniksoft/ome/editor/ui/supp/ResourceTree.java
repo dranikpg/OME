@@ -5,12 +5,10 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
-import com.draniksoft.ome.editor.res.impl.constructor.GroupResConstructor;
 import com.draniksoft.ome.editor.res.impl.constructor.ResConstructor;
 import com.draniksoft.ome.editor.res.impl.ui_br.NodeDeliverer;
 import com.draniksoft.ome.support.ui.viewsys.BaseView;
 import com.draniksoft.ome.ui_addons.resource_ui.ResTreeNode;
-import com.draniksoft.ome.utils.struct.Pair;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTree;
@@ -109,9 +107,9 @@ public class ResourceTree extends BaseView {
 			  tree.add(cc.getNode(getNodeD()));
 			  if (_ll != null) _ll.newRoot(cc);
 		    } else {
-			  Pair<ResConstructor, GroupResConstructor> nextG = n.c().findParentPrefix(true);
+			/*  Pair<ResConstructor, GroupResConstructor> nextG = n.c().findParentPrefix(true);
 			  if (nextG == null) return;
-			  nextG.V().add(cc, nextG.K(), getNodeD());
+			  nextG.V().add(cc, nextG.K(), getNodeD());*/
 		    }
 
 		    tree.getSelection().set(cc.getNode(getNodeD()));
@@ -144,9 +142,9 @@ public class ResourceTree extends BaseView {
 		return;
 	  }
 
-	  Pair<ResConstructor, GroupResConstructor> nextG = sel.c().findParentPrefix(true);
+	  /*Pair<ResConstructor, GroupResConstructor> nextG = sel.c().findParentPrefix(true);
 	  if (nextG == null) return;
-	  nextG.V().add(c, nextG.K(), getNodeD());
+	  nextG.V().add(c, nextG.K(), getNodeD());*/
 
 	  tree.getSelection().set(c.getNode(getNodeD()));
     }

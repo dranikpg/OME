@@ -2,6 +2,7 @@ package com.draniksoft.ome.editor.support;
 
 import com.artemis.Aspect;
 import com.artemis.BaseSystem;
+import com.artemis.ComponentMapper;
 import com.artemis.World;
 import com.artemis.utils.Bag;
 import com.artemis.utils.ImmutableBag;
@@ -10,11 +11,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.draniksoft.ome.editor.components.gfx.DrawableC;
+import com.draniksoft.ome.editor.components.pos.PosC;
 import com.draniksoft.ome.editor.esc_utils.OmeStrategy;
 import com.draniksoft.ome.editor.extensions.Extension;
 import com.draniksoft.ome.editor.extensions.export.ExtensionExporter;
@@ -22,7 +26,16 @@ import com.draniksoft.ome.editor.extensions.stg.ExtensionDao;
 import com.draniksoft.ome.editor.load.MapLoadBundle;
 import com.draniksoft.ome.editor.manager.ExtensionManager;
 import com.draniksoft.ome.editor.manager.MapMgr;
+import com.draniksoft.ome.editor.manager.ResourceManager;
 import com.draniksoft.ome.editor.manager.TimeMgr;
+import com.draniksoft.ome.editor.res.drawable.Drawable;
+import com.draniksoft.ome.editor.res.drawable.constr.DrawableLeafContructor;
+import com.draniksoft.ome.editor.res.drawable.typedata.ColorCclDwbTD;
+import com.draniksoft.ome.editor.res.drawable.typedata.LinkedDrawableTD;
+import com.draniksoft.ome.editor.res.impl.ext_mgmnt.ResContainer;
+import com.draniksoft.ome.editor.res.impl.ext_mgmnt.ResSubExt;
+import com.draniksoft.ome.editor.res.impl.typedata.ResTypeDescriptor;
+import com.draniksoft.ome.editor.res.impl.types.ResTypes;
 import com.draniksoft.ome.editor.struct.text_ext_test.TheTextSubExt;
 import com.draniksoft.ome.editor.support.actions.Action;
 import com.draniksoft.ome.editor.support.compositionObserver.abstr.CompositionObserver;
@@ -33,12 +46,12 @@ import com.draniksoft.ome.editor.support.input.InputController;
 import com.draniksoft.ome.editor.support.input.back.SelectIC;
 import com.draniksoft.ome.editor.support.input.back.TimedSelectIC;
 import com.draniksoft.ome.editor.support.input.base_mo.NewMOIC;
-import com.draniksoft.ome.editor.support.render.core.SbsRenderer;
+import com.draniksoft.ome.editor.support.render.core.OverlayRenderer;
 import com.draniksoft.ome.editor.systems.file_mgmnt.ProjectLoadSystem;
 import com.draniksoft.ome.editor.systems.gfx_support.CameraSys;
 import com.draniksoft.ome.editor.systems.gui.UiSystem;
 import com.draniksoft.ome.editor.systems.pos.PositionSystem;
-import com.draniksoft.ome.editor.systems.render.editor.SubsidiaryRenderSys;
+import com.draniksoft.ome.editor.systems.render.editor.OverlayRenderSys;
 import com.draniksoft.ome.editor.systems.support.ActionSystem;
 import com.draniksoft.ome.editor.systems.support.ConsoleSys;
 import com.draniksoft.ome.editor.systems.support.ExecutionSystem;
@@ -59,6 +72,7 @@ import com.draniksoft.ome.utils.Const;
 import com.draniksoft.ome.utils.Env;
 import com.draniksoft.ome.utils.GU;
 import com.draniksoft.ome.utils.cam.Target;
+import com.draniksoft.ome.utils.lang.PlainText;
 import com.draniksoft.ome.utils.struct.ResponseListener;
 
 import java.lang.reflect.Field;
@@ -360,8 +374,44 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
     }
 
     /*
-        Some res utils
+        Resource utils
      */
+
+    public void log_res(String extname, String ts) {
+        Extension ext = world.getSystem(ExtensionManager.class).getExt(extname);
+        if (ext == null) {
+            console.log("Extension not found");
+            return;
+        }
+
+        ResSubExt rese = ext.getSub(ResSubExt.class);
+        if (rese == null) {
+            console.log("No Resource sub extension");
+            return;
+        }
+
+        ResTypes t = ResTypes.valueOf(ts);
+        if (t == null) {
+            console.log("No resource type");
+            return;
+        }
+
+        for (Iterator<ResContainer> it = rese.get(t).getAll(); it.hasNext(); ) {
+            ResContainer ct = it.next();
+            console.log(ct.name.get() + " (aka " + ct.handle + ")  ~ " + ct.references());
+        }
+    }
+
+    public void log_av_res(String ts) {
+        ResTypes t = ResTypes.valueOf(ts);
+        if (t == null) {
+            console.log("NOT FOUND");
+            return;
+        }
+        for (ResTypeDescriptor d : world.getSystem(ResourceManager.class).getDesc(t)) {
+            console.log(d.name.get() + "  (g:" + d.group + ") -> " + d.c.getSimpleName());
+        }
+    }
 
     public void log_etydwbc(int e) {
         try {
@@ -369,6 +419,73 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
             console.log(c.ctr.toString());
         } catch (Exception er) {
             Gdx.app.error("CE", "", er);
+        }
+    }
+
+    /*
+        Test commands
+     */
+
+    public void test_1() {
+
+        try {
+
+            DrawableLeafContructor c = new DrawableLeafContructor();
+            ColorCclDwbTD td = new ColorCclDwbTD();
+            td.r = 30;
+            td.c = Color.CORAL;
+            td.outL = true;
+            c.handler(td);
+
+            ComponentMapper<PosC> posM = world.getMapper(PosC.class);
+            ComponentMapper<DrawableC> dwbM = world.getMapper(DrawableC.class);
+
+            for (int i = 0; i < 700; i++) {
+                int e = world.create();
+
+                posM.create(e);
+                posM.get(e).x = MathUtils.random(0, 4000);
+                posM.get(e).y = MathUtils.random(0, 4000);
+
+                dwbM.create(e);
+                dwbM.get(e).ctr = c.copy();
+                dwbM.get(e).d = dwbM.get(e).ctr.build(world).self();
+            }
+
+        } catch (Exception e) {
+            Gdx.app.error("CE", "", e);
+        }
+    }
+
+    public void test_2() {
+
+        try {
+            DrawableLeafContructor c = new DrawableLeafContructor();
+            ColorCclDwbTD td = new ColorCclDwbTD();
+            td.r = 30;
+            td.c = Color.SKY;
+            c.handler(td);
+
+            ResourceManager resM = world.getSystem(ResourceManager.class);
+            int id = resM.create(ResTypes.DRAWABLE, "i_casB", new PlainText("Name"), "hd");
+            resM.update(ResTypes.DRAWABLE, "i_casB", id, c);
+
+            DrawableLeafContructor c2 = new DrawableLeafContructor();
+            LinkedDrawableTD td2 = new LinkedDrawableTD();
+            td2.setAddress("i_casB", id);
+            c2.handler(td2);
+
+            int e = world.create();
+
+            PosC pos_c = world.getMapper(PosC.class).create(e);
+            pos_c.x = 500;
+            pos_c.y = 500;
+
+            DrawableC dwb_c = world.getMapper(DrawableC.class).create(e);
+            dwb_c.ctr = c2;
+            dwb_c.d = Drawable.buildForEty(c2);
+        } catch (Exception e) {
+            Gdx.app.error("CE", "", e);
         }
     }
 
@@ -380,7 +497,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
         StringBuilder b = new StringBuilder();
 
-        for (SbsRenderer r : world.getSystem(SubsidiaryRenderSys.class).getRs()) {
+        for (OverlayRenderer r : world.getSystem(OverlayRenderSys.class).getRs()) {
 
             b.append(r.getClass().getSimpleName()).append("; \n ");
 
@@ -402,7 +519,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
         int[] o = new int[o_s.length];
         for (int i = 0; i < o_s.length; i++) o[i] = Integer.parseInt(o_s[i]);
 
-        world.getSystem(SubsidiaryRenderSys.class).removeRdrByPlaceBK(a, o);
+        world.getSystem(OverlayRenderSys.class).removeRdrByPlaceBK(a, o);
 
     }
 

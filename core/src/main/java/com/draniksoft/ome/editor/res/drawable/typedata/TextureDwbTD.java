@@ -1,13 +1,12 @@
 package com.draniksoft.ome.editor.res.drawable.typedata;
 
 import com.artemis.World;
-import com.draniksoft.ome.editor.res.drawable.utils.Drawable;
+import com.draniksoft.ome.editor.res.drawable.Drawable;
 import com.draniksoft.ome.editor.res.impl.res_ifaces.Resource;
 import com.draniksoft.ome.editor.res.impl.res_ifaces.WeakLinkedResource;
 import com.draniksoft.ome.editor.res.impl.typedata.ResDataHandler;
-import com.draniksoft.ome.editor.res.impl.types.ResSubT;
 
-public class SimpleDwbTD implements ResDataHandler<Drawable> {
+public class TextureDwbTD implements ResDataHandler<Drawable>, CamScaleable {
 
     int s1, s2;
 
@@ -27,8 +26,8 @@ public class SimpleDwbTD implements ResDataHandler<Drawable> {
     }
 
     @Override
-    public void deinit() {
-	  // dwb = null;
+    public void deinitL() {
+        // dwb = null;
     }
 
     public void setUri(String uri) {
@@ -40,10 +39,6 @@ public class SimpleDwbTD implements ResDataHandler<Drawable> {
 	  //    dwb.r = FUtills.getRAC(uri);
     }
 
-    @Override
-    public ResSubT type() {
-	  return ResSubT.SIMPLE;
-    }
 
     @Override
     public Resource<Drawable> build(World w) {
@@ -52,7 +47,27 @@ public class SimpleDwbTD implements ResDataHandler<Drawable> {
     }
 
     @Override
+    public ResDataHandler<Drawable> copy() {
+        return null;
+    }
+
+    @Override
     public String toString() {
 	  return " SD_TD(" + uri + ")";
+    }
+
+    @Override
+    public void set(float lb, float ub) {
+
+    }
+
+    @Override
+    public float getLowerB() {
+        return 0;
+    }
+
+    @Override
+    public float getUpperB() {
+        return 0;
     }
 }

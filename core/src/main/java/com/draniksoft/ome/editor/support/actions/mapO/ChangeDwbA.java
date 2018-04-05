@@ -3,7 +3,7 @@ package com.draniksoft.ome.editor.support.actions.mapO;
 import com.artemis.World;
 import com.badlogic.gdx.Gdx;
 import com.draniksoft.ome.editor.components.gfx.DrawableC;
-import com.draniksoft.ome.editor.res.drawable.utils.Drawable;
+import com.draniksoft.ome.editor.res.drawable.Drawable;
 import com.draniksoft.ome.editor.support.actions.Action;
 import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
 import com.draniksoft.ome.editor.support.event.entityy.EntityDataChangeE;

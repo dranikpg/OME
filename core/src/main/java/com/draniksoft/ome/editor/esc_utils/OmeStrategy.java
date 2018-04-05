@@ -23,8 +23,6 @@ public class OmeStrategy extends InvocationStrategy {
     boolean __profiling = false;
     boolean onePass = true;
 
-    boolean fpsNotific = true;
-
     int frameC = 5;
     int frame_c = frameC;
 
@@ -72,6 +70,7 @@ public class OmeStrategy extends InvocationStrategy {
 	  if (pf == null) pf = new GLProfiler(Gdx.graphics);
 
 	  if (profiling) __profiling = true;
+	  // else __profiling = false; // DAMN STUPID BUG
 
 	  if (profiling) {
 		pf.enable();

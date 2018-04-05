@@ -1,20 +1,7 @@
 package com.draniksoft.ome.editor.ui.proj;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.utils.Array;
-import com.draniksoft.ome.editor.manager.ResourceManager;
-import com.draniksoft.ome.editor.res.impl.types.ResTypes;
-import com.draniksoft.ome.editor.support.event.__base.OmeEventSystem;
-import com.draniksoft.ome.editor.support.event.projectVals.ProjectValEvent;
-import com.draniksoft.ome.support.ui.viewsys.BaseWinView;
-import com.draniksoft.ome.ui_addons.ColoredCirlceWget;
-import com.github.czyzby.lml.annotation.LmlActor;
-import com.kotcrab.vis.ui.util.adapter.ArrayAdapter;
-import com.kotcrab.vis.ui.widget.*;
-import net.mostlyoriginal.api.event.common.Subscribe;
-
-public class ColorListT1View extends BaseWinView {
-
+public class ColorListT1View /* extends BaseWinView*/ {
+/*
     private static final String tag = "ColorListT1View";
 
     @LmlActor("root")
@@ -130,5 +117,7 @@ public class ColorListT1View extends BaseWinView {
     public Actor get() {
 	  return root;
     }
+
+    */
 
 }
