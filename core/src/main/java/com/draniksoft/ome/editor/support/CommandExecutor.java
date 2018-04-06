@@ -28,10 +28,17 @@ import com.draniksoft.ome.editor.manager.ExtensionManager;
 import com.draniksoft.ome.editor.manager.MapMgr;
 import com.draniksoft.ome.editor.manager.ResourceManager;
 import com.draniksoft.ome.editor.manager.TimeMgr;
+import com.draniksoft.ome.editor.res.color.constr.ColorGroupConstructor;
+import com.draniksoft.ome.editor.res.color.constr.ColorLeafConstructor;
+import com.draniksoft.ome.editor.res.color.typedata.ColorAnimTD;
+import com.draniksoft.ome.editor.res.color.typedata.SimpleClPTD;
 import com.draniksoft.ome.editor.res.drawable.Drawable;
+import com.draniksoft.ome.editor.res.drawable.constr.DrawableGroupConstructor;
 import com.draniksoft.ome.editor.res.drawable.constr.DrawableLeafContructor;
 import com.draniksoft.ome.editor.res.drawable.typedata.ColorCclDwbTD;
 import com.draniksoft.ome.editor.res.drawable.typedata.LinkedDrawableTD;
+import com.draniksoft.ome.editor.res.drawable.typedata.StackDwbTD;
+import com.draniksoft.ome.editor.res.drawable.typedata.TextureDwbTD;
 import com.draniksoft.ome.editor.res.impl.ext_mgmnt.ResContainer;
 import com.draniksoft.ome.editor.res.impl.ext_mgmnt.ResSubExt;
 import com.draniksoft.ome.editor.res.impl.typedata.ResTypeDescriptor;
@@ -433,14 +440,26 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
             DrawableLeafContructor c = new DrawableLeafContructor();
             ColorCclDwbTD td = new ColorCclDwbTD();
             td.r = 30;
-            td.c = Color.CORAL;
+
+            ColorGroupConstructor cl = new ColorGroupConstructor();
+            cl.handler(new ColorAnimTD());
+
+            ColorLeafConstructor c1 = new ColorLeafConstructor();
+            c1.handler(new SimpleClPTD(Color.CORAL));
+
+            ColorLeafConstructor c2 = new ColorLeafConstructor();
+            c2.handler(new SimpleClPTD(Color.YELLOW));
+
+            cl.addSilent(c1, c2);
+
+            td.pv = cl;
             td.outL = true;
             c.handler(td);
 
             ComponentMapper<PosC> posM = world.getMapper(PosC.class);
             ComponentMapper<DrawableC> dwbM = world.getMapper(DrawableC.class);
 
-            for (int i = 0; i < 700; i++) {
+            for (int i = 0; i < 1000; i++) {
                 int e = world.create();
 
                 posM.create(e);
@@ -449,7 +468,8 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
 
                 dwbM.create(e);
                 dwbM.get(e).ctr = c.copy();
-                dwbM.get(e).d = dwbM.get(e).ctr.build(world).self();
+                dwbM.get(e).d = Drawable.buildForEty(c);
+
             }
 
         } catch (Exception e) {
@@ -463,7 +483,7 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
             DrawableLeafContructor c = new DrawableLeafContructor();
             ColorCclDwbTD td = new ColorCclDwbTD();
             td.r = 30;
-            td.c = Color.SKY;
+            //td.c = Color.SKY;
             c.handler(td);
 
             ResourceManager resM = world.getSystem(ResourceManager.class);
@@ -484,6 +504,70 @@ public class CommandExecutor extends com.strongjoshua.console.CommandExecutor {
             DrawableC dwb_c = world.getMapper(DrawableC.class).create(e);
             dwb_c.ctr = c2;
             dwb_c.d = Drawable.buildForEty(c2);
+
+        } catch (Exception e) {
+            Gdx.app.error("CE", "", e);
+        }
+    }
+
+    public void test_3() {
+
+        DrawableLeafContructor c2 = new DrawableLeafContructor();
+        LinkedDrawableTD td2 = new LinkedDrawableTD();
+        td2.setAddress("i_casB", 1);
+        c2.handler(td2);
+
+        int e = world.create();
+
+        PosC pos_c = world.getMapper(PosC.class).create(e);
+        pos_c.x = 500;
+        pos_c.y = 500;
+
+        DrawableC dwb_c = world.getMapper(DrawableC.class).create(e);
+        dwb_c.ctr = c2;
+        dwb_c.d = Drawable.buildForEty(c2);
+
+    }
+
+    public void test_4() {
+
+        try {
+
+            DrawableGroupConstructor ct = new DrawableGroupConstructor();
+            ct.handler(new StackDwbTD());
+
+            DrawableLeafContructor c1 = new DrawableLeafContructor();
+            ColorCclDwbTD td1 = new ColorCclDwbTD();
+
+            ColorLeafConstructor cl = new ColorLeafConstructor();
+            SimpleClPTD ctd = new SimpleClPTD();
+            ctd.c = Color.GREEN;
+            cl.handler(ctd);
+
+            td1.pv = cl;
+            td1.r = 50;
+
+            c1.handler(td1);
+
+            DrawableLeafContructor c2 = new DrawableLeafContructor();
+            TextureDwbTD td2 = new TextureDwbTD();
+            td2.w = 80;
+            td2.h = 80;
+            td2.setUri("i_casB@mapTile@100");
+            c2.handler(td2);
+
+            ct.addSilent(c1, c2);
+
+            int e = world.create();
+
+            PosC pos_c = world.getMapper(PosC.class).create(e);
+            pos_c.x = 1000;
+            pos_c.y = 1000;
+
+            DrawableC dwb_c = world.getMapper(DrawableC.class).create(e);
+            dwb_c.ctr = ct;
+            dwb_c.d = Drawable.buildForEty(ct);
+
         } catch (Exception e) {
             Gdx.app.error("CE", "", e);
         }

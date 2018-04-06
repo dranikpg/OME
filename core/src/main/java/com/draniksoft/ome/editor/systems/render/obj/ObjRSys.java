@@ -43,6 +43,7 @@ public class ObjRSys extends IteratingSystem {
 	  posC = posM.get(e);
 	  dwbC = dwbM.get(e);
 
+	  dwbC.d.update();
 	  if (cam.frustum.boundsInFrustum(posC.x - 100, posC.y - 100, 0, 100, 100, 0))
 		dwbC.d.draw(b, posC.x, posC.y);
     }

@@ -84,7 +84,7 @@ public class MainBase extends Game {
     @Override
     public void dispose() {
 
-	  engine.dispose();
+	  if (engine != null) engine.dispose();
 
         final IntelligentLoader l = new IntelligentLoader();
         l.setMaxTs(1);

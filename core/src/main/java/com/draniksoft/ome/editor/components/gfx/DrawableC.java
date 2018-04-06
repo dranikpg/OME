@@ -6,8 +6,8 @@ import com.draniksoft.ome.editor.res.impl.constructor.ResConstructor;
 
 public class DrawableC extends Component {
 
-    public ResConstructor<Drawable> ctr;
 
+    public ResConstructor<Drawable> ctr;
     public transient Drawable d;
 
 }

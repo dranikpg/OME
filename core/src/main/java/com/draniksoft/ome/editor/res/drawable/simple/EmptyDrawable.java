@@ -27,6 +27,11 @@ public class EmptyDrawable extends Drawable {
     }
 
     @Override
+    public void _update() {
+
+    }
+
+    @Override
     public void msg(short msg, byte dir, Object data) {
 	  // discard everything
     }

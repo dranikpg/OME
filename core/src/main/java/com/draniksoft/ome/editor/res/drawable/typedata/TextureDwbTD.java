@@ -2,17 +2,19 @@ package com.draniksoft.ome.editor.res.drawable.typedata;
 
 import com.artemis.World;
 import com.draniksoft.ome.editor.res.drawable.Drawable;
+import com.draniksoft.ome.editor.res.drawable.simple.TextureQuadDwb;
 import com.draniksoft.ome.editor.res.impl.res_ifaces.Resource;
 import com.draniksoft.ome.editor.res.impl.res_ifaces.WeakLinkedResource;
 import com.draniksoft.ome.editor.res.impl.typedata.ResDataHandler;
+import com.draniksoft.ome.utils.FUtills;
 
 public class TextureDwbTD implements ResDataHandler<Drawable>, CamScaleable {
 
-    int s1, s2;
 
+    float lB = 1f, uB = 1;
+    public int w = 40, h = 40;
     String uri;
 
-    // transient SimpleDrawable dwb;
 
     @Override
     public void init() {
@@ -21,29 +23,21 @@ public class TextureDwbTD implements ResDataHandler<Drawable>, CamScaleable {
 
     @Override
     public void initL(WeakLinkedResource<Drawable> link) {
-	 /* dwb = new SimpleDrawable();
-	  link.set(dwb);*/
+
     }
 
     @Override
     public void deinitL() {
-        // dwb = null;
     }
 
     public void setUri(String uri) {
 	  this.uri = uri;
-	  // if(dwb != null) updatePreviewDwb(uri);
-    }
-
-    public void updatePreviewDwb(String uri) {
-	  //    dwb.r = FUtills.getRAC(uri);
     }
 
 
     @Override
-    public Resource<Drawable> build(World w) {
-	  //   return new SimpleDrawable(FUtills.getRAC(uri));
-	  return null;
+    public Resource<Drawable> build(World _w) {
+	  return new TextureQuadDwb(FUtills.getRAC(uri), w, h, lB, uB);
     }
 
     @Override
@@ -57,17 +51,18 @@ public class TextureDwbTD implements ResDataHandler<Drawable>, CamScaleable {
     }
 
     @Override
-    public void set(float lb, float ub) {
-
+    public void setCS(float lb, float ub) {
+	  this.lB = lb;
+	  this.uB = ub;
     }
 
     @Override
     public float getLowerB() {
-        return 0;
+	  return lB;
     }
 
     @Override
     public float getUpperB() {
-        return 0;
+	  return uB;
     }
 }

@@ -39,6 +39,11 @@ public class WeakLinkDrawable extends Drawable implements WeakLinkedResource<Dra
     }
 
     @Override
+    public void _update() {
+
+    }
+
+    @Override
     public void msg(short msg, byte dir, Object data) {
 	  Gdx.app.error(tag, "Part of message chain !! somsingswrong");
     }

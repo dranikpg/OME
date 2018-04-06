@@ -41,6 +41,11 @@ public class LinkedDrawable extends Drawable implements LinkedResource {
     }
 
     @Override
+    public void _update() {
+	  link.update();
+    }
+
+    @Override
     public void setR(RootResource r) {
 	  this.link = (Drawable) r;
     }

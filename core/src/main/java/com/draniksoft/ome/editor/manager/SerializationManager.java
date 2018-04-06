@@ -122,6 +122,7 @@ public class SerializationManager extends Manager implements LoadSaveManager {
     public void writeKryoData(Output outp, Object o) {
 	  synchronized (KRYO_LOCK) {
 		kryoBackend.getKryo().writeObject(outp, o);
+		outp.close();
 	  }
     }
 

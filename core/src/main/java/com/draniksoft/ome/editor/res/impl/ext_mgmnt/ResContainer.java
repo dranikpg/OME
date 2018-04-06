@@ -6,12 +6,15 @@ import com.draniksoft.ome.editor.support.track.ReferenceTracker;
 import com.draniksoft.ome.utils.lang.Text;
 
 public class ResContainer<T> implements ReferenceTracker {
+
+    public boolean resolved = true;
+
     public Text name;
     public String handle;
 
     public ResConstructor<T> ctr;
 
-    public RootResource<T> r;
+    public transient RootResource<T> r;
 
     transient int refs = 0;
 

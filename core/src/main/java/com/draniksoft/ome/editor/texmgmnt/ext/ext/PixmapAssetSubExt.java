@@ -153,6 +153,8 @@ public class PixmapAssetSubExt extends AssetSubExtension {
 
 		PixmapPacker packer = new PixmapPacker(500, 500, Pixmap.Format.RGBA4444, 2, false);
 
+		//packer.sort(pixMap.values().toArray(new Array<Pixmap>()));
+
 		for (ObjectMap.Entry<String, Pixmap> e : pixMap) {
 		    packer.pack(e.key, e.value);
 		}

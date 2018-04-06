@@ -16,6 +16,7 @@ public abstract class Drawable implements Resource<Drawable>, MsgNode {
 
     Drawable parent;
 
+
     /*
     	Main iface
      */
@@ -34,6 +35,16 @@ public abstract class Drawable implements Resource<Drawable>, MsgNode {
 
     /* Return max bounds size - max HALFwidth and HALFheight, like most distant point from center*/
     public abstract void size(Vector2 v);
+
+    /*
+    	Update colors and depencies
+     */
+
+    public void update() {
+	  _update();
+    }
+
+    protected abstract void _update();
 
     /*
     	Resources

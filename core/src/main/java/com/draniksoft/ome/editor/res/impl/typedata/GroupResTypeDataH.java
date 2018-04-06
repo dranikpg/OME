@@ -9,7 +9,7 @@ public interface GroupResTypeDataH<TYPE> {
 
     void update(Array<TYPE> ar);
 
-    Resource<TYPE> build(Array<Resource<TYPE>> ar);
+    Resource<TYPE> build(Array<TYPE> ar);
 
     ResDataHandler<TYPE> asHanlder();
 

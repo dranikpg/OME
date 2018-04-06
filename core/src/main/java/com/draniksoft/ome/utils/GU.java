@@ -55,7 +55,7 @@ public class GU {
     }
 
     public static int CIRCLE_SEGMENTS(int r) {
-	  return Math.max(8, (int) (10 * (float) Math.cbrt(r)));
+	  return Math.max(8, (int) (8 * (float) Math.cbrt(r)));
 	  // return 4;
     }
 
@@ -64,7 +64,6 @@ public class GU {
     }
 
     //
-
 
     public static TextureRegion[][] splitTITR(Texture t, int h, int w) {
 

@@ -23,6 +23,7 @@ public class ResSubExt extends SubExtension {
 	  return ar.get(t.ordinal());
     }
 
+
     public void register(ResContainer ct) {
 	  reference(ct.reference(1));
     }
@@ -34,11 +35,18 @@ public class ResSubExt extends SubExtension {
 
     @Override
     public void load(ExecutionProvider p) {
+
 	  FileHandle h = FUtills.uriToFile(extension.dao.URI + "/res.kryo");
+
 	  if (h.exists()) {
 		SerializationManager sm = extension.w.getSystem(SerializationManager.class);
 		try {
 		    ar = sm.loadKryoData(h.path(), Array.class);
+
+		    for (ResContainerBase b : ar) {
+			  b.init(extension.w);
+		    }
+
 		} catch (FileNotFoundException e) {
 		    e.printStackTrace();
 		}
@@ -50,6 +58,11 @@ public class ResSubExt extends SubExtension {
 		    b.empty(t);
 		    ar.add(b);
 		}
+	  }
+
+
+	  for (ResTypes t : ResTypes.values()) {
+		ar.get(t.ordinal()).ext = this;
 	  }
     }
 

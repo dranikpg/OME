@@ -8,6 +8,7 @@ import com.draniksoft.ome.editor.res.impl.res_ifaces.RootResource;
 import com.draniksoft.ome.editor.support.track.UsageTracker;
 import com.draniksoft.ome.support.pipemsg.MsgBaseCodes;
 import com.draniksoft.ome.support.pipemsg.MsgDirection;
+import com.draniksoft.ome.utils.FM;
 
 /*
       Top level drawable class.
@@ -20,7 +21,9 @@ public class RootDrawable extends Drawable implements RootResource<Drawable>, Us
 
     public Drawable d;
 
-    transient short uses = 0;
+    short uses = 0;
+
+    int LF = -1;
 
 
     @Override
@@ -42,6 +45,19 @@ public class RootDrawable extends Drawable implements RootResource<Drawable>, Us
     @Override
     public void size(Vector2 v) {
 	  if (d != null) d.size(v);
+    }
+
+    @Override
+    public void update() {
+	  if (LF < FM.FRAME) {
+		_update();
+		LF = FM.FRAME;
+	  }
+    }
+
+    @Override
+    public void _update() {
+
     }
 
     //

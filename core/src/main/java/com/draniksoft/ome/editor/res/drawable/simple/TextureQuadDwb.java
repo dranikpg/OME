@@ -3,8 +3,10 @@ package com.draniksoft.ome.editor.res.drawable.simple;
 import com.badlogic.gdx.math.Vector2;
 import com.cyphercove.gdx.flexbatch.FlexBatch;
 import com.draniksoft.ome.editor.base_gfx.batchables.STB;
+import com.draniksoft.ome.editor.manager.uslac.TextureRManager;
 import com.draniksoft.ome.editor.res.drawable.Drawable;
 import com.draniksoft.ome.editor.texmgmnt.acess.TextureRAccesor;
+import com.draniksoft.ome.main_menu.MainBase;
 import com.draniksoft.ome.utils.GU;
 
 public class TextureQuadDwb extends Drawable {
@@ -23,10 +25,13 @@ public class TextureQuadDwb extends Drawable {
 
     @Override
     public void draw(FlexBatch b, int x, int y) {
-	  if (ac == null) return;
+	  if (ac == null) {
+		System.out.println("NOAC");
+		return;
+	  }
 	  int bx = x - w() / 2;
 	  int by = y - h() / 2;
-	  STB.rect(bx, by, w(), h(), ac.acl());
+	  b.draw(STB.rect(bx, by, w(), h(), ac.atl()));
     }
 
     @Override
@@ -36,7 +41,7 @@ public class TextureQuadDwb extends Drawable {
 	  int nh = Math.min(h, this.h);
 	  int bx = x - nw / 2;
 	  int by = y - nh / 2;
-	  STB.rect(bx, by, nw, nh, ac.acl());
+	  b.draw(STB.rect(bx, by, nw, nh, ac.acl()));
     }
 
     @Override
@@ -48,6 +53,29 @@ public class TextureQuadDwb extends Drawable {
     public void size(Vector2 v) {
 	  v.x = Math.max(w(), v.x);
 	  v.y = Math.max(h(), v.y);
+    }
+
+    @Override
+    public void _update() {
+
+    }
+
+    @Override
+    protected void _init() {
+	  super._init();
+
+	  if (ac != null)
+		MainBase.engine.getSystem(TextureRManager.class).updateReference(ac, 1);
+
+    }
+
+    @Override
+    protected void _updateUsage(short sum, short delta) {
+	  super._updateUsage(sum, delta);
+
+	  if (ac != null)
+		MainBase.engine.getSystem(TextureRManager.class).updateUsage(ac, delta);
+
     }
 
     public int w() {

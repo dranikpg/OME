@@ -1,6 +1,7 @@
 package com.draniksoft.ome.editor.res.color.utils;
 
 import com.badlogic.gdx.graphics.Color;
+import com.draniksoft.ome.editor.res.color.ColorProvider;
 import com.draniksoft.ome.editor.res.impl.res_ifaces.Resource;
 import com.draniksoft.ome.editor.res.impl.res_ifaces.RootResource;
 import com.draniksoft.ome.editor.support.track.UsageTracker;
@@ -11,14 +12,14 @@ public class RootColorProvider extends ColorProvider implements RootResource<Col
     Color c;
 
     @Override
-    public void get(Color c) {
+    public void getC(Color c) {
 	  if (p != null) {
-		p.get(c);
+		p.getC(c);
 	  }
     }
 
-    public Color get() {
-	  get(c);
+    public Color getC() {
+	  getC(c);
 	  return c;
     }
 
