@@ -1,0 +1,9 @@
+[
+    {
+        "name": "All available", 
+        "match":{
+            "type":"stsw",
+            "val":"map"
+        }
+    }
+]

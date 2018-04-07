@@ -1,16 +1,22 @@
 package com.draniksoft.ome.main_menu;
 
 import com.artemis.World;
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.draniksoft.ome.editor.base_gfx.screen_base.EditorScreen;
 import com.draniksoft.ome.mgmnt_base.base.AppDO;
 import com.draniksoft.ome.mgmnt_base.base.AppDataManager;
+import com.draniksoft.ome.mgmnt_base.base.BaseLoadController;
 import com.draniksoft.ome.support.load.IntelligentLoader;
+import com.draniksoft.ome.support.load.load_screen.LoadingScreen;
 import com.draniksoft.ome.utils.FM;
 import com.draniksoft.ome.utils.GU;
 import com.draniksoft.ome.utils.struct.ResponseListener;
+import com.kotcrab.vis.ui.VisUI;
 
 public class MainBase extends Game {
 
@@ -18,25 +24,76 @@ public class MainBase extends Game {
 
     public static volatile World engine;
 
-    MenuScreen ms;
     EditorScreen sc;
+    LoadingScreen ls;
 
     SpriteBatch b;
 
+    BaseLoadController lc;
+
     @Override
     public void create() {
+        Gdx.app.debug(tag, "Created");
+        Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
+        VisUI.load("skin/skin.json");
         b = new SpriteBatch();
 
-        Gdx.app.debug(tag, "\n\nCreated");
+        lc = new BaseLoadController();
+        lc.startLoad(new IntelligentLoader(), new ResponseListener() {
+            @Override
+            public void onResponse(short code) {
+                lc = null;
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        MainBase.this.launchEditor();
+                    }
+                });
+            }
+        });
 
-        ms = new MenuScreen(this);
+        setScreen(new Screen() {
+            @Override
+            public void show() {
 
-        setScreen(ms);
+            }
 
-	  GU.getWindow().setSizeLimits(500, 500, 10000, 10000);
+            @Override
+            public void render(float delta) {
+                Gdx.gl.glClearColor(1,1,0.4f,1);
+                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            }
+
+            @Override
+            public void resize(int width, int height) {
+
+            }
+
+            @Override
+            public void pause() {
+
+            }
+
+            @Override
+            public void resume() {
+
+            }
+
+            @Override
+            public void hide() {
+
+            }
+
+            @Override
+            public void dispose() {
+
+            }
+        });
+
 
     }
+
 
     public void launchEditor() {
         launchEditor(false);
@@ -78,6 +135,7 @@ public class MainBase extends Game {
     @Override
     public void render() {
 	  FM.frame();
+	  if(lc != null) lc.updateGL();
 	  super.render();
     }
 

@@ -1,0 +1,15 @@
+{
+    "id":"i_casB",
+    "name": "Castle pack", 
+    "type":"BASIC",
+    "stpload": true, 
+    "assets":{
+    
+    }, 
+    "asset_group":{
+    
+    }, 
+    "res":{
+    
+    }
+}

@@ -1,5 +1,4 @@
 apply plugin: 'application'
-apply plugin: 'kotlin'
 
 sourceSets.main.resources.srcDirs += [ rootProject.file('assets').absolutePath ]
 mainClassName = 'com.draniksoft.ome.lwjgl3.Lwjgl3Launcher'
@@ -7,14 +6,9 @@ eclipse.project.name = appName + '-lwjgl3'
 sourceCompatibility = 1.7
 
 dependencies {
-    compile project(':core')
-    compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
-    compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-    compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
-    compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
-
-    compile group: 'ro.fortsoft.pf4j', name: 'pf4j', version: '1.3.0'
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+  compile project(':core')
+  compile "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+  compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 }
 
 jar {
@@ -23,26 +17,4 @@ jar {
   manifest {
     attributes 'Main-Class': project.mainClassName
   }
-}
-buildscript {
-    ext.kotlin_version = '1.2.0'
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
-repositories {
-    mavenCentral()
-}
-compileKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-}
-compileTestKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
 }

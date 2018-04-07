@@ -131,7 +131,7 @@ public class ResourceManager extends BaseSystem implements LoadSaveManager {
     }
 
     private void parseDesc() {
-	  JsonValue v = FUtills.r().parse(Gdx.files.internal("assets/data/res_type_desc.json"));
+	  JsonValue v = FUtills.r().parse(Gdx.files.internal("data/res_type_desc.json"));
 	  for (JsonValue type_v : v) {
 		ResTypes t = ResTypes.valueOf(type_v.name);
 		if (t == null) continue;

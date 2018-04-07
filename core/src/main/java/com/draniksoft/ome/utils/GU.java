@@ -1,7 +1,6 @@
 package com.draniksoft.ome.utils;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.lwjgl3.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -9,7 +8,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.BufferUtils;
 import com.draniksoft.ome.editor.texmgmnt.acess.TextureRAccesor;
-import com.draniksoft.ome.main_menu.MainBase;
 
 import java.nio.IntBuffer;
 
@@ -86,52 +84,6 @@ public class GU {
 
     }
 
-
-    public static Lwjgl3Graphics getGraphics() {
-	  return (Lwjgl3Graphics) Gdx.graphics;
-    }
-
-    public static Lwjgl3Window getWindow() {
-	  return getGraphics().getWindow();
-    }
-
-    public static Lwjgl3Application getApp() {
-	  return (Lwjgl3Application) Gdx.app;
-    }
-
-    public static Lwjgl3Input getInput() {
-	  return (Lwjgl3Input) Gdx.input;
-    }
-
-
-    public static Lwjgl3ApplicationConfiguration getEditorConfig() {
-
-	  Gdx.input.setOnscreenKeyboardVisible(true);
-
-	  Lwjgl3ApplicationConfiguration configuration = new Lwjgl3ApplicationConfiguration();
-	  configuration.setTitle("OpenMapEditor");
-
-	  configuration.setWindowedMode(640, 480);
-	  configuration.setMaximized(true);
-
-	  configuration.setWindowIcon("libgdx128.png", "libgdx64.png", "libgdx32.png", "libgdx16.png");
-
-	  configuration.setBackBufferConfig(8, 8, 8, 8, 0, 0, 1);
-
-	  return configuration;
-
-    }
-
-    public static void openEditorWin() {
-
-	  GU.getApp().newWindow(new MainBase(), GU.getEditorConfig());
-
-	  GU.getWindow().closeWindow();
-
-    }
-
     //
-
-
 
 }

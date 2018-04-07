@@ -1,0 +1,11 @@
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+mainClassName = 'com.draniksoft.ome.headless.HeadlessLauncher'
+eclipse.project.name = appName + '-headless'
+
+dependencies {
+  compile project(':core')
+  compile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+  compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+}

@@ -28,9 +28,6 @@ public class EditorAdapter extends ApplicationAdapter {
     public void create() {
 
 
-	  GU.getWindow().setVisible(true);
-
-
     }
 
     @Override

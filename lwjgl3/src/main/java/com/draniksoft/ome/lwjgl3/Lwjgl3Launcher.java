@@ -3,6 +3,7 @@ package com.draniksoft.ome.lwjgl3;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.draniksoft.ome.Main;
+import com.draniksoft.ome.main_menu.MainBase;
 
 /** Launches the desktop (LWJGL3) application. */
 public class Lwjgl3Launcher {
@@ -11,23 +12,14 @@ public class Lwjgl3Launcher {
     }
 
     private static Lwjgl3Application createApplication() {
-        return new Lwjgl3Application(new Main(), getDefaultConfiguration());
+        return new Lwjgl3Application(new MainBase(), getDefaultConfiguration());
     }
 
     private static Lwjgl3ApplicationConfiguration getDefaultConfiguration() {
         Lwjgl3ApplicationConfiguration configuration = new Lwjgl3ApplicationConfiguration();
         configuration.setTitle("OpenMapEditor");
-
         configuration.setWindowedMode(640, 480);
         configuration.setWindowIcon("libgdx128.png", "libgdx64.png", "libgdx32.png", "libgdx16.png");
-        configuration.setInitialVisible(true);
-
-        configuration.setIdleFPS(10);
-
-        configuration.setDecorated(false);
-        configuration.setResizable(false);
-
-
         return configuration;
     }
 }

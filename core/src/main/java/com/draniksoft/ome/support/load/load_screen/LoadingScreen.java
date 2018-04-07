@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.draniksoft.ome.main_menu.MainBase;
 import com.draniksoft.ome.mgmnt_base.base.BaseLoadController;
 import com.draniksoft.ome.support.load.IntelligentLoader;
 import com.draniksoft.ome.utils.GU;
@@ -26,6 +27,7 @@ public class LoadingScreen implements Screen {
     Viewport vp;
 
     boolean lR = false;
+
 
     @Override
     public void show() {
@@ -86,7 +88,6 @@ public class LoadingScreen implements Screen {
 
         if (lR & t == maxT) {
 
-            openMainWin();
 
             lR = false;
 
@@ -95,11 +96,6 @@ public class LoadingScreen implements Screen {
 
     }
 
-    private void openMainWin() {
-
-	  GU.openEditorWin();
-
-    }
 
     int maxX = 1500 - 600;
     int maxR = 350;

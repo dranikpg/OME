@@ -269,7 +269,7 @@ public class EngineLoader {
 
 		} else if (cc == base + 3) {
 
-		    CompliantBatch<Quad2D> batch = new CompliantBatch<Quad2D>(Quad2D.class, 10000, true);
+		    CompliantBatch<Quad2D> batch = new CompliantBatch<Quad2D>(Quad2D.class, 20000, true);
 		    b = batch;
 		    c.register("batch", batch);
 
